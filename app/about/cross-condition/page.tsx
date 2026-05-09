@@ -46,7 +46,7 @@ export default function CrossConditionPage() {
  Data sources
  </h2>
  <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- FDA Adverse Event Monitoring System (AEMS), a public database of real world patient reports submitted to the FDA (formerly FAERS, renamed March 2026). When a woman on a statin reports that her period pain improved, that appears here. We also pull from published population studies and observational research.
+ FDA Adverse Event Monitoring System (AEMS), a public database of real world patient reports submitted to the FDA (formerly FAERS, renamed March 11, 2026). When a woman on a statin reports that her period pain improved, that appears here. We also pull from published population studies and observational research.
  </p>
  <p className="text-sm leading-relaxed mt-4" style={{ color: "#111" }}>
  WHEL also draws on the Open Targets Platform (platform.opentargets.org), a public resource developed by EMBL-EBI, the Wellcome Sanger Institute, and GlaxoSmithKline that aggregates genetic, genomic, and clinical evidence linking drug targets to diseases. Open Targets evidence scores reflect the strength of association between a drug target and a condition across multiple evidence types including genetic association, somatic mutations, known drugs, and literature.
@@ -58,7 +58,7 @@ export default function CrossConditionPage() {
  How signals are chosen
  </h2>
  <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- We query FDA AEMS for female patients taking specific drug classes (statins, GLP1 agonists, dopamine agonists, anti TNF biologics, and others) and look for any reported effects related to our six conditions. We then use AI to identify patterns across thousands of reports. Signals with 2 or more supporting reports are included. We err on the side of inclusion because filtering based on current assumptions is exactly the kind of bias this tool exists to counter.
+ We query FDA AEMS for female patients taking specific drug classes (statins, GLP1 agonists, dopamine agonists, anti TNF biologics, and others) and look for any reported effects related to our six conditions. We then use AI to identify patterns across thousands of reports. As a noise filter, individual AEMS reactions need at least 2 reports before they are surfaced; the broader Cross-Condition inclusion bar (corroboration across two independent evidence domains) still applies before a signal is classified above Exploratory. We err on the side of inclusion because filtering based on current assumptions is exactly the kind of bias this tool exists to counter.
  </p>
  </section>
 

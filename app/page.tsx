@@ -43,7 +43,7 @@ const SIGNAL_TYPES = [
     num: "04",
     title: "Community Reports",
     desc: "Consistent treatment patterns reported across condition-specific patient communities.",
-    sources: ["Patient forums"],
+    sources: ["Reddit communities"],
     href: "/about/community-reports",
   },
 ];
@@ -207,7 +207,7 @@ export default async function Home() {
           >
             {[
               { label: "Conditions",     value: totalConditions > 0 ? String(totalConditions) : "6"   },
-              { label: "Signals indexed", value: totalSignals > 0    ? String(totalSignals)    : "281" },
+              { label: "Scored signals", value: totalSignals > 0    ? String(totalSignals)    : "281" },
               { label: "Data sources",   value: "5"   },
               { label: "Citations",      value: citationsLabel },
             ].map(({ label, value }) => (
