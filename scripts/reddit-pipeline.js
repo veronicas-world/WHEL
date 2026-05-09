@@ -29,7 +29,7 @@ const REDDIT_UA = 'WomensHealthEvidenceLab/1.0 (research tool; contact via githu
 
 const CONDITION_SUBREDDITS = {
   endometriosis: ['Endo', 'endometriosis'],
-  adenomyosis:   ['Endo', 'endometriosis'],
+  adenomyosis:   ['adenomyosis', 'endometriosis'],
   pmdd:          ['PMDD'],
   pcos:          ['PCOS'],
   menopause:     ['Menopause', 'Perimenopause'],
@@ -181,7 +181,7 @@ async function analyzeWithClaude(apiKey, condition, posts) {
     `If no treatments meet the 5-post threshold described in the system prompt, return [].\n\n` +
     formatted;
 
-  const resp = await fetch(`${ANTHROPIC_BASE}/v1/messages`, {
+  const requestInit = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -194,7 +194,22 @@ async function analyzeWithClaude(apiKey, condition, posts) {
       system: buildSystemPrompt(condition),
       messages: [{ role: 'user', content: userMessage }],
     }),
-  });
+  };
+
+  // Auto-retry on 429 rate-limit errors with linear backoff so back-to-back
+  // condition runs survive the input-tokens-per-minute cap.
+  const MAX_RETRIES = 3;
+  let resp;
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    resp = await fetch(`${ANTHROPIC_BASE}/v1/messages`, requestInit);
+    if (resp.status !== 429) break;
+    if (attempt === MAX_RETRIES) break;
+
+    const waitSeconds = 75 * (attempt + 1);
+    log(`   Rate limited (429). Waiting ${waitSeconds}s before retry ${attempt + 1}/${MAX_RETRIES}...`);
+    await new Promise(r => setTimeout(r, waitSeconds * 1000));
+  }
 
   if (!resp.ok) {
     const body = await resp.text();
@@ -269,7 +284,14 @@ async function lookupConditionId(supabaseUrl, supabaseKey, condition) {
 
 function esc(val) {
   if (val === null || val === undefined) return 'NULL';
-  return `'${String(val).replace(/'/g, "''")}'`;
+  // Reddit content frequently contains Unicode smart quotes (U+2018, U+2019,
+  // U+201C, U+201D) that survive in Postgres string literals but get
+  // normalized back to ASCII by some clipboards / SQL editor inputs, which
+  // breaks string-literal boundaries. Normalize to ASCII before escaping.
+  const normalized = String(val)
+    .replace(/[\u2018\u2019\u02BC]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"');
+  return `'${normalized.replace(/'/g, "''")}'`;
 }
 
 function toTitleCase(name) {
