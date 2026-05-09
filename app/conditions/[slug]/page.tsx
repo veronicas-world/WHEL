@@ -117,7 +117,7 @@ export default async function ConditionDetailPage({
 
  {/* Freshness timestamp */}
  <p className="text-xs mt-4" style={{ color:"#999" }}>
- Signals last updated: March 2026
+ Signals last updated: May 2026
  </p>
  </div>
  </div>

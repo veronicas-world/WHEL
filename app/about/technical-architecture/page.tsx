@@ -8,11 +8,11 @@ const SECTIONS = [
   {
     key: "pipelines",
     title: "Data Pipelines",
-    summary: "Six automated pipelines across PubMed, ClinicalTrials.gov, FDA AEMS, Open Targets Platform, EudraVigilance, and Reddit.",
+    summary: "Five active automated pipelines across PubMed, ClinicalTrials.gov, FDA AEMS, Open Targets Platform, and Reddit. EudraVigilance integration is in development.",
     content: (
       <div className="space-y-4">
         <p className="text-sm leading-relaxed" style={{ color: "#111" }}>
-          WHEL runs six automated data pipelines that populate the database on demand.
+          WHEL runs five active data pipelines that populate the database on demand. A sixth pipeline (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.
         </p>
         {[
           {
@@ -36,9 +36,9 @@ const SECTIONS = [
             body: "Queries the Open Targets Platform GraphQL API (platform.opentargets.org) for each condition using standardized EFO and MONDO disease ontology identifiers. Retrieves drug candidates, mechanistic associations, and biological target scores aggregated from genetic association data, known drug target interactions, Reactome pathway analysis, and differential gene expression. Results are analyzed by Claude Opus for pathway level repurposing hypotheses. No authentication required.",
           },
           {
-            name: "EudraVigilance EVDAS",
+            name: "EudraVigilance EVDAS (in development — not yet contributing signals)",
             tag: "Cross-Condition Signals",
-            body: "Queries the European Medicines Agency adverse event database (dap.ema.europa.eu) via the Oracle BI Analytics API. Substance codes are resolved via the public adrreports.eu substance table. Female patient reaction data is filtered and grouped by condition. Requires a free registered EMA account for session authentication.",
+            body: "Queries the European Medicines Agency adverse event database (dap.ema.europa.eu) via the Oracle BI Analytics API. Substance codes are resolved via the public adrreports.eu substance table. Female patient reaction data is filtered and grouped by condition. Requires a free registered EMA account for session authentication. This pipeline is implemented but has not yet been ingested into the current database snapshot.",
           },
           {
             name: "Reddit",
@@ -280,7 +280,7 @@ const SECTIONS = [
             },
             {
               label: "Data freshness",
-              body: "The signal database reflects a point-in-time snapshot based on when pipelines were last run. New literature and adverse event reports are not captured automatically. Last pipeline run: March 2026.",
+              body: "The signal database reflects a point-in-time snapshot based on when pipelines were last run. New literature and adverse event reports are not captured automatically. Last pipeline run: May 2026.",
             },
             {
               label: "Reddit data quality",

@@ -1036,7 +1036,7 @@ export default function ResearchSignalsTabs({ signals, conditionSlug }: { signal
  {crossSignals.length < 2 && (
  <div className=" p-4" style={{ backgroundColor:"#F5F3EF", border:"1px solid #E0DDD8" }}>
  <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- Cross-condition signal data for this condition is limited in public databases. This may reflect gaps in how womens health outcomes are tracked in broader drug trials, not an absence of real effects.
+ Cross-condition signal data for this condition is limited in public databases. This may reflect gaps in how women&apos;s health outcomes are tracked in broader drug trials, not an absence of real effects.
  </p>
  </div>
  )}

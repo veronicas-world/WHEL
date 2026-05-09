@@ -71,7 +71,7 @@ export default function Footer() {
  &copy; 2026 WHEL
  </p>
  <p className="text-xs" style={{ color:"rgba(255,255,255,0.35)" }}>
- Database last updated: March 2026
+ Database last updated: May 2026
  </p>
  <p className="text-xs" style={{ color:"rgba(255,255,255,0.35)" }}>
  For research and educational purposes only.

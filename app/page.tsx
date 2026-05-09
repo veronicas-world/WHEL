@@ -11,10 +11,10 @@ const TIER_COLORS: Record<TierKey, { text: string; bg: string; bar: string }> = 
 };
 
 const TIERS: { key: TierKey; label: string; desc: string; range: string }[] = [
-  { key: "strong",      label: "Strong",      desc: "Multiple independent RCTs with mechanistic support.", range: "9–10" },
-  { key: "moderate",    label: "Moderate",    desc: "Replicated evidence across 2 or more source arms.",   range: "7–8"  },
-  { key: "emerging",    label: "Emerging",    desc: "Plausible signal with limited replication.",          range: "4–6"  },
-  { key: "exploratory", label: "Exploratory", desc: "Hypothesis generating; single arm only.",             range: "1–3"  },
+  { key: "strong",      label: "Strong",      desc: "Highly replicated, well-characterized signals with consistent direction across multiple evidence types.", range: "9–10" },
+  { key: "moderate",    label: "Moderate",    desc: "Replicated findings with solid mechanistic rationale.",                                                    range: "7–8"  },
+  { key: "emerging",    label: "Emerging",    desc: "Early-stage evidence with some corroboration or mechanistic support.",                                     range: "4–6"  },
+  { key: "exploratory", label: "Exploratory", desc: "Single-source, mechanistic, or low-specificity signals; hypothesis generation only.",                      range: "0–3"  },
 ];
 
 const SIGNAL_TYPES = [
@@ -36,7 +36,7 @@ const SIGNAL_TYPES = [
     num: "03",
     title: "Pathway Insights",
     desc: "Signals from biological pathway and target analysis, including drugs with mechanistic or genetic evidence of relevance, and adverse event patterns revealing underlying disease biology.",
-    sources: ["FDA AEMS", "Pathway databases"],
+    sources: ["Open Targets", "FDA labels", "EMA reports"],
     href: "/about/pathways",
   },
   {
@@ -61,7 +61,7 @@ const EYEBROW: React.CSSProperties = {
 };
 
 export default async function Home() {
-  const [{ data: conditionsRaw }, { data: signalsRaw }] = await Promise.all([
+  const [{ data: conditionsRaw }, { data: signalsRaw }, { count: sourcesCount }] = await Promise.all([
     supabase.from("conditions").select("id, name, slug, description").order("name"),
     supabase
       .from("repurposing_signals")
@@ -69,6 +69,7 @@ export default async function Home() {
       .eq("status", "active")
       .not("total_evidence_score", "is", null)
       .gt("total_evidence_score", 0),
+    supabase.from("sources").select("*", { count: "exact", head: true }),
   ]);
 
   const conditions = conditionsRaw ?? [];
@@ -87,6 +88,14 @@ export default async function Home() {
 
   const totalSignals = signals.length;
   const totalConditions = conditions.length;
+
+  // Format citation count: raw number under 1000, "X.XK" format above.
+  const citationsLabel =
+    typeof sourcesCount === "number" && sourcesCount > 0
+      ? sourcesCount >= 1000
+        ? `${(sourcesCount / 1000).toFixed(1)}K`
+        : String(sourcesCount)
+      : "2.2K";
 
   return (
     <main className="flex-1 flex flex-col">
@@ -148,7 +157,7 @@ export default async function Home() {
                 color: "#999",
               }}
             >
-              Updated Apr 2026
+              Updated May 2026
             </span>
           </div>
 
@@ -198,9 +207,9 @@ export default async function Home() {
           >
             {[
               { label: "Conditions",     value: totalConditions > 0 ? String(totalConditions) : "6"   },
-              { label: "Signals indexed", value: totalSignals > 0    ? String(totalSignals)    : "178" },
-              { label: "Data sources",   value: "6"   },
-              { label: "Citations",      value: "1.2K" },
+              { label: "Signals indexed", value: totalSignals > 0    ? String(totalSignals)    : "281" },
+              { label: "Data sources",   value: "5"   },
+              { label: "Citations",      value: citationsLabel },
             ].map(({ label, value }) => (
               <div key={label}>
                 <dt
