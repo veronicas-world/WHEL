@@ -225,7 +225,7 @@ export default async function ConditionDetailPage({
  </p>
  </div>
 
- <ResearchSignalsTabs signals={(signals ?? []) as unknown as Signal[]} conditionSlug={slug} />
+ <ResearchSignalsTabs signals={(signals ?? []) as unknown as Signal[]} />
  </div>
 
  </div>

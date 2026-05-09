@@ -909,7 +909,7 @@ function PathwaySignalCard({ signal }: { signal: Signal }) {
 
 type Tab ="direct" |"cross" |"caution" |"community";
 
-export default function ResearchSignalsTabs({ signals, conditionSlug }: { signals: Signal[]; conditionSlug?: string }) {
+export default function ResearchSignalsTabs({ signals }: { signals: Signal[] }) {
  const [activeTab, setActiveTab] = useState<Tab>("direct");
 
  const directSignals = signals.filter((s) => getSignalTab(s) ==="direct");
@@ -982,9 +982,9 @@ export default function ResearchSignalsTabs({ signals, conditionSlug }: { signal
  ))}
  </div>
  )}
- {conditionSlug === "vulvodynia" && !directSignals.some((s) => s.confidence_tier === "Strong" || (s.evidence_strength ?? "").toLowerCase() === "strong") && (
+ {directSignals.length > 0 && !directSignals.some((s) => s.confidence_tier === "Strong" || (s.evidence_strength ?? "").toLowerCase() === "strong") && (
  <p className="text-xs leading-relaxed mb-4" style={{ color: "#999" }}>
- Vulvodynia has no Strong Evidence signals in our database. This reflects the broader research landscape: vulvodynia remains one of the least funded chronic pain conditions affecting women, with few large-scale clinical trials completed to date.
+ No Strong Evidence signals yet for this condition. This often reflects the broader research landscape: many women&apos;s hormonal conditions remain under-studied, and sparseness in the literature is itself information.
  </p>
  )}
  {directSignals.length < 2 && (

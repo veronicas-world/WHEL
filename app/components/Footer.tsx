@@ -68,7 +68,7 @@ export default function Footer() {
  style={{ borderTop:"1px solid rgba(255,255,255,0.1)" }}
  >
  <p className="text-xs" style={{ color:"rgba(255,255,255,0.35)" }}>
- &copy; 2026 WHEL
+ &copy; {new Date().getFullYear()} WHEL
  </p>
  <p className="text-xs" style={{ color:"rgba(255,255,255,0.35)" }}>
  Database last updated: May 2026

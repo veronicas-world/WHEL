@@ -74,7 +74,7 @@ export default function AboutPage() {
  The surprising thing is that the signals are often already there. Somewhere in a published trial, an adverse event database, or a Reddit thread from two years ago, someone noticed that women on statins were reporting reduced period pain. Someone noticed that a drug developed for one condition was doing something unexpected for another. The data exists. It is just scattered across PubMed, clinical trial registries, adverse event databases, and patient community forums — and no one has built a clean, accessible tool that pulls it together specifically for women&apos;s hormonal health.
  </p>
  <p>
- My mother — who brought what she called a two arm data strategy to this project — framed it clearly: the absence of direct evidence is not the same as the absence of evidence. Sparseness in the research literature is itself information. And signals from unexpected places are hypotheses. They are different kinds of data, and they deserve to be presented differently.
+ My mother — who brought what she called a &ldquo;two-arm data strategy&rdquo; to this project — framed it clearly: the absence of direct evidence is not the same as the absence of evidence. Sparseness in the research literature is itself information. And signals from unexpected places are hypotheses. They are different kinds of data, and they deserve to be presented differently.
  </p>
  </div>
  </section>
