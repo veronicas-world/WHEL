@@ -1,7 +1,16 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
+import MetaStrip from "@/app/components/MetaStrip";
+import TierHeatmap, { type TierKey, type HeatmapRow } from "@/app/components/TierHeatmap";
+import SourceSankey from "@/app/components/SourceSankey";
 
-type TierKey = "strong" | "moderate" | "emerging" | "exploratory";
+// Force runtime data fetching on every request so the home page always
+// reflects the current state of the Supabase database. Without this,
+// Next.js statically prerenders the page at build time and stat numbers
+// freeze to whatever the DB contained at deploy.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const TIER_COLORS: Record<TierKey, { text: string; bg: string; bar: string }> = {
   strong:      { text: "#243217", bg: "#d4d8c1", bar: "#243217" },
@@ -29,19 +38,19 @@ const SIGNAL_TYPES = [
     num: "02",
     title: "Cross-Condition Signals",
     desc: "Drugs developed for other conditions where women incidentally reported benefit.",
-    sources: ["PubMed", "Trial registries"],
+    sources: ["FAERS", "EudraVigilance", "PubMed", "Trial registries"],
     href: "/about/cross-condition",
   },
   {
     num: "03",
     title: "Pathway Insights",
     desc: "Signals from biological pathway and target analysis, including drugs with mechanistic or genetic evidence of relevance, and adverse event patterns revealing underlying disease biology.",
-    sources: ["Open Targets", "FDA labels", "EMA reports"],
+    sources: ["Open Targets", "FAERS", "EudraVigilance", "SIDER"],
     href: "/about/pathways",
   },
   {
     num: "04",
-    title: "Community Reports",
+    title: "Community Forum Reports",
     desc: "Consistent treatment patterns reported across condition-specific patient communities.",
     sources: ["Reddit communities"],
     href: "/about/community-reports",
@@ -49,23 +58,27 @@ const SIGNAL_TYPES = [
 ];
 
 const MONO: React.CSSProperties = {
-  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+  fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
 };
 
 const EYEBROW: React.CSSProperties = {
   ...MONO,
   fontSize: "11px",
-  letterSpacing: "0.22em",
+  letterSpacing: "0.18em",
   textTransform: "uppercase",
-  color: "#777",
+  color: "var(--muted)",
 };
 
 export default async function Home() {
-  const [{ data: conditionsRaw }, { data: signalsRaw }, { count: sourcesCount }] = await Promise.all([
+  const [
+    { data: conditionsRaw },
+    { data: signalsRaw },
+    { count: sourcesCount },
+  ] = await Promise.all([
     supabase.from("conditions").select("id, name, slug, description").order("name"),
     supabase
       .from("repurposing_signals")
-      .select("condition_id, confidence_tier, total_evidence_score")
+      .select("condition_id, confidence_tier, total_evidence_score, created_at, signal_type")
       .eq("status", "active")
       .not("total_evidence_score", "is", null)
       .gt("total_evidence_score", 0),
@@ -73,8 +86,9 @@ export default async function Home() {
   ]);
 
   const conditions = conditionsRaw ?? [];
-  const signals = signalsRaw ?? [];
+  const signals    = signalsRaw   ?? [];
 
+  // Per-condition stats for the heatmap and condition cards
   const conditionsWithStats = conditions.map((c) => {
     const cSigs = signals.filter((s) => s.condition_id === c.id);
     const tierCounts: Record<TierKey, number> = { strong: 0, moderate: 0, emerging: 0, exploratory: 0 };
@@ -86,119 +100,192 @@ export default async function Home() {
     return { ...c, totalSignals: cSigs.length, tierCounts };
   });
 
-  const totalSignals = signals.length;
+  const totalSignals    = signals.length;
   const totalConditions = conditions.length;
+  const totalStrong     = signals.filter(
+    (s) => (s.confidence_tier?.toLowerCase() ?? "") === "strong"
+  ).length;
 
-  // Format citation count: raw number under 1000, "X.XK" format above.
+  // Aggregate tier counts for Figure 2
+  const globalTierCounts: Record<TierKey, number> = { strong: 0, moderate: 0, emerging: 0, exploratory: 0 };
+  for (const s of signals) {
+    const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
+    if (t in globalTierCounts) globalTierCounts[t]++;
+    else globalTierCounts.exploratory++;
+  }
+
+  // Aggregate arm counts for Figure 2 (from signal_type field, if populated)
+  const armCounts: Partial<Record<ArmKey, number>> = {};
+  for (const s of signals) {
+    const key = toArmKey((s as { signal_type?: string | null }).signal_type);
+    if (key) armCounts[key] = (armCounts[key] ?? 0) + 1;
+  }
+
+  // Last review date from most-recent created_at (repurposing_signals has no updated_at column)
+  const lastUpdated = signals
+    .map((s) => s.created_at)
+    .filter((d): d is string => !!d)
+    .sort()
+    .slice(-1)[0];
+
+  const lastReviewLabel = lastUpdated
+    ? new Date(lastUpdated).toLocaleDateString("en-US", { month: "short", year: "numeric" })
+    : "–";
+
+  // Format sources count for the stat strip — locale-formatted (e.g. "2,228")
   const citationsLabel =
     typeof sourcesCount === "number" && sourcesCount > 0
-      ? sourcesCount >= 1000
-        ? `${(sourcesCount / 1000).toFixed(1)}K`
-        : String(sourcesCount)
-      : "2.2K";
+      ? sourcesCount.toLocaleString("en-US")
+      : "–";
+
+  // Heatmap rows — same shape TierHeatmap expects
+  const heatmapRows: HeatmapRow[] = conditionsWithStats.map((c) => ({
+    id:    c.id,
+    name:  c.name,
+    slug:  c.slug,
+    tiers: c.tierCounts,
+    total: c.totalSignals,
+  }));
 
   return (
     <main className="flex-1 flex flex-col">
 
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      {/* ── Operational status bar ───────────────────────────────────────────── */}
+      <MetaStrip
+        signals={totalSignals || undefined}
+        conditions={totalConditions || undefined}
+        arms={4}
+      />
+
+      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
-        style={{ backgroundColor: "#fff", borderBottom: "1px solid #E0DDD8" }}
+        style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}
       >
+        {/* Subtle paper texture */}
         <div
           aria-hidden="true"
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E")`,
             zIndex: 0,
           }}
         />
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 sm:py-28" style={{ zIndex: 1 }}>
 
-          {/* Eyebrow meta */}
-          <div
-            style={{
-              display: "flex",
-              gap: 24,
-              alignItems: "center",
-              marginBottom: 32,
-              flexWrap: "wrap",
-            }}
-          >
-            <span
-              style={{
-                ...MONO,
-                fontSize: "11px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#4D5E4D",
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              <span
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20" style={{ zIndex: 1 }}>
+
+          {/* ── Two-column asymmetric layout ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-12 lg:gap-16 mb-14">
+
+            {/* Left column: wordmark, headline, CTAs */}
+            <div>
+              {/* H1 */}
+              <h1
+                className="font-heading font-normal"
                 style={{
-                  width: 7,
-                  height: 7,
-                  background: "#4D5E4D",
-                  display: "inline-block",
-                  flexShrink: 0,
+                  color: "var(--ink)",
+                  fontSize: "clamp(1.75rem, 3.8vw, 3.25rem)",
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.02em",
+                  marginBottom: 36,
+                  maxWidth: "20ch",
                 }}
-              />
-              Research instrument
-            </span>
-            <span
+              >
+                An evidence index for{" "}
+                <span style={{ color: "var(--green-deep)", whiteSpace: "nowrap" }}>
+                  under-researched
+                </span>{" "}
+                women&rsquo;s health conditions.
+              </h1>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/conditions"
+                  className="inline-flex items-center justify-center px-6 py-3 text-white text-sm font-medium transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "var(--green-mid)" }}
+                >
+                  {totalSignals > 0 ? `Browse ${totalSignals} signals →` : "Browse conditions →"}
+                </Link>
+                <Link
+                  href="/about/technical-architecture"
+                  className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-opacity hover:opacity-80"
+                  style={{
+                    border: "1px solid var(--green-mid)",
+                    color: "var(--green-mid)",
+                  }}
+                >
+                  How we score evidence
+                </Link>
+              </div>
+            </div>
+
+            {/* Right column — context and framing */}
+            <div
               style={{
-                ...MONO,
-                fontSize: "11px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#999",
+                paddingTop: 4,
+                borderLeft: "1px solid var(--rule)",
+                paddingLeft: "clamp(24px, 3vw, 40px)",
               }}
+              className="hidden lg:block"
             >
-              Updated May 2026
-            </span>
+              <p
+                className="font-serif"
+                style={{
+                  fontSize: "1.05rem",
+                  lineHeight: 1.65,
+                  color: "var(--ink-2)",
+                  marginBottom: 20,
+                }}
+              >
+                Women&rsquo;s health conditions are persistently underfunded,
+                undertreated, and under-diagnosed. Endometriosis affects roughly
+                1 in 10 reproductive-age women yet averages 7 to 10 years to
+                diagnosis. PCOS, the most common endocrine disorder of
+                reproductive age, has no FDA-approved therapy. These are the
+                conditions medicine has been slow to study.
+              </p>
+              <p
+                style={{
+                  fontSize: "0.9375rem",
+                  lineHeight: 1.65,
+                  color: "var(--muted)",
+                }}
+              >
+                WHEL aggregates four parallel streams of evidence, scores each
+                signal across five dimensions, and publishes the result with full
+                provenance, for clinicians, researchers, and informed patients
+                to interpret.
+              </p>
+            </div>
+
           </div>
 
-          <h1
-            className="font-heading font-normal leading-tight"
-            style={{ color: "#1a1a1a", fontSize: "clamp(2.75rem, 6.5vw, 5.75rem)", marginBottom: 32 }}
-          >
-            Addressing the data gap in under-researched female hormonal conditions
-          </h1>
-          <p
-            className="text-base sm:text-lg leading-relaxed max-w-2xl"
-            style={{ color: "#333", marginBottom: 36 }}
-          >
-            WHEL is a drug repurposing research tool that aggregates and analyzes data from published
-            clinical literature, trial registries, regulatory adverse event databases, and patient
-            community forums to identify therapeutic candidates for under-researched female hormonal
-            conditions. Signals are organized by source type and evidence strength, and every result
-            links to its primary source.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Link
-              href="/conditions"
-              className="inline-flex items-center justify-center px-6 py-3 text-white text-sm font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#4D5E4D" }}
+          {/* Right-column description visible on mobile (below headline) */}
+          <div className="lg:hidden mb-10">
+            <p
+              className="font-serif"
+              style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 16 }}
             >
-              Browse conditions →
-            </Link>
-            <Link
-              href="/search"
-              className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-opacity hover:opacity-80"
-              style={{ backgroundColor: "transparent", border: "1px solid #4D5E4D", color: "#4D5E4D" }}
-            >
-              Search database
-            </Link>
+              Women&rsquo;s health conditions are persistently underfunded,
+              undertreated, and under-diagnosed. Endometriosis affects roughly
+              1 in 10 reproductive-age women yet averages 7 to 10 years to
+              diagnosis. PCOS, the most common endocrine disorder of
+              reproductive age, has no FDA-approved therapy. These are the
+              conditions medicine has been slow to study.
+            </p>
+            <p style={{ fontSize: "0.9rem", lineHeight: 1.65, color: "var(--muted)" }}>
+              WHEL aggregates four parallel streams of evidence, scores each
+              signal across five dimensions, and publishes the result with full
+              provenance, for clinicians, researchers, and informed patients
+              to interpret.
+            </p>
           </div>
 
-          {/* Stats strip */}
+          {/* ── Stat strip ── */}
           <dl
             style={{
-              borderTop: "1px solid #1a1a1a",
-              marginTop: 52,
+              borderTop: "1px solid var(--ink)",
               paddingTop: 20,
               display: "grid",
               gridTemplateColumns: "repeat(4, 1fr)",
@@ -206,11 +293,30 @@ export default async function Home() {
             }}
           >
             {[
-              { label: "Conditions",     value: totalConditions > 0 ? String(totalConditions) : "6"   },
-              { label: "Scored signals", value: totalSignals > 0    ? String(totalSignals)    : "281" },
-              { label: "Data sources",   value: "5"   },
-              { label: "Citations",      value: citationsLabel },
-            ].map(({ label, value }) => (
+              {
+                label: "Signals indexed",
+                value: totalSignals > 0 ? String(totalSignals) : "–",
+                sub:   "across 4 evidence arms",
+              },
+              {
+                label: "Conditions covered",
+                value: totalConditions > 0 ? String(totalConditions) : "–",
+                sub:   "",
+              },
+              {
+                label: "Strong-tier",
+                value: totalStrong > 0 ? String(totalStrong) : "–",
+                sub:
+                  totalSignals > 0 && totalStrong > 0
+                    ? `${((totalStrong / totalSignals) * 100).toFixed(1)}% of total`
+                    : "",
+              },
+              {
+                label: "Last review",
+                value: lastReviewLabel,
+                sub:   citationsLabel !== "–" ? `${citationsLabel} source citations` : "",
+              },
+            ].map(({ label, value, sub }) => (
               <div key={label}>
                 <dt
                   style={{
@@ -218,7 +324,7 @@ export default async function Home() {
                     fontSize: "10.5px",
                     letterSpacing: "0.2em",
                     textTransform: "uppercase",
-                    color: "#888",
+                    color: "var(--muted)",
                     marginBottom: 4,
                   }}
                 >
@@ -226,18 +332,163 @@ export default async function Home() {
                 </dt>
                 <dd
                   className="font-heading"
-                  style={{ margin: 0, fontSize: "30px", fontWeight: 500, lineHeight: 1.05, letterSpacing: "-0.01em" }}
+                  style={{
+                    margin: 0,
+                    fontSize: "clamp(1.6rem, 3vw, 2rem)",
+                    fontWeight: 500,
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.01em",
+                    color: "var(--ink)",
+                  }}
                 >
                   {value}
                 </dd>
+                {sub ? (
+                  <div
+                    style={{
+                      ...MONO,
+                      fontSize: 10.5,
+                      color: "var(--muted)",
+                      letterSpacing: "0.02em",
+                      marginTop: 4,
+                    }}
+                  >
+                    {sub}
+                  </div>
+                ) : null}
               </div>
             ))}
           </dl>
+
         </div>
       </section>
 
-      {/* ── Evidence framework ────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid #E0DDD8" }}>
+      {/* ── Figure 1 — Confidence heatmap ────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: 16,
+              marginBottom: 24,
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div style={{ ...EYEBROW, marginBottom: 12 }}>Figure 1 · Confidence distribution</div>
+              <h2
+                className="font-heading"
+                style={{
+                  fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+                  fontWeight: 500,
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.012em",
+                  color: "var(--ink)",
+                }}
+              >
+                Where the evidence sits, by condition.
+              </h2>
+            </div>
+            {totalSignals > 0 && (
+              <div
+                className="font-mono"
+                style={{ fontSize: 12, letterSpacing: "0.04em", color: "var(--muted)" }}
+              >
+                N = {totalSignals} SIGNALS · {totalConditions} × 4 MATRIX
+              </div>
+            )}
+          </div>
+
+          {heatmapRows.length > 0 ? (
+            <TierHeatmap rows={heatmapRows} />
+          ) : (
+            <div
+              className="font-mono"
+              style={{
+                border: "1px solid var(--rule)",
+                background: "var(--paper)",
+                padding: "32px",
+                fontSize: 13,
+                color: "var(--muted)",
+                textAlign: "center",
+              }}
+            >
+              Heatmap will populate once active signals are loaded.
+            </div>
+          )}
+
+        </div>
+      </section>
+
+      {/* ── Figure 2 — Source → Arm → Tier provenance flow ───────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              gap: 16,
+              marginBottom: 24,
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div style={{ ...EYEBROW, marginBottom: 12 }}>Figure 2 · Evidence provenance</div>
+              <h2
+                className="font-heading"
+                style={{
+                  fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+                  fontWeight: 500,
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.012em",
+                  color: "var(--ink)",
+                }}
+              >
+                How signals flow from source to tier.
+              </h2>
+            </div>
+            <div
+              className="font-mono"
+              style={{ fontSize: 12, letterSpacing: "0.04em", color: "var(--muted)" }}
+            >
+              5 SOURCES → 4 ARMS → 4 TIERS
+            </div>
+          </div>
+
+          <div style={{ border: "1px solid var(--rule)", background: "var(--paper)", padding: "28px 24px" }}>
+            <SourceSankey
+              tierCounts={globalTierCounts}
+              armCounts={armCounts}
+              total={totalSignals}
+            />
+          </div>
+
+          <p
+            className="font-mono"
+            style={{
+              fontSize: 11,
+              color: "var(--muted)",
+              letterSpacing: "0.04em",
+              marginTop: 12,
+              lineHeight: 1.55,
+            }}
+          >
+            Each curve is one provenance pathway. Tier node heights are proportional
+            to signal count. Direct Research dominates the Strong tier; Pathway Insights
+            and Community Forum signals concentrate in Emerging and Exploratory.
+            ↑ Ribbon thickness scales with signal volume.
+          </p>
+
+        </div>
+      </section>
+
+      {/* ── Evidence framework ────────────────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
@@ -252,15 +503,18 @@ export default async function Home() {
                   lineHeight: 1.08,
                   letterSpacing: "-0.012em",
                   marginBottom: 20,
+                  color: "var(--ink)",
                 }}
               >
                 How evidence is evaluated
               </h2>
-              <p style={{ color: "#444", fontSize: 15, lineHeight: 1.65, maxWidth: "52ch" }}>
-                Every signal in WHEL is scored before it enters the database. Each record is assessed
-                across five dimensions: replication, source quality, specificity, biological
-                plausibility, and consistency of direction. Results are classified into a confidence
-                tier, and sources and scores are visible on every card.
+              <p style={{ color: "var(--ink-2)", fontSize: 15, lineHeight: 1.65, maxWidth: "52ch" }}>
+                Every signal in WHEL is scored before it enters the database. Each record
+                is assessed across five dimensions: replication, source quality,
+                specificity, biological plausibility, and consistency of direction. Each
+                dimension is rated 0 to 2, summed to a 0 to 10 composite. Results are
+                classified into a confidence tier, and sources and scores are visible
+                on every card.
               </p>
               <div style={{ marginTop: 24 }}>
                 <Link
@@ -270,9 +524,9 @@ export default async function Home() {
                     fontSize: "12px",
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
-                    borderBottom: "1px solid #1a1a1a",
+                    borderBottom: "1px solid var(--ink)",
                     paddingBottom: 2,
-                    color: "#1a1a1a",
+                    color: "var(--ink)",
                   }}
                 >
                   Read the methodology →
@@ -280,19 +534,37 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Right: TierFramework widget */}
-            <div style={{ border: "1px solid #1a1a1a", background: "#fff" }}>
+            {/* Right: Confidence tier widget */}
+            <div style={{ border: "1px solid var(--ink)", background: "var(--paper)" }}>
               <div
                 style={{
                   padding: "14px 20px",
-                  borderBottom: "1px solid #E0DDD8",
+                  borderBottom: "1px solid var(--rule)",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <span style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.2em", textTransform: "uppercase", color: "#777" }}>
+                <span
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "var(--muted)",
+                  }}
+                >
                   Confidence tiers
+                </span>
+                <span
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    letterSpacing: "0.08em",
+                    color: "var(--muted)",
+                  }}
+                >
+                  5 dimensions · 0–10 composite
                 </span>
               </div>
               {TIERS.map((row, i) => (
@@ -304,7 +576,7 @@ export default async function Home() {
                     gap: 20,
                     alignItems: "center",
                     padding: "16px 20px",
-                    borderBottom: i < 3 ? "1px solid #E0DDD8" : "none",
+                    borderBottom: i < 3 ? "1px solid var(--rule)" : "none",
                   }}
                 >
                   <span
@@ -322,10 +594,19 @@ export default async function Home() {
                   >
                     {row.label}
                   </span>
-                  <div>
-                    <div style={{ fontSize: 12.5, color: "#777", lineHeight: 1.4 }}>{row.desc}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--muted)", lineHeight: 1.4 }}>
+                    {row.desc}
                   </div>
-                  <div style={{ ...MONO, fontSize: 13, color: "#555", whiteSpace: "nowrap" }}>{row.range}</div>
+                  <div
+                    style={{
+                      ...MONO,
+                      fontSize: 13,
+                      color: "var(--ink-2)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {row.range}
+                  </div>
                 </div>
               ))}
             </div>
@@ -334,11 +615,10 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Conditions grid ───────────────────────────────────────────────── */}
-      <section>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-4">
+      {/* ── Conditions grid ───────────────────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-16 sm:pb-20">
 
-          {/* Section head */}
           <div
             style={{
               display: "flex",
@@ -349,7 +629,7 @@ export default async function Home() {
             }}
           >
             <div>
-              <div style={{ ...EYEBROW, marginBottom: 12 }}>02 · Conditions</div>
+              <div style={{ ...EYEBROW, marginBottom: 12 }}>02 · Index</div>
               <h2
                 className="font-heading"
                 style={{
@@ -357,37 +637,44 @@ export default async function Home() {
                   fontWeight: 500,
                   lineHeight: 1.1,
                   letterSpacing: "-0.01em",
+                  color: "var(--ink)",
                 }}
               >
-                Conditions with active drug repurposing signals in the database
+                Conditions covered.
               </h2>
             </div>
             <Link
               href="/conditions"
-              style={{ fontSize: 14, color: "#4D5E4D", whiteSpace: "nowrap" }}
+              className="font-mono"
+              style={{
+                fontSize: 12,
+                color: "var(--green-mid)",
+                whiteSpace: "nowrap",
+                letterSpacing: "0.04em",
+              }}
             >
-              View all →
+              View all conditions →
             </Link>
           </div>
 
           {/* Hairline grid */}
           <div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-            style={{ borderTop: "1px solid #1a1a1a", borderLeft: "1px solid #1a1a1a" }}
+            style={{ borderTop: "1px solid var(--ink)", borderLeft: "1px solid var(--ink)" }}
           >
             {conditionsWithStats.map((c, i) => {
-              const blurb = c.description ?? "";
-              const total = Object.values(c.tierCounts).reduce((a, b) => a + b, 0);
+              const blurb    = c.description ?? "";
+              const total    = Object.values(c.tierCounts).reduce((a, b) => a + b, 0);
               const tierOrder: TierKey[] = ["strong", "moderate", "emerging", "exploratory"];
               return (
                 <Link
                   key={c.id}
                   href={`/conditions/${c.slug}`}
                   style={{
-                    background: "#fff",
+                    background: "var(--paper)",
                     padding: "28px 26px 24px",
-                    borderRight: "1px solid #1a1a1a",
-                    borderBottom: "1px solid #1a1a1a",
+                    borderRight: "1px solid var(--ink)",
+                    borderBottom: "1px solid var(--ink)",
                     display: "flex",
                     flexDirection: "column",
                     gap: 16,
@@ -398,75 +685,117 @@ export default async function Home() {
                   }}
                   className="hover:bg-[#f7f4ed]"
                 >
-                  <div style={{ ...MONO, fontSize: "11px", letterSpacing: "0.16em", color: "#999" }}>
-                    {String(i + 1).padStart(2, "0")}
+                  <div
+                    className="font-mono"
+                    style={{ fontSize: "11px", letterSpacing: "0.16em", color: "var(--muted)" }}
+                  >
+                    C-{String(i + 1).padStart(2, "0")}
                   </div>
                   <h3
                     className="font-heading"
-                    style={{ fontSize: 24, lineHeight: 1.1, fontWeight: 500, margin: 0 }}
+                    style={{
+                      fontSize: 24,
+                      lineHeight: 1.1,
+                      fontWeight: 500,
+                      margin: 0,
+                      color: "var(--ink)",
+                    }}
                   >
                     {c.name}
                   </h3>
                   {blurb && (
-                    <div style={{ fontSize: "12.5px", color: "#777", lineHeight: 1.45 }}>{blurb}</div>
+                    <div style={{ fontSize: "12.5px", color: "var(--muted)", lineHeight: 1.45 }}>
+                      {blurb}
+                    </div>
                   )}
                   <div
                     style={{
                       marginTop: "auto",
                       paddingTop: 16,
-                      borderTop: "1px dashed #E0DDD8",
+                      borderTop: "1px dashed var(--rule)",
                       display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-end",
-                      gap: 12,
+                      flexDirection: "column",
+                      gap: 10,
                     }}
                   >
-                    <div>
-                      <span className="font-heading" style={{ fontSize: 30, lineHeight: 1, fontWeight: 500 }}>
-                        {c.totalSignals}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
-                          ...MONO,
-                          fontSize: "9.5px",
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          color: "#999",
-                          marginTop: 6,
-                          fontWeight: 500,
-                        }}
-                      >
-                        signals
-                      </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-end",
+                        gap: 12,
+                      }}
+                    >
+                      <div>
+                        <span
+                          className="font-heading"
+                          style={{ fontSize: 30, lineHeight: 1, fontWeight: 500, color: "var(--ink)" }}
+                        >
+                          {c.totalSignals}
+                        </span>
+                        <span
+                          className="font-mono"
+                          style={{
+                            display: "block",
+                            fontSize: "9.5px",
+                            letterSpacing: "0.18em",
+                            textTransform: "uppercase",
+                            color: "var(--muted)",
+                            marginTop: 6,
+                            fontWeight: 500,
+                          }}
+                        >
+                          signals
+                        </span>
+                      </div>
+                      {total > 0 && (
+                        <div
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            height: 6,
+                            border: "1px solid var(--ink)",
+                            overflow: "hidden",
+                            alignSelf: "flex-end",
+                            maxWidth: 140,
+                          }}
+                        >
+                          {tierOrder.map((t) => {
+                            const pct = (c.tierCounts[t] / total) * 100;
+                            if (pct === 0) return null;
+                            return (
+                              <span
+                                key={t}
+                                style={{
+                                  display: "block",
+                                  width: `${pct}%`,
+                                  height: "100%",
+                                  background: TIER_COLORS[t].bar,
+                                }}
+                              />
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                     {total > 0 && (
                       <div
+                        className="font-mono"
                         style={{
-                          flex: 1,
                           display: "flex",
-                          height: 6,
-                          border: "1px solid #1a1a1a",
-                          overflow: "hidden",
-                          alignSelf: "flex-end",
-                          maxWidth: 140,
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          fontSize: "10.5px",
+                          letterSpacing: "0.06em",
+                          color: "var(--muted)",
                         }}
                       >
-                        {tierOrder.map((t) => {
-                          const pct = (c.tierCounts[t] / total) * 100;
-                          if (pct === 0) return null;
-                          return (
-                            <span
-                              key={t}
-                              style={{
-                                display: "block",
-                                width: `${pct}%`,
-                                height: "100%",
-                                background: TIER_COLORS[t].bar,
-                              }}
-                            />
-                          );
-                        })}
+                        <span>
+                          {c.tierCounts.strong} strong · {c.tierCounts.moderate} moderate
+                        </span>
+                        <span style={{ color: "var(--green-mid)", fontWeight: 500 }}>
+                          Open →
+                        </span>
                       </div>
                     )}
                   </div>
@@ -474,10 +803,11 @@ export default async function Home() {
               );
             })}
           </div>
+
         </div>
       </section>
 
-      {/* ── Source arms ───────────────────────────────────────────────────── */}
+      {/* ── Source arms ───────────────────────────────────────────────────────── */}
       <section>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-16 sm:pt-20 pb-16 sm:pb-20">
 
@@ -499,6 +829,7 @@ export default async function Home() {
                   fontWeight: 500,
                   lineHeight: 1.1,
                   letterSpacing: "-0.01em",
+                  color: "var(--ink)",
                 }}
               >
                 How signals are categorized
@@ -512,8 +843,8 @@ export default async function Home() {
                 key={st.num}
                 href={st.href}
                 style={{
-                  background: "#fff",
-                  border: "1px solid #E0DDD8",
+                  background: "var(--paper)",
+                  border: "1px solid var(--rule)",
                   padding: "24px 20px 20px",
                   display: "flex",
                   flexDirection: "column",
@@ -523,37 +854,44 @@ export default async function Home() {
                   color: "inherit",
                   transition: "border-color 0.15s",
                 }}
-                className="hover:border-[#1a1a1a]"
+                className="hover:border-[#14180F]"
               >
-                <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.18em", color: "#999" }}>{st.num}</div>
+                <div
+                  className="font-mono"
+                  style={{ fontSize: "10.5px", letterSpacing: "0.18em", color: "var(--muted)" }}
+                >
+                  {st.num}
+                </div>
                 <h3
                   className="font-heading"
-                  style={{ fontSize: 20, lineHeight: 1.15, fontWeight: 500, margin: 0 }}
+                  style={{ fontSize: 20, lineHeight: 1.15, fontWeight: 500, margin: 0, color: "var(--ink)" }}
                 >
                   {st.title}
                 </h3>
-                <p style={{ fontSize: 13, lineHeight: 1.5, color: "#555", margin: 0, flex: 1 }}>{st.desc}</p>
+                <p style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink-2)", margin: 0, flex: 1 }}>
+                  {st.desc}
+                </p>
                 <div
+                  className="font-mono"
                   style={{
                     paddingTop: 12,
-                    borderTop: "1px solid #E0DDD8",
-                    ...MONO,
+                    borderTop: "1px solid var(--rule)",
                     fontSize: "10.5px",
-                    color: "#999",
+                    color: "var(--muted)",
                     letterSpacing: "0.05em",
                   }}
                 >
                   Sources: {st.sources.join(", ")}
                 </div>
-                <span style={{ fontSize: "12.5px", color: "#4D5E4D", fontWeight: 500 }}>
+                <span style={{ fontSize: "12.5px", color: "var(--green-mid)", fontWeight: 500 }}>
                   Read methodology →
                 </span>
               </Link>
             ))}
           </div>
+
         </div>
       </section>
-
 
     </main>
   );

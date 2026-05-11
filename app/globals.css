@@ -1,11 +1,38 @@
 @import"tailwindcss";
 
 :root {
+ /* ── Legacy tokens (kept for backward compatibility) ─────────────────── */
  --background: #F5F3EF;
  --foreground: #1a1a1a;
  --accent: #4D5E4D;
  --accent-dark: #3E4E3E;
  --border: #E0DDD8;
+
+ /* ── WHEL design system (round-2 Claude Design palette) ──────────────── */
+ --bg:        #F2EEE5;       /* page bg, slightly warmer than legacy cream */
+ --bg-2:      #EBE5D7;       /* secondary bg / subtle blocks */
+ --paper:     #FBF8F1;       /* card / paper surface */
+ --ink:       #14180F;       /* primary ink — near-black, slightly warm */
+ --ink-2:     #2E3A26;       /* secondary ink — used in body copy */
+ --muted:     #6B6F61;       /* tertiary / metadata */
+ --rule:      #D9D2BF;       /* hairline rule color */
+
+ /* Accent — green family */
+ --green-deep: #2E3D2B;
+ --green-mid:  #4D5E4D;
+ --green-soft: #B7C2A8;
+
+ /* Tier accents */
+ --tier-strong:      #1F2A1C;
+ --tier-moderate:    #4D5E4D;
+ --tier-emerging:    #8C9577;
+ --tier-exploratory: #B5B19A;
+
+ /* Evidence-arm accents */
+ --arm-direct:    #1A3A5C;
+ --arm-cross:     #6B5B3E;
+ --arm-pathway:   #2E3D2B;
+ --arm-community: #8C4A2E;
 }
 
 @theme inline {
@@ -18,9 +45,10 @@
  --color-sage-dark: #3E4E3E;
  --color-sage-light: #EDEAE4;
  --color-warm-border: #E0DDD8;
- /* Playfair Display for headings, DM Sans for body/UI */
- --font-sans: var(--font-dm-sans);
- --font-serif: var(--font-playfair);
+ /* Source Serif 4 for display, IBM Plex Sans for body, IBM Plex Mono for meta */
+ --font-sans: var(--font-plex-sans);
+ --font-serif: var(--font-source-serif);
+ --font-mono: var(--font-plex-mono);
  /* Force all border-radius utilities to 0 except full */
  --radius: 0;
  --radius-sm: 0;
@@ -36,36 +64,41 @@
 body {
  background: var(--background);
  color: var(--foreground);
- font-family: var(--font-dm-sans, system-ui, sans-serif);
+ font-family: var(--font-plex-sans, var(--font-dm-sans, system-ui, sans-serif));
  font-size: 16px;
  line-height: 1.65;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
 }
 
-/* All heading elements use Playfair Display by default */
+/* All heading elements use Source Serif 4 by default */
 h1, h2, h3, h4 {
- font-family: var(--font-playfair, Georgia, serif);
+ font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
 }
 
 /* ── Font utilities ────────────────────────────────────────────────────── */
 
-/* Headings — Playfair Display */
+/* Headings — Source Serif 4 */
 .font-heading {
- font-family: var(--font-playfair, Georgia, serif);
+ font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
  letter-spacing: -0.01em;
 }
 
 /* Explicit serif (nav brand, display use) */
 .font-serif {
- font-family: var(--font-playfair, Georgia, serif);
+ font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
 }
 
-/* Section labels — small, uppercase, spaced, DM Sans, no decoration */
+/* Mono — IBM Plex Mono for meta / labels / kickers */
+.font-mono {
+ font-family: var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+}
+
+/* Section labels — small, uppercase, spaced, mono */
 .section-label {
- font-family: var(--font-dm-sans, system-ui, sans-serif);
+ font-family: var(--font-plex-mono, var(--font-dm-sans, system-ui, sans-serif));
  font-size: 0.7rem;
- font-weight: 600;
+ font-weight: 500;
  text-transform: uppercase;
  letter-spacing: 0.08em;
  color: #111;
@@ -73,8 +106,25 @@ h1, h2, h3, h4 {
 
 /* Breadcrumb nav */
 .font-label {
- font-family: var(--font-dm-sans, system-ui, sans-serif);
+ font-family: var(--font-plex-mono, var(--font-dm-sans, system-ui, sans-serif));
  font-size: 0.75rem;
+}
+
+/* Eyebrow (over-line above section heads) */
+.eyebrow {
+ font-family: var(--font-plex-mono, ui-monospace, monospace);
+ font-size: 11px;
+ letter-spacing: 0.18em;
+ text-transform: uppercase;
+ color: var(--muted);
+}
+
+/* Kicker (small mono inline metadata) */
+.kicker {
+ font-family: var(--font-plex-mono, ui-monospace, monospace);
+ font-size: 12px;
+ letter-spacing: 0.04em;
+ color: var(--muted);
 }
 
 /* ── Focus ─────────────────────────────────────────────────────────────── */

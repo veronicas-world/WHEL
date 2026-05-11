@@ -254,7 +254,7 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
  <div className="relative">
  <span
  className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
- style={{ color: isLg ?"#111" :"rgba(255,255,255,0.5)" }}
+ style={{ color: isLg ? "#111" : "var(--muted)" }}
  >
  <svg
  width={isLg ? 17 : 14}
@@ -277,20 +277,20 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
  onChange={handleChange}
  onKeyDown={handleKeyDown}
  onFocus={() => searched && setOpen(true)}
- placeholder={isLg ?"Search conditions, medications, symptoms…" :"Search…"}
+ placeholder={isLg ? "Search conditions, medications, symptoms…" : "Search signals, drugs, mechanisms…"}
  className={`w-full transition focus:outline-none ${
  isLg ?"pl-10 pr-4 py-3 text-base" :"pl-8 pr-3 py-2 text-sm"
  }`}
  style={
  isLg
  ? { border:"1px solid #D8D5CF", backgroundColor:"#fff", color:"#333" }
- : { border:"1px solid rgba(255,255,255,0.2)", backgroundColor:"rgba(255,255,255,0.12)", color:"#fff" }
+ : { border:"1px solid var(--rule)", backgroundColor:"var(--bg)", color:"var(--ink)" }
  }
  />
  {loading && (
  <span
  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
- style={{ color: isLg ?"#111" :"rgba(255,255,255,0.4)" }}
+ style={{ color: isLg ? "#111" : "var(--muted)" }}
  >
  …
  </span>
