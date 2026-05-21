@@ -1,1161 +1,958 @@
 "use client";
 
-import { useState } from"react";
-import ExternalLinkIcon from"../../components/ExternalLinkIcon";
+import { useState } from "react";
+import ExternalLinkIcon from "../../components/ExternalLinkIcon";
+import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
+
+// ── Types ────────────────────────────────────────────────────────────────────
 
 interface Source {
- id: string;
- source_type: string | null;
- external_id: string | null;
- title: string | null;
- authors: string | null;
- journal: string | null;
- publication_date: string | null;
- url: string | null;
- key_finding_excerpt: string | null;
+  id: string;
+  source_type: string | null;
+  external_id: string | null;
+  title: string | null;
+  authors: string | null;
+  journal: string | null;
+  publication_date: string | null;
+  url: string | null;
+  key_finding_excerpt: string | null;
 }
 
 export interface Signal {
- id: string;
- signal_type: string | null;
- evidence_strength: string | null;
- confidence_tier: string | null;
- replication_score: number | null;
- source_quality_score: number | null;
- specificity_score: number | null;
- plausibility_score: number | null;
- direction_score: number | null;
- total_evidence_score: number | null;
- effect_direction: string | null;
- replication_level: string | null;
- plausibility_level: string | null;
- summary: string | null;
- mechanism_hypothesis: string | null;
- status: string | null;
- compounds: {
- name: string;
- generic_name: string | null;
- drug_class: string | null;
- fda_status: string | null;
- } | null;
- sources: Source[];
+  id: string;
+  signal_type: string | null;
+  evidence_strength: string | null;
+  confidence_tier: string | null;
+  replication_score: number | null;
+  source_quality_score: number | null;
+  specificity_score: number | null;
+  plausibility_score: number | null;
+  direction_score: number | null;
+  total_evidence_score: number | null;
+  effect_direction: string | null;
+  replication_level: string | null;
+  plausibility_level: string | null;
+  summary: string | null;
+  mechanism_hypothesis: string | null;
+  status: string | null;
+  compounds: {
+    name: string;
+    generic_name: string | null;
+    drug_class: string | null;
+    fda_status: string | null;
+  } | null;
+  sources: Source[];
 }
 
-// Evidence badge: sage green bg + white text, UPPERCASE +"EVIDENCE" suffix
-function EvidenceBadge({ strength }: { strength: string | null }) {
- const key = (strength ??"").toLowerCase();
+// ── Constants ────────────────────────────────────────────────────────────────
 
- const configs: Record<string, { label: string; bg: string; color: string; border?: string }> = {
- strong: { label:"STRONG EVIDENCE", bg:"#5C6B5D", color:"#fff" },
- moderate: { label:"MODERATE EVIDENCE", bg:"#7A8B7A", color:"#fff" },
- preliminary: {
- label:"PRELIMINARY EVIDENCE",
- bg:"#EEF1EE",
- color:"#5C6B5D",
- border:"#7A8B7A",
- },
- };
+type TierKey = "strong" | "moderate" | "emerging" | "exploratory";
 
- const config = configs[key] ?? {
- label: (strength ??"UNKNOWN").toUpperCase(),
- bg:"#EEF1EE",
- color:"#5C6B5D",
- border:"#7A8B7A",
- };
+const TIERS: { key: TierKey; label: string; fill: string; soft: string }[] = [
+  { key: "strong",      label: "STRONG",      fill: "var(--tier-strong)",           soft: "var(--tier-strong-soft)"      },
+  { key: "moderate",    label: "MODERATE",    fill: "var(--tier-moderate)",         soft: "var(--tier-moderate-soft)"    },
+  { key: "emerging",    label: "EMERGING",    fill: "var(--tier-emerging)",         soft: "var(--tier-emerging-soft)"    },
+  { key: "exploratory", label: "EXPLORATORY", fill: "var(--tier-exploratory)",      soft: "var(--tier-exploratory-soft)" },
+];
 
- return (
- <span
- className="text-[10px] font-bold px-2.5 py-1 tracking-wider whitespace-nowrap"
- style={{
- backgroundColor: config.bg,
- color: config.color,
- border: config.border ? `1px solid ${config.border}` : undefined,
- }}
- >
- {config.label}
- </span>
- );
+const ARMS: { key: ArmKey; label: string; fill: string }[] = [
+  { key: "direct",    label: ARM_LABELS.direct,    fill: "var(--arm-direct)"    },
+  { key: "cross",     label: ARM_LABELS.cross,     fill: "var(--arm-cross)"     },
+  { key: "pathway",   label: ARM_LABELS.pathway,   fill: "var(--arm-pathway)"   },
+  { key: "community", label: ARM_LABELS.community, fill: "var(--arm-community)" },
+];
+
+const DIRECTION_LABELS: Record<string, string> = {
+  improves: "Improves condition",
+  worsens:  "May worsen condition",
+  mixed:    "Mixed effects",
+  unclear:  "Unclear",
+};
+
+const MONO: React.CSSProperties = {
+  fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
+};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function scoreToLevel(score: number | null, dimension: string): string {
+  if (score == null) return "—";
+  if (dimension === "direction") {
+    return score >= 2 ? "Consistent" : score >= 1 ? "Mixed" : "Inconsistent";
+  }
+  return score >= 2 ? "High" : score >= 1 ? "Moderate" : "Low";
 }
 
-// Confidence tier badge — replaces EvidenceBadge on new scored signals
-function ConfidenceTierBadge({ tier }: { tier: string | null }) {
- if (!tier) return null;
- const configs: Record<string, { bg: string; color: string; border?: string }> = {
- Strong:      { bg: "#5C6B5D", color: "#fff" },
- Moderate:    { bg: "#7A8B7A", color: "#fff" },
- Emerging:    { bg: "#EEF1EE", color: "#5C6B5D", border: "#7A8B7A" },
- Exploratory: { bg: "#F5F3EF", color: "#777", border: "#C8C3BB" },
- };
- const cfg = configs[tier] ?? { bg: "#EEF1EE", color: "#5C6B5D", border: "#7A8B7A" };
- return (
- <span
- className="text-[10px] font-bold px-2.5 py-1 tracking-wider whitespace-nowrap uppercase"
- style={{ backgroundColor: cfg.bg, color: cfg.color, border: cfg.border ? `1px solid ${cfg.border}` : undefined }}
- >
- {tier}
- </span>
- );
+function getSourceLabels(sources: Source[]): string {
+  const parts: string[] = [];
+  const types = new Set(sources.map((s) => s.source_type));
+  if (types.has("pubmed") || types.has("clinical_trial_finding") || types.has("review_article")) parts.push("PubMed");
+  if (types.has("faers") || types.has("sider")) parts.push("FDA AEMS");
+  if (types.has("opentargets")) parts.push("Open Targets");
+  return parts.join(" · ");
 }
 
-// Score pip row: 0–2 filled dots
-function ScorePips({ value, max = 2 }: { value: number | null; max?: number }) {
- if (value == null) return null;
- return (
- <span className="flex gap-0.5 items-center">
- {Array.from({ length: max }, (_, i) => (
- <span
- key={i}
- style={{
- width: 6, height: 6, borderRadius: "50%",
- backgroundColor: i < value ? "#5C6B5D" : "#D6D1C9",
- display: "inline-block",
- }}
- />
- ))}
- </span>
- );
+function getStudyCount(sources: Source[]): number {
+  return sources.filter((s) =>
+    s.source_type === "pubmed" ||
+    s.source_type === "clinical_trial_finding" ||
+    s.source_type === "review_article"
+  ).length;
 }
 
-// Effect direction pill
-function EffectDirectionPill({ direction }: { direction: string | null }) {
- if (!direction || direction === "unclear") return null;
- const label: Record<string, string> = {
- improves: "Improves condition",
- worsens:  "May worsen condition",
- mixed:    "Mixed effects",
- };
- const color: Record<string, string> = {
- improves: "#4D5E4D",
- worsens:  "#8B4513",
- mixed:    "#7A6B4D",
- };
- return (
- <span
- className="text-[10px] font-semibold px-2 py-0.5 tracking-wide"
- style={{ backgroundColor: "#F5F3EF", color: color[direction] ?? "#777", border: "1px solid #E0DDD8" }}
- >
- {label[direction] ?? direction}
- </span>
- );
+function getDirectionLabel(signal: Signal): string {
+  if (!signal.effect_direction || signal.effect_direction === "unclear") return "";
+  return DIRECTION_LABELS[signal.effect_direction] ?? signal.effect_direction;
 }
 
-// Derive a display label from a signal's sources array
-function getSourceLabel(sources: Source[]): string | null {
- const types = new Set(sources.map((s) => s.source_type));
- if (types.has("faers")) return "FDA AEMS";
- if (types.has("pubmed")) return "PubMed";
- if (types.has("opentargets")) return "Open Targets";
- return null;
+function getTierInfo(tier: string | null) {
+  if (!tier) return null;
+  return TIERS.find((t) => t.key === tier.toLowerCase()) ?? null;
 }
 
-// Small source badge shown on signal cards
-// For Open Targets sources, renders as a link to the evidence page.
-function SourceBadge({ sources }: { sources: Source[] }) {
- const label = getSourceLabel(sources);
- if (!label) return null;
-
- const badgeStyle = {
-   backgroundColor: "#F0EDE8",
-   color: "#111",
-   border: "1px solid #E0DDD8",
- };
- const className = "text-[10px] font-semibold px-2 py-0.5 tracking-wide whitespace-nowrap";
-
- if (label === "Open Targets") {
-   const otSource = sources.find((s) => s.source_type === "opentargets");
-   const url = otSource?.url ?? "https://platform.opentargets.org";
-   return (
-     <a
-       href={url}
-       target="_blank"
-       rel="noopener noreferrer"
-       className={className}
-       style={{ ...badgeStyle, textDecoration: "none" }}
-     >
-       Source: {label} <ExternalLinkIcon />
-     </a>
-   );
- }
-
- return (
-   <span className={className} style={badgeStyle}>
-     Source: {label}
-   </span>
- );
+function getArmInfo(signal_type: string | null) {
+  const arm = toArmKey(signal_type) ?? "direct";
+  return ARMS.find((a) => a.key === arm) ?? ARMS[0];
 }
 
-// Section field label inside cards
+// ── Sub-components ───────────────────────────────────────────────────────────
+
+function TierFilterChip({
+  tier,
+  active,
+  count,
+  onClick,
+}: {
+  tier: TierKey;
+  active: boolean;
+  count: number;
+  onClick: () => void;
+}) {
+  const info = TIERS.find((t) => t.key === tier)!;
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        ...MONO,
+        fontSize: 10,
+        letterSpacing: "0.1em",
+        padding: "5px 10px",
+        background: active ? info.fill : info.soft,
+        color: active ? "var(--paper)" : info.fill,
+        border: `1px solid ${info.fill}`,
+        cursor: "pointer",
+        whiteSpace: "nowrap" as const,
+        transition: "background 0.1s, color 0.1s",
+      }}
+    >
+      {info.label}
+      <span
+        style={{
+          marginLeft: 5,
+          opacity: 0.7,
+          fontSize: 9,
+        }}
+      >
+        {count}
+      </span>
+    </button>
+  );
+}
+
+function ScoreBar({ score }: { score: number | null }) {
+  if (score == null) return null;
+  const pct = Math.min(100, (score / 10) * 100);
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+      <span
+        style={{
+          display: "inline-block",
+          width: 80,
+          height: 4,
+          background: "var(--rule-strong)",
+          position: "relative" as const,
+          flexShrink: 0,
+        }}
+      >
+        <span
+          style={{
+            position: "absolute" as const,
+            left: 0, top: 0, bottom: 0,
+            width: `${pct}%`,
+            background: "var(--ink)",
+          }}
+        />
+      </span>
+      <span style={{ ...MONO, fontSize: 12, color: "var(--ink)" }}>
+        {score}/10
+      </span>
+    </span>
+  );
+}
+
 function FieldLabel({ children }: { children: React.ReactNode }) {
- return (
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-1.5" style={{ color:"#111" }}>
- {children}
- </p>
- );
+  return (
+    <p
+      style={{
+        ...MONO,
+        fontSize: 10,
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        color: "var(--muted)",
+        marginBottom: 6,
+      }}
+    >
+      {children}
+    </p>
+  );
 }
 
-// Collapsible citations with configurable colors.
-// PubMed sources render as linked paper titles with authors/journal.
-// AEMS sources render as reaction-category rows with report counts.
-function CollapsibleSources({
- sources,
- linkColor ="#7A8B7A",
- textColor ="#666",
- mutedColor ="#999",
- borderColor ="#E0DDD8",
+// ── CollapsibleSources ───────────────────────────────────────────────────────
+
+function CollapsibleSources({ sources }: { sources: Source[] }) {
+  const [open, setOpen] = useState(false);
+  if (!sources.length) return null;
+
+  const seenUrls = new Set<string>();
+  const deduped = sources.filter((s) => {
+    if (!s.url) return true;
+    if (seenUrls.has(s.url)) return false;
+    seenUrls.add(s.url);
+    return true;
+  });
+
+  const pubmed  = deduped.filter((s) => s.source_type === "pubmed");
+  const faers   = deduped.filter((s) => s.source_type === "faers");
+  const reddit  = deduped.filter((s) => s.source_type === "reddit");
+  const ot      = deduped.filter((s) => s.source_type === "opentargets");
+  const other   = deduped.filter(
+    (s) => !["pubmed", "faers", "reddit", "opentargets"].includes(s.source_type ?? "")
+  );
+
+  return (
+    <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--rule)" }}>
+      <p style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 12 }}>
+        CITATIONS · {deduped.length}
+      </p>
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: "0.8125rem",
+          color: "var(--accent)",
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
+          ...MONO,
+          letterSpacing: "0.04em",
+        }}
+      >
+        <svg
+          width="11" height="11" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2.5"
+          strokeLinecap="round" strokeLinejoin="round"
+          style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s" }}
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+        {open ? "Hide" : "View"} citations ({deduped.length})
+      </button>
+
+      {open && (
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 16 }}>
+
+          {/* PubMed */}
+          {pubmed.length > 0 && (
+            <div>
+              {(faers.length > 0 || ot.length > 0) && (
+                <p style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-2)", marginBottom: 8 }}>
+                  PUBLISHED RESEARCH
+                </p>
+              )}
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                {pubmed.map((s) => (
+                  <li key={s.id} style={{ fontSize: "0.8125rem", lineHeight: 1.6, color: "var(--ink-2)" }}>
+                    {s.url ? (
+                      <a
+                        href={s.url} target="_blank" rel="noopener noreferrer"
+                        style={{ color: "var(--accent)", fontWeight: 500 }}
+                      >
+                        <strong>{s.title ?? s.external_id ?? s.url}</strong>
+                      </a>
+                    ) : (
+                      <strong style={{ color: "var(--ink)" }}>{s.title ?? s.external_id ?? "Source"}</strong>
+                    )}
+                    {s.authors && <span style={{ color: "var(--muted)" }}> · {s.authors}</span>}
+                    {s.journal && <em style={{ color: "var(--muted)" }}>, {s.journal}</em>}
+                    {s.publication_date && (
+                      <span style={{ color: "var(--muted)" }}> · {s.publication_date.slice(0, 4)}</span>
+                    )}
+                    {s.external_id && (
+                      <a
+                        href={`https://pubmed.ncbi.nlm.nih.gov/${s.external_id}`}
+                        target="_blank" rel="noopener noreferrer"
+                        style={{ color: "var(--muted)", marginLeft: 4, ...MONO, fontSize: 11 }}
+                      >
+                        · PMID {s.external_id}
+                      </a>
+                    )}
+                    {s.key_finding_excerpt && (
+                      <p style={{ marginTop: 4, fontStyle: "italic", color: "var(--muted-2)" }}>
+                        &ldquo;{s.key_finding_excerpt}&rdquo;
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* FAERS */}
+          {faers.length > 0 && (
+            <div>
+              <p style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-2)", marginBottom: 8 }}>
+                FDA ADVERSE EVENT MONITORING SYSTEM
+              </p>
+              {(() => {
+                const query = faers.find((s) => (s.external_id ?? "").startsWith("FAERS-QUERY-"));
+                const rows  = faers.filter((s) => !(s.external_id ?? "").startsWith("FAERS-QUERY-"));
+                return (
+                  <>
+                    {query && (
+                      <div
+                        style={{
+                          padding: "8px 12px",
+                          marginBottom: 8,
+                          fontSize: "0.8125rem",
+                          background: "var(--bg-2)",
+                          border: "1px solid var(--rule)",
+                          color: "var(--ink-2)",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {(query.title ?? "").replace(/^FDA (FAERS|AEMS) Database Query:\s*/i, "")}
+                        {query.url && (
+                          <a
+                            href={query.url} target="_blank" rel="noopener noreferrer"
+                            style={{ marginLeft: 8, color: "var(--muted)", ...MONO, fontSize: 10 }}
+                          >
+                            FDA AEMS <ExternalLinkIcon />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {rows.length > 0 && (
+                      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 4 }}>
+                        {rows.map((s) => (
+                          <li
+                            key={s.id}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              padding: "6px 12px",
+                              background: "var(--bg-2)",
+                              border: "1px solid var(--rule)",
+                              fontSize: "0.8125rem",
+                              color: "var(--ink-2)",
+                            }}
+                          >
+                            <span>{(s.title ?? "").replace(/^(FAERS|AEMS):\s*/i, "")}</span>
+                            {s.url && (
+                              <a
+                                href={s.url} target="_blank" rel="noopener noreferrer"
+                                style={{ marginLeft: 12, color: "var(--muted)", ...MONO, fontSize: 10, flexShrink: 0 }}
+                              >
+                                verify <ExternalLinkIcon />
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <p style={{ marginTop: 6, ...MONO, fontSize: 10, color: "var(--muted-2)" }}>
+                      Reactions with 2+ reports shown.
+                    </p>
+                  </>
+                );
+              })()}
+            </div>
+          )}
+
+          {/* Reddit */}
+          {reddit.length > 0 && (
+            <div>
+              <p style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-2)", marginBottom: 8 }}>
+                COMMUNITY POSTS
+              </p>
+              {(() => {
+                const grouped: Record<string, Source[]> = {};
+                for (const s of reddit) {
+                  const sub = s.external_id ?? "unknown";
+                  if (!grouped[sub]) grouped[sub] = [];
+                  grouped[sub].push(s);
+                }
+                return Object.entries(grouped).map(([sub, posts]) => (
+                  <div key={sub} style={{ marginBottom: 10 }}>
+                    <p style={{ ...MONO, fontSize: 10, color: "var(--muted)", marginBottom: 6 }}>r/{sub}</p>
+                    <ul style={{ listStyle: "none", padding: "0 0 0 12px", margin: 0, borderLeft: "2px solid var(--rule)" }}>
+                      {posts.map((s) => (
+                        <li key={s.id} style={{ fontSize: "0.8125rem", marginBottom: 4, lineHeight: 1.5 }}>
+                          {s.url ? (
+                            <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
+                              {s.title ?? s.url}
+                            </a>
+                          ) : (
+                            <span style={{ color: "var(--ink-2)" }}>{s.title ?? "Reddit post"}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ));
+              })()}
+            </div>
+          )}
+
+          {/* Open Targets */}
+          {ot.length > 0 && (
+            <div>
+              <p style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", color: "var(--muted-2)", marginBottom: 8 }}>
+                OPEN TARGETS PLATFORM
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                {ot.map((s) => (
+                  <li key={s.id} style={{ fontSize: "0.8125rem", lineHeight: 1.6, color: "var(--ink-2)" }}>
+                    {s.url ? (
+                      <a href={s.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)", fontWeight: 500 }}>
+                        {s.title ?? s.external_id ?? s.url} <ExternalLinkIcon />
+                      </a>
+                    ) : (
+                      <strong style={{ color: "var(--ink)" }}>{s.title ?? s.external_id ?? "Open Targets"}</strong>
+                    )}
+                    {s.key_finding_excerpt && (
+                      <p style={{ marginTop: 4, fontStyle: "italic", color: "var(--muted-2)" }}>
+                        &ldquo;{s.key_finding_excerpt}&rdquo;
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Other */}
+          {other.length > 0 && (
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+              {other.map((s) => (
+                <li key={s.id} style={{ fontSize: "0.8125rem", lineHeight: 1.6, color: "var(--ink-2)" }}>
+                  <strong style={{ color: "var(--ink)" }}>{s.title ?? s.external_id ?? "Source"}</strong>
+                  {s.journal && <em style={{ color: "var(--muted)" }}>, {s.journal}</em>}
+                </li>
+              ))}
+            </ul>
+          )}
+
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── SignalCard ────────────────────────────────────────────────────────────────
+
+function SignalCard({
+  signal,
+  signalId,
 }: {
- sources: Source[];
- linkColor?: string;
- textColor?: string;
- mutedColor?: string;
- borderColor?: string;
+  signal: Signal;
+  signalId: string;
 }) {
- const [open, setOpen] = useState(false);
- if (!sources.length) return null;
+  const [expanded, setExpanded] = useState(false);
 
- // Deduplicate by URL — keep first occurrence of each URL
- const seenUrls = new Set<string>();
- const dedupedSources = sources.filter((s) => {
- if (!s.url) return true;
- if (seenUrls.has(s.url)) return false;
- seenUrls.add(s.url);
- return true;
- });
+  const tierInfo  = getTierInfo(signal.confidence_tier);
+  const armInfo   = getArmInfo(signal.signal_type);
+  const direction = getDirectionLabel(signal);
+  const sourceLabel = getSourceLabels(signal.sources);
+  const studyCount  = getStudyCount(signal.sources);
 
- const pubmedSources = dedupedSources.filter((s) => s.source_type === "pubmed");
- const faersSources = dedupedSources.filter((s) => s.source_type === "faers");
- const redditSources = dedupedSources.filter((s) => s.source_type === "reddit");
- const otSources = dedupedSources.filter((s) => s.source_type === "opentargets");
- const otherSources = dedupedSources.filter(
-   (s) =>
-     s.source_type !== "pubmed" &&
-     s.source_type !== "faers" &&
-     s.source_type !== "reddit" &&
-     s.source_type !== "opentargets"
- );
+  const hasScore = signal.total_evidence_score != null && signal.total_evidence_score > 0;
+  const hasDetails =
+    signal.mechanism_hypothesis ||
+    (signal.replication_score != null) ||
+    signal.sources.length > 0;
 
- return (
- <div className="mt-5 pt-4" style={{ borderTop: `1px solid ${borderColor}` }}>
- <button
- onClick={() => setOpen(!open)}
- className="flex items-center gap-1.5 text-xs font-medium transition-opacity hover:opacity-70"
- style={{ color: linkColor }}
- >
- <svg
- width="12"
- height="12"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2.5"
- strokeLinecap="round"
- strokeLinejoin="round"
- style={{
- transform: open ?"rotate(180deg)" :"none",
- transition:"transform 0.15s",
- }}
- >
- <polyline points="6 9 12 15 18 9" />
- </svg>
- {open ?"Hide" :"View"} Citations ({dedupedSources.length})
- </button>
+  // Scoring dimensions
+  const dims = [
+    {
+      label: "REPLICATION",
+      level: signal.replication_level ?? scoreToLevel(signal.replication_score, "replication"),
+      score: signal.replication_score,
+    },
+    {
+      label: "SOURCEQUALITY",
+      level: scoreToLevel(signal.source_quality_score, "source_quality"),
+      score: signal.source_quality_score,
+    },
+    {
+      label: "SPECIFICITY",
+      level: scoreToLevel(signal.specificity_score, "specificity"),
+      score: signal.specificity_score,
+    },
+    {
+      label: "PLAUSIBILITY",
+      level: signal.plausibility_level ?? scoreToLevel(signal.plausibility_score, "plausibility"),
+      score: signal.plausibility_score,
+    },
+    {
+      label: "DIRECTION",
+      level: scoreToLevel(signal.direction_score, "direction"),
+      score: signal.direction_score,
+    },
+  ];
 
- {open && (
- <div className="mt-3 space-y-4">
+  const compoundName = signal.compounds?.name ?? "Unknown compound";
+  const genericName  = signal.compounds?.generic_name;
+  const showGeneric  = genericName && genericName !== compoundName;
 
- {/* PubMed sources */}
- {pubmedSources.length > 0 && (
- <div>
- {(faersSources.length > 0 || otSources.length > 0 || otherSources.length > 0) && (
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: mutedColor }}>
- Published Research
- </p>
- )}
- <ul className="space-y-3">
- {pubmedSources.map((source) => (
- <li key={source.id} className="text-xs leading-relaxed" style={{ color: textColor }}>
- {source.url ? (
- <a
- href={source.url}
- target="_blank"
- rel="noopener noreferrer"
- className="font-medium hover:underline underline-offset-2"
- style={{ color: linkColor }}
- >
- {source.title ?? source.external_id ?? source.url}
- </a>
- ) : (
- <span className="font-medium" style={{ color:"#333" }}>
- {source.title ?? source.external_id ??"Source"}
- </span>
- )}
- {source.authors && (
- <span style={{ color: mutedColor }}> · {source.authors}</span>
- )}
- {source.journal && (
- <span style={{ color: mutedColor }} className="italic">
- , {source.journal}
- </span>
- )}
- {source.publication_date && (
- <span style={{ color: mutedColor }}>
- {""}({source.publication_date.slice(0, 4)})
- </span>
- )}
- {source.external_id && (
- <a
- href={`https://pubmed.ncbi.nlm.nih.gov/${source.external_id}`}
- target="_blank"
- rel="noopener noreferrer"
- className="ml-1 hover:underline underline-offset-2"
- style={{ color: mutedColor }}
- >
- · PMID {source.external_id}
- </a>
- )}
- {source.key_finding_excerpt && (
- <p className="mt-1.5 italic leading-relaxed" style={{ color: mutedColor }}>
- &ldquo;{source.key_finding_excerpt}&rdquo;
- </p>
- )}
- </li>
- ))}
- </ul>
- </div>
- )}
+  return (
+    <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 24, paddingBottom: 24 }}>
 
- {/* AEMS sources: query summary + reaction categories with counts */}
- {faersSources.length > 0 && (
- <div>
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: mutedColor }}>
- FDA Adverse Event Monitoring System (AEMS)
- </p>
- {(() => {
- const querySummary = faersSources.find((s) =>
- (s.external_id ??"").startsWith("FAERS-QUERY-")
- );
- const reactionRows = faersSources.filter((s) =>
- !(s.external_id ??"").startsWith("FAERS-QUERY-")
- );
- return (
- <>
- {/* Volume summary row */}
- {querySummary && (
- <div
- className=" px-3 py-2 mb-2 text-xs leading-snug"
- style={{ backgroundColor:"#F5F3EF", border:"1px solid #E0DDD8", color: textColor }}
- >
- <span style={{ color: mutedColor }}>
- {/* Strip stored "FDA FAERS/AEMS Database Query:" prefix for a tighter label */}
- {(querySummary.title ??"").replace(/^FDA (FAERS|AEMS) Database Query:\s*/i,"")}
- </span>
- {querySummary.url && (
- <a
- href={querySummary.url}
- target="_blank"
- rel="noopener noreferrer"
- className="ml-2 hover:underline underline-offset-2 whitespace-nowrap"
- style={{ color: mutedColor, fontSize:"10px" }}
- >
- FDA AEMS <ExternalLinkIcon /> (raw FDA data)
- </a>
- )}
- </div>
- )}
- {/* Per-reaction pill rows */}
- {reactionRows.length > 0 && (
- <ul className="space-y-1.5">
- {reactionRows.map((source) => (
- <li
- key={source.id}
- className="flex items-center justify-between text-xs px-3 py-1.5"
- style={{ backgroundColor:"#F5F3EF", border:"1px solid #E0DDD8" }}
- >
- <span style={{ color: textColor }}>
- {(source.title ??"").replace(/^(FAERS|AEMS):\s*/i,"")}
- </span>
- {source.url && (
- <a
- href={source.url}
- target="_blank"
- rel="noopener noreferrer"
- className="ml-3 shrink-0 hover:underline underline-offset-2 whitespace-nowrap"
- style={{ color: mutedColor, fontSize:"10px" }}
- >
- verify <ExternalLinkIcon /> (raw FDA data)
- </a>
- )}
- </li>
- ))}
- </ul>
- )}
- {/* Inclusion note */}
- <p className="mt-2 text-[10px] leading-relaxed" style={{ color: mutedColor }}>
- Reactions with 2+ reports shown. Unexpected patterns may indicate biological connections.
- </p>
- </>
- );
- })()}
- </div>
- )}
+      {/* Top row: arm eyebrow + tier chip */}
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12, gap: 12 }}>
+        <span
+          style={{
+            ...MONO,
+            fontSize: 10,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: armInfo.fill,
+            textDecoration: "underline",
+            textUnderlineOffset: 3,
+          }}
+        >
+          {armInfo.label}
+        </span>
 
- {/* Reddit post sources — grouped by subreddit */}
- {redditSources.length > 0 && (
- <div>
- {(pubmedSources.length > 0 || faersSources.length > 0 || otSources.length > 0 || otherSources.length > 0) && (
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: mutedColor }}>
- Community Posts
- </p>
- )}
- {(() => {
- const grouped: Record<string, Source[]> = {};
- for (const s of redditSources) {
- const sub = s.external_id ??"unknown";
- if (!grouped[sub]) grouped[sub] = [];
- grouped[sub].push(s);
- }
- return Object.entries(grouped).map(([sub, subPosts]) => (
- <div key={sub} className="mb-3 last:mb-0">
- <p className="text-[10px] font-bold mb-1.5" style={{ color: mutedColor }}>
- r/{sub}
- </p>
- <ul
- className="space-y-1.5 pl-3"
- style={{ borderLeft: `2px solid ${borderColor}` }}
- >
- {subPosts.map((source) => (
- <li key={source.id} className="text-xs leading-snug">
- {source.url ? (
- <a
- href={source.url}
- target="_blank"
- rel="noopener noreferrer"
- className="hover:underline underline-offset-2"
- style={{ color: linkColor }}
- >
- {source.title ?? source.url}
- </a>
- ) : (
- <span style={{ color: textColor }}>
- {source.title ??"Reddit post"}
- </span>
- )}
- </li>
- ))}
- </ul>
- </div>
- ));
- })()}
- </div>
- )}
+        {tierInfo && (
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "4px 8px",
+              background: tierInfo.fill,
+              color: "var(--paper)",
+              ...MONO,
+              fontSize: 10,
+              letterSpacing: "0.1em",
+              flexShrink: 0,
+            }}
+          >
+            <span style={{ width: 7, height: 7, background: "var(--paper)", display: "inline-block" }} />
+            {signal.confidence_tier?.toUpperCase()}
+          </span>
+        )}
+      </div>
 
- {/* Open Targets sources */}
- {otSources.length > 0 && (
- <div>
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-2" style={{ color: mutedColor }}>
- Open Targets Platform
- </p>
- <ul className="space-y-3">
- {otSources.map((source) => (
- <li key={source.id} className="text-xs leading-relaxed" style={{ color: textColor }}>
- {source.url ? (
- <a
- href={source.url}
- target="_blank"
- rel="noopener noreferrer"
- className="font-medium hover:underline underline-offset-2"
- style={{ color: linkColor }}
- >
- {source.title ?? source.external_id ?? source.url} <ExternalLinkIcon />
- </a>
- ) : (
- <span className="font-medium" style={{ color: '#333' }}>
- {source.title ?? source.external_id ?? 'Open Targets'}
- </span>
- )}
- {source.key_finding_excerpt && (
- <p className="mt-1.5 italic leading-relaxed" style={{ color: mutedColor }}>
- &ldquo;{source.key_finding_excerpt}&rdquo;
- </p>
- )}
- </li>
- ))}
- </ul>
- </div>
- )}
+      {/* H3: compound name */}
+      <h3
+        className="font-heading"
+        style={{
+          fontSize: "1.375rem",
+          fontWeight: 500,
+          lineHeight: 1.2,
+          letterSpacing: "-0.01em",
+          color: "var(--ink)",
+          marginBottom: 16,
+        }}
+      >
+        {compoundName}
+        {showGeneric && (
+          <span style={{ ...MONO, fontSize: "0.8em", color: "var(--muted)", fontWeight: 400, marginLeft: 6 }}>
+            ({genericName})
+          </span>
+        )}
+      </h3>
 
- {/* Other / unknown source types */}
- {otherSources.length > 0 && (
- <ul className="space-y-3">
- {otherSources.map((source) => (
- <li key={source.id} className="text-xs leading-relaxed" style={{ color: textColor }}>
- <span className="font-medium" style={{ color:"#333" }}>
- {source.title ?? source.external_id ??"Source"}
- </span>
- {source.journal && (
- <span style={{ color: mutedColor }} className="italic">
- , {source.journal}
- </span>
- )}
- </li>
- ))}
- </ul>
- )}
+      {/* Score row */}
+      {hasScore && (
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: "6px 16px",
+            marginBottom: 20,
+            fontSize: "0.8125rem",
+            color: "var(--ink-2)",
+            ...MONO,
+          }}
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color: "var(--muted)", fontSize: 11 }}>Score</span>
+            <ScoreBar score={signal.total_evidence_score} />
+          </span>
 
- </div>
- )}
- </div>
- );
+          {direction && (
+            <span>
+              <span style={{ color: "var(--muted)", fontSize: 11 }}>Direction</span>
+              <span style={{ color: "var(--muted)", margin: "0 4px" }}>·</span>
+              <span style={{ color: "var(--ink-2)", fontStyle: "italic", fontFamily: "inherit" }}>{direction}</span>
+            </span>
+          )}
+
+          {sourceLabel && (
+            <span>
+              <span style={{ color: "var(--muted)", fontSize: 11 }}>Source</span>
+              <span style={{ color: "var(--muted)", margin: "0 4px" }}>·</span>
+              {sourceLabel}
+            </span>
+          )}
+
+          {studyCount > 0 && (
+            <span>
+              <span style={{ color: "var(--muted)", fontSize: 11 }}>Studies</span>
+              <span style={{ color: "var(--muted)", margin: "0 4px" }}>·</span>
+              {studyCount}
+            </span>
+          )}
+
+          {signal.compounds?.fda_status && (
+            <span
+              style={{
+                padding: "2px 7px",
+                border: "1px solid var(--rule-strong)",
+                color: "var(--ink-2)",
+                fontSize: 10,
+              }}
+            >
+              {signal.compounds.fda_status}
+            </span>
+          )}
+
+          {signal.compounds?.drug_class && (
+            <span
+              style={{
+                padding: "2px 7px",
+                border: "1px solid var(--rule-strong)",
+                color: "var(--ink-2)",
+                fontSize: 10,
+              }}
+            >
+              {signal.compounds.drug_class}
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Summary */}
+      {signal.summary && (
+        <div style={{ marginBottom: expanded ? 20 : 0 }}>
+          <FieldLabel>Summary</FieldLabel>
+          <p
+            className="font-heading"
+            style={{
+              fontSize: "0.9375rem",
+              lineHeight: 1.7,
+              color: "var(--ink-2)",
+              fontStyle: "italic",
+            }}
+          >
+            {signal.summary}
+          </p>
+        </div>
+      )}
+
+      {/* Expanded sections */}
+      {expanded && (
+        <>
+          {signal.mechanism_hypothesis && (
+            <div style={{ marginTop: 20 }}>
+              <FieldLabel>Hypothesized Mechanism</FieldLabel>
+              <p
+                className="font-heading"
+                style={{
+                  fontSize: "0.9375rem",
+                  lineHeight: 1.7,
+                  color: "var(--ink-2)",
+                  fontStyle: "italic",
+                }}
+              >
+                {signal.mechanism_hypothesis}
+              </p>
+            </div>
+          )}
+
+          {/* Scoring dimensions */}
+          {dims.some((d) => d.score != null) && (
+            <div style={{ marginTop: 20 }}>
+              <FieldLabel>Scoring Dimensions</FieldLabel>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 1fr)",
+                  gap: 0,
+                  borderTop: "1px solid var(--rule)",
+                  marginTop: 4,
+                }}
+              >
+                {dims.map((dim) => (
+                  <div
+                    key={dim.label}
+                    style={{
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      paddingRight: 8,
+                    }}
+                  >
+                    <p
+                      style={{
+                        ...MONO,
+                        fontSize: 9.5,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        color: "var(--muted)",
+                        marginBottom: 4,
+                      }}
+                    >
+                      {dim.label}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: "0.9375rem",
+                        fontWeight: 500,
+                        color: "var(--ink)",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {dim.level}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Citations */}
+          <CollapsibleSources sources={signal.sources} />
+        </>
+      )}
+
+      {/* Footer */}
+      {hasDetails && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: 20,
+            paddingTop: 12,
+            borderTop: "1px solid var(--rule)",
+          }}
+        >
+          <span style={{ ...MONO, fontSize: 11, color: "var(--muted)", letterSpacing: "0.08em" }}>
+            SIGNAL · {signalId}
+          </span>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              ...MONO,
+              fontSize: 11,
+              color: "var(--ink-2)",
+              background: "none",
+              border: "1px solid var(--rule-strong)",
+              padding: "4px 10px",
+              cursor: "pointer",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {expanded ? "Collapse" : "Open detail"}
+            <span style={{ fontSize: 9 }}>{expanded ? "▴" : "▾"}</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
-function SignalCard({ signal }: { signal: Signal }) {
- const hasScoring = signal.confidence_tier != null;
- const hasVisibleScore = signal.total_evidence_score != null && signal.total_evidence_score > 0;
- return (
- <div className="bg-white p-6" style={{ border:"1px solid #E0DDD8" }}>
- {/* Compound name + tier badge */}
- <div className="flex flex-wrap items-start gap-3 mb-4">
- <h3 className="font-heading text-lg font-bold leading-tight" style={{ color:"#333" }}>
- {signal.compounds?.name ??"Unknown compound"}
- </h3>
- {hasScoring
- ? <ConfidenceTierBadge tier={signal.confidence_tier} />
- : signal.evidence_strength && <EvidenceBadge strength={signal.evidence_strength} />
- }
- {signal.effect_direction && <EffectDirectionPill direction={signal.effect_direction} />}
- </div>
+// ── Main export ───────────────────────────────────────────────────────────────
 
- {/* Scoring row — only shown when there are non-zero scores */}
- {hasVisibleScore && (
- <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4 text-[11px]" style={{ color: "#777" }}>
- {signal.replication_level && (
- <span className="flex items-center gap-1.5">
- <ScorePips value={signal.replication_score} />
- Replication: {signal.replication_level}
- </span>
- )}
- {signal.plausibility_level && (
- <span className="flex items-center gap-1.5">
- <ScorePips value={signal.plausibility_score} />
- Plausibility: {signal.plausibility_level}
- </span>
- )}
- <span className="flex items-center gap-1" style={{ color: "#5C6B5D", fontWeight: 600 }}>
- Score: {signal.total_evidence_score}/10
- </span>
- </div>
- )}
-
- {/* Compound meta tags + source badge */}
- {(signal.compounds?.drug_class || signal.compounds?.fda_status || signal.sources.length > 0) && (
- <div className="flex flex-wrap gap-2 mb-5">
- {signal.compounds?.drug_class && (
- <span
- className="text-[11px] px-2.5 py-0.5"
- style={{ backgroundColor:"#F5F3EF", color:"#111", border:"1px solid #E0DDD8" }}
- >
- {signal.compounds.drug_class}
- </span>
- )}
- {signal.compounds?.fda_status && (
- <span
- className="text-[11px] px-2.5 py-0.5"
- style={{ backgroundColor:"#F5F3EF", color:"#111", border:"1px solid #E0DDD8" }}
- >
- {signal.compounds.fda_status}
- </span>
- )}
- <SourceBadge sources={signal.sources} />
- </div>
- )}
-
- {/* Safety note — shown for ulipristal acetate / SPRMs */}
- {(signal.compounds?.name ?? "").toLowerCase().includes("ulipristal") && (
- <div
- className="flex gap-3 items-start p-4 mb-4"
- style={{ backgroundColor: "#FEF3E2", border: "1px solid #F0C060" }}
- >
- <svg
- width="15"
- height="15"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- className="mt-0.5 shrink-0"
- style={{ color: "#B45309" }}
- >
- <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
- <line x1="12" y1="9" x2="12" y2="13" />
- <line x1="12" y1="17" x2="12.01" y2="17" />
- </svg>
- <p className="text-sm leading-relaxed" style={{ color: "#78350F" }}>
-   Ulipristal acetate was suspended in the EU in 2020 following reports of serious liver injury (hepatotoxicity). The European Medicines Agency recommended suspension of all marketing authorizations.
- </p>
- </div>
- )}
-
- {/* Body */}
- <div className="space-y-4">
- {signal.summary && (
- <div>
- <FieldLabel>Summary</FieldLabel>
- <p className="text-sm leading-relaxed" style={{ color:"#333" }}>
- {signal.summary}
- </p>
- </div>
- )}
- {signal.mechanism_hypothesis && (
- <div>
- <FieldLabel>Mechanism Hypothesis</FieldLabel>
- <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- {signal.mechanism_hypothesis}
- </p>
- </div>
- )}
- </div>
-
- <CollapsibleSources sources={signal.sources} />
- </div>
- );
-}
-
-// ── Evidence grouping ────────────────────────────────────────────────────────
-
-const EVIDENCE_ORDER = ["strong","moderate","preliminary"] as const;
-
-const EVIDENCE_LABELS: Record<string, string> = {
- strong:"Strong Evidence",
- moderate:"Moderate Evidence",
- preliminary:"Preliminary Evidence",
-};
-
-// Normalize a compound name for duplicate detection:
-// lowercase, trim, strip parenthetical suffixes like "(Ozempic/Wegovy/...)"
-function normalizeCompoundName(name: string): string {
- return name
- .toLowerCase()
- .replace(/\s*\(.*$/, "") // strip everything from first "(" onward
- .trim();
-}
-
-function groupByEvidence(signals: Signal[]): { key: string; label: string; signals: Signal[] }[] {
- // Deduplicate by normalized compound name.
- // When two signals share the same normalized name, keep the one with the longer (more complete) raw name.
- const bestByNorm = new Map<string, Signal>();
- for (const s of signals) {
- const raw = s.compounds?.name ?? "";
- if (!raw) { bestByNorm.set(s.id, s); continue; } // no name — keep by unique id
- const norm = normalizeCompoundName(raw);
- const existing = bestByNorm.get(norm);
- if (!existing) {
- bestByNorm.set(norm, s);
- } else {
- // Keep whichever has the longer raw name
- const existingRaw = existing.compounds?.name ?? "";
- if (raw.length > existingRaw.length) bestByNorm.set(norm, s);
- }
- }
- const deduped = Array.from(bestByNorm.values());
-
- const buckets: Record<string, Signal[]> = {};
- for (const s of deduped) {
- const key = (s.evidence_strength ??"preliminary").toLowerCase();
- if (!buckets[key]) buckets[key] = [];
- buckets[key].push(s);
- }
- // Known strengths in order, then any unknowns
- const ordered = EVIDENCE_ORDER.filter((k) => buckets[k]?.length);
- const unknown = Object.keys(buckets).filter((k) => !EVIDENCE_ORDER.includes(k as typeof EVIDENCE_ORDER[number]));
- return [...ordered, ...unknown].map((key) => ({
- key,
- label: EVIDENCE_LABELS[key] ?? key.charAt(0).toUpperCase() + key.slice(1) +" Evidence",
- signals: buckets[key],
- }));
-}
-
-function EvidenceGroup({
- groupKey,
- label,
- count,
- children,
- accentColor ="#4D5E4D",
- badgeBg ="#D8E5D8",
- badgeColor ="#4D5E4D",
+export default function ResearchSignalsTabs({
+  signals,
+  signalIds,
 }: {
- groupKey: string;
- label: string;
- count: number;
- children: React.ReactNode;
- accentColor?: string;
- badgeBg?: string;
- badgeColor?: string;
+  signals: Signal[];
+  signalIds: Record<string, string>;
 }) {
- const defaultOpen = groupKey !=="preliminary";
- const [open, setOpen] = useState(defaultOpen);
+  const [activeTier, setActiveTier] = useState<TierKey | null>(null);
+  const [activeArm,  setActiveArm]  = useState<ArmKey | null>(null);
 
- return (
- <div>
- <button
- onClick={() => setOpen(!open)}
- className="w-full flex items-center gap-2 py-3 text-left transition-opacity hover:opacity-70"
- style={{ borderBottom: open ?"none" :"1px solid #E0DDD8" }}
- >
- <svg
- width="14"
- height="14"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2.5"
- strokeLinecap="round"
- strokeLinejoin="round"
- style={{
- color: accentColor,
- transform: open ?"rotate(180deg)" :"none",
- transition:"transform 0.15s",
- flexShrink: 0,
- }}
- >
- <polyline points="6 9 12 15 18 9" />
- </svg>
- <span className="text-sm font-semibold" style={{ color:"#333" }}>{label}</span>
- <span
- className="text-xs px-2 py-0.5 font-semibold"
- style={{ backgroundColor: badgeBg, color: badgeColor }}
- >
- {count}
- </span>
- </button>
- {open && <div className="space-y-4 pt-4 pb-2">{children}</div>}
- </div>
- );
-}
+  // Tier counts always reflect full set
+  const tierTotals = TIERS.reduce(
+    (acc, t) => ({
+      ...acc,
+      [t.key]: signals.filter(
+        (s) => (s.confidence_tier?.toLowerCase() ?? "exploratory") === t.key
+      ).length,
+    }),
+    {} as Record<TierKey, number>
+  );
 
-// ── Community color palette ───────────────────────────────────────────────────
-const community = {
- bg:"#F0F5FB",
- border:"#B8CEDD",
- heading:"#2C3E50",
- body:"#44596A",
- label:"#6B7E8E",
- tagBg:"#DCE9F5",
- tagBorder:"#9DBAD4",
- link:"#2B5F8A",
-};
+  // Arm counts reflect active tier filter
+  const tierFiltered = activeTier
+    ? signals.filter((s) => (s.confidence_tier?.toLowerCase() ?? "exploratory") === activeTier)
+    : signals;
 
-// ── Pathway signal_types: these always win regardless of source
-const PATHWAY_SIGNAL_TYPES = new Set(["pathway_signal","caution_signal"]);
+  const armCounts = ARMS.reduce(
+    (acc, a) => ({
+      ...acc,
+      [a.key]: tierFiltered.filter((s) => (toArmKey(s.signal_type) ?? "direct") === a.key).length,
+    }),
+    {} as Record<ArmKey, number>
+  );
 
-// Source types that belong in Cross-Condition
-const CROSS_SOURCE_TYPES = new Set(["faers","sider"]);
+  // Final filtered list (tier AND arm)
+  const visible = tierFiltered.filter(
+    (s) => !activeArm || (toArmKey(s.signal_type) ?? "direct") === activeArm
+  );
 
-// Source types that belong in Direct Research
-const DIRECT_SOURCE_TYPES = new Set(["pubmed","clinical_trial"]);
+  function clearFilters() {
+    setActiveTier(null);
+    setActiveArm(null);
+  }
 
-function getSignalTab(signal: Signal):"direct" |"cross" |"caution" |"community" {
- // Community reports always go to their own tab
- if (signal.signal_type ==="community_report") return"community";
- // Pathway signal_type overrides everything else
- if (PATHWAY_SIGNAL_TYPES.has(signal.signal_type ??"")) return"caution";
+  return (
+    <div>
+      {/* Tier filter chips — right-aligned */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          flexWrap: "wrap",
+          gap: 6,
+          marginBottom: 16,
+        }}
+      >
+        {TIERS.map((t) => (
+          <TierFilterChip
+            key={t.key}
+            tier={t.key}
+            active={activeTier === t.key}
+            count={tierTotals[t.key]}
+            onClick={() => setActiveTier(activeTier === t.key ? null : t.key)}
+          />
+        ))}
+      </div>
 
- const sourceTypes = signal.sources.map((s) => s.source_type).filter(Boolean);
+      {/* Arm tabs — underline style */}
+      <div
+        style={{
+          display: "flex",
+          gap: 0,
+          borderBottom: "1px solid var(--rule)",
+          marginBottom: 0,
+          overflowX: "auto",
+        }}
+        className="no-scrollbar"
+      >
+        {/* All tab */}
+        <button
+          onClick={() => setActiveArm(null)}
+          style={{
+            ...MONO,
+            fontSize: 12,
+            letterSpacing: "0.04em",
+            padding: "10px 16px 10px 0",
+            marginRight: 24,
+            background: "none",
+            border: "none",
+            borderBottom: activeArm === null ? "2px solid var(--ink)" : "2px solid transparent",
+            color: activeArm === null ? "var(--ink)" : "var(--muted)",
+            cursor: "pointer",
+            whiteSpace: "nowrap" as const,
+            marginBottom: -1,
+          }}
+        >
+          All{" "}
+          <span style={{ opacity: 0.6 }}>{tierFiltered.length}</span>
+        </button>
 
- // If any source is AEMS (formerly FAERS) or SIDER → Cross-Condition
- if (sourceTypes.some((t) => CROSS_SOURCE_TYPES.has(t!))) return"cross";
+        {ARMS.map((arm) => {
+          const count = armCounts[arm.key];
+          const isActive = activeArm === arm.key;
+          return (
+            <button
+              key={arm.key}
+              onClick={() => setActiveArm(isActive ? null : arm.key)}
+              style={{
+                ...MONO,
+                fontSize: 12,
+                letterSpacing: "0.04em",
+                padding: "10px 16px 10px 0",
+                marginRight: 24,
+                background: "none",
+                border: "none",
+                borderBottom: isActive ? `2px solid ${arm.fill}` : "2px solid transparent",
+                color: isActive ? "var(--ink)" : "var(--muted)",
+                cursor: "pointer",
+                whiteSpace: "nowrap" as const,
+                marginBottom: -1,
+              }}
+            >
+              {arm.label}{" "}
+              <span style={{ opacity: 0.6 }}>{count}</span>
+            </button>
+          );
+        })}
+      </div>
 
- // If any source is PubMed or ClinicalTrials → Direct Research
- if (sourceTypes.some((t) => DIRECT_SOURCE_TYPES.has(t!))) return"direct";
-
- // No sources or unknown source type → Direct Research (default)
- return"direct";
-}
-
-// Muted amber palette for Pathway signals
-const amber = {
- bg:"#FEFAF2",
- border:"#EAD9B0",
- heading:"#5D4B20",
- body:"#7A6030",
- label:"#A08040",
- tagBg:"#F5E8C0",
- tagBorder:"#D4B870",
- link:"#8B6914",
-};
-
-function PathwaySignalCard({ signal }: { signal: Signal }) {
- const hasScoring = signal.confidence_tier != null;
- const hasVisibleScore = signal.total_evidence_score != null && signal.total_evidence_score > 0;
- return (
- <div
- className=" p-6"
- style={{ backgroundColor: amber.bg, border: `1px solid ${amber.border}` }}
- >
- {/* Compound name + badge */}
- <div className="flex flex-wrap items-start gap-3 mb-4">
- <svg
- width="14"
- height="14"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- className="mt-1.5 shrink-0"
- style={{ color: amber.label }}
- aria-hidden="true"
- >
- <circle cx="11" cy="11" r="3" />
- <path d="M11 2v2M11 20v2M2 11h2M20 11h2" />
- <path d="m14.5 7.5 1.5-1.5M8 14l-1.5 1.5M14.5 14.5l1.5 1.5M8 8 6.5 6.5" />
- </svg>
- <h3 className="font-heading text-lg font-bold leading-tight" style={{ color: amber.heading }}>
- {signal.compounds?.name ??"Unknown compound"}
- </h3>
- {hasScoring
- ? <ConfidenceTierBadge tier={signal.confidence_tier} />
- : signal.evidence_strength && (
- <span
- className="text-[10px] font-bold px-2.5 py-1 tracking-wider"
- style={{ backgroundColor: amber.tagBg, color: amber.link, border: `1px solid ${amber.tagBorder}` }}
- >
- {signal.evidence_strength.toUpperCase()}
- </span>
- )
- }
- {signal.effect_direction && <EffectDirectionPill direction={signal.effect_direction} />}
- </div>
-
- {/* Scoring row — only shown when there are non-zero scores */}
- {hasVisibleScore && (
- <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4 text-[11px]" style={{ color: amber.label }}>
- {signal.replication_level && (
- <span className="flex items-center gap-1.5">
- <ScorePips value={signal.replication_score} />
- Replication: {signal.replication_level}
- </span>
- )}
- {signal.plausibility_level && (
- <span className="flex items-center gap-1.5">
- <ScorePips value={signal.plausibility_score} />
- Plausibility: {signal.plausibility_level}
- </span>
- )}
- <span className="flex items-center gap-1" style={{ color: amber.heading, fontWeight: 600 }}>
- Score: {signal.total_evidence_score}/10
- </span>
- </div>
- )}
-
- {/* Meta tags + source badge */}
- {(signal.compounds?.drug_class || signal.compounds?.fda_status || signal.sources.length > 0) && (
- <div className="flex flex-wrap gap-2 mb-5">
- {signal.compounds?.drug_class && (
- <span
- className="text-[11px] px-2.5 py-0.5"
- style={{ backgroundColor: amber.tagBg, color: amber.body, border: `1px solid ${amber.tagBorder}` }}
- >
- {signal.compounds.drug_class}
- </span>
- )}
- {signal.compounds?.fda_status && (
- <span
- className="text-[11px] px-2.5 py-0.5"
- style={{ backgroundColor: amber.tagBg, color: amber.body, border: `1px solid ${amber.tagBorder}` }}
- >
- {signal.compounds.fda_status}
- </span>
- )}
- <SourceBadge sources={signal.sources} />
- </div>
- )}
-
- {/* Body */}
- <div className="space-y-4">
- {signal.summary && (
- <div>
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-1.5" style={{ color: amber.label }}>
- Summary
- </p>
- <p className="text-sm leading-relaxed" style={{ color: amber.heading }}>
- {signal.summary}
- </p>
- </div>
- )}
- {signal.mechanism_hypothesis && (
- <div>
- <p className="text-[10px] font-semibold uppercase tracking-widest mb-1.5" style={{ color: amber.label }}>
- Pathway Insight
- </p>
- <p className="text-sm leading-relaxed" style={{ color: amber.body }}>
- {signal.mechanism_hypothesis}
- </p>
- </div>
- )}
- </div>
-
- <CollapsibleSources
- sources={signal.sources}
- linkColor={amber.link}
- textColor={amber.body}
- mutedColor={amber.label}
- borderColor={amber.border}
- />
- </div>
- );
-}
-
-type Tab ="direct" |"cross" |"caution" |"community";
-
-export default function ResearchSignalsTabs({ signals }: { signals: Signal[] }) {
- const [activeTab, setActiveTab] = useState<Tab>("direct");
-
- const directSignals = signals.filter((s) => getSignalTab(s) ==="direct");
- const cautionSignals = signals.filter((s) => getSignalTab(s) ==="caution");
- const crossSignals = signals.filter((s) => getSignalTab(s) ==="cross");
- const communitySignals = signals.filter((s) => getSignalTab(s) ==="community");
-
- const tabs: { key: Tab; label: string; count: number }[] = [
- { key:"direct", label:"Direct Research", count: directSignals.length },
- { key:"cross", label:"Cross-Condition", count: crossSignals.length },
- { key:"caution", label:"Pathways", count: cautionSignals.length },
- { key:"community", label:"Community Reports", count: communitySignals.length },
- ];
-
- function tabStyle(key: Tab) {
- const isActive = activeTab === key;
- if (isActive && key ==="caution") {
- return { backgroundColor: amber.tagBg, color: amber.link, border: `1px solid ${amber.tagBorder}` };
- }
- if (isActive && key ==="community") {
- return { backgroundColor: community.tagBg, color: community.link, border: `1px solid ${community.tagBorder}` };
- }
- if (isActive) {
- return { backgroundColor:"#EEF1EE", color:"#5C6B5D", border:"1px solid #7A8B7A" };
- }
- return { backgroundColor:"transparent", color:"#111", border:"1px solid #E0DDD8" };
- }
-
- return (
- <div>
- {/* Pill tab bar — horizontal scroll on mobile */}
- <div className="no-scrollbar flex gap-2 mb-8 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
- {tabs.map(({ key, label, count }) => (
- <button
- key={key}
- onClick={() => setActiveTab(key)}
- className="shrink-0 px-4 py-2 text-sm font-medium transition-all whitespace-nowrap"
- style={tabStyle(key)}
- >
- {label}
- {count > 0 && (
- <span
- className="ml-1.5 text-xs px-1.5 py-0.5"
- style={
- activeTab === key && key ==="caution"
- ? { backgroundColor: amber.bg, color: amber.label }
- : activeTab === key && key ==="community"
- ? { backgroundColor: community.tagBg, color: community.link }
- : activeTab === key
- ? { backgroundColor:"#D8E5D8", color:"#5C6B5D" }
- : { backgroundColor:"#F0EDE8", color:"#111" }
- }
- >
- {count}
- </span>
- )}
- </button>
- ))}
- </div>
-
- {/* Direct Research tab */}
- {activeTab ==="direct" && (
- <div>
- {directSignals.length > 0 && (
- <div className="space-y-2 mb-6">
- {groupByEvidence(directSignals).map(({ key, label, signals: group }) => (
- <EvidenceGroup key={key} groupKey={key} label={label} count={group.length}>
- {group.map((signal) => <SignalCard key={signal.id} signal={signal} />)}
- </EvidenceGroup>
- ))}
- </div>
- )}
- {directSignals.length > 0 && !directSignals.some((s) => s.confidence_tier === "Strong" || (s.evidence_strength ?? "").toLowerCase() === "strong") && (
- <p className="text-xs leading-relaxed mb-4" style={{ color: "#999" }}>
- No Strong Evidence signals yet for this condition. This often reflects the broader research landscape: many women&apos;s hormonal conditions remain under-studied, and sparseness in the literature is itself information.
- </p>
- )}
- {directSignals.length < 2 && (
- <div className=" p-4" style={{ backgroundColor:"#F5F3EF", border:"1px solid #E0DDD8" }}>
- <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- Few or no clinical trials exist specifically targeting this condition. The limited research base is itself evidence of the underfunding problem this tool exists to address.
- </p>
- </div>
- )}
- </div>
- )}
-
- {/* Cross-Condition tab */}
- {activeTab ==="cross" && (
- <div>
- <div
- className="flex gap-3 items-start p-4 mb-6"
- style={{ backgroundColor:"#EEF1EE", border:"1px solid #D0DAD0" }}
- >
- <svg
- width="14"
- height="14"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- className="mt-0.5 shrink-0"
- style={{ color:"#7A8B7A" }}
- >
- <circle cx="12" cy="12" r="10" />
- <line x1="12" y1="8" x2="12" y2="12" />
- <line x1="12" y1="16" x2="12.01" y2="16" />
- </svg>
- <p className="text-sm leading-relaxed" style={{ color:"#5C6B5D" }}>
- Drugs developed for other conditions where women incidentally reported benefit. Hypothesis-generating, not treatment evidence.
- </p>
- </div>
- {crossSignals.length > 0 && (
- <div className="space-y-2 mb-6">
- {groupByEvidence(crossSignals).map(({ key, label, signals: group }) => (
- <EvidenceGroup key={key} groupKey={key} label={label} count={group.length}>
- {group.map((signal) => <SignalCard key={signal.id} signal={signal} />)}
- </EvidenceGroup>
- ))}
- </div>
- )}
- {crossSignals.length < 2 && (
- <div className=" p-4" style={{ backgroundColor:"#F5F3EF", border:"1px solid #E0DDD8" }}>
- <p className="text-sm leading-relaxed" style={{ color:"#111" }}>
- Cross-condition signal data for this condition is limited in public databases. This may reflect gaps in how women&apos;s health outcomes are tracked in broader drug trials, not an absence of real effects.
- </p>
- </div>
- )}
- </div>
- )}
-
- {/* Pathways tab */}
- {activeTab ==="caution" && (
- <div>
- <div
- className="flex gap-3 items-start p-4 mb-6"
- style={{ backgroundColor: amber.bg, border: `1px solid ${amber.border}` }}
- >
- <svg
- width="14"
- height="14"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- className="mt-0.5 shrink-0"
- style={{ color: amber.label }}
- aria-hidden="true"
- >
- <circle cx="11" cy="11" r="3" />
- <path d="M11 2v2M11 20v2M2 11h2M20 11h2" />
- <path d="m14.5 7.5 1.5-1.5M8 14l-1.5 1.5M14.5 14.5l1.5 1.5M8 8 6.5 6.5" />
- </svg>
- <p className="text-sm leading-relaxed" style={{ color: amber.body }}>
- Signals derived from biological pathway and target analysis, including drugs with mechanistic or genetic evidence of relevance to this condition, and adverse event patterns that reveal underlying disease biology.
- </p>
- </div>
- {cautionSignals.length > 0 && (
- <div className="space-y-2 mb-6">
- {groupByEvidence(cautionSignals).map(({ key, label, signals: group }) => (
- <EvidenceGroup
- key={key}
- groupKey={key}
- label={label}
- count={group.length}
- accentColor={amber.link}
- badgeBg={amber.tagBg}
- badgeColor={amber.link}
- >
- {group.map((signal) => <PathwaySignalCard key={signal.id} signal={signal} />)}
- </EvidenceGroup>
- ))}
- </div>
- )}
- {cautionSignals.length < 2 && (
- <div className=" p-4" style={{ backgroundColor: amber.bg, border: `1px solid ${amber.border}` }}>
- <p className="text-sm leading-relaxed" style={{ color: amber.body }}>
- No pathway signals have been identified for this condition yet. This section will be updated as more data is available.
- </p>
- </div>
- )}
- </div>
- )}
-
- {/* Community Forum Reports tab */}
- {activeTab ==="community" && (
- <div>
- {/* Disclaimer */}
- <div
- className="flex gap-3 items-start p-4 mb-6"
- style={{ backgroundColor: community.bg, border: `1px solid ${community.border}` }}
- >
- <svg
- width="14"
- height="14"
- viewBox="0 0 24 24"
- fill="none"
- stroke="currentColor"
- strokeWidth="2"
- strokeLinecap="round"
- strokeLinejoin="round"
- className="mt-0.5 shrink-0"
- style={{ color: community.label }}
- aria-hidden="true"
- >
- <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
- <circle cx="9" cy="7" r="4" />
- <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
- <path d="M16 3.13a4 4 0 0 1 0 7.75" />
- </svg>
- <p className="text-sm leading-relaxed" style={{ color: community.body }}>
- Consistent treatment patterns reported across condition-specific patient communities. These are community signals, not clinical evidence. They are hypothesis generating.
- </p>
- </div>
-
- {communitySignals.length > 0 && (
- <div className="space-y-2 mb-6">
- {groupByEvidence(communitySignals).map(({ key, label, signals: group }) => (
- <EvidenceGroup
- key={key}
- groupKey={key}
- label={label}
- count={group.length}
- accentColor={community.link}
- badgeBg={community.tagBg}
- badgeColor={community.link}
- >
- {group.map((signal) => <SignalCard key={signal.id} signal={signal} />)}
- </EvidenceGroup>
- ))}
- </div>
- )}
-
- {communitySignals.length === 0 && (
- <div className=" p-4" style={{ backgroundColor: community.bg, border: `1px solid ${community.border}` }}>
- <p className="text-sm leading-relaxed" style={{ color: community.body }}>
- Community forum data for this condition has not been processed yet.
- </p>
- </div>
- )}
- </div>
- )}
- </div>
- );
+      {/* Signal list */}
+      {visible.length === 0 ? (
+        <div style={{ padding: "40px 0", textAlign: "center" as const }}>
+          <p
+            style={{
+              ...MONO,
+              fontSize: 11,
+              letterSpacing: "0.12em",
+              color: "var(--muted)",
+              marginBottom: 12,
+            }}
+          >
+            NO SIGNALS · TRY ANOTHER FILTER
+          </p>
+          <button
+            onClick={clearFilters}
+            style={{
+              color: "var(--accent)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.875rem",
+              textDecoration: "underline",
+              textUnderlineOffset: 3,
+            }}
+          >
+            Clear filters
+          </button>
+        </div>
+      ) : (
+        <div>
+          {visible.map((signal) => (
+            <SignalCard
+              key={signal.id}
+              signal={signal}
+              signalId={signalIds[signal.id] ?? signal.id}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
