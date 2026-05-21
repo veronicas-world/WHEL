@@ -1,6 +1,6 @@
 # Conditions — detail page revisions
 
-**Hand off to Claude Code with the round-2 mockups (Screenshots 2026-05-09 at 7.49–7.53 PM).** This is the working spec for rewriting the *individual* condition page (`/conditions/[slug]`) and its inner signal list, so they match the editorial register already in place on the homepage (`app/page.tsx`) and the conditions index (`app/conditions/page.tsx`).
+**Hand off to Claude Code with the round-2 mockups in `docs/design-handoff/conditions-detail-mockups/`** (see that folder's README for what each image shows). This is the working spec for rewriting the *individual* condition page (`/conditions/[slug]`) and its inner signal list, so they match the editorial register already in place on the homepage (`app/page.tsx`) and the conditions index (`app/conditions/page.tsx`).
 
 The conditions **index** has already been rebuilt to the new system and ships as-is. Do not touch that file. This brief is exclusively about the detail page and the signal list inside it.
 
@@ -83,7 +83,7 @@ Sharp corners. The global rule in `globals.css` forces `border-radius: 0` on eve
 
 ## Section-by-section spec
 
-Match the mockups (Screenshots 2026-05-09 at 7.49–7.53 PM, both `[slug]` views — single-condition hero + figures + signal list). The numbered subsections below correspond to the visible blocks in those screenshots.
+Match the mockups in `docs/design-handoff/conditions-detail-mockups/` — `02-condition-detail-page.png` for the hero, sidebar, and figures; `03-signal-card-expanded.png` and `04-signal-cards-collapsed.png` for the signal cards. The numbered subsections below correspond to the visible blocks in those screenshots.
 
 ### 1. Hero block
 

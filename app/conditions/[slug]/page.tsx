@@ -53,14 +53,17 @@ const MONO: React.CSSProperties = {
   fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
 };
 
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
 function formatReviewDate(isoStrings: string[]): string {
-  if (!isoStrings.length) return "2026.04";
+  if (!isoStrings.length) return "—";
   const latest = isoStrings.reduce((a, b) => (a > b ? a : b));
   const d = new Date(latest);
-  const y = d.getUTCFullYear();
-  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(d.getUTCDate()).padStart(2, "0");
-  return `${y}.${m}.${day}`;
+  if (Number.isNaN(d.getTime())) return "—";
+  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
 }
 
 export default async function ConditionDetailPage({
@@ -155,6 +158,16 @@ export default async function ConditionDetailPage({
     armCounts[arm]++;
   }
 
+  // Figure caption inputs — derived from the data, never asserted
+  const topTier = [...TIERS].sort(
+    (a, b) => tierCounts[b.key] - tierCounts[a.key],
+  )[0];
+  const armsRanked = [...ARMS].sort(
+    (a, b) => armCounts[b.key] - armCounts[a.key],
+  );
+  const topArm = armsRanked[0];
+  const bottomArm = armsRanked[armsRanked.length - 1];
+
   // Last review from max created_at
   const createdAts = (rawSignals ?? [])
     .map((s: Record<string, unknown>) => s.created_at as string)
@@ -198,11 +211,11 @@ export default async function ConditionDetailPage({
                 <Link href="/" style={{ color: "var(--muted)", textDecoration: "none" }}>
                   Home
                 </Link>
-                <span style={{ margin: "0 10px", opacity: 0.4 }}>/</span>
+                <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
                 <Link href="/conditions" style={{ color: "var(--muted)", textDecoration: "none" }}>
                   Conditions
                 </Link>
-                <span style={{ margin: "0 10px", opacity: 0.4 }}>/</span>
+                <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
                 <span style={{ color: "var(--ink)" }}>{condition.name}</span>
               </nav>
 
@@ -425,9 +438,19 @@ export default async function ConditionDetailPage({
                   lineHeight: 1.6,
                 }}
               >
-                The shape is characteristic of {condition.name.toLowerCase()} indexing:
-                a small Strong band (well-established therapies),
-                a wide middle, and a long Exploratory tail of mechanistic signals.
+                {total > 0 ? (
+                  <>
+                    The largest single group is the {topTier.label} tier (
+                    {tierCounts[topTier.key]}); {tierCounts.strong} of the {total}{" "}
+                    indexed signals reach Strong, the tier reserved for the most
+                    robust, replicated evidence.
+                  </>
+                ) : (
+                  <>
+                    No repurposing signals have been indexed for{" "}
+                    {condition.name.toLowerCase()} yet.
+                  </>
+                )}
               </p>
             </div>
 
@@ -518,9 +541,16 @@ export default async function ConditionDetailPage({
                   lineHeight: 1.6,
                 }}
               >
-                Direct Research is the largest arm; Community signals are smallest
-                by design — their inclusion threshold is the highest in the index.
-                Most surprising drug candidates surface from Cross-Condition.
+                {total > 0 ? (
+                  <>
+                    {topArm.label} contributes the most signals (
+                    {armCounts[topArm.key]}); {bottomArm.label} the fewest (
+                    {armCounts[bottomArm.key]}). Each evidence arm applies its own
+                    inclusion threshold.
+                  </>
+                ) : (
+                  <>Arm composition will appear once signals are indexed.</>
+                )}
               </p>
             </div>
 
