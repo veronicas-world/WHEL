@@ -11,22 +11,33 @@
  /* ── WHEL design system (round-2 Claude Design palette) ──────────────── */
  --bg:        #F2EEE5;       /* page bg, slightly warmer than legacy cream */
  --bg-2:      #EBE5D7;       /* secondary bg / subtle blocks */
+ --bg-3:      #E3DDD0;       /* tertiary bg / inset blocks */
  --paper:     #FBF8F1;       /* card / paper surface */
  --ink:       #14180F;       /* primary ink — near-black, slightly warm */
- --ink-2:     #2E3A26;       /* secondary ink — used in body copy */
- --muted:     #6B6F61;       /* tertiary / metadata */
- --rule:      #D9D2BF;       /* hairline rule color */
+ --ink-2:     #2A2E25;       /* secondary ink — used in body copy */
+ --muted:     #5C6151;       /* tertiary / metadata */
+ --muted-2:   #8A8E7E;       /* quaternary / very low-emphasis text */
+ --rule:      rgba(20,24,15,0.14);  /* hairline rule */
+ --rule-strong: rgba(20,24,15,0.32); /* medium-weight rule */
+
+ /* Accent — navy (direct-research arm / CTA) */
+ --accent:      #1A3A5C;
+ --accent-soft: #C7D3DE;
 
  /* Accent — green family */
  --green-deep: #2E3D2B;
- --green-mid:  #4D5E4D;
+ --green-mid:  #4D5C44;
  --green-soft: #B7C2A8;
 
  /* Tier accents */
- --tier-strong:      #1F2A1C;
- --tier-moderate:    #4D5E4D;
- --tier-emerging:    #8C9577;
- --tier-exploratory: #B5B19A;
+ --tier-strong:           #1F2A1C;
+ --tier-strong-soft:      #D4D8C1;
+ --tier-moderate:         #4D5E4D;
+ --tier-moderate-soft:    #DFE2CC;
+ --tier-emerging:         #8A7A4E;
+ --tier-emerging-soft:    #E8DDBF;
+ --tier-exploratory:      #8E867A;
+ --tier-exploratory-soft: #E5E0D8;
 
  /* Evidence-arm accents */
  --arm-direct:    #1A3A5C;

@@ -1,45 +1,115 @@
-import { supabase } from"@/lib/supabase";
-import ConditionsList from"./ConditionsList";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+import ConditionsList from "./ConditionsList";
+import type { TierKey } from "@/app/components/TierHeatmap";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
- title:"Conditions",
+  title: "Conditions — Whel",
 };
 
 export default async function ConditionsPage() {
- const { data: conditions, error } = await supabase
- .from("conditions")
- .select("id, name, slug")
- .order("name");
+  const [
+    { data: conditionsRaw },
+    { data: signalsRaw },
+  ] = await Promise.all([
+    supabase
+      .from("conditions")
+      .select("id, name, slug, description")
+      .order("name"),
+    supabase
+      .from("repurposing_signals")
+      .select("condition_id, confidence_tier")
+      .eq("status", "active")
+      .not("total_evidence_score", "is", null)
+      .gt("total_evidence_score", 0),
+  ]);
 
- if (error) {
- console.error("Failed to fetch conditions:", error.message);
- }
+  const conditions = conditionsRaw ?? [];
+  const signals    = signalsRaw   ?? [];
 
- return (
- <main className="flex-1" style={{ backgroundColor:"#F5F3EF" }}>
- {/* Page header */}
- <div style={{ backgroundColor:"#fff", borderBottom:"1px solid #E0DDD8" }}>
- <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
- <nav className="text-xs mb-4" style={{ color:"#111" }}>
- <span>Home</span>
- <span className="mx-2">›</span>
- <span style={{ color:"#4D5E4D" }}>Conditions</span>
- </nav>
- <h1
- className="font-heading text-3xl sm:text-4xl font-bold tracking-tight mb-3"
- style={{ color:"#1a1a1a" }}
- >
- Conditions
- </h1>
- <p className="text-base max-w-xl" style={{ color:"#111" }}>
- Conditions with active drug repurposing signals in the database.
- </p>
- </div>
- </div>
+  const conditionsWithStats = conditions.map((c, i) => {
+    const cSigs = signals.filter((s) => s.condition_id === c.id);
+    const tierCounts: Record<TierKey, number> = {
+      strong: 0, moderate: 0, emerging: 0, exploratory: 0,
+    };
+    for (const s of cSigs) {
+      const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
+      if (t in tierCounts) tierCounts[t]++;
+      else tierCounts.exploratory++;
+    }
+    return {
+      ...c,
+      conditionCode: `C-${String(i + 1).padStart(2, "0")}`,
+      totalSignals: cSigs.length,
+      tierCounts,
+    };
+  });
 
- <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
- <ConditionsList conditions={conditions ?? []} />
- </div>
- </main>
- );
+  const MONO: React.CSSProperties = {
+    fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
+  };
+
+  return (
+    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+
+      {/* ── Page header ─────────────────────────────────────────────────────── */}
+      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
+          {/* Breadcrumb */}
+          <nav
+            style={{
+              ...MONO,
+              fontSize: "11px",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase" as const,
+              color: "var(--muted)",
+              marginBottom: 20,
+            }}
+          >
+            <Link href="/" style={{ color: "var(--muted)" }}>
+              Home
+            </Link>
+            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
+            <span style={{ color: "var(--ink)" }}>Conditions</span>
+          </nav>
+
+          <h1
+            className="font-heading"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontWeight: 500,
+              lineHeight: 1.08,
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              marginBottom: 16,
+            }}
+          >
+            Conditions index.
+          </h1>
+          <p
+            style={{
+              fontSize: "1rem",
+              lineHeight: 1.65,
+              color: "var(--ink-2)",
+              maxWidth: "48ch",
+            }}
+          >
+            {conditionsWithStats.length} condition
+            {conditionsWithStats.length !== 1 ? "s" : ""} with active
+            drug-repurposing signals in the database.
+          </p>
+        </div>
+      </div>
+
+      {/* ── Conditions grid ─────────────────────────────────────────────────── */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <ConditionsList conditions={conditionsWithStats} />
+      </div>
+
+    </main>
+  );
 }
