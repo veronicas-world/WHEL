@@ -1,6 +1,6 @@
 # Limitations — proposed additions
 
-This file proposes additions and refinements to the existing Limitations accordion at `/about/technical-architecture` (the fourth section, key `"limitations"`). The current published list contains six entries (publication bias, AEMS confounding, LLM classification risk, sex-disaggregated data gap, data freshness, Reddit data quality). The additions below are intended to harden the section for review by a senior methodologist (e.g., a biomedical informatics reviewer).
+This file proposes additions and refinements to the existing Limitations accordion at `/about/technical-architecture` (the fourth section, key `"limitations"`). The current published list contains six entries (publication bias, FAERS confounding, LLM classification risk, sex-disaggregated data gap, data freshness, Reddit data quality). The additions below are intended to harden the section for review by a senior methodologist (e.g., a biomedical informatics reviewer).
 
 ## Refine an existing entry
 
@@ -16,7 +16,7 @@ This file proposes additions and refinements to the existing Limitations accordi
 > "Both the model and the system prompts evolve over the lifecycle of the project. Each pipeline run is logged with the model version (claude-opus-4-6 at current snapshot) and a hash of the active prompt; snapshots taken months apart should not be compared signal-for-signal without re-running classification with a pinned model and prompt. The repository preserves prompt history for reproducibility."
 
 ### Cross-condition signal interpretation
-> "Cross-Condition Signals identify drugs developed for other indications where women incidentally reported benefit for one of the six target conditions. Such signals can reflect three different underlying realities: (a) genuine pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity — the same patient population happens to carry both the original indication and the target condition, with no causal pharmacological link, or (c) reporting artifact — patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation against AEMS plus literature plus pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely."
+> "Cross-Condition Signals identify drugs developed for other indications where women incidentally reported benefit for one of the six target conditions. Such signals can reflect three different underlying realities: (a) genuine pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity — the same patient population happens to carry both the original indication and the target condition, with no causal pharmacological link, or (c) reporting artifact — patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation against FAERS plus literature plus pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely."
 
 ### Pathway insight inference is weak
 > "Open Targets and similar pathway databases connect drugs to targets and targets to diseases via integrated genetic-association, expression-quantitative, and known-drug-target evidence. The inferential bridge from \"drug A modulates target T, target T is associated with condition D\" to \"drug A may help condition D\" is structurally weak. Pathway-only signals are explicitly classified Exploratory in WHEL and labeled accordingly; pathway signals are intended to surface mechanistic hypotheses worth investigating, not therapeutic candidates."
@@ -34,7 +34,7 @@ This file proposes additions and refinements to the existing Limitations accordi
 > "A signal extracted from a 2014 trial may no longer reflect current standard of care, drug formulation, or dosing practice. The current snapshot does not yet flag signals as superseded when newer evidence reverses the direction of effect. Users should treat older signals with appropriate caution and rely on the linked source citations to assess timeliness."
 
 ### Database completeness
-> "WHEL's coverage of each condition is bounded by the scope of the search queries used in each pipeline. Compounds entirely outside our query terms — for example, a recently introduced biologic with no AEMS reports yet, or a long-tail traditional medicine without PubMed coverage — will not appear regardless of their actual relevance. Coverage gaps are systematically larger for the rarer of the six conditions (vulvodynia, adenomyosis) than for the better-studied ones (endometriosis, PCOS)."
+> "WHEL's coverage of each condition is bounded by the scope of the search queries used in each pipeline. Compounds entirely outside our query terms — for example, a recently introduced biologic with no FAERS reports yet, or a long-tail traditional medicine without PubMed coverage — will not appear regardless of their actual relevance. Coverage gaps are systematically larger for the rarer of the six conditions (vulvodynia, adenomyosis) than for the better-studied ones (endometriosis, PCOS)."
 
 ## Suggested ordering of the full Limitations section
 
@@ -43,7 +43,7 @@ After incorporating the additions:
 1. LLM classification risk (refined version)
 2. LLM versioning and prompt drift (new)
 3. Publication bias (existing)
-4. AEMS confounding (existing)
+4. FAERS confounding (existing)
 5. Cross-condition signal interpretation (new)
 6. Pathway insight inference is weak (new)
 7. Reddit data quality (existing, possibly merged with #11)

@@ -86,7 +86,7 @@ The current short arm descriptions on the homepage do not convey methodological 
 
 Example for Cross-Condition Signals:
 
-> **Cross-Condition Signals** — FDA AEMS reports plus literature triangulation. Inclusion requires corroboration across two independent evidence domains and a documented shared biological mechanism. Hypothesis-generating; not causal.
+> **Cross-Condition Signals** — FDA FAERS reports plus literature triangulation. Inclusion requires corroboration across two independent evidence domains and a documented shared biological mechanism. Hypothesis-generating; not causal.
 
 ## Disclaimer language
 

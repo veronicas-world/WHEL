@@ -16,11 +16,11 @@ WHEL is a hypothesis-generating tool, not a clinical recommendation engine.
 
 - **6 conditions:** endometriosis, adenomyosis, PCOS, PMDD, vulvodynia, perimenopause/menopause
 - **281 scored signals** with non-null total_evidence_score
-- **5 active data sources:** PubMed, ClinicalTrials.gov, FDA AEMS (formerly FAERS), Open Targets Platform, Reddit
+- **5 active data sources:** PubMed, ClinicalTrials.gov, FDA FAERS, Open Targets Platform, Reddit
 - **2,228 source citations** total
 - **4 evidence arms:**
   - **Direct Research** (PubMed + ClinicalTrials.gov)
-  - **Cross-Condition Signals** (FDA AEMS + literature triangulation)
+  - **Cross-Condition Signals** (FDA FAERS + literature triangulation)
   - **Pathway Insights** (Open Targets + FDA labels)
   - **Community Forum Reports** (Reddit communities)
 - **4 confidence tiers** mapped from a 0–10 score:

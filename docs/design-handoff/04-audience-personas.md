@@ -51,7 +51,7 @@ The redesign serves three audiences in priority order. Trade-offs should resolve
 **What she'll scrutinize:**
 
 - FDA approval status and label indications
-- Distinctions between RCT evidence and observational/AEMS data
+- Distinctions between RCT evidence and observational/FAERS data
 - Whether community-reported signal is being conflated with clinical evidence
 
 **What turns her off:**

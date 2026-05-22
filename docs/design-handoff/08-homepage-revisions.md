@@ -106,7 +106,7 @@ Specifically the values that need wiring:
 - Stat row: `281` signals indexed, `6 + 4 in pipeline` conditions, `17` strong-tier, `Apr 2026` last review.
 - Figure 1 caption: `N = 281 SIGNALS · 6 × 4 MATRIX`.
 - Figure 1 cells: every count and percentage (e.g. Endometriosis Emerging `31 / 46%`).
-- Figure 2: every node count (PubMed 142, ClinicalTrials.gov 38, FDA AEMS 47, Open Targets 31, Reddit 23; Direct Research 136, Cross-Condition Signals 65, Pathway Insights 57, Community Forum Reports 23; Strong 17, Moderate 56, Emerging 108, Exploratory 100).
+- Figure 2: every node count (PubMed 142, ClinicalTrials.gov 38, FDA FAERS 47, Open Targets 31, Reddit 23; Direct Research 136, Cross-Condition Signals 65, Pathway Insights 57, Community Forum Reports 23; Strong 17, Moderate 56, Emerging 108, Exploratory 100).
 - Conditions cards: every signal count and `X strong · Y moderate` summary.
 
 Math sanity-checks pass on the mockup (sources sum to 281, arms sum to 281, tiers sum to 281), but no claim is made that those are the current DB values. Implementation will replace.

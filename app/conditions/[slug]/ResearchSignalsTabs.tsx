@@ -333,7 +333,7 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
                           lineHeight: 1.5,
                         }}
                       >
-                        {(query.title ?? "").replace(/^FDA (FAERS|AEMS) Database Query:\s*/i, "")}
+                        {(query.title ?? "").replace(/^FDA \w+ Database Query:\s*/i, "")}
                         {query.url && (
                           <a
                             href={query.url} target="_blank" rel="noopener noreferrer"
@@ -360,7 +360,7 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
                               color: "var(--ink-2)",
                             }}
                           >
-                            <span>{(s.title ?? "").replace(/^(FAERS|AEMS):\s*/i, "")}</span>
+                            <span>{(s.title ?? "").replace(/^[A-Z]{2,}:\s*/, "")}</span>
                             {s.url && (
                               <a
                                 href={s.url} target="_blank" rel="noopener noreferrer"

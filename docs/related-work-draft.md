@@ -36,7 +36,7 @@ WHEL is structurally compatible with these resources and could be extended to in
 
 Disproportionality methods for spontaneous adverse event reporting databases — including the Proportional Reporting Ratio (PRR), Reporting Odds Ratio (ROR), and Information Component (IC) — are well-established (Bate & Evans, 2009, *Pharmacoepidemiology and Drug Safety*). These methods quantify whether a particular drug-reaction pair appears in the database at rates higher than expected given the marginal frequency of the drug and reaction.
 
-WHEL's FDA AEMS pipeline does not currently implement disproportionality methods. The current pipeline relies on raw report-frequency summaries plus LLM-mediated cross-condition reasoning. This is a deliberate but provisional choice: disproportionality methods provide quantitative comparisons but do not directly answer the question WHEL is asking, which is whether reports cluster in a way suggestive of off-label benefit for one of six target conditions in female patients. Triangulating WHEL's AEMS signals against PRR/ROR/IC scores is on the development roadmap and is the most likely first methodological refinement in v0.2.
+WHEL's FDA FAERS pipeline does not currently implement disproportionality methods. The current pipeline relies on raw report-frequency summaries plus LLM-mediated cross-condition reasoning. This is a deliberate but provisional choice: disproportionality methods provide quantitative comparisons but do not directly answer the question WHEL is asking, which is whether reports cluster in a way suggestive of off-label benefit for one of six target conditions in female patients. Triangulating WHEL's FAERS signals against PRR/ROR/IC scores is on the development roadmap and is the most likely first methodological refinement in v0.2.
 
 ## Women's health research underrepresentation
 
@@ -51,7 +51,7 @@ There are now several drug-repurposing-adjacent tools that surface hypothesis ca
 What we believe is novel about WHEL:
 
 - **Condition focus.** A repurposing aggregator built specifically and only for under-studied women's hormonal conditions, with condition-specific search vocabularies tuned for the population.
-- **Multi-arm triangulation under one rubric.** Formal evidence (PubMed, ClinicalTrials.gov), regulatory pharmacovigilance (FDA AEMS), mechanistic pathway data (Open Targets), and patient-reported community signal (Reddit) scored against a single five-dimension rubric and tier-mapped consistently.
+- **Multi-arm triangulation under one rubric.** Formal evidence (PubMed, ClinicalTrials.gov), regulatory pharmacovigilance (FDA FAERS), mechanistic pathway data (Open Targets), and patient-reported community signal (Reddit) scored against a single five-dimension rubric and tier-mapped consistently.
 - **Explicit "sparseness as information" framing.** The four-tier display deliberately includes Exploratory and Emerging signals on equal footing with Strong ones, rather than filtering them away; the tool is designed to surface where the evidence base is thin, not to hide that thinness.
 
 What we explicitly do not claim:
