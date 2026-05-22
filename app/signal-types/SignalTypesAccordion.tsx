@@ -3,7 +3,11 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 
-const LINK_STYLE = { color: "#4D5E4D", textDecoration: "underline" };
+const LINK_STYLE = {
+  color: "var(--green-mid)",
+  textDecoration: "underline",
+  textUnderlineOffset: "2px",
+};
 
 const CARDS: {
   key: string;
@@ -30,12 +34,13 @@ const CARDS: {
     oneLine: "Drugs developed for other conditions where women incidentally reported benefit.",
     paragraphs: [
       "Cross-Condition Signals is the arm that drug repurposing is built on. It looks for drugs that were developed or trialed for an entirely different purpose, where female patients incidentally reported benefit — or where secondary endpoints in large trials suggest an unexpected effect on a condition we are tracking.",
-      <>Data sources include the <a href="https://www.fda.gov/safety/questions-and-answers-fdas-adverse-event-reporting-system-faers" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>FDA Adverse Event Monitoring System (AEMS, formerly FAERS)</a>, population level epidemiological studies, and secondary endpoints buried in trials designed to study something else. FDA AEMS is particularly useful because it captures not just adverse events but off label use patterns and unexpected outcomes. WHEL also draws on the <a href="https://platform.opentargets.org" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>Open Targets Platform</a> (platform.opentargets.org), developed by EMBL-EBI, the Wellcome Sanger Institute, and GlaxoSmithKline, which aggregates genetic, genomic, and clinical evidence linking drug targets to diseases across multiple evidence types.</>,
+      <>Data sources include the <a href="https://www.fda.gov/drugs/surveillance/questions-and-answers-fdas-adverse-event-reporting-system-faers" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>FDA Adverse Event Reporting System (FAERS)</a>, population level epidemiological studies, and secondary endpoints buried in trials designed to study something else. FDA FAERS is particularly useful because it captures not just adverse events but off label use patterns and unexpected outcomes. WHEL also draws on the <a href="https://platform.opentargets.org" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>Open Targets Platform</a> (platform.opentargets.org), developed by EMBL-EBI, the Wellcome Sanger Institute, and GlaxoSmithKline, which aggregates genetic, genomic, and clinical evidence linking drug targets to diseases across multiple evidence types.</>,
       "A concrete example: several large statin trials (statins are cholesterol lowering drugs) included significant female populations. Buried in the secondary endpoints, women on statins reported reduced dysmenorrhea — painful periods, which is a hallmark symptom of endometriosis. Is this a proven treatment? No. Is it a hypothesis worth formal investigation? Yes. That is exactly what this arm is designed to surface.",
       "Drug classes of particular interest in this arm include statins, SSRIs, dopamine agonists (cabergoline, bromocriptine), and GLP-1 receptor agonists. GLP-1s are especially active right now: the wave of Ozempic and Wegovy trials has generated an enormous amount of data about hormonal and inflammatory effects in women, and researchers are only beginning to analyze what that secondary data contains.",
-      "What to look for: Cross-condition signals with multiple independent sources (FDA AEMS reports plus a secondary trial endpoint, for example) are stronger candidates for follow-up than signals from a single source.",
+      "What the raw data looks like: each cross-condition signal card shows reaction counts drawn from FDA FAERS reports — for example, \u201CPain n=11.\u201D The n= number reflects how many reports in WHEL's sampled dataset mentioned that reaction, and every count links directly to the live FDA database query so anyone can verify it. As a noise filter, an individual FAERS reaction needs at least two reports before it is surfaced at all; the broader cross-condition inclusion bar — corroboration across two independent evidence domains — still applies before a signal is classified above Exploratory.",
+      "What to look for: Cross-condition signals with multiple independent sources (FDA FAERS reports plus a secondary trial endpoint, for example) are stronger candidates for follow-up than signals from a single source.",
     ],
-    inclusionCriteria: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA AEMS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient — a documented shared pathway is required.",
+    inclusionCriteria: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA FAERS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient — a documented shared pathway is required.",
   },
   {
     key: "pathways",
@@ -78,9 +83,9 @@ export default function SignalTypesAccordion() {
           <div
             key={card.key}
             style={{
-              border: "1px solid #E0DDD8",
-              borderLeft: isActive ? "3px solid #4D5E4D" : "1px solid #E0DDD8",
-              backgroundColor: "#fff",
+              border: "1px solid var(--rule)",
+              borderLeft: isActive ? "3px solid var(--green-mid)" : "1px solid var(--rule)",
+              backgroundColor: "var(--paper)",
               transition: "border-left 0.15s ease",
             }}
           >
@@ -91,18 +96,29 @@ export default function SignalTypesAccordion() {
             >
               <div className="flex-1 min-w-0">
                 <h2
-                  className="font-heading text-xl font-bold mb-1.5"
-                  style={{ color: isActive ? "#4D5E4D" : "#1a1a1a" }}
+                  className="font-heading mb-1.5"
+                  style={{
+                    fontSize: "1.25rem",
+                    fontWeight: 500,
+                    letterSpacing: "-0.01em",
+                    color: isActive ? "var(--green-mid)" : "var(--ink)",
+                  }}
                 >
                   {card.title}
                 </h2>
-                <p className="text-sm leading-relaxed" style={{ color: "#111" }}>
+                <p
+                  style={{
+                    fontSize: "0.9rem",
+                    lineHeight: 1.6,
+                    color: "var(--ink-2)",
+                  }}
+                >
                   {card.oneLine}
                 </p>
               </div>
               <span
                 className="shrink-0 text-lg font-light mt-0.5"
-                style={{ color: "#4D5E4D", lineHeight: 1 }}
+                style={{ color: "var(--green-mid)", lineHeight: 1 }}
                 aria-hidden="true"
               >
                 {isActive ? "−" : "+"}
@@ -112,9 +128,12 @@ export default function SignalTypesAccordion() {
             {isActive && (
               <div
                 className="px-6 sm:px-8 pb-8 space-y-4"
-                style={{ borderTop: "1px solid #E0DDD8" }}
+                style={{ borderTop: "1px solid var(--rule)" }}
               >
-                <div className="pt-6 space-y-4 text-sm leading-relaxed" style={{ color: "#111" }}>
+                <div
+                  className="pt-6 space-y-4"
+                  style={{ fontSize: "0.975rem", lineHeight: 1.72, color: "var(--ink-2)" }}
+                >
                   {card.paragraphs.map((p, i) => (
                     <p key={i}>{p}</p>
                   ))}
@@ -123,15 +142,21 @@ export default function SignalTypesAccordion() {
                 {/* Inclusion criteria */}
                 <div
                   className="mt-6 p-5"
-                  style={{ backgroundColor: "#F5F3EF", border: "1px solid #E0DDD8" }}
+                  style={{ backgroundColor: "var(--bg-2)", border: "1px solid var(--rule)" }}
                 >
                   <p
-                    className="text-[10px] font-semibold uppercase tracking-widest mb-2"
-                    style={{ color: "#4D5E4D" }}
+                    className="font-mono mb-2"
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.18em",
+                      color: "var(--green-mid)",
+                    }}
                   >
                     Inclusion criteria
                   </p>
-                  <p className="text-sm leading-relaxed" style={{ color: "#111" }}>
+                  <p style={{ fontSize: "0.925rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
                     {card.inclusionCriteria}
                   </p>
                 </div>

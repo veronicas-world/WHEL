@@ -69,7 +69,7 @@ const CARDS: CarouselCard[] = [
       { label: "Effect directionality",    desc: "every signal must be classified as improves, worsens, mixed, or unclear" },
       { label: "Replication",              desc: "one source is interesting; two or more independent sources constitute a signal" },
       { label: "Confounding assessment",   desc: "known confounders are flagged, including drugs with multiple indications and forum populations on concurrent therapies" },
-      { label: "Denominator awareness",    desc: "FDA AEMS and community data are signal-generating, not causal; signals from these sources require corroboration before elevation above Emerging" },
+      { label: "Denominator awareness",    desc: "FDA FAERS and community data are signal-generating, not causal; signals from these sources require corroboration before elevation above Emerging" },
     ],
   },
   {

@@ -8,7 +8,7 @@ export default function BackLink({ href, label }: { href: string; label: string 
     <Link
       href={href}
       className="inline-flex items-center gap-1.5 text-sm font-medium transition-opacity hover:opacity-70"
-      style={{ color: "#4D5E4D" }}
+      style={{ color: "var(--green-mid)" }}
     >
       <svg
         width="14"

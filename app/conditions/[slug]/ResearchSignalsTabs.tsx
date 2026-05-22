@@ -87,7 +87,7 @@ function getSourceLabels(sources: Source[]): string {
   const parts: string[] = [];
   const types = new Set(sources.map((s) => s.source_type));
   if (types.has("pubmed") || types.has("clinical_trial_finding") || types.has("review_article")) parts.push("PubMed");
-  if (types.has("faers") || types.has("sider")) parts.push("FDA AEMS");
+  if (types.has("faers") || types.has("sider")) parts.push("FDA FAERS");
   if (types.has("opentargets")) parts.push("Open Targets");
   return parts.join(" · ");
 }
@@ -339,7 +339,7 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
                             href={query.url} target="_blank" rel="noopener noreferrer"
                             style={{ marginLeft: 8, color: "var(--muted)", ...MONO, fontSize: 10 }}
                           >
-                            FDA AEMS <ExternalLinkIcon />
+                            FDA FAERS <ExternalLinkIcon />
                           </a>
                         )}
                       </div>

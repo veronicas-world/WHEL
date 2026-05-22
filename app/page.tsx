@@ -32,28 +32,28 @@ const SIGNAL_TYPES = [
     title: "Direct Research",
     desc: "Published studies and active clinical trials specifically investigating each condition.",
     sources: ["PubMed", "ClinicalTrials.gov"],
-    href: "/about/direct-research",
+    href: "/signal-types",
   },
   {
     num: "02",
     title: "Cross-Condition Signals",
     desc: "Drugs developed for other conditions where women incidentally reported benefit.",
     sources: ["FAERS", "EudraVigilance", "PubMed", "Trial registries"],
-    href: "/about/cross-condition",
+    href: "/signal-types",
   },
   {
     num: "03",
     title: "Pathway Insights",
     desc: "Signals from biological pathway and target analysis, including drugs with mechanistic or genetic evidence of relevance, and adverse event patterns revealing underlying disease biology.",
     sources: ["Open Targets", "FAERS", "EudraVigilance", "SIDER"],
-    href: "/about/pathways",
+    href: "/signal-types",
   },
   {
     num: "04",
     title: "Community Forum Reports",
     desc: "Consistent treatment patterns reported across condition-specific patient communities.",
     sources: ["Reddit communities"],
-    href: "/about/community-reports",
+    href: "/signal-types",
   },
 ];
 

@@ -2,34 +2,59 @@ import Link from "next/link";
 import SignalTypesAccordion from "./SignalTypesAccordion";
 
 export const metadata = {
- title: "Signal Types",
+  title: "Signal Types — Whel",
+};
+
+const MONO: React.CSSProperties = {
+  fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
 };
 
 export default function SignalTypesPage() {
- return (
- <main className="flex-1" style={{ backgroundColor: "#F5F3EF" }}>
- <div style={{ backgroundColor: "#fff", borderBottom: "1px solid #E0DDD8" }}>
- <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
- <nav className="text-xs mb-4" style={{ color: "#111" }}>
- <Link href="/" className="hover:underline">Home</Link>
- <span className="mx-2">›</span>
- <span style={{ color: "#4D5E4D" }}>Signal Types</span>
- </nav>
- <h1
- className="font-heading text-3xl sm:text-4xl font-bold tracking-tight mb-3"
- style={{ color: "#1a1a1a" }}
- >
- Signal Types
- </h1>
- <p className="text-base max-w-2xl" style={{ color: "#111" }}>
- WHEL organizes evidence into four arms. Select a signal type to read how it works and what to look for.
- </p>
- </div>
- </div>
+  return (
+    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
 
- <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
- <SignalTypesAccordion />
- </div>
- </main>
- );
+      {/* ── Page header ─────────────────────────────────────────────────────── */}
+      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+          <nav
+            style={{
+              ...MONO,
+              fontSize: "11px",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: 20,
+            }}
+          >
+            <Link href="/" style={{ color: "var(--muted)" }}>Home</Link>
+            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
+            <span style={{ color: "var(--ink)" }}>Signal Types</span>
+          </nav>
+
+          <h1
+            className="font-heading"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontWeight: 500,
+              lineHeight: 1.08,
+              letterSpacing: "-0.02em",
+              color: "var(--ink)",
+              marginBottom: 16,
+            }}
+          >
+            Signal types.
+          </h1>
+          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "56ch" }}>
+            WHEL organizes evidence into four research arms. Select a signal type
+            to read how it works, what its sources are, and what to look for.
+          </p>
+        </div>
+      </div>
+
+      {/* ── Body ────────────────────────────────────────────────────────────── */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <SignalTypesAccordion />
+      </div>
+    </main>
+  );
 }
