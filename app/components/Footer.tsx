@@ -1,14 +1,14 @@
 import Link from "next/link";
 
 const EXPLORE_LINKS = [
-  { label: "Browse Conditions", href: "/conditions" },
+  { label: "Conditions", href: "/conditions" },
   { label: "Search", href: "/search" },
   { label: "Signal Types", href: "/signal-types" },
+  { label: "Technical Architecture", href: "/about/technical-architecture" },
 ];
 
 const ABOUT_LINKS = [
   { label: "Mission", href: "/about" },
-  { label: "Technical Architecture", href: "/about/technical-architecture" },
   { label: "Contact", href: "/about/contact" },
 ];
 

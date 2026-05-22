@@ -21,37 +21,43 @@ function VennIcon() {
   );
 }
 
-const NAV_LINKS = [
-  { label: "Browse Conditions", href: "/conditions" },
-  { label: "Signal Types", href: "/signal-types" },
+type NavLink = { label: string; href: string };
+
+const NAV_LINKS: NavLink[] = [
+  { label: "Home", href: "/" },
+  { label: "Conditions", href: "/conditions" },
 ];
 
-const ABOUT_LINKS = [
-  { label: "Mission", href: "/about" },
+const METHODOLOGY_LINKS: NavLink[] = [
+  { label: "Signal Types", href: "/signal-types" },
   { label: "Technical Architecture", href: "/about/technical-architecture" },
+];
+
+const ABOUT_LINKS: NavLink[] = [
+  { label: "Mission", href: "/about" },
   { label: "Contact", href: "/about/contact" },
 ];
 
-export default function Nav() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
-  const aboutRef = useRef<HTMLDivElement>(null);
-  const aboutCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+/** Hover/click dropdown used for the Methodology and About menus. */
+function NavDropdown({ label, links }: { label: string; links: NavLink[] }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function openAbout() {
-    if (aboutCloseTimer.current) clearTimeout(aboutCloseTimer.current);
-    setAboutOpen(true);
+  function openMenu() {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
   }
 
-  function scheduleCloseAbout() {
-    aboutCloseTimer.current = setTimeout(() => setAboutOpen(false), 150);
+  function scheduleClose() {
+    closeTimer.current = setTimeout(() => setOpen(false), 150);
   }
 
   useEffect(() => {
-    if (!aboutOpen) return;
+    if (!open) return;
     function handleOutsideClick(e: MouseEvent | TouchEvent) {
-      if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) {
-        setAboutOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
       }
     }
     document.addEventListener("mousedown", handleOutsideClick);
@@ -60,7 +66,58 @@ export default function Nav() {
       document.removeEventListener("mousedown", handleOutsideClick);
       document.removeEventListener("touchstart", handleOutsideClick);
     };
-  }, [aboutOpen]);
+  }, [open]);
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={openMenu}
+      onMouseLeave={scheduleClose}
+    >
+      <button
+        className="text-sm font-medium whitespace-nowrap transition-opacity hover:opacity-60"
+        style={{ color: "var(--ink)" }}
+        aria-expanded={open}
+        aria-haspopup="true"
+        onClick={() => (open ? setOpen(false) : openMenu())}
+      >
+        {label}
+      </button>
+
+      {open && (
+        <div className="absolute top-full right-0 pt-2" style={{ zIndex: 50, minWidth: "210px" }}>
+          <div
+            style={{
+              backgroundColor: "var(--paper)",
+              border: "1px solid var(--ink)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+            }}
+            onMouseEnter={openMenu}
+            onMouseLeave={scheduleClose}
+          >
+            {links.map(({ label: itemLabel, href }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className="block px-4 py-2.5 text-sm transition-colors"
+                style={{ color: "var(--ink)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--bg-2)")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              >
+                {itemLabel}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Nav() {
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header
@@ -122,51 +179,8 @@ export default function Nav() {
             </Link>
           ))}
 
-          {/* About dropdown */}
-          <div
-            ref={aboutRef}
-            className="relative"
-            onMouseEnter={openAbout}
-            onMouseLeave={scheduleCloseAbout}
-          >
-            <button
-              className="text-sm font-medium whitespace-nowrap transition-opacity hover:opacity-60"
-              style={{ color: "var(--ink)" }}
-              aria-expanded={aboutOpen}
-              aria-haspopup="true"
-              onClick={() => (aboutOpen ? setAboutOpen(false) : openAbout())}
-            >
-              About
-            </button>
-
-            {aboutOpen && (
-              <div className="absolute top-full right-0 pt-2" style={{ zIndex: 50, minWidth: "210px" }}>
-                <div
-                  style={{
-                    backgroundColor: "var(--paper)",
-                    border: "1px solid var(--ink)",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-                  }}
-                  onMouseEnter={openAbout}
-                  onMouseLeave={scheduleCloseAbout}
-                >
-                  {ABOUT_LINKS.map(({ label, href }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      onClick={() => setAboutOpen(false)}
-                      className="block px-4 py-2.5 text-sm transition-colors"
-                      style={{ color: "var(--ink)" }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--bg-2)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          <NavDropdown label="Methodology" links={METHODOLOGY_LINKS} />
+          <NavDropdown label="About" links={ABOUT_LINKS} />
 
           {/* Search bar */}
           <div className="w-52 lg:w-64">
@@ -215,7 +229,7 @@ export default function Nav() {
             <SearchBar size="lg" onNavigate={() => setMobileOpen(false)} />
           </div>
           <nav className="flex flex-col px-4 pb-4 gap-1">
-            {[...NAV_LINKS, ...ABOUT_LINKS].map(({ label, href }, i, arr) => (
+            {[...NAV_LINKS, ...METHODOLOGY_LINKS, ...ABOUT_LINKS].map(({ label, href }, i, arr) => (
               <Link
                 key={href}
                 href={href}
