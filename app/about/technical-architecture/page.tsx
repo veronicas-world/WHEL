@@ -409,6 +409,34 @@ export default function TechnicalArchitecturePage() {
             The data pipelines, the five-dimension scoring framework, the
             infrastructure, and the documented limitations behind every signal.
           </p>
+
+          <div style={{ marginTop: 28 }}>
+            <a
+              href="/whel-methods-v0.1.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                ...MONO,
+                display: "inline-flex",
+                alignItems: "baseline",
+                gap: 10,
+                fontSize: "12px",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--paper)",
+                backgroundColor: "var(--green-deep)",
+                border: "1px solid var(--green-deep)",
+                padding: "12px 20px",
+                textDecoration: "none",
+              }}
+            >
+              Read the methods (PDF)
+              <span aria-hidden="true">↓</span>
+            </a>
+            <p style={{ ...MONO, fontSize: "11px", letterSpacing: "0.04em", color: "var(--muted)", marginTop: 9, marginBottom: 0 }}>
+              v0.1 · May 2026 · working draft · 12 pages
+            </p>
+          </div>
         </div>
       </div>
 
