@@ -151,7 +151,7 @@ export default function ContactPage() {
                 We are also actively interested in hearing which gaps matter most: which
                 conditions to add next, which pipelines to strengthen, and where the
                 evidence framing could be clearer. If you are a researcher or clinician
-                open to a conversation, an email is genuinely welcome.
+                open to a conversation, an email is welcome.
               </p>
             </div>
           </section>
