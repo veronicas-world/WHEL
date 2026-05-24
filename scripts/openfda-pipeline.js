@@ -428,7 +428,7 @@ Key cross-condition overlaps:
 - Vasomotor signals (hot flush, night sweat): primarily menopause, but also relevant to surgical menopause secondary to endometriosis treatment
 `.trim();
 
-const FAERS_SYSTEM_PROMPT = `You are a pharmacovigilance analyst specializing in women's health and drug repurposing. You are reviewing FDA Adverse Event Reporting System (FAERS) data for a drug class.
+const FAERS_SYSTEM_PROMPT = `You are a pharmacovigilance analyst specializing in women's health and drug repurposing. You are reviewing FDA Adverse Event Monitoring System (AEMS) data for a drug class.
 
 ${CONDITIONS_CONTEXT}
 
@@ -438,13 +438,13 @@ For each signal, provide:
 - drug_name: the generic drug name (lowercase)
 - signal_type: one of "side_effect_signal", "pathway_signal", "cross_condition_signal"
 - evidence_strength: "preliminary", "moderate", or "strong"
-- summary: 2–3 sentences. MUST include the exact FAERS volume numbers from the input header (gynae_total and general_total). Follow this format: "Out of [gynae_total] condition-relevant adverse event reports for [drug] in the FDA FAERS database (from [general_total] total female-patient reports), [key finding]. [Scientific interpretation of what this means for the specific condition]. Full-scale analysis of all reports may reveal additional patterns."
+- summary: 2–3 sentences. MUST include the exact AEMS volume numbers from the input header (gynae_total and general_total). Follow this format: "Out of [gynae_total] condition-relevant adverse event reports for [drug] in the FDA AEMS database (from [general_total] total female-patient reports), [key finding]. [Scientific interpretation of what this means for the specific condition]. Full-scale analysis of all reports may reveal additional patterns."
 - mechanism_hypothesis: 1–2 sentences on the biological mechanism specific to this condition
 - relevant_conditions: array containing the specific condition(s) this signal directly applies to, using these exact names: ["endometriosis", "premenstrual dysphoric disorder", "polycystic ovary syndrome", "adenomyosis", "vulvodynia", "menopause"]
-- reaction_counts: object mapping EVERY relevant reaction term found in the FAERS data to its report count, covering all applicable categories (menstrual, pain, mood, metabolic, vasomotor, inflammatory, sexual/urinary). Include ALL relevant terms — do not limit to a small subset. Sort descending by count in your response. Example: {"vaginal haemorrhage": 12, "pelvic pain": 8, "depression": 6, "dysmenorrhoea": 4, "hot flush": 3}
+- reaction_counts: object mapping EVERY relevant reaction term found in the AEMS data to its report count, covering all applicable categories (menstrual, pain, mood, metabolic, vasomotor, inflammatory, sexual/urinary). Include ALL relevant terms — do not limit to a small subset. Sort descending by count in your response. Example: {"vaginal haemorrhage": 12, "pelvic pain": 8, "depression": 6, "dysmenorrhoea": 4, "hot flush": 3}
 
 MINIMUM INCLUSION STANDARD — Hard exclusion rules. A signal must meet ALL of the following or it must not appear in your output at all (do not include it with low scores — omit it entirely):
-1. The signal must be corroborated across at least TWO independent evidence domains (e.g. gynae-targeted FAERS reports PLUS general FAERS pattern, or FAERS data PLUS a known pharmacological mechanism). A count in a single reaction category alone is insufficient.
+1. The signal must be corroborated across at least TWO independent evidence domains (e.g. gynae-targeted AEMS reports PLUS general AEMS pattern, or AEMS data PLUS a known pharmacological mechanism). A count in a single reaction category alone is insufficient.
 2. OR: three or more independent formal source mentions all pointing in the same direction.
 3. A plausible shared biological mechanism must be identifiable and named — not generic "inflammation" but a specific pathway (e.g. prostaglandin signaling, androgen receptor modulation, HPA axis dysregulation).
 4. The direction of effect must be discernible (improves, worsens, or clearly mixed — not just "present").
@@ -454,7 +454,7 @@ If a drug has reactions relevant to multiple conditions, return one array entry 
 For each signal, include these evidence scoring fields:
 - confidence_tier: "Exploratory" (total 0-3), "Emerging" (4-6), "Moderate" (7-8), or "Strong" (9-10)
 - replication_score: 0 = single source or theoretical; 1 = two independent sources or one moderate study; 2 = multiple independent replications or RCT evidence
-- source_quality_score: 0 = case reports or computational; 1 = observational, secondary endpoint, or registry data (FAERS = 1); 2 = RCT, meta-analysis, or large prospective cohort
+- source_quality_score: 0 = case reports or computational; 1 = observational, secondary endpoint, or registry data (AEMS = 1); 2 = RCT, meta-analysis, or large prospective cohort
 - specificity_score: 0 = indirect or pathway-level only; 1 = condition-adjacent; 2 = direct evidence in this condition
 - plausibility_score: 0 = speculative mechanism; 1 = biologically plausible with supporting data; 2 = well-characterized mechanism with direct pathway evidence
 - direction_score: 0 = unclear or conflicting; 1 = consistent direction but limited data; 2 = clear directional effect with consistent data
@@ -467,15 +467,15 @@ Return ONLY a valid JSON array. If nothing is noteworthy, return [].`;
 async function analyzeWithClaude(apiKey, drugClass, content) {
   const userMessage =
     `Drug class: ${drugClass}\n\n` +
-    `The following is a two-pass summary of FDA Adverse Event Reporting System (FAERS) data ` +
+    `The following is a two-pass summary of FDA Adverse Event Monitoring System (AEMS) data ` +
     `for female patients taking drugs in the "${drugClass}" class.\n\n` +
     `DATA FORMAT:\n` +
     `Each drug section header shows: (a) gynae_total = number of reports matching condition-relevant ` +
-    `reaction terms in all of FDA FAERS, and (b) general_total = total female-patient reports for this drug. ` +
+    `reaction terms in all of FDA AEMS, and (b) general_total = total female-patient reports for this drug. ` +
     `USE THESE EXACT NUMBERS verbatim in the summary field of each signal.\n\n` +
     `Pass 1 (condition-targeted): Reports filtered for reaction terms relevant to any of the 6 conditions ` +
     `(menstrual, pain, mood, metabolic, vasomotor, inflammatory, sexual/urinary). ` +
-    `Reaction counts shown reflect the sampled 100 reports, not all of FDA FAERS.\n\n` +
+    `Reaction counts shown reflect the sampled 100 reports, not all of FDA AEMS.\n\n` +
     `Pass 2 (general sample): Unfiltered female-patient sample. Use as baseline context.\n\n` +
     `INSTRUCTIONS:\n` +
     `1. For each drug with relevant findings, generate ONE signal entry PER CONDITION it implicates. ` +
@@ -819,7 +819,7 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
     // ── (a) Database query summary row ──────────────────────────────────────
     const summarySourceId = randomUUID();
     const summaryTitle =
-      `FDA FAERS Database Query: ${s.drug_name} — ` +
+      `FDA AEMS Database Query: ${s.drug_name} — ` +
       `${gynaeTotal.toLocaleString()} condition-relevant reports out of ` +
       `${generalTotal.toLocaleString()} female-patient reports`;
 
@@ -840,7 +840,7 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
     out.push(`  ${esc(summarySourceId)}, ${signalIdSubquery}, 'faers',`);
     out.push(`  ${esc(`FAERS-QUERY-${s.drug_name.toUpperCase()}`)},`);
     out.push(`  ${esc(summaryTitle)},`);
-    out.push(`  NULL, 'FDA Adverse Event Reporting System (FAERS)', ${esc(today)}, ${esc(summaryUrl)}`);
+    out.push(`  NULL, 'FDA Adverse Event Monitoring System (AEMS)', ${esc(today)}, ${esc(summaryUrl)}`);
     out.push(`);`);
     out.push('');
 
@@ -853,21 +853,21 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
     if (reactionEntries.length === 0) {
       // Fallback if Claude returned no reaction_counts or all were n=1
       const sourceId = randomUUID();
-      const title = `FAERS: ${s.drug_name} — condition-relevant reactions in female patients (${gynaeTotal.toLocaleString()} matching reports in FDA FAERS)`;
+      const title = `AEMS: ${s.drug_name} — condition-relevant reactions in female patients (${gynaeTotal.toLocaleString()} matching reports in FDA AEMS)`;
       out.push(`INSERT INTO sources`);
       out.push(`  (id, signal_id, source_type, external_id, title, authors, journal, publication_date, url)`);
       out.push(`VALUES (`);
       out.push(`  ${esc(sourceId)}, ${signalIdSubquery}, 'faers',`);
       out.push(`  ${esc(`FAERS-${s.drug_name.toUpperCase()}`)},`);
       out.push(`  ${esc(title)},`);
-      out.push(`  NULL, 'FDA Adverse Event Reporting System (FAERS)', ${esc(today)}, ${esc(faersUrl)}`);
+      out.push(`  NULL, 'FDA Adverse Event Monitoring System (AEMS)', ${esc(today)}, ${esc(faersUrl)}`);
       out.push(`);`);
       out.push('');
     } else {
       for (const [reaction, count] of reactionEntries) {
         const sourceId = randomUUID();
         const reactionDisplay = reaction.charAt(0).toUpperCase() + reaction.slice(1);
-        const title = `FAERS: ${reactionDisplay} (n=${count})`;
+        const title = `AEMS: ${reactionDisplay} (n=${count})`;
         const externalId = `FAERS-${s.drug_name.toUpperCase()}-${reaction.replace(/\s+/g, '_').toUpperCase()}`;
 
         // Build a verifiable OpenFDA URL for this specific drug + reaction combination
@@ -880,7 +880,7 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
         out.push(`  ${esc(sourceId)}, ${signalIdSubquery}, 'faers',`);
         out.push(`  ${esc(externalId)},`);
         out.push(`  ${esc(title)},`);
-        out.push(`  NULL, 'FDA Adverse Event Reporting System (FAERS)', ${esc(today)}, ${esc(verifyUrl)}`);
+        out.push(`  NULL, 'FDA Adverse Event Monitoring System (AEMS)', ${esc(today)}, ${esc(verifyUrl)}`);
         out.push(`);`);
         out.push('');
       }

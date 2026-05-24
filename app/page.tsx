@@ -38,14 +38,14 @@ const SIGNAL_TYPES = [
     num: "02",
     title: "Cross-Condition Signals",
     desc: "Drugs developed for other conditions where women incidentally reported benefit.",
-    sources: ["FAERS", "EudraVigilance", "PubMed", "Trial registries"],
+    sources: ["AEMS", "EudraVigilance", "PubMed", "Trial registries"],
     href: "/signal-types",
   },
   {
     num: "03",
     title: "Pathway Insights",
     desc: "Signals from biological pathway and target analysis, including drugs with mechanistic or genetic evidence of relevance, and adverse event patterns revealing underlying disease biology.",
-    sources: ["Open Targets", "FAERS", "EudraVigilance", "SIDER"],
+    sources: ["Open Targets", "AEMS", "EudraVigilance", "SIDER"],
     href: "/signal-types",
   },
   {

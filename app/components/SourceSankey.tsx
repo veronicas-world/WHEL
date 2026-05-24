@@ -17,7 +17,7 @@ export type SankeyProps = {
 const SOURCES = [
   { id: "pubmed",         label: "PubMed" },
   { id: "clinicaltrials", label: "ClinicalTrials.gov" },
-  { id: "fda",            label: "FAERS" },
+  { id: "fda",            label: "AEMS" },
   { id: "opentargets",    label: "Open Targets" },
   { id: "reddit",         label: "Reddit" },
 ] as const;
