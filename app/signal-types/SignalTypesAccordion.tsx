@@ -69,7 +69,7 @@ const CARDS: {
 ];
 
 export default function SignalTypesAccordion() {
-  const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [activeKey, setActiveKey] = useState<string | null>("direct");
 
   function toggle(key: string) {
     setActiveKey((prev) => (prev === key ? null : key));
@@ -77,7 +77,7 @@ export default function SignalTypesAccordion() {
 
   return (
     <div className="space-y-3">
-      {CARDS.map((card) => {
+      {CARDS.map((card, idx) => {
         const isActive = activeKey === card.key;
         return (
           <div
@@ -95,6 +95,18 @@ export default function SignalTypesAccordion() {
               aria-expanded={isActive}
             >
               <div className="flex-1 min-w-0">
+                <p
+                  className="font-mono mb-1.5"
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.18em",
+                    color: isActive ? "var(--green-mid)" : "var(--muted)",
+                  }}
+                >
+                  Arm {String(idx + 1).padStart(2, "0")} / {String(CARDS.length).padStart(2, "0")}
+                </p>
                 <h2
                   className="font-heading mb-1.5"
                   style={{
