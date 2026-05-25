@@ -44,3 +44,9 @@ next-env.d.ts
 # Reddit pipeline outputs (generated, not source)
 out_*.sql
 log_*.txt
+
+# Ad-hoc diagnostic / probe scripts (local debugging, not source)
+# Review finding M4, May 2026: keeps one-off DB probes out of the repo.
+# Root-level config files (eslint.config.mjs, postcss.config.mjs) are
+# unaffected -- this pattern only matches scripts/.
+scripts/*.mjs
