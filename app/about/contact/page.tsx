@@ -98,7 +98,7 @@ export default function ContactPage() {
                 For questions, research collaborations, corrections, or feedback, the
                 best way to reach us is by email at{" "}
                 <a href="mailto:vla2117@columbia.edu" style={LINK}>vla2117@columbia.edu</a>.
-                We read everything, though replies can take a little time.
+                We read everything.
               </p>
               <p style={BODY}>
                 A detailed account of how Whel was conceived and built is available in the{" "}
@@ -149,8 +149,9 @@ export default function ContactPage() {
             <h2 className="font-heading" style={H2}>The people behind Whel</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel was built by two people. Veronica Agudelo is a philosophy student
-                who came to this work through a personal experience with a hormonal
+                Whel was built by two people. Veronica Agudelo is an undergraduate
+                student at Columbia University who came to this work through a personal
+                experience with a hormonal
                 condition, a brain surgery, and a long stretch of late-night PubMed
                 reading. The project&apos;s clinical grounding comes from her mother, a
                 practicing psychiatrist who has spent much of her career thinking about
