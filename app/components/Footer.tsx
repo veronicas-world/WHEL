@@ -1,4 +1,7 @@
 import Link from "next/link";
+import LinkedInIcon from "./LinkedInIcon";
+
+const LINKEDIN_URL = "https://www.linkedin.com/company/whel2026/";
 
 const EXPLORE_LINKS = [
   { label: "Conditions", href: "/conditions" },
@@ -46,6 +49,28 @@ export default function Footer() {
             <p style={{ fontSize: "12.5px", color: "var(--muted)", lineHeight: 1.6, maxWidth: "28ch" }}>
               An evidence index for under-researched women&apos;s health conditions.
             </p>
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Whel on LinkedIn"
+              className="transition-opacity hover:opacity-60"
+              style={{
+                ...MONO,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 7,
+                marginTop: 16,
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--ink-2)",
+                textDecoration: "none",
+              }}
+            >
+              <LinkedInIcon size={14} />
+              LinkedIn
+            </a>
           </div>
 
           {/* Explore */}

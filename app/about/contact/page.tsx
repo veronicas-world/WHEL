@@ -1,4 +1,7 @@
 import Link from "next/link";
+import LinkedInIcon from "@/app/components/LinkedInIcon";
+
+const LINKEDIN_URL = "https://www.linkedin.com/company/whel2026/";
 
 export const metadata = {
   title: "Contact | Whel",
@@ -110,6 +113,33 @@ export default function ContactPage() {
                 , which is also where occasional updates about new conditions and
                 pipeline changes are posted.
               </p>
+              <p style={BODY}>
+                You can also follow the project on LinkedIn for shorter updates
+                and to get in touch there.
+              </p>
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-70"
+                style={{
+                  ...MONO,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  alignSelf: "flex-start",
+                  gap: 9,
+                  border: "1px solid var(--rule)",
+                  padding: "9px 15px",
+                  fontSize: "12px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--ink)",
+                  textDecoration: "none",
+                }}
+              >
+                <LinkedInIcon size={15} />
+                Whel on LinkedIn
+              </a>
             </div>
           </section>
 
