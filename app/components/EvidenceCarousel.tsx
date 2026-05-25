@@ -28,7 +28,7 @@ interface CarouselCard {
 const CARDS: CarouselCard[] = [
   {
     title: "Model Selection",
-    body: "All signal analysis is performed using Claude Opus 4.6, Anthropic's most capable model. Opus was selected specifically for its performance on complex multi-criteria reasoning — simultaneously assessing source quality, replication, biological plausibility, and confounding risk in a single analytical pass. Smaller models were evaluated and produced flatter, less discriminating scores. For a tool where evidence evaluation is the core product, model selection is not a minor implementation detail.",
+    body: "All signal analysis is performed using Claude Opus 4.6, Anthropic's most capable model. Opus was selected specifically for its performance on complex multi-criteria reasoning, simultaneously assessing source quality, replication, biological plausibility, and confounding risk in a single analytical pass. Smaller models were evaluated and produced flatter, less discriminating scores. For a tool where evidence evaluation is the core product, model selection is not a minor implementation detail.",
   },
   {
     title: "Five-Dimension Scoring",
@@ -53,7 +53,7 @@ const CARDS: CarouselCard[] = [
   },
   {
     title: "Category Minimum Standards",
-    body: "Each research arm has its own inclusion floor. Signals that do not meet the minimum are excluded entirely — not entered with a low score.",
+    body: "Each research arm has its own inclusion floor. Signals that do not meet the minimum are excluded entirely rather than entered with a low score.",
     items: [
       { label: "Direct Research",           desc: "requires at least one peer-reviewed human study with clear population, drug, outcome, and effect direction" },
       { label: "Cross-Condition Signals",   desc: "requires the signal in at least two independent evidence domains with a shared mechanism" },
@@ -74,7 +74,7 @@ const CARDS: CarouselCard[] = [
   },
   {
     title: "One Guiding Principle",
-    body: "Frequency is not truth. A rare but repeatedly observed, highly specific signal from a single credible source may carry more evidential weight than 500 vague forum mentions. WHEL's scoring framework privileges specificity, reproducibility, and triangulation over raw volume.",
+    body: "Frequency is not truth. A rare but repeatedly observed, highly specific signal from a single credible source may carry more evidential weight than 500 vague forum mentions. Whel's scoring framework privileges specificity, reproducibility, and triangulation over raw volume.",
     link: { text: "Read the full methodology", href: "/about/technical-architecture" },
   },
 ];
@@ -210,7 +210,7 @@ function CardContent({ card }: { card: CarouselCard }) {
             >
               <span>
                 <span style={{ fontWeight: 600, color: "#1a1a1a" }}>{item.label}</span>
-                {" — "}
+                {": "}
                 {item.desc}
               </span>
             </li>
@@ -256,7 +256,7 @@ export default function EvidenceCarousel() {
             How evidence is evaluated
           </h2>
           <p style={{ fontSize: "0.95rem", color: "#555", lineHeight: 1.6 }}>
-            Every signal in WHEL is scored before it enters the database.
+            Every signal in Whel is scored before it enters the database.
           </p>
         </div>
 

@@ -18,7 +18,7 @@ export async function generateMetadata({
     .select("name")
     .eq("slug", slug)
     .single();
-  return { title: data?.name ? `${data.name} — Whel` : "Condition — Whel" };
+  return { title: data?.name ? `${data.name} | Whel` : "Condition | Whel" };
 }
 
 function slugToPrefix(slug: string): string {

@@ -4,19 +4,33 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import SearchBar from "./SearchBar";
 
-function VennIcon() {
+/** WHEL mark — four overlapping rings, one for each of the four research arms. */
+function WhelMark() {
+  const rings = [
+    { cx: 16, cy: 9.5 },  // top
+    { cx: 22.5, cy: 16 }, // right
+    { cx: 16, cy: 22.5 }, // bottom
+    { cx: 9.5, cy: 16 },  // left
+  ];
   return (
     <svg
-      viewBox="0 0 28 28"
+      viewBox="0 0 32 32"
       width="26"
       height="26"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <circle cx="9" cy="9" r="7" stroke="var(--green-mid)" strokeWidth="1.5" fill="var(--green-mid)" fillOpacity="0.08" />
-      <circle cx="19" cy="9" r="7" stroke="var(--green-mid)" strokeWidth="1.5" fill="var(--green-mid)" fillOpacity="0.08" />
-      <circle cx="14" cy="18" r="7" stroke="var(--green-mid)" strokeWidth="1.5" fill="var(--green-mid)" fillOpacity="0.08" />
+      {rings.map((r, i) => (
+        <circle
+          key={i}
+          cx={r.cx}
+          cy={r.cy}
+          r="8.3"
+          stroke="var(--green-deep)"
+          strokeWidth="1.7"
+        />
+      ))}
     </svg>
   );
 }
@@ -35,6 +49,7 @@ const METHODOLOGY_LINKS: NavLink[] = [
 
 const ABOUT_LINKS: NavLink[] = [
   { label: "Mission", href: "/about" },
+  { label: "Roadmap", href: "/about/roadmap" },
   { label: "Contact", href: "/about/contact" },
 ];
 
@@ -136,7 +151,7 @@ export default function Nav() {
           style={{ textDecoration: "none", color: "var(--ink)" }}
           onClick={() => setMobileOpen(false)}
         >
-          <VennIcon />
+          <WhelMark />
           <span
             className="font-serif"
             style={{

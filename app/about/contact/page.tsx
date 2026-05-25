@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Contact — Whel",
+  title: "Contact | Whel",
 };
 
 const MONO: React.CSSProperties = {
@@ -76,7 +76,7 @@ export default function ContactPage() {
             Get in touch.
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "52ch" }}>
-            WHEL is a small project and an open one. Questions, corrections, and
+            Whel is a small project and an open one. Questions, corrections, and
             collaboration are all welcome.
           </p>
         </div>
@@ -98,7 +98,7 @@ export default function ContactPage() {
                 We read everything, though replies can take a little time.
               </p>
               <p style={BODY}>
-                A detailed account of how WHEL was conceived and built is available in the{" "}
+                A detailed account of how Whel was conceived and built is available in the{" "}
                 <a
                   href="https://veronicaagudelo.substack.com/p/my-first-project-womens-health-evidence"
                   target="_blank"
@@ -116,10 +116,10 @@ export default function ContactPage() {
           {/* 02 — Who we are */}
           <section>
             <div style={EYEBROW}>02 · Who we are</div>
-            <h2 className="font-heading" style={H2}>The people behind WHEL</h2>
+            <h2 className="font-heading" style={H2}>The people behind Whel</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                WHEL was built by two people. Veronica Agudelo is a philosophy student
+                Whel was built by two people. Veronica Agudelo is a philosophy student
                 who came to this work through a personal experience with a hormonal
                 condition, a brain surgery, and a long stretch of late-night PubMed
                 reading. The project&apos;s clinical grounding comes from her mother, a
@@ -128,7 +128,7 @@ export default function ContactPage() {
                 &ldquo;two-arm data strategy&rdquo; to how the evidence here is organized.
               </p>
               <p style={BODY}>
-                Neither of us is selling anything. WHEL is free, open, and not a
+                Neither of us is selling anything. Whel is free, open, and not a
                 monetization project. The fuller story is on the{" "}
                 <Link href="/about" style={LINK}>About page</Link>.
               </p>
@@ -141,10 +141,10 @@ export default function ContactPage() {
             <h2 className="font-heading" style={H2}>If you work in this field</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                WHEL is meant to be useful to researchers, clinicians, and patients, and
+                Whel is meant to be useful to researchers, clinicians, and patients, and
                 it improves fastest with input from people who know these conditions
                 well. If you spot an error, a missing study, or a signal that has been
-                miscategorized, please tell us — accuracy matters more to this project
+                miscategorized, please tell us; accuracy matters more to this project
                 than completeness.
               </p>
               <p style={BODY}>
@@ -159,14 +159,14 @@ export default function ContactPage() {
           {/* 04 — Citation */}
           <section>
             <div style={EYEBROW}>04 · Citation</div>
-            <h2 className="font-heading" style={H2}>How to cite WHEL</h2>
+            <h2 className="font-heading" style={H2}>How to cite Whel</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                WHEL is an index of signals, not a primary source. For any clinical
+                Whel is an index of signals, not a primary source. For any clinical
                 claim, follow the link through to the underlying study, trial registry,
-                or database and cite that source directly. If you want to reference WHEL
-                itself — for example, to point to a specific signal or to the way the
-                evidence is aggregated — a suggested format is:
+                or database and cite that source directly. If you want to reference Whel
+                itself, for example to point to a specific signal or to the way the
+                evidence is aggregated, a suggested format is:
               </p>
               <div
                 style={{
@@ -176,7 +176,7 @@ export default function ContactPage() {
                 }}
               >
                 <p style={{ ...MONO, fontSize: "0.82rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
-                  Women&apos;s Health Evidence Lab (WHEL). (2026). [Condition] — [Signal
+                  Women&apos;s Health Evidence Lab (Whel). (2026). [Condition], [Signal
                   type]. Retrieved [date] from [page URL].
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default function ContactPage() {
                 paddingBottom: 2,
               }}
             >
-              ← About WHEL
+              ← About Whel
             </Link>
             <Link
               href="/conditions"

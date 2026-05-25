@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
-import MetaStrip from "@/app/components/MetaStrip";
 import TierHeatmap, { type TierKey, type HeatmapRow } from "@/app/components/TierHeatmap";
 import SourceSankey from "@/app/components/SourceSankey";
 
@@ -150,13 +149,6 @@ export default async function Home() {
   return (
     <main className="flex-1 flex flex-col">
 
-      {/* ── Operational status bar ───────────────────────────────────────────── */}
-      <MetaStrip
-        signals={totalSignals || undefined}
-        conditions={totalConditions || undefined}
-        arms={4}
-      />
-
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section
         className="relative overflow-hidden"
@@ -252,7 +244,7 @@ export default async function Home() {
                   color: "var(--muted)",
                 }}
               >
-                WHEL aggregates four parallel streams of evidence, scores each
+                Whel aggregates four parallel streams of evidence, scores each
                 signal across five dimensions, and publishes the result with full
                 provenance, for clinicians, researchers, and informed patients
                 to interpret.
@@ -275,7 +267,7 @@ export default async function Home() {
               conditions medicine has been slow to study.
             </p>
             <p style={{ fontSize: "0.9rem", lineHeight: 1.65, color: "var(--muted)" }}>
-              WHEL aggregates four parallel streams of evidence, scores each
+              Whel aggregates four parallel streams of evidence, scores each
               signal across five dimensions, and publishes the result with full
               provenance, for clinicians, researchers, and informed patients
               to interpret.
@@ -509,7 +501,7 @@ export default async function Home() {
                 How evidence is evaluated
               </h2>
               <p style={{ color: "var(--ink-2)", fontSize: 15, lineHeight: 1.65, maxWidth: "52ch" }}>
-                Every signal in WHEL is scored before it enters the database. Each record
+                Every signal in Whel is scored before it enters the database. Each record
                 is assessed across five dimensions: replication, source quality,
                 specificity, biological plausibility, and consistency of direction. Each
                 dimension is rated 0 to 2, summed to a 0 to 10 composite. Results are

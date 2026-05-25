@@ -2,7 +2,7 @@ import Link from "next/link";
 import SignalTypesAccordion from "./SignalTypesAccordion";
 
 export const metadata = {
-  title: "Signal Types — Whel",
+  title: "Signal Types | Whel",
 };
 
 const MONO: React.CSSProperties = {
@@ -45,7 +45,7 @@ export default function SignalTypesPage() {
             Signal types.
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "56ch" }}>
-            WHEL organizes evidence into four research arms. Select a signal type
+            Whel organizes evidence into four research arms. Select a signal type
             to read how it works, what its sources are, and what to look for.
           </p>
         </div>

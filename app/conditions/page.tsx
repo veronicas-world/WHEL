@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata = {
-  title: "Conditions — Whel",
+  title: "Conditions | Whel",
 };
 
 export default async function ConditionsPage() {
@@ -107,6 +107,57 @@ export default async function ConditionsPage() {
 
       {/* ── Conditions grid ─────────────────────────────────────────────────── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+
+        {/* Why these six — pointer to the Roadmap */}
+        <div
+          style={{
+            background: "var(--paper)",
+            border: "1px solid var(--rule)",
+            borderLeft: "3px solid var(--green-mid)",
+            padding: "20px 24px",
+            marginBottom: 36,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+            gap: "10px 28px",
+          }}
+        >
+          <div style={{ maxWidth: "62ch" }}>
+            <div
+              style={{
+                ...MONO,
+                fontSize: "10.5px",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase" as const,
+                color: "var(--muted)",
+                marginBottom: 8,
+              }}
+            >
+              Scope
+            </div>
+            <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)" }}>
+              These six conditions were selected against three criteria: shared
+              biology, documented neglect, and a focus on women&apos;s hormonal and
+              reproductive health. The same criteria guide which conditions are
+              added in future versions of the database.
+            </p>
+          </div>
+          <Link
+            href="/about/roadmap"
+            style={{
+              ...MONO,
+              fontSize: "12px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase" as const,
+              color: "var(--green-mid)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Why these six, and what&apos;s next &rarr;
+          </Link>
+        </div>
+
         <ConditionsList conditions={conditionsWithStats} />
       </div>
 

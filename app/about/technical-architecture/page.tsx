@@ -37,7 +37,7 @@ const ARM_COLORS: Record<string, string> = {
    ────────────────────────────────────────────────────────────────────────── */
 
 const PIPELINES_INTRO =
-  "WHEL runs five active data pipelines that populate the database on demand. A sixth pipeline (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.";
+  "Whel runs five active data pipelines that populate the database on demand. A sixth pipeline (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.";
 
 const PIPELINES: {
   name: string;
@@ -85,10 +85,10 @@ const PIPELINES: {
     tag: "Community Forum Reports",
     api: "Public JSON",
     status: "Active",
-    body: "Queries condition specific subreddits (r/Endo, r/PCOS, r/PMDD, r/Menopause, r/adenomyosis, r/vulvodynia) using eight treatment focused search queries per subreddit. Individual post permalinks are stored and validated — URLs must contain /comments/ to confirm they are post level, not subreddit level. Posts are grouped by subreddit in citation display. The pipeline looks for consistent patterns across many posts, not individual anecdotes.",
+    body: "Queries condition specific subreddits (r/Endo, r/PCOS, r/PMDD, r/Menopause, r/adenomyosis, r/vulvodynia) using eight treatment focused search queries per subreddit. Individual post permalinks are stored and validated; URLs must contain /comments/ to confirm they are post level rather than subreddit level. Posts are grouped by subreddit in citation display. The pipeline looks for consistent patterns across many posts, not individual anecdotes.",
   },
   {
-    name: "EudraVigilance EVDAS (in development — not yet contributing signals)",
+    name: "EudraVigilance EVDAS (in development, not yet contributing signals)",
     short: "EudraVigilance EVDAS",
     tag: "Cross-Condition Signals",
     api: "Oracle BI API",
@@ -98,10 +98,10 @@ const PIPELINES: {
 ];
 
 const SCORING_INTRO =
-  "WHEL applies a structured, multidimensional inclusion framework to every signal before it enters the database. The goal is not a single universal cutoff, but a tiered evidence framework with minimum standards for reliability, reproducibility, and actionability. The framework was developed in consultation with published research on evidence synthesis and pharmacovigilance methodology, drawing on established practices in systematic review design and drug repurposing research.";
+  "Whel applies a structured, multidimensional inclusion framework to every signal before it enters the database. The goal is a tiered evidence framework with minimum standards for reliability, reproducibility, and actionability, rather than a single universal cutoff. The framework was developed in consultation with published research on evidence synthesis and pharmacovigilance methodology, drawing on established practices in systematic review design and drug repurposing research.";
 
 const MODEL_NOTE =
-  "All signal analysis and scoring is performed using Claude Opus 4.6 (claude-opus-4-6), Anthropic's most capable model. Opus 4.6 was selected specifically for its performance on complex multicriteria reasoning tasks. Independent benchmarks consistently place Opus at the top of evaluations requiring simultaneous assessment across multiple analytical dimensions — precisely what evidence scoring requires. Smaller or faster models were evaluated and found to produce flatter, less discriminating scores, particularly on biological plausibility and confounding risk assessment. For a tool where the quality of the evidence evaluation is the core product, model selection is not a minor implementation detail.";
+  "All signal analysis and scoring is performed using Claude Opus 4.6 (claude-opus-4-6), Anthropic's most capable model. Opus 4.6 was selected specifically for its performance on complex multicriteria reasoning tasks. Independent benchmarks consistently place Opus at the top of evaluations requiring simultaneous assessment across multiple analytical dimensions, precisely what evidence scoring requires. Smaller or faster models were evaluated and found to produce flatter, less discriminating scores, particularly on biological plausibility and confounding risk assessment. For a tool where the quality of the evidence evaluation is the core product, model selection is not a minor implementation detail.";
 
 const FRAMEWORK_INTRO =
   "Every signal is independently scored from 0 to 2 on five dimensions, for a maximum total score of 10. Scores are assigned by Claude Opus 4.6 based on the full source content, not just metadata.";
@@ -181,24 +181,24 @@ const TIERS: { name: string; range: string; color: string; soft: string; desc: s
 const CATEGORY_STANDARDS: { label: string; body: string }[] = [
   {
     label: "Direct Research",
-    body: "The highest-confidence category carries the highest bar. Minimum requirements: at least one peer reviewed human study with clearly identified population, drug, outcome, and effect direction. Signals are excluded if they are mechanistic only with no human data. Preferred: at least one prospective study, trial, or meta-analysis. Quality criteria prioritize replication and outcome relevance over citation count — a highly cited older paper with no replication is not equivalent to two recent independent studies with similar findings.",
+    body: "The highest-confidence category carries the highest bar. Minimum requirements: at least one peer reviewed human study with clearly identified population, drug, outcome, and effect direction. Signals are excluded if they are mechanistic only with no human data. Preferred: at least one prospective study, trial, or meta-analysis. Quality criteria prioritize replication and outcome relevance over citation count; a highly cited older paper with no replication is not equivalent to two recent independent studies with similar findings.",
   },
   {
     label: "Cross-Condition Signals",
-    body: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA AEMS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient — a documented shared pathway is required.",
+    body: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA AEMS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient; a documented shared pathway is required.",
   },
   {
     label: "Pathway Insights",
-    body: "Pathway signals are powerful but easy to overinterpret. Minimum requirements: a specific named mechanism (mast cell activation, prostaglandin signaling, androgen receptor modulation — not generic \"inflammation\"), at least one known drug target link, and at least one disease pathway link. Pathway-only signals with no human or pharmacovigilance corroboration are classified Exploratory and displayed with explicit framing. Pathway signals paired with human observation are classified Emerging or Moderate. Pathway signals with human observation plus independent replication are classified Strong.",
+    body: "Pathway signals are powerful but easy to overinterpret. Minimum requirements: a specific named mechanism (mast cell activation, prostaglandin signaling, or androgen receptor modulation, not generic \"inflammation\"), at least one known drug target link, and at least one disease pathway link. Pathway-only signals with no human or pharmacovigilance corroboration are classified Exploratory and displayed with explicit framing. Pathway signals paired with human observation are classified Emerging or Moderate. Pathway signals with human observation plus independent replication are classified Strong.",
   },
   {
     label: "Community Forum Reports",
-    body: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient — the framework still requires specificity (not \"metformin changed things\" but \"after starting metformin, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. WHEL also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
+    body: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient; the framework still requires specificity (not \"metformin changed things\" but \"after starting metformin, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. Whel also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
   },
 ];
 
 const RELIABILITY_INTRO =
-  "For every signal across all four categories, WHEL applies five cross-cutting reliability checks:";
+  "For every signal across all four categories, Whel applies five cross-cutting reliability checks:";
 
 const RELIABILITY: { label: string; body: string }[] = [
   {
@@ -215,7 +215,7 @@ const RELIABILITY: { label: string; body: string }[] = [
   },
   {
     label: "Confounding assessment",
-    body: "Known confounders are flagged — drugs with multiple indications where symptom improvement may be indirect, forum populations reporting multiple concurrent therapies, and adverse event data that may reflect reporting bias rather than true incidence.",
+    body: "Known confounders are flagged: drugs with multiple indications where symptom improvement may be indirect, forum populations reporting multiple concurrent therapies, and adverse event data that may reflect reporting bias rather than true incidence.",
   },
   {
     label: "Denominator awareness",
@@ -224,7 +224,7 @@ const RELIABILITY: { label: string; body: string }[] = [
 ];
 
 const PRINCIPLE_BODY =
-  "A rare but repeatedly observed, highly specific signal from a single credible source may carry more evidential weight than 500 vague forum mentions. WHEL's scoring framework is designed to privilege specificity, reproducibility, and triangulation over raw volume.";
+  "A rare but repeatedly observed, highly specific signal from a single credible source may carry more evidential weight than 500 vague forum mentions. Whel's scoring framework is designed to privilege specificity, reproducibility, and triangulation over raw volume.";
 
 const INFRASTRUCTURE: { label: string; body: string }[] = [
   {
@@ -242,7 +242,7 @@ const INFRASTRUCTURE: { label: string; body: string }[] = [
 ];
 
 const LIMITATIONS_INTRO =
-  "WHEL is a signal aggregator, not a clinical recommendation engine. Evidence strength classifications are generated by a language model against a published five-dimension rubric and should be treated as a starting point for further investigation, not a definitive assessment. Community Forum Reports reflect patient-reported patterns and are explicitly not clinical evidence. The absence of signals in the Direct Research arm for a given condition is itself data — it reflects the current state of published research, not a gap in the tool. The full list of known limitations is documented below, grouped for navigation.";
+  "Whel is a signal aggregator rather than a clinical recommendation engine. Evidence strength classifications are generated by a language model against a published five-dimension rubric and should be treated as a starting point for further investigation, not a definitive assessment. Community Forum Reports reflect patient-reported patterns and are explicitly not clinical evidence. The absence of signals in the Direct Research arm for a given condition is itself data; it reflects the current state of published research rather than a gap in the tool. The full list of known limitations is documented below, grouped for navigation.";
 
 const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string }[] }[] = [
   {
@@ -250,7 +250,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
     items: [
       {
         label: "LLM classification risk",
-        body: "Evidence strength classifications are generated by Claude Opus 4.6 against a published five-dimension rubric. While the rubric and JSON-schema validation reduce variability, three concrete classes of LLM-introduced error remain: (1) mechanistic misinterpretation — the model may overstate the specificity of a target-pathway match, particularly for under-characterized pathways; (2) prompt sensitivity — small changes to the system prompt have produced measurable shifts in tier assignment in our internal testing; (3) hallucinated citations — although the rubric requires the model to score against the source content provided, occasional fabricated references have been observed and are mitigated by validating each cited source URL or PMID before database insertion. A planned validation pass will quantify per-tier concordance against expert human raters; until then, all signals should be treated as starting points for further verification, not assessments.",
+        body: "Evidence strength classifications are generated by Claude Opus 4.6 against a published five-dimension rubric. While the rubric and JSON-schema validation reduce variability, three concrete classes of LLM-introduced error remain: (1) mechanistic misinterpretation, where the model may overstate the specificity of a target-pathway match, particularly for under-characterized pathways; (2) prompt sensitivity, where small changes to the system prompt have produced measurable shifts in tier assignment in our internal testing; (3) hallucinated citations, where occasional fabricated references have been observed despite the rubric requiring the model to score against the source content provided, and are mitigated by validating each cited source URL or PMID before database insertion. A planned validation pass will quantify per-tier concordance against expert human raters; until then, all signals should be treated as starting points for further verification, not assessments.",
       },
       {
         label: "LLM versioning and prompt drift",
@@ -271,7 +271,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
       },
       {
         label: "Cross-condition signal interpretation",
-        body: "Cross-Condition Signals identify drugs developed for other indications where women incidentally reported benefit for one of the six target conditions. Such signals can reflect three different underlying realities: (a) genuine pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity — the same patient population happens to carry both the original indication and the target condition with no causal pharmacological link, or (c) reporting artifact — patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation across literature, AEMS, and pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely.",
+        body: "Cross-Condition Signals identify drugs developed for other indications where women incidentally reported benefit for one of the six target conditions. Such signals can reflect three different underlying realities: (a) a real pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity, where the same patient population happens to carry both the original indication and the target condition with no causal pharmacological link, or (c) reporting artifact, where patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation across literature, AEMS, and pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely.",
       },
       {
         label: "Pathway insight inference is weak",
@@ -288,7 +288,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
     items: [
       {
         label: "Generalizability is not stratified",
-        body: "The current database does not stratify signals by race, age band, geography, or comorbidity profile. The aggregate evidence pattern presented for each condition reflects the population mix of the underlying sources — predominantly mixed-race or unspecified-race trial populations from US- and EU-based studies, PubMed authors disproportionately publishing in English, and Reddit communities skewing young, English-speaking, and Western. Signals should not be assumed to generalize uniformly across subpopulations.",
+        body: "The current database does not stratify signals by race, age band, geography, or comorbidity profile. The aggregate evidence pattern presented for each condition reflects the population mix of the underlying sources: predominantly mixed-race or unspecified-race trial populations from US- and EU-based studies, PubMed authors disproportionately publishing in English, and Reddit communities skewing young, English-speaking, and Western. Signals should not be assumed to generalize uniformly across subpopulations.",
       },
       {
         label: "Geographic and language scope",
@@ -300,7 +300,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
       },
       {
         label: "Database completeness",
-        body: "WHEL's coverage of each condition is bounded by the scope of the search queries used in each pipeline. Compounds entirely outside our query terms — for example, a recently introduced biologic with no AEMS reports yet, or a long-tail traditional medicine without PubMed coverage — will not appear regardless of their actual relevance. Coverage gaps are systematically larger for the rarer of the six conditions (vulvodynia, adenomyosis) than for the better-studied ones (endometriosis, PCOS).",
+        body: "Whel's coverage of each condition is bounded by the scope of the search queries used in each pipeline. Compounds entirely outside our query terms, for example a recently introduced biologic with no AEMS reports yet or a long-tail traditional medicine without PubMed coverage, will not appear regardless of their actual relevance. Coverage gaps are systematically larger for the rarer of the six conditions (vulvodynia, adenomyosis) than for the better-studied ones (endometriosis, PCOS).",
       },
       {
         label: "Signal age and treatment-landscape drift",
@@ -317,7 +317,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
       },
       {
         label: "Conflict of interest and funding",
-        body: "WHEL is an independent research project. The authors declare no funding from the pharmaceutical industry, no compensation for any specific drug-condition pair surfaced by the database, and no commercial product associated with the project. Hosting infrastructure (Vercel and Supabase free tiers) is at the personal expense of the authors. A formal funding statement will accompany any peer-reviewed publication.",
+        body: "Whel is an independent research project. The authors declare no funding from the pharmaceutical industry, no compensation for any specific drug-condition pair surfaced by the database, and no commercial product associated with the project. Hosting infrastructure (Vercel and Supabase free tiers) is at the personal expense of the authors. A formal funding statement will accompany any peer-reviewed publication.",
       },
     ],
   },
