@@ -867,7 +867,12 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
       for (const [reaction, count] of reactionEntries) {
         const sourceId = randomUUID();
         const reactionDisplay = reaction.charAt(0).toUpperCase() + reaction.slice(1);
-        const title = `AEMS: ${reactionDisplay} (n=${count})`;
+        // `count` is the number of reports mentioning this reaction WITHIN the
+        // bounded sample fetched above (MAX_REPORTS_PER_DRUG per pass), not an
+        // openFDA population total. The title states this explicitly so the
+        // number is not mistaken for the count returned by verifyUrl, which
+        // queries the entire openFDA database. (Review finding S1, May 2026.)
+        const title = `AEMS: ${reactionDisplay} (${count} reports in the analysed AEMS sample)`;
         const externalId = `FAERS-${s.drug_name.toUpperCase()}-${reaction.replace(/\s+/g, '_').toUpperCase()}`;
 
         // Build a verifiable OpenFDA URL for this specific drug + reaction combination
