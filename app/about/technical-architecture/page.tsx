@@ -714,6 +714,58 @@ export default function TechnicalArchitecturePage() {
               </tbody>
             </table>
           </div>
+
+          {/* Pre-registered validation callout */}
+          <div
+            style={{
+              marginTop: 28,
+              padding: "16px 18px",
+              border: "1px solid var(--rule)",
+              backgroundColor: "var(--paper)",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "8px 18px",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ maxWidth: "56ch" }}>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: "10px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  marginBottom: 4,
+                }}
+              >
+                Pre-registered validation
+              </div>
+              <p style={{ fontSize: "13.5px", color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
+                The benchmark that tests whether this rubric separates high-
+                confidence signals from lower ones is pre-registered: sample,
+                external comparators, and reporting rules are all fixed before
+                the run.
+              </p>
+            </div>
+            <Link
+              href="/about/methodology"
+              style={{
+                ...MONO,
+                fontSize: "11px",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                borderBottom: "1px solid var(--ink)",
+                paddingBottom: 2,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Read the methodology &rarr;
+            </Link>
+          </div>
         </div>
       </section>
 
