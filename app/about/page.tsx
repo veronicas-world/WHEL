@@ -96,7 +96,10 @@ export default function AboutPage() {
                 I got through it. And I am aware, acutely, that I had it relatively easy. A prolactinoma is not endometriosis, or PMDD, or eight years of being told your pain is normal, to come back in six months, to try exercise. I had a diagnosis, a treatment, a surgery, and a recovery. Many women with reproductive and hormonal conditions do not get that clean of an arc.
               </p>
               <p style={BODY}>
-                That realization, along with a lot of late night PubMed rabbit holes and conversations with my mother, who is a psychiatrist and has spent a long time thinking about women&apos;s hormonal conditions, eventually turned into this project. We built it together.
+                That realization, along with a lot of late night PubMed rabbit holes and conversations with my mother, a psychiatry resident at a Harvard-affiliated hospital with a decade of NIMH- and PCORI-funded research experience in women&apos;s mental health, eventually turned into this project. We built it together.
+              </p>
+              <p style={BODY}>
+                The specific idea, drug repurposing, came out of those conversations. Her framing of it was the one that stuck: the useful signals often already exist. They sit, scattered, across PubMed, clinical trial registries, adverse event databases, genetic target platforms, and patient communities. No one had pulled them into a single scored, condition-specific, accessible index for this cluster of conditions. That became the project.
               </p>
             </div>
           </section>
