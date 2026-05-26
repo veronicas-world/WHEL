@@ -354,6 +354,82 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* ── Featured signal teaser ───────────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)", backgroundColor: "var(--bg-2)" }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-14 items-start">
+
+            {/* Left: eyebrow + meta */}
+            <div>
+              <div style={{ ...EYEBROW, marginBottom: 14 }}>Featured signal · 01</div>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  color: "var(--muted)",
+                  lineHeight: 1.7,
+                }}
+              >
+                <div>Endometriosis · Anastrozole</div>
+                <div>Pathway Insights · Strong (10 / 10)</div>
+                <div>11 sources</div>
+              </div>
+            </div>
+
+            {/* Right: headline + summary + CTA */}
+            <div>
+              <h2
+                className="font-heading"
+                style={{
+                  fontSize: "clamp(1.5rem, 2.6vw, 2.1rem)",
+                  fontWeight: 500,
+                  lineHeight: 1.12,
+                  letterSpacing: "-0.012em",
+                  color: "var(--ink)",
+                  marginBottom: 16,
+                  maxWidth: "30ch",
+                }}
+              >
+                A breast cancer drug surfaces as a top endometriosis lead.
+              </h2>
+              <p
+                style={{
+                  fontSize: "1rem",
+                  lineHeight: 1.7,
+                  color: "var(--ink-2)",
+                  maxWidth: "62ch",
+                  marginBottom: 18,
+                }}
+              >
+                Anastrozole is an aromatase inhibitor approved for hormone
+                receptor-positive breast cancer. Aromatase is also locally
+                overexpressed in endometriotic lesions, where it sustains an
+                estrogen loop that drives lesion growth. A walkthrough of how
+                that connection surfaced in the database, the eleven sources it
+                rests on, and the external clinical evidence it lines up with.
+              </p>
+              <Link
+                href="/featured"
+                style={{
+                  ...MONO,
+                  display: "inline-block",
+                  fontSize: "12px",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: "var(--ink)",
+                  borderBottom: "1px solid var(--ink)",
+                  paddingBottom: 2,
+                }}
+              >
+                Read the walkthrough →
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ── Figure 1 — Confidence heatmap ────────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
