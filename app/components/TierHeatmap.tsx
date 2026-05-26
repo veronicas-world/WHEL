@@ -53,14 +53,16 @@ export default function TierHeatmap({ rows }: { rows: HeatmapRow[] }) {
 
   return (
     <div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(160px, 220px) repeat(4, 1fr) 80px",
-          border: "1px solid var(--ink)",
-          background: "var(--paper)",
-        }}
-      >
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(160px, 220px) repeat(4, 1fr) 80px",
+            border: "1px solid var(--ink)",
+            background: "var(--paper)",
+            minWidth: 640,
+          }}
+        >
         {/* Header row */}
         <div style={headerCellStyle} />
         {TIERS.map((t) => (
@@ -77,6 +79,7 @@ export default function TierHeatmap({ rows }: { rows: HeatmapRow[] }) {
             <ConditionRow key={row.id} row={row} isLast={isLast} max={max} />
           );
         })}
+        </div>
       </div>
 
       <div

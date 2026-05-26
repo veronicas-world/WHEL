@@ -692,9 +692,8 @@ function SignalCard({
             <div style={{ marginTop: 20 }}>
               <FieldLabel>Scoring Dimensions</FieldLabel>
               <div
+                className="grid grid-cols-2 sm:grid-cols-5"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(5, 1fr)",
                   gap: 0,
                   borderTop: "1px solid var(--rule)",
                   marginTop: 4,

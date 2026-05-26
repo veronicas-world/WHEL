@@ -276,11 +276,10 @@ export default async function Home() {
 
           {/* ── Stat strip ── */}
           <dl
+            className="grid grid-cols-2 sm:grid-cols-4"
             style={{
               borderTop: "1px solid var(--ink)",
               paddingTop: 20,
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
               gap: 12,
             }}
           >
