@@ -187,38 +187,6 @@ export default function ContactPage() {
             </div>
           </section>
 
-          {/* 04 — Citation */}
-          <section>
-            <div style={EYEBROW}>04 · Citation</div>
-            <h2 className="font-heading" style={H2}>How to cite Whel</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Whel is an index of signals, not a primary source. For any clinical
-                claim, follow the link through to the underlying study, trial registry,
-                or database and cite that source directly. If you want to reference Whel
-                itself, for example to point to a specific signal or to the way the
-                evidence is aggregated, a suggested format is:
-              </p>
-              <div
-                style={{
-                  backgroundColor: "var(--paper)",
-                  border: "1px solid var(--rule)",
-                  padding: "18px 20px",
-                }}
-              >
-                <p style={{ ...MONO, fontSize: "0.82rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
-                  Women&apos;s Health Evidence Lab (Whel). (2026). [Condition], [Signal
-                  type]. Retrieved [date] from [page URL].
-                </p>
-              </div>
-              <p style={BODY}>
-                Because the index is updated as new evidence appears, please include the
-                date accessed. When citing a specific signal, name the condition and the
-                signal so the reference can be located even after the page changes.
-              </p>
-            </div>
-          </section>
-
           {/* Continue */}
           <div
             style={{
