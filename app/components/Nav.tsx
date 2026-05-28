@@ -45,6 +45,7 @@ const NAV_LINKS: NavLink[] = [
 const METHODOLOGY_LINKS: NavLink[] = [
   { label: "Signal Types", href: "/signal-types" },
   { label: "Technical Architecture", href: "/about/technical-architecture" },
+  { label: "Validation", href: "/about/methodology" },
 ];
 
 const ABOUT_LINKS: NavLink[] = [

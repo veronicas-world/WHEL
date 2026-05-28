@@ -8,12 +8,12 @@ const EXPLORE_LINKS = [
   { label: "Search", href: "/search" },
   { label: "Signal Types", href: "/signal-types" },
   { label: "Technical Architecture", href: "/about/technical-architecture" },
+  { label: "Validation", href: "/about/methodology" },
 ];
 
 const ABOUT_LINKS = [
   { label: "Mission", href: "/about" },
   { label: "Roadmap", href: "/about/roadmap" },
-  { label: "Validation methodology", href: "/about/methodology" },
   { label: "Contact", href: "/about/contact" },
 ];
 
