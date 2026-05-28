@@ -823,9 +823,13 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
       `${gynaeTotal.toLocaleString()} condition-relevant reports out of ` +
       `${generalTotal.toLocaleString()} female-patient reports`;
 
-    // Verifiable summary query URL: all female patients for this drug
+    // Verifiable summary query URL: all female patients for this drug.
+    // limit=100 (rather than the openFDA default of 1) lets a reader who
+    // clicks the citation see up to 100 actual report records, not just a
+    // single example. The true openFDA-side total is still surfaced in the
+    // response's meta.results.total field. (Review finding S1, May 2026.)
     const summaryQuery = `patient.drug.openfda.generic_name:"${s.drug_name.toLowerCase()}"+AND+patient.patientsex:2`;
-    const summaryUrl = `https://api.fda.gov/drug/event.json?search=${summaryQuery.replace(/"/g, '%22')}&limit=1`;
+    const summaryUrl = `https://api.fda.gov/drug/event.json?search=${summaryQuery.replace(/"/g, '%22')}&limit=100`;
 
     // Subquery to resolve the actual signal ID from DB (handles the case where
     // ON CONFLICT preserved the original UUID rather than the new generated one)
@@ -875,9 +879,13 @@ async function generateSQL(drugClass, signals, byDrug, supabaseUrl, supabaseKey)
         const title = `AEMS: ${reactionDisplay} (${count} reports in the analysed AEMS sample)`;
         const externalId = `FAERS-${s.drug_name.toUpperCase()}-${reaction.replace(/\s+/g, '_').toUpperCase()}`;
 
-        // Build a verifiable OpenFDA URL for this specific drug + reaction combination
+        // Build a verifiable OpenFDA URL for this specific drug + reaction
+        // combination. limit=100 (rather than the openFDA default of 1) so a
+        // reader following the citation sees up to 100 real example reports;
+        // meta.results.total in the response still shows the population total
+        // for the drug + reaction pair. (Review finding S1, May 2026.)
         const reactionQuery = `patient.drug.openfda.generic_name:"${s.drug_name.toLowerCase()}"+AND+patient.patientsex:2+AND+patient.reaction.reactionmeddrapt:"${reaction}"`;
-        const verifyUrl = `https://api.fda.gov/drug/event.json?search=${reactionQuery.replace(/"/g, '%22')}&limit=1`;
+        const verifyUrl = `https://api.fda.gov/drug/event.json?search=${reactionQuery.replace(/"/g, '%22')}&limit=100`;
 
         out.push(`INSERT INTO sources`);
         out.push(`  (id, signal_id, source_type, external_id, title, authors, journal, publication_date, url)`);
