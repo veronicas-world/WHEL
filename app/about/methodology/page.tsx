@@ -109,7 +109,7 @@ export default function MethodologyPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Pre-registration · v1
+            Pre-registration · v2
           </div>
 
           <h1
@@ -368,14 +368,15 @@ export default function MethodologyPage() {
                 fields are revealed.
               </p>
               <p style={BODY}>
-                The primary adjudicator is the project lead, who is also the
-                author of the indexed rubric. This conflict is acknowledged
-                and partially mitigated by the masking above. A subset of at
-                least 20 percent of the sample will be independently scored by
-                a second reviewer, with disagreements resolved by discussion
-                and the inter-rater agreement reported as Cohen&apos;s kappa.
-                Both reviewers must be blind to the tier assignment at the
-                time of scoring.
+                The primary adjudicator is an external clinician-researcher
+                with a decade of NIMH- and PCORI-funded research experience in
+                women&apos;s health, drawn from outside the project team. The
+                project lead is not the primary rater. A subset of at least 20
+                percent of the sample will be independently scored by a second
+                reviewer, with disagreements resolved by discussion and the
+                inter-rater agreement reported as Cohen&apos;s kappa. Both
+                reviewers must be blind to the tier assignment at the time of
+                scoring.
               </p>
             </div>
           </section>
@@ -576,9 +577,13 @@ export default function MethodologyPage() {
               paddingTop: 18,
             }}
           >
-            Methodology version 1, published May 2026. Sample numbers reflect
-            the Whel database snapshot at time of publication. Updates to this
-            page will be versioned and dated.
+            Methodology version 2, May 2026. v2 updates the adjudication
+            section to name an external clinician-researcher as the primary
+            rater, in place of the project lead. The sample, the rubric, the
+            external comparators, and the pre-specified thresholds are
+            unchanged from v1. Sample numbers reflect the Whel database
+            snapshot at time of publication. Updates to this page will be
+            versioned and dated.
           </p>
 
         </div>
