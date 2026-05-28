@@ -50,3 +50,21 @@ log_*.txt
 # Root-level config files (eslint.config.mjs, postcss.config.mjs) are
 # unaffected -- this pattern only matches scripts/.
 scripts/*.mjs
+
+# LibreOffice / Office lock files
+.~lock.*#
+
+# Validation study working artifacts (worksheet, samples, per-row agent output)
+# The methodology page and methods doc describe the study; the working
+# spreadsheets, JSON samples, and briefing notes are local-only and will
+# be replaced by the published kappa result once raters return scores.
+whel-validation-benchmark.xlsx
+whel-validation-briefing-for-mom.md
+scripts/validation-sample.json
+scripts/validation-agent-output/
+scripts/build-validation-worksheet.py
+scripts/merge-pilot-into-worksheet.py
+
+# Private working drafts (review notes, roadmap copy drafts)
+WHEL-Independent-Review-*.docx
+WHEL-Roadmap-page-draft.md
