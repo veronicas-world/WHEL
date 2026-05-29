@@ -244,10 +244,11 @@ export default async function Home() {
                   color: "var(--muted)",
                 }}
               >
-                Whel aggregates four parallel streams of evidence, scores each
-                signal across five dimensions, and publishes the result with full
-                provenance, for clinicians, researchers, and informed patients
-                to interpret.
+                Whel aggregates four parallel streams of evidence and scores
+                each signal across five dimensions, surfacing drug-repurposing
+                hypotheses worth taking into formal study. Built for researchers,
+                clinician-researchers, graduate students, journalists and
+                advocates, and institutional funders.
               </p>
             </div>
 
@@ -267,10 +268,11 @@ export default async function Home() {
               conditions medicine has been slow to study.
             </p>
             <p style={{ fontSize: "0.9rem", lineHeight: 1.65, color: "var(--muted)" }}>
-              Whel aggregates four parallel streams of evidence, scores each
-              signal across five dimensions, and publishes the result with full
-              provenance, for clinicians, researchers, and informed patients
-              to interpret.
+              Whel aggregates four parallel streams of evidence and scores
+              each signal across five dimensions, surfacing drug-repurposing
+              hypotheses worth taking into formal study. Built for researchers,
+              clinician-researchers, graduate students, journalists and
+              advocates, and institutional funders.
             </p>
           </div>
 
