@@ -64,6 +64,7 @@ scripts/validation-sample.json
 scripts/validation-agent-output/
 scripts/build-validation-worksheet.py
 scripts/merge-pilot-into-worksheet.py
+scripts/audit-output/
 
 # Private working drafts (review notes, roadmap copy drafts)
 WHEL-Independent-Review-*.docx

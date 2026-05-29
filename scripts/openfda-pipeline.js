@@ -453,7 +453,7 @@ If a drug has reactions relevant to multiple conditions, return one array entry 
 
 For each signal, include these evidence scoring fields:
 - confidence_tier: "Exploratory" (total 0-3), "Emerging" (4-6), "Moderate" (7-8), or "Strong" (9-10)
-- replication_score: 0 = single source or theoretical; 1 = two independent sources or one moderate study; 2 = multiple independent replications or RCT evidence
+- replication_score: 0 = single source only (regardless of source quality — even one large FAERS pull is replication=0); 1 = two independent sources with the same direction; 2 = three or more independent sources with the same direction. NOTE: aggregator-summarised evidence does not bypass this rule; the FAERS pull itself counts as one source.
 - source_quality_score: 0 = case reports or computational; 1 = observational, secondary endpoint, or registry data (AEMS = 1); 2 = RCT, meta-analysis, or large prospective cohort
 - specificity_score: 0 = indirect or pathway-level only; 1 = condition-adjacent; 2 = direct evidence in this condition
 - plausibility_score: 0 = speculative mechanism; 1 = biologically plausible with supporting data; 2 = well-characterized mechanism with direct pathway evidence

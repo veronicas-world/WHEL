@@ -157,7 +157,7 @@ For each qualifying signal, provide: compound_name, original_indication, signal_
 
 For each signal, include these evidence scoring fields in addition to the core fields:
 - confidence_tier: "Exploratory" (total 0-3), "Emerging" (4-6), "Moderate" (7-8), or "Strong" (9-10) — derived from the five scores below
-- replication_score: 0 = single source or theoretical; 1 = two independent sources or one moderate study; 2 = multiple independent replications or RCT evidence
+- replication_score: 0 = single source only (regardless of study quality — even one RCT is replication=0); 1 = two independent sources with the same direction; 2 = three or more independent sources with the same direction. NOTE: A review article that internally summarises multiple primary studies still counts as ONE source for this score unless multiple independent reviews are present. Aggregator-summarised evidence does not bypass this rule.
 - source_quality_score: 0 = case reports, forum posts, or computational prediction; 1 = observational study, secondary endpoint, or registry data; 2 = RCT, meta-analysis, or large prospective cohort
 - specificity_score: 0 = indirect or pathway-level connection only; 1 = condition-adjacent (related symptoms or mechanism); 2 = direct evidence in this specific condition
 - plausibility_score: 0 = speculative or theoretical mechanism; 1 = biologically plausible with supporting data in related areas; 2 = well-characterized mechanism with direct pathway evidence

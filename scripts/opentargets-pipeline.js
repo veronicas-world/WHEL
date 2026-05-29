@@ -355,7 +355,7 @@ Generate one entry per (drug, condition) pair where the connection is non-obviou
 
 For each signal, include these evidence scoring fields:
 - confidence_tier: "Exploratory" (total 0-3), "Emerging" (4-6), "Moderate" (7-8), or "Strong" (9-10)
-- replication_score: 0 = single source or theoretical; 1 = two independent sources or one moderate study; 2 = multiple independent replications or RCT evidence
+- replication_score: 0 = single source only (regardless of how many evidence streams Open Targets aggregates internally — each OT record IS one source for this rubric); 1 = two independent sources with the same direction; 2 = three or more independent sources with the same direction. Aggregator-summarised evidence does not bypass this rule; if only an OT record is attached, replication is 0.
 - source_quality_score: 0 = computational or theoretical; 1 = genetic association or pathway data (Open Targets genetic evidence = 1); 2 = clinical trial evidence or validated drug target
 - specificity_score: 0 = indirect or pathway-level only; 1 = condition-adjacent; 2 = direct evidence in this condition
 - plausibility_score: 0 = speculative mechanism; 1 = biologically plausible with supporting genetic/pathway data; 2 = well-characterized mechanism with strong Open Targets scores (>0.5)

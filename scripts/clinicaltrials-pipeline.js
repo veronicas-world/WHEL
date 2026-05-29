@@ -318,7 +318,8 @@ Only skip a signal if there is genuinely no AE pattern that could plausibly conn
 
 For each signal, include these evidence scoring fields:
 - confidence_tier: "Exploratory" (total 0-3), "Emerging" (4-6), "Moderate" (7-8), or "Strong" (9-10)
-- replication_score: 0 = single source or theoretical; 1 = two independent sources or one moderate study; 2 = multiple independent replications or RCT evidence
+- replication_score: 0 = single source only (regardless of source quality — even one RCT is replication=0); 1 = two independent sources with the same direction; 2 = three or more independent sources with the same direction. A clinical trial in one condition cited as evidence for a DIFFERENT condition does not bypass this rule.
+- signal_type guidance: Use clinical_trial_finding ONLY when the trial directly enrolled patients with the target condition. If the trial was conducted in a DIFFERENT condition but the signal extrapolates to the target condition via a shared mechanism, use cross_condition_signal instead. Do not file mechanism-based extrapolation under clinical_trial_finding.
 - source_quality_score: 0 = case reports or computational; 1 = observational, secondary endpoint, or registry data; 2 = RCT, meta-analysis, or large prospective cohort (clinical trial AE data = 1)
 - specificity_score: 0 = indirect or pathway-level only; 1 = condition-adjacent; 2 = direct evidence in this condition
 - plausibility_score: 0 = speculative mechanism; 1 = biologically plausible with supporting data; 2 = well-characterized mechanism with direct pathway evidence
