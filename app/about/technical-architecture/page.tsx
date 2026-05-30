@@ -327,37 +327,6 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
   },
 ];
 
-const ROADMAP_INTRO =
-  "Whel's evidence framework is built to be extended without breaking the existing rubric. The following items are on the build list, listed in approximate order of execution. Each is published here before implementation begins, so users can see where the framework is going and so the limitations above can be read alongside the work planned to address them.";
-
-const ROADMAP: { label: string; phase: string; body: string }[] = [
-  {
-    label: "External cross-reference: Every Cure MATRIX scores",
-    phase: "Phase 1 · Scoping",
-    body: "Every Cure publishes a quarterly-refreshed dataset of predicted biological-plausibility scores for roughly 60 million drug-disease pairs (the MATRIX matrix-scores dataset, openly available on Hugging Face). Every active Whel signal will be cross-referenced against the corresponding MATRIX score for its compound-condition pair, where coverage exists, and the score will be displayed alongside the Whel rubric on the signal card. MATRIX is an independent evidence stream built from a 100+ dataset biomedical knowledge graph; cross-referencing it does not change the Whel rubric but gives every signal a second, externally-built anchor. The first step is a coverage sanity check across the 135 indexed compounds and 6 conditions, since MATRIX is built on FDA-approved drug lists and women's-health coverage may be partial. Coverage results will be published before any score-display integration ships.",
-  },
-  {
-    label: "Cross-arm concordance flag",
-    phase: "Phase 2 · Planned",
-    body: "Every Whel signal is currently scored independently against the five-dimension rubric using only its own sources, by design, to avoid double-counting the same underlying observation across arms. The trade-off is that genuine cross-arm corroboration, for example the same compound surfacing in Pathway Insights, Community Forum Reports, and the MATRIX external score for the same condition, is not currently rewarded in the score itself. The planned cross-arm concordance flag is a derived field that counts the number of independent evidence streams (Whel arms plus MATRIX) pointing in the same direction for the same compound-condition pair, surfaced as a \"cross-validated across N streams\" badge on the signal card. This is a display-layer addition only; it does not modify the underlying rubric or the total evidence score.",
-  },
-  {
-    label: "Compound-level synthesis score",
-    phase: "Phase 3 · Scoping",
-    body: "Distinct from the per-signal total evidence score, a compound-level synthesis score is under design. The intent is to express how strongly the overall body of evidence supports a given compound-condition pair, drawing on every Whel signal for the pair, the corresponding MATRIX score, and the cross-arm concordance flag. The per-signal score remains the unit of grading on individual sources; the compound-level score is a derived summary for the compound page only. Both will be displayed side by side so users can see how the per-source rubric compares with the aggregate picture. Methodology, pre-registered validation, and the relationship between the two scores will be documented on the methodology page before this ships.",
-  },
-  {
-    label: "Dedicated audit log",
-    phase: "Phase 1 · Planned",
-    body: "The methodology version log at the foot of the methodology page records every change to the rubric and every batch remediation. A dedicated audit log page is planned that lists every database migration in plain English alongside its date, the affected signal count, and a link to the underlying SQL. This is a transparency feature rather than a methodology change; it makes the change history navigable for readers who want to trace how a specific signal got to its current tier.",
-  },
-  {
-    label: "EudraVigilance ingestion",
-    phase: "Phase 2 · In development",
-    body: "The EudraVigilance pipeline is implemented but not yet contributing signals to the current snapshot. It is listed on the pipeline register above as \"In development\" and will broaden European adverse-event coverage for the cross-condition arm once the first ingestion run is validated against the existing FDA AEMS signals.",
-  },
-];
-
 /* ──────────────────────────────────────────────────────────────────────────
    Small presentational helpers
    ────────────────────────────────────────────────────────────────────────── */
@@ -1109,57 +1078,28 @@ export default function TechnicalArchitecturePage() {
               );
             })}
           </div>
-        </div>
-      </section>
 
-      {/* ── Figure 8 — Roadmap ──────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className={SECTION_INNER}>
-          <FigureHeader
-            label="Figure 8 · Roadmap"
-            title="What's on the build list"
-            intro={ROADMAP_INTRO}
-          />
-
-          <div className="space-y-3">
-            {ROADMAP.map((item) => (
-              <div key={item.label} style={{ ...CARD, padding: "22px 24px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: "8px 18px",
-                    marginBottom: 7,
-                  }}
-                >
-                  <p
-                    className="font-heading"
-                    style={{ fontSize: "17px", color: "var(--ink)", margin: 0 }}
-                  >
-                    {item.label}
-                  </p>
-                  <span
-                    style={{
-                      ...MONO,
-                      fontSize: "10.5px",
-                      fontWeight: 500,
-                      letterSpacing: "0.12em",
-                      textTransform: "uppercase",
-                      color: "var(--muted)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {item.phase}
-                  </span>
-                </div>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--ink-2)" }}>
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
+          <p
+            style={{
+              fontSize: 14,
+              lineHeight: 1.65,
+              color: "var(--ink-2)",
+              marginTop: 28,
+              maxWidth: "68ch",
+            }}
+          >
+            Planned work against these limitations, including external
+            cross-reference to Every Cure&apos;s MATRIX scores, a cross-arm
+            concordance flag, a compound-level synthesis score, and a
+            dedicated audit log, is tracked on the{" "}
+            <Link
+              href="/about/roadmap"
+              style={{ color: "var(--ink)", borderBottom: "1px solid var(--ink)" }}
+            >
+              Roadmap
+            </Link>
+            .
+          </p>
 
           <div style={{ borderTop: "1px solid var(--rule)", paddingTop: "2rem", marginTop: "2.5rem" }}>
             <BackLink href="/about" label="Back to About" />

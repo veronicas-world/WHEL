@@ -58,6 +58,8 @@ const PHASES: { tag: string; sub: string; color: string; items: string[] }[] = [
     items: [
       "Run the two-rater validation study and publish the agreement score",
       "Add disproportionality statistics (PRR / ROR) to the adverse-event arm",
+      "Cross-reference every signal against Every Cure's MATRIX scores as an external comparison layer",
+      "Surface a cross-arm concordance flag where two or more arms support the same compound-condition pair",
       "Make every citation reproduce the count it claims; finish source de-duplication",
       "Publish an open CSV / JSON data export with a citable DOI",
     ],
@@ -189,8 +191,12 @@ const REGISTER: { name: string; role: string; status: "Live" | "Under review" | 
   { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
   { name: "EudraVigilance", role: "European adverse-event data; populate or formally retire", status: "Under review" },
   { name: "SIDER", role: "Drug side-effect reference; populate or formally retire", status: "Under review" },
+  { name: "Every Cure MATRIX cross-reference", role: "External drug-disease score layer (Hugging Face); coverage check first, display-only flag second", status: "Under review" },
   { name: "Disproportionality statistics (PRR / ROR)", role: "Method upgrade to the adverse-event arm", status: "Planned" },
   { name: "Two-rater validation study", role: "Reliability measurement (Cohen's kappa)", status: "Planned" },
+  { name: "Cross-arm concordance flag", role: "Display flag where two or more arms (Whel + MATRIX) support the same compound-condition pair", status: "Planned" },
+  { name: "Compound-level synthesis score", role: "Derived rollup across all signals for a compound-condition pair", status: "Under review" },
+  { name: "Dedicated audit log", role: "Per-signal change history in plain English, with links to underlying migrations", status: "Planned" },
   { name: "Open data export", role: "CSV / JSON under CC BY 4.0, with a Zenodo DOI", status: "Planned" },
   { name: "DrugBank", role: "Drug-target & indication data", status: "Planned" },
 ];
