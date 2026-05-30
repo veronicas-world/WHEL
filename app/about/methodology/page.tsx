@@ -254,7 +254,12 @@ export default function MethodologyPage() {
                   sources or text fields, no duplicate URLs within a signal,
                   no zero scores). A separate spot-check of a stratified
                   random sample of 23 source URLs returned 200 OK on every
-                  request.
+                  request. A subsequent independent external review,
+                  completed May 29 2026, systematically re-applied the
+                  rubric to every Moderate-and-above signal and re-checked
+                  the condition-attribution of every ClinicalTrials.gov
+                  citation; the findings and resolutions are recorded in
+                  the methodology version log at the foot of this page.
                 </p>
               </div>
             </div>
@@ -577,13 +582,31 @@ export default function MethodologyPage() {
               paddingTop: 18,
             }}
           >
-            Methodology version 2, May 2026. v2 updates the adjudication
-            section to name an external clinician-researcher as the primary
-            rater, in place of the project lead. The sample, the rubric, the
-            external comparators, and the pre-specified thresholds are
-            unchanged from v1. Sample numbers reflect the Whel database
-            snapshot at time of publication. Updates to this page will be
-            versioned and dated.
+            Methodology version 3, May 29 2026. v3 records the close of
+            an independent external review covering two findings. C1
+            (replication-score drift in the LLM rater): the rater prompts
+            in all four pipelines were tightened to enforce literal source
+            counting per the published rubric; 14 signals were downgraded
+            to the tier the literature actually supports; 19
+            manually-verified PubMed citations were added so each
+            remaining Moderate-tier signal carries the source count the
+            strict rubric requires. S3 (ClinicalTrials.gov
+            citation/condition mismatches across 21 audit rows): 10
+            signals were deactivated, 5 were reassigned from
+            clinical-trial-finding to cross-condition framing, 1 source
+            was dropped where the signal retained independent support, 2
+            sources were replaced with proper condition-specific
+            citations (ESHRE 2022 endometriosis guideline; 2025 network
+            meta-analysis of hormone therapies for adenomyosis pain), and
+            1 row was documented as a ClinicalTrials.gov API field
+            limitation. Recorded in database migrations 036 through 040.
+            Methodology version 2, May 2026, named an external
+            clinician-researcher as the primary rater in place of the
+            project lead. The sample, the rubric, the external
+            comparators, and the pre-specified thresholds are unchanged
+            from v1. Sample numbers reflect the Whel database snapshot at
+            time of publication. Updates to this page will be versioned
+            and dated.
           </p>
 
         </div>
