@@ -101,21 +101,8 @@ export default function ContactPage() {
                 We read everything.
               </p>
               <p style={BODY}>
-                A detailed account of how Whel was conceived and built is available in the{" "}
-                <a
-                  href="https://veronicaagudelo.substack.com/p/my-first-project-womens-health-evidence"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={LINK}
-                >
-                  project write-up on Substack
-                </a>
-                , which is also where occasional updates about new conditions and
-                pipeline changes are posted.
-              </p>
-              <p style={BODY}>
-                You can also follow the project on LinkedIn for shorter updates
-                and to get in touch there.
+                You can also follow the project on LinkedIn for shorter
+                updates and to get in touch there.
               </p>
               <a
                 href={LINKEDIN_URL}

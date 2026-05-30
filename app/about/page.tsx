@@ -154,6 +154,18 @@ export default function AboutPage() {
                 Each signal is classified by evidence strength (Strong, Moderate, Emerging, or Exploratory), and every result links to its source. The goal is not to tell anyone what to take. It is to make visible the hypotheses that exist in the data but have not yet been formally investigated.
               </p>
               <p style={BODY}>
+                Whel is built alongside, not in place of, other work in this field. The most direct counterpart is{" "}
+                <a href="https://www.everycure.org/" target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure</a>, a nonprofit founded in 2022 by physicians David Fajgenbaum and Grant Mitchell to systematically search for new uses for already-approved drugs. Every Cure publishes{" "}
+                <a href="https://huggingface.co/datasets/everycure/matrix" target="_blank" rel="noopener noreferrer" style={LINK}>MATRIX</a>, a public dataset of machine-learned plausibility predictions across roughly sixty million drug-disease pairs, generated from a biomedical knowledge graph. The work has been funded at scale by{" "}
+                <a href="https://arpa-h.gov/news-and-events/arpa-h-launches-matrix-program" target="_blank" rel="noopener noreferrer" style={LINK}>ARPA-H</a>{" "}
+                and the{" "}
+                <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>.
+              </p>
+              <p style={BODY}>
+                Whel and MATRIX answer different questions. MATRIX scores how biologically plausible a drug-disease link looks across the whole of biomedicine. Whel grades the strength of the evidence currently available for a specific compound-condition pair in a specific clinical literature. Where MATRIX has coverage, Whel will surface those scores as an independent biological-plausibility layer beside its own. A fuller account of the external resources Whel draws on, and the ones it deliberately does not, is on the{" "}
+                <Link href="/about/external-references" style={LINK}>external references</Link> page.
+              </p>
+              <p style={BODY}>
                 This is a starting point. The plan is to expand the condition set, improve the pipelines, and incorporate feedback from researchers, clinicians, and patients about which gaps matter most.
               </p>
             </div>
@@ -196,6 +208,20 @@ export default function AboutPage() {
               }}
             >
               How we score evidence →
+            </Link>
+            <Link
+              href="/about/external-references"
+              style={{
+                ...MONO,
+                fontSize: "12px",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                borderBottom: "1px solid var(--ink)",
+                paddingBottom: 2,
+              }}
+            >
+              External references →
             </Link>
             <Link
               href="/signal-types"
