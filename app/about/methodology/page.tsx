@@ -600,6 +600,9 @@ export default function MethodologyPage() {
             meta-analysis of hormone therapies for adenomyosis pain), and
             1 row was documented as a ClinicalTrials.gov API field
             limitation. Recorded in database migrations 036 through 040.
+            Planned extensions, including external cross-reference to
+            Every Cure MATRIX scores and a cross-arm concordance flag,
+            are documented on the Technical Architecture page.
             Methodology version 2, May 2026, named an external
             clinician-researcher as the primary rater in place of the
             project lead. The sample, the rubric, the external
