@@ -14,6 +14,7 @@ const EXPLORE_LINKS = [
 const ABOUT_LINKS = [
   { label: "Mission", href: "/about" },
   { label: "Roadmap", href: "/about/roadmap" },
+  { label: "External References", href: "/about/external-references" },
   { label: "Contact", href: "/about/contact" },
 ];
 
