@@ -51,6 +51,7 @@ const METHODOLOGY_LINKS: NavLink[] = [
 const ABOUT_LINKS: NavLink[] = [
   { label: "Mission", href: "/about" },
   { label: "Roadmap", href: "/about/roadmap" },
+  { label: "External References", href: "/about/external-references" },
   { label: "Contact", href: "/about/contact" },
 ];
 

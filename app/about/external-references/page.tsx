@@ -45,7 +45,7 @@ const AT_A_GLANCE: { tag: string; sub: string; color: string; items: string[] }[
     items: [
       "Every Cure's MATRIX dataset, displayed where it has coverage",
       "Machine-learned biological-plausibility scores from a biomedical knowledge graph",
-      "Cited and linked beside Whel's own grades; not blended into them",
+      "Shown alongside Whel's own grades rather than blended into them",
     ],
   },
   {
@@ -74,9 +74,10 @@ const EVERYCURE_STATS: { label: string; value: string }[] = [
   { label: "Founded", value: "2022" },
   { label: "Founders", value: "Fajgenbaum, Mitchell, Sikora" },
   { label: "ARPA-H Phase 1", value: "$48.3M · Feb 2024" },
-  { label: "ARPA-H Phase 2", value: "$76M" },
-  { label: "TED Audacious Project", value: "$60M" },
-  { label: "MATRIX predictions", value: "~60M drug-disease pairs" },
+  { label: "ARPA-H Phase 2", value: "up to $76M" },
+  { label: "TED Audacious Project", value: "grantee" },
+  { label: "MATRIX coverage", value: "~1,800 drugs × ~22,000 diseases" },
+  { label: "Pair count", value: "~39.5M" },
   { label: "Hosting", value: "Hugging Face, public" },
 ];
 
@@ -127,7 +128,7 @@ const SOURCES: {
   {
     name: "Every Cure MATRIX",
     role: "Independent biological-plausibility layer; displayed where MATRIX has coverage",
-    href: "https://huggingface.co/datasets/everycure/matrix",
+    href: "https://huggingface.co/datasets/everycure/matrix-scores",
     status: "Under review",
   },
   {
@@ -268,10 +269,14 @@ export default function ExternalReferencesPage() {
           >
             External references.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "62ch" }}>
-            The independent resources Whel draws on, the primary data sources its
-            pipelines run against, and the kinds of material it deliberately
-            does not treat as evidence.
+          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "66ch" }}>
+            Whel is built on top of public databases that other research groups
+            also use, and it sits within a broader ecosystem of drug-repurposing
+            work being done by other teams. This page lays out those
+            relationships explicitly. The intent is to be honest about what Whel
+            is doing that no one else does, what it is using from other
+            projects, what it is comparing itself against, and what kinds of
+            work are intentionally out of scope.
           </p>
         </div>
       </div>
@@ -383,24 +388,31 @@ export default function ExternalReferencesPage() {
                   marginBottom: 14,
                 }}
               >
-                Plausibility scores across roughly sixty million drug-disease pairs.
+                Predicted treatment probabilities for around 39.5 million drug-disease pairs.
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <p style={{ fontSize: "14.5px", lineHeight: 1.7, color: "var(--ink-2)" }}>
                   <a href="https://www.everycure.org/" target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure</a>{" "}
-                  was founded in 2022 by physicians David Fajgenbaum and Grant Mitchell, with Tracey Sikora, to systematically search for new uses of already-approved drugs. Its work is funded at scale by{" "}
-                  <a href="https://arpa-h.gov/news-and-events/arpa-h-launches-matrix-program" target="_blank" rel="noopener noreferrer" style={LINK}>ARPA-H</a>{" "}
-                  and the{" "}
-                  <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>, with infrastructure support from a public collaboration with{" "}
-                  <a href="https://cloud.google.com/blog/topics/healthcare-life-sciences/google-cloud-and-every-cure-accelerate-drug-repurposing" target="_blank" rel="noopener noreferrer" style={LINK}>Google Cloud</a>.
+                  is a nonprofit founded in 2022 by physicians David Fajgenbaum and Grant Mitchell, with Tracey Sikora, to identify new uses for already-approved drugs. Its core work is funded by an ARPA-H program also called MATRIX, which awarded Every Cure{" "}
+                  <a href="https://arpa-h.gov/news-and-events/arpa-h-awards-ai-driven-project-repurpose-approved-medications" target="_blank" rel="noopener noreferrer" style={LINK}>$48.3M in Phase 1</a>{" "}
+                  and up to{" "}
+                  <a href="https://everycure.org/phase2/" target="_blank" rel="noopener noreferrer" style={LINK}>$76M in Phase 2</a>, by a{" "}
+                  <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>{" "}
+                  grant, and through a research collaboration with{" "}
+                  <a href="https://everycure.org/every-cure-expands-collaboration-with-google-cloud-to-transform-ai-driven-drug-repurposing/" target="_blank" rel="noopener noreferrer" style={LINK}>Google Cloud</a>.
                 </p>
                 <p style={{ fontSize: "14.5px", lineHeight: 1.7, color: "var(--ink-2)" }}>
                   The{" "}
-                  <a href="https://huggingface.co/datasets/everycure/matrix" target="_blank" rel="noopener noreferrer" style={LINK}>MATRIX dataset</a>{" "}
-                  is a public release of those predictions, built on a biomedical knowledge graph and published on Hugging Face under an open license. It scores how biologically plausible a drug-disease link looks across the whole of biomedicine, distilled from structured prior knowledge.
+                  <a href="https://huggingface.co/datasets/everycure/matrix-scores" target="_blank" rel="noopener noreferrer" style={LINK}>matrix-scores dataset</a>{" "}
+                  is a public release of those predictions on Hugging Face. It covers roughly 1,800 drugs paired against roughly 22,000 diseases, with a machine-learned treatment-probability score for each pair derived from a biomedical knowledge graph.
                 </p>
                 <p style={{ fontSize: "14.5px", lineHeight: 1.7, color: "var(--ink-2)" }}>
-                  Whel answers a different question. Where MATRIX asks &ldquo;does this link look biologically plausible at all,&rdquo; Whel asks &ldquo;what does the actual evidence base for this compound, in this specific women&apos;s health condition, currently say.&rdquo; The two are complementary, and Whel displays MATRIX scores beside its own grades wherever MATRIX has coverage, rather than blending them into a single number.
+                  MATRIX and Whel are not doing the same thing. MATRIX provides a model-based estimate of how plausible a drug-disease link looks given the structure of biomedical knowledge. Whel reads the current clinical literature, trial registries, adverse-event reports, target databases, and named community forums for a specific set of under-researched women&apos;s health conditions, and grades the evidence it finds. Where MATRIX has coverage of a Whel pair, the MATRIX score will appear alongside the Whel grade so a reader can see both.
+                </p>
+                <p style={{ fontSize: "14.5px", lineHeight: 1.7, color: "var(--ink-2)" }}>
+                  One thing worth noting about the difference: MATRIX collapses many evidence streams into a single plausibility score. Whel does not. Each Whel signal stays labeled with the source arm it came from, and where two or more arms independently support the same compound-condition pair, that overlap is surfaced as a cross-arm concordance flag. The flag is currently a planned display element rather than a tier change. The{" "}
+                  <Link href="/about/roadmap" style={LINK}>roadmap</Link>{" "}
+                  has the current status.
                 </p>
               </div>
               <div style={{ marginTop: 22, display: "flex", flexWrap: "wrap", gap: "10px 22px" }}>
@@ -421,7 +433,7 @@ export default function ExternalReferencesPage() {
                   Every Cure →
                 </a>
                 <a
-                  href="https://huggingface.co/datasets/everycure/matrix"
+                  href="https://huggingface.co/datasets/everycure/matrix-scores"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -432,7 +444,7 @@ export default function ExternalReferencesPage() {
                     color: "var(--green-mid)",
                   }}
                 >
-                  MATRIX on Hugging Face →
+                  matrix-scores on Hugging Face →
                 </a>
               </div>
             </div>
@@ -504,7 +516,7 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
-      {/* ── Banner — complementarity ─────────────────────────────────────── */}
+      {/* ── Banner — what Whel does that MATRIX doesn't ──────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <div style={{ backgroundColor: "var(--green-deep)", padding: "clamp(32px, 5vw, 48px)" }}>
@@ -519,7 +531,7 @@ export default function ExternalReferencesPage() {
                 marginBottom: 16,
               }}
             >
-              The relationship
+              What Whel does that MATRIX does not
             </div>
             <p
               className="font-heading"
@@ -532,14 +544,17 @@ export default function ExternalReferencesPage() {
                 marginBottom: 14,
               }}
             >
-              MATRIX predicts. Whel grades. The two answer different questions.
+              Whel reads the actual clinical evidence base for specific compound-condition pairs in
+              women&apos;s hormonal and reproductive health.
             </p>
             <p style={{ fontSize: "14.5px", lineHeight: 1.62, color: "rgba(251,248,241,0.78)", maxWidth: "74ch" }}>
-              MATRIX assigns biological-plausibility scores across all of biomedicine from structured prior knowledge.
-              Whel reads the current clinical literature, trial registries, adverse-event reports, target databases, and
-              named community forums for a specific set of under-researched women&apos;s health conditions, and grades each
-              signal it finds. Displaying both layers side by side lets a reader see where structural prediction and
-              accumulated evidence agree, where they diverge, and where neither yet has anything to say.
+              MATRIX is a model that predicts treatment probability from a knowledge graph. It does not
+              read the clinical literature for any specific condition, and it is not condition-specific.
+              Whel does the opposite: a narrow set of women&apos;s health conditions, each one read closely
+              across published research, trials, adverse-event data, target evidence, and named patient
+              communities, with every signal scored individually. The two outputs are different enough
+              that Whel shows MATRIX scores beside its own grades wherever MATRIX has coverage, instead
+              of folding them together.
             </p>
           </div>
         </div>
@@ -551,7 +566,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="02 · Underlying data"
             title="The primary sources Whel runs on"
-            intro="Every signal in the database is traceable to one of a small set of primary sources. Each row below names a source, what role it plays in the pipelines, where it lives, and the status of its integration with Whel. External links open the source itself, not a description of it."
+            intro="Every signal in the database traces back to one of a small set of primary sources. The table below lists each source, its role in the pipelines, and the current integration status. Each name links straight to the source."
           />
 
           <div style={{ overflowX: "auto" }}>
@@ -734,8 +749,8 @@ export default function ExternalReferencesPage() {
         <div className={SECTION_INNER}>
           <SectionHeader
             label="04 · Out of scope"
-            title="What Whel intentionally does not draw from"
-            intro="Whel's value rests on every cited record being traceable, citable, and independently verifiable. Several categories of material that an evidence aggregator could reasonably pull from are deliberately excluded for that reason. The exclusions below are policy, not oversight."
+            title="What Whel does not draw from"
+            intro="Whel only cites records that are reachable upstream to a primary source. That single requirement rules out several categories of material an evidence aggregator could otherwise pull from. The list below explains which categories and why."
           />
 
           <div className="space-y-3">
