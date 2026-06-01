@@ -582,6 +582,22 @@ export default function MethodologyPage() {
               paddingTop: 18,
             }}
           >
+            Methodology version 3.1, June 1 2026. Every Cure&apos;s MATRIX
+            dataset is now surfaced as an independent biological-plausibility
+            layer beside Whel&apos;s grades wherever MATRIX has coverage; it
+            is not blended into the grades. A reproducible audit of MATRIX
+            coverage over Whel&apos;s active compound–condition universe was
+            run and published on this site (70.4% adjusted compound match
+            rate, six of six conditions confirmed, full per-condition
+            breakdown and dataset SHAs at{" "}
+            <Link
+              href="/about/external-references#coverage-disclosure"
+              style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+            >
+              /about/external-references → 01b · Coverage disclosure
+            </Link>
+            ). No change to Whel&apos;s rubric, sample, or tier definitions.
+            {" "}
             Methodology version 3, May 29 2026. v3 records the close of
             an independent external review covering two findings. C1
             (replication-score drift in the LLM rater): the rater prompts

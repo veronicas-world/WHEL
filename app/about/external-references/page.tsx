@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import {
   BRAND_DICT_ENTRIES,
   BRAND_DICT_META,
@@ -566,12 +567,34 @@ export default function ExternalReferencesPage() {
               that Whel shows MATRIX scores beside its own grades wherever MATRIX has coverage, instead
               of folding them together.
             </p>
+            <p
+              style={{
+                ...MONO,
+                fontSize: "11.5px",
+                letterSpacing: "0.06em",
+                color: "rgba(251,248,241,0.62)",
+                marginTop: 18,
+                maxWidth: "74ch",
+              }}
+            >
+              Coverage audited {MATRIX_AUDIT_SNAPSHOT._meta.audit_date ?? "—"}.{" "}
+              <a
+                href="#coverage-disclosure"
+                style={{
+                  color: "var(--green-soft)",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "2px",
+                }}
+              >
+                Headline numbers and per-condition breakdown below ↓
+              </a>
+            </p>
           </div>
         </div>
       </section>
 
       {/* ── 01b · Coverage disclosure ────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="coverage-disclosure" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <SectionHeader
             label="01b · Coverage disclosure"
@@ -725,11 +748,10 @@ export default function ExternalReferencesPage() {
                       <thead>
                         <tr>
                           {[
-                            ["Condition", "30%"],
-                            ["MONDO", "18%"],
-                            ["Official MATRIX filter¹", "22%"],
-                            ["Predictions in audit", "18%"],
-                            ["Note", "12%"],
+                            ["Condition", "34%"],
+                            ["MONDO", "22%"],
+                            ["Official MATRIX filter¹", "24%"],
+                            ["Predictions in audit", "20%"],
                           ].map(([h, w], i) => (
                             <th
                               key={h}
@@ -752,68 +774,102 @@ export default function ExternalReferencesPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {snap.per_condition.map((row) => (
-                          <tr key={row.condition}>
-                            <td
-                              style={{
-                                padding: "13px 14px 13px 0",
-                                borderBottom: "1px solid var(--rule)",
-                                verticalAlign: "baseline",
-                                fontSize: 14.5,
-                                color: "var(--ink)",
-                              }}
-                            >
-                              {row.condition}
-                            </td>
-                            <td
-                              style={{
-                                padding: "13px 14px",
-                                borderBottom: "1px solid var(--rule)",
-                                verticalAlign: "baseline",
-                                ...MONO,
-                                fontSize: 12.5,
-                                color: "var(--ink-2)",
-                              }}
-                            >
-                              {row.mondo}
-                            </td>
-                            <td
-                              style={{
-                                padding: "13px 14px",
-                                borderBottom: "1px solid var(--rule)",
-                                verticalAlign: "baseline",
-                                fontSize: 14,
-                                color: "var(--ink-2)",
-                              }}
-                            >
-                              {trueFalse(row.matrix_official_filter)}
-                            </td>
-                            <td
-                              style={{
-                                padding: "13px 14px",
-                                borderBottom: "1px solid var(--rule)",
-                                verticalAlign: "baseline",
-                                ...MONO,
-                                fontSize: 13,
-                                color: "var(--ink)",
-                              }}
-                            >
-                              {num(row.predictions_in_audit)}
-                            </td>
-                            <td
-                              style={{
-                                padding: "13px 14px",
-                                borderBottom: "1px solid var(--rule)",
-                                verticalAlign: "baseline",
-                                fontSize: 12.5,
-                                lineHeight: 1.45,
-                                color: "var(--ink-2)",
-                              }}
-                            >
-                              {row.note || ""}
-                            </td>
-                          </tr>
-                        ))}
+                        {snap.per_condition.map((row) => {
+                          const hasNote = Boolean(row.note);
+                          // When a note follows, the data row's bottom border
+                          // is suppressed so the row + note read as one block.
+                          const dataBorder = hasNote
+                            ? "1px solid transparent"
+                            : "1px solid var(--rule)";
+                          return (
+                            <Fragment key={row.condition}>
+                              <tr>
+                                <td
+                                  style={{
+                                    padding: "13px 14px 13px 0",
+                                    borderBottom: dataBorder,
+                                    verticalAlign: "baseline",
+                                    fontSize: 14.5,
+                                    color: "var(--ink)",
+                                  }}
+                                >
+                                  {row.condition}
+                                </td>
+                                <td
+                                  style={{
+                                    padding: "13px 14px",
+                                    borderBottom: dataBorder,
+                                    verticalAlign: "baseline",
+                                    ...MONO,
+                                    fontSize: 12.5,
+                                    color: "var(--ink-2)",
+                                  }}
+                                >
+                                  {row.mondo}
+                                </td>
+                                <td
+                                  style={{
+                                    padding: "13px 14px",
+                                    borderBottom: dataBorder,
+                                    verticalAlign: "baseline",
+                                    fontSize: 14,
+                                    color: "var(--ink-2)",
+                                  }}
+                                >
+                                  {trueFalse(row.matrix_official_filter)}
+                                </td>
+                                <td
+                                  style={{
+                                    padding: "13px 14px",
+                                    borderBottom: dataBorder,
+                                    verticalAlign: "baseline",
+                                    ...MONO,
+                                    fontSize: 13,
+                                    color: "var(--ink)",
+                                  }}
+                                >
+                                  {num(row.predictions_in_audit)}
+                                </td>
+                              </tr>
+                              {hasNote && (
+                                <tr>
+                                  <td
+                                    colSpan={4}
+                                    style={{
+                                      padding: "0 14px 16px 14px",
+                                      borderBottom: "1px solid var(--rule)",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        borderLeft: "2px solid var(--rule-strong)",
+                                        paddingLeft: 14,
+                                        fontSize: 13,
+                                        lineHeight: 1.6,
+                                        color: "var(--ink-2)",
+                                        maxWidth: "72ch",
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          ...MONO,
+                                          fontSize: "9.5px",
+                                          letterSpacing: "0.14em",
+                                          textTransform: "uppercase",
+                                          color: "var(--muted)",
+                                          marginRight: 8,
+                                        }}
+                                      >
+                                        Note
+                                      </span>
+                                      {row.note}
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                            </Fragment>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
@@ -829,6 +885,259 @@ export default function ExternalReferencesPage() {
                     ¹ Whether the condition sits inside MATRIX&apos;s own official disease filter.
                     This flag is intent, not a gate: predictions can still be present for
                     conditions outside the official filter, and absent for conditions inside it.
+                  </p>
+                </div>
+
+                {/* What we take from this */}
+                <div
+                  style={{
+                    ...CARD,
+                    padding: "clamp(20px, 2.5vw, 28px)",
+                    borderLeft: "3px solid var(--green-deep)",
+                    marginBottom: 32,
+                  }}
+                >
+                  <div
+                    style={{
+                      ...EYEBROW,
+                      color: "var(--green-deep)",
+                      marginBottom: 12,
+                    }}
+                  >
+                    Reading the numbers
+                  </div>
+                  <h3
+                    className="font-heading"
+                    style={{
+                      fontSize: "clamp(1.25rem, 2.2vw, 1.55rem)",
+                      fontWeight: 500,
+                      lineHeight: 1.2,
+                      letterSpacing: "-0.01em",
+                      color: "var(--ink)",
+                      margin: "0 0 14px 0",
+                    }}
+                  >
+                    What we take from this
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.68,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 16px 0",
+                    }}
+                  >
+                    Whel covers a small set of women&apos;s health conditions; MATRIX is a
+                    general-purpose drug-repurposing graph trained across the whole disease
+                    space. A 70.4% adjusted compound match rate is high for that kind of
+                    cross-reference. When both sides of a Whel pair exist in MATRIX, MATRIX
+                    has a published score for that pair 82.8% of the time. The cross-reference
+                    is meaningful, not ornamental.
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.68,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 14px 0",
+                    }}
+                  >
+                    The asymmetries in the per-condition table are the most informative result.
+                    MATRIX&apos;s official disease filter and what its model actually produces
+                    don&apos;t line up cleanly, in both directions. That mismatch is the
+                    central reason the two layers stay separated rather than blended:
+                  </p>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: "0 0 16px 0",
+                      maxWidth: "72ch",
+                    }}
+                  >
+                    {[
+                      {
+                        head: "PMDD: 0 predictions despite being inside MATRIX's filter.",
+                        tail: "MATRIX scopes PMDD as in-scope but its model produced no scores for it. A blended grade would silently penalise every PMDD compound for a MATRIX gap that has nothing to do with the evidence.",
+                      },
+                      {
+                        head: "Endometriosis: 38 predictions despite being outside MATRIX's filter.",
+                        tail: "MATRIX returns useful scores here even though Endometriosis isn't in its official disease list. Surfacing those scores is exactly what the disclosure layer is for.",
+                      },
+                      {
+                        head: "9 compounds matched only via the brand-name dictionary.",
+                        tail: "Roughly one in seven matches would have been missed without the brand-to-generic crosswalk published in section 05. That number is small but real, and explicitly auditable.",
+                      },
+                      {
+                        head: "17 class labels and 21 non-drug entries excluded from the denominator.",
+                        tail: "Umbrella categories like 'GLP-1 RAs' and supplements like 'Magnesium' can't be looked up in MATRIX the way individual drugs can. Excluding them is what the word 'adjusted' is doing in the 70.4% headline.",
+                      },
+                    ].map((item) => (
+                      <li
+                        key={item.head}
+                        style={{
+                          position: "relative",
+                          paddingLeft: 22,
+                          marginBottom: 12,
+                          fontSize: 14.5,
+                          lineHeight: 1.6,
+                          color: "var(--ink-2)",
+                        }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            color: "var(--green-mid)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          ›
+                        </span>
+                        <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                          {item.head}
+                        </strong>{" "}
+                        {item.tail}
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    style={{
+                      fontSize: 14.5,
+                      lineHeight: 1.65,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: 0,
+                    }}
+                  >
+                    Net: MATRIX gives Whel a strong, audited cross-reference for most of its
+                    universe, with two informative gaps and a documented set of exclusions.
+                    That&apos;s the right shape for an independent layer.
+                  </p>
+                </div>
+
+                {/* What this says about Whel */}
+                <div
+                  style={{
+                    ...CARD,
+                    padding: "clamp(20px, 2.5vw, 28px)",
+                    borderLeft: "3px solid var(--green-mid)",
+                    marginBottom: 32,
+                  }}
+                >
+                  <div
+                    style={{
+                      ...EYEBROW,
+                      color: "var(--green-mid)",
+                      marginBottom: 12,
+                    }}
+                  >
+                    The other direction
+                  </div>
+                  <h3
+                    className="font-heading"
+                    style={{
+                      fontSize: "clamp(1.25rem, 2.2vw, 1.55rem)",
+                      fontWeight: 500,
+                      lineHeight: 1.2,
+                      letterSpacing: "-0.01em",
+                      color: "var(--ink)",
+                      margin: "0 0 14px 0",
+                    }}
+                  >
+                    What this says about Whel
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.68,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 16px 0",
+                    }}
+                  >
+                    The audit isn&apos;t only a measurement of MATRIX. It&apos;s also a clean
+                    test of whether Whel&apos;s conditions and compounds speak the standard
+                    biomedical language the rest of the field uses, and where Whel covers
+                    clinical ground a general-purpose drug-repurposing model doesn&apos;t.
+                    Four specific things the comparison reinforces:
+                  </p>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: 0,
+                      margin: "0 0 16px 0",
+                      maxWidth: "72ch",
+                    }}
+                  >
+                    {[
+                      {
+                        head: "All six conditions confirmed as exact MONDO matches.",
+                        tail: "Whel's disease definitions resolve to standard ontology entries the broader literature already indexes — PCOS, PMDD, Adenomyosis, Endometriosis, Vulvodynia, Perimenopause & Menopause. No in-house labels, no silent drift.",
+                      },
+                      {
+                        head: "Whel's compound vocabulary maps cleanly into standard CURIE space.",
+                        tail: "70.4% of eligible compounds match into the CHEBI / UNII / DrugBank identifier system MATRIX uses. For a niche women's-health subset that's a high crosswalk rate, and it means Whel's drug layer isn't speaking a parallel language from the rest of pharmacology.",
+                      },
+                      {
+                        head: "Whel covers conditions where MATRIX is silent.",
+                        tail: "PMDD sits inside MATRIX's official disease filter, yet MATRIX's model produced no predictions for it. Whel has graded, source-anchored signals for PMDD anyway. That's not duplicate work — it's filling a gap a general-purpose model couldn't fill, in exactly the kind of underserved women's-health condition Whel exists to serve.",
+                      },
+                      {
+                        head: "The brand-name dictionary is Whel's contribution back.",
+                        tail: "9 of the 69 matched compounds were only recoverable via Whel's brand→generic crosswalk (section 05). That dictionary is published openly and reusable by anyone else doing this kind of cross-referencing. It's a small artifact, but it's net-new infrastructure Whel ships that MATRIX doesn't.",
+                      },
+                    ].map((item) => (
+                      <li
+                        key={item.head}
+                        style={{
+                          position: "relative",
+                          paddingLeft: 22,
+                          marginBottom: 12,
+                          fontSize: 14.5,
+                          lineHeight: 1.6,
+                          color: "var(--ink-2)",
+                        }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            color: "var(--green-mid)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          ›
+                        </span>
+                        <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                          {item.head}
+                        </strong>{" "}
+                        {item.tail}
+                      </li>
+                    ))}
+                  </ul>
+                  <p
+                    style={{
+                      fontSize: 14.5,
+                      lineHeight: 1.65,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: 0,
+                    }}
+                  >
+                    Scope of the claim: the audit measures structural alignment between
+                    Whel and MATRIX, not the validity of Whel&apos;s grades. MATRIX scores
+                    are model probabilities and Whel grades are literature tiers; the two
+                    are not interchangeable as ground truth. The numbers above establish
+                    that Whel&apos;s identifiers resolve into the standard biomedical
+                    ontologies MATRIX uses, and that Whel&apos;s coverage includes
+                    condition–compound pairs MATRIX leaves unscored.
                   </p>
                 </div>
 
