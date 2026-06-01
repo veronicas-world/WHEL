@@ -1029,6 +1029,28 @@ def _download_shard(idx: int, dest: Path) -> None:
     raise RuntimeError(f"shard {idx} failed after 6 download attempts")
 
 
+def _safe_unlink_shard(path: Path) -> None:
+    """Delete a downloaded parquet shard, tolerating mounts that refuse
+    unlink even for owned files (e.g. the fuse/virtiofs mount this script
+    typically runs over). On PermissionError we rename to a .stale-* path
+    so the directory doesn't accumulate but the script can continue."""
+    try:
+        path.unlink(missing_ok=True)
+    except PermissionError:
+        try:
+            stale = path.with_suffix(path.suffix + f".stale-{int(time.time())}")
+            path.rename(stale)
+            print(
+                f"     (note: could not unlink {path.name}; renamed to "
+                f"{stale.name} -- mount denies unlink for owned files)"
+            )
+        except Exception as e:  # noqa: BLE001
+            print(
+                f"     (note: could not unlink or rename {path.name}: {e}; "
+                f"leaving in place and continuing)"
+            )
+
+
 def query_matrix_scores(
     mondo_ids: list[str],
     drugbank_curies: list[str],
@@ -1104,7 +1126,7 @@ def query_matrix_scores(
                 f"{e.__class__.__name__}: {str(e).splitlines()[0]}"
             )
             if not keep_shards:
-                shard_path.unlink(missing_ok=True)
+                _safe_unlink_shard(shard_path)
             continue
 
         if not cols:
@@ -1116,7 +1138,7 @@ def query_matrix_scores(
         all_rows.extend(rows)
 
         if not keep_shards:
-            shard_path.unlink(missing_ok=True)
+            _safe_unlink_shard(shard_path)
 
     print(
         f"     total: {len(all_rows)} matched pairs across all shards in "

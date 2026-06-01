@@ -1,55 +1,98 @@
 {
   "_meta": {
     "schema_version": 1,
-    "purpose": "Published MATRIX coverage snapshot for /about/external-references. Single source of truth for the headline numbers Whel displays publicly. Refreshed by scripts/check-matrix-coverage.py at the end of every run; manually copied from scripts/audit-output/matrix-coverage-report.json by the script's emit-snapshot step. Null values mean the audit has not been run since this file was created.",
-    "snapshot_label": "pre-run stub",
-    "audit_date": null,
+    "purpose": "Published MATRIX coverage snapshot for /about/external-references. Refreshed at the end of every scripts/check-matrix-coverage.py run.",
+    "snapshot_label": "audit run",
+    "audit_date": "2026-06-01",
     "audit_script": "scripts/check-matrix-coverage.py",
     "audit_output_report": "scripts/audit-output/matrix-coverage-report.json"
   },
   "dataset_snapshot": {
     "matrix-scores": {
       "repo": "everycure/matrix-scores",
-      "sha": null,
-      "last_modified": null
+      "sha": "8b09a71239d92f3879cde9638f0a57f43f862472",
+      "last_modified": "2026-04-09T12:23:48.000Z"
     },
     "matrix-disease": {
       "repo": "everycure/disease-list",
-      "sha": null,
-      "last_modified": null
+      "sha": "33575e20ffb9606baa6745a36423aef375b57e70",
+      "last_modified": "2026-04-08T10:46:29.000Z"
     },
     "matrix-drug": {
       "repo": "everycure/drug-list",
-      "sha": null,
-      "last_modified": null
+      "sha": "7c51b34e5b494c968f788de892fb7bd5d2148bca",
+      "last_modified": "2026-05-12T14:46:58.000Z"
     }
   },
   "headline": {
-    "compounds_total": null,
-    "compounds_matched_raw": null,
-    "compound_match_rate_raw": null,
-    "compounds_eligible_total": null,
-    "compounds_eligible_matched": null,
-    "compound_match_rate_adjusted": null,
-    "compounds_excluded_class_label": null,
-    "compounds_excluded_non_drug": null,
-    "compounds_rescued_by_brand_dict": null,
-    "conditions_total": null,
-    "conditions_confirmed_in_mondo": null,
-    "active_pairs": null,
-    "eligible_pairs_adjusted": null,
-    "pairs_with_matrix_score": null,
-    "coverage_rate_over_eligible_adjusted": null,
-    "coverage_rate_over_all_active": null
+    "compounds_total": 136,
+    "compounds_matched_raw": 71,
+    "compound_match_rate_raw": 0.522,
+    "compounds_eligible_total": 98,
+    "compounds_eligible_matched": 69,
+    "compound_match_rate_adjusted": 0.704,
+    "compounds_excluded_class_label": 17,
+    "compounds_excluded_non_drug": 21,
+    "compounds_rescued_by_brand_dict": 9,
+    "conditions_total": 6,
+    "conditions_confirmed_in_mondo": 6,
+    "active_pairs": 271,
+    "eligible_pairs_adjusted": 198,
+    "pairs_with_matrix_score": 164,
+    "coverage_rate_over_eligible_adjusted": 0.828,
+    "coverage_rate_over_all_active": 0.605
   },
-  "per_condition": [],
+  "per_condition": [
+    {
+      "condition": "Endometriosis",
+      "mondo": "MONDO:0005133",
+      "matrix_official_filter": false,
+      "predictions_in_audit": 38,
+      "note": null
+    },
+    {
+      "condition": "PCOS",
+      "mondo": "MONDO:0008487",
+      "matrix_official_filter": true,
+      "predictions_in_audit": 37,
+      "note": null
+    },
+    {
+      "condition": "Adenomyosis",
+      "mondo": "MONDO:0010888",
+      "matrix_official_filter": true,
+      "predictions_in_audit": 34,
+      "note": null
+    },
+    {
+      "condition": "PMDD",
+      "mondo": "MONDO:1010182",
+      "matrix_official_filter": true,
+      "predictions_in_audit": 0,
+      "note": "MATRIX scores the parent term 'premenstrual tension' (MONDO:0004169) rather than PMDD directly. Reported direct coverage is zero; parent-term coverage is captured separately for context."
+    },
+    {
+      "condition": "Vulvodynia",
+      "mondo": "MONDO:0021722",
+      "matrix_official_filter": true,
+      "predictions_in_audit": 15,
+      "note": "Not indexed in Open Targets Platform; the OT pipeline falls back to target search."
+    },
+    {
+      "condition": "Perimenopause & Menopause",
+      "mondo": "MONDO:0001119",
+      "matrix_official_filter": true,
+      "predictions_in_audit": 40,
+      "note": "MONDO has no general 'menopause' or 'perimenopause' disease term. Coverage is computed against the closest disease phenotypes (premature menopause, postmenopausal osteoporosis, postmenopausal atrophic vaginitis) and will under-represent the lived experience of natural menopause. The Open Targets pipeline previously used GO:0042697 (a Gene Ontology process term, not a disease term) for this condition and should migrate to MONDO:0001119 with the same candidate cluster."
+    }
+  ],
   "score_distribution": {
-    "n": null,
-    "min": null,
-    "p25": null,
-    "median": null,
-    "p75": null,
-    "max": null,
-    "mean": null
+    "n": 152,
+    "min": 3.11389633821949,
+    "p25": 3.327409626942073,
+    "median": 3.460221577537473,
+    "p75": 3.654901119513715,
+    "max": 4.553531082572356,
+    "mean": 3.505538159403259
   }
 }
