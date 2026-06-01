@@ -31,38 +31,48 @@ const MODEL          = 'claude-opus-4-6';
 
 // ── Condition EFO/MONDO ID map ────────────────────────────────────────────────
 //
-// Open Targets uses EFO (Experimental Factor Ontology) and MONDO IDs.
-// These are the best-matching disease IDs for the six WHEL conditions.
-// Verified against https://platform.opentargets.org (April 2026).
+// The condition-to-disease-ID mapping is loaded from the canonical source
+// of truth at lib/conditions-ontology.json. The TypeScript wrapper at
+// lib/conditions-ontology.ts re-exports the same data for the Next.js app,
+// and scripts/check-matrix-coverage.py (Python) reads the same JSON.
+//
+// Known issue (tracked in scripts/audit-output/matrix-airtightness-audit.md
+// item 1.2): the menopause entry currently uses GO_0042697, which is a Gene
+// Ontology process term rather than a disease term. The migration to
+// MONDO:0001119 with the same candidate cluster is deferred to a future
+// commit so the OT pipeline's behaviour does not change unexpectedly here.
 
-const CONDITION_EFO_MAP = {
-  'endometriosis':                   'EFO_0001065',
-  'polycystic ovary syndrome':       'EFO_0000660',
-  'pcos':                            'EFO_0000660',
-  'polycystic ovarian syndrome':     'EFO_0000660',
-  'premenstrual dysphoric disorder': 'MONDO_0004169',  // premenstrual tension (closest available)
-  'pmdd':                            'MONDO_0004169',
-  'premenstrual syndrome':           'MONDO_0004169',
-  'adenomyosis':                     'MONDO_0010888',
-  'vulvodynia':                      null,              // not indexed in OT Platform; pipeline uses target search
-  'menopause':                       'GO_0042697',
-  'perimenopause':                   'GO_0042697',
-};
+const ONTOLOGY_JSON_PATH = path.join(__dirname, '..', 'lib', 'conditions-ontology.json');
+const ONTOLOGY_SCHEMA_VERSION = 1;
 
-// Aliases for condition lookup
-const CONDITION_ALIASES = {
-  'polycystic ovary syndrome':       ['pcos', 'polycystic ovary', 'polycystic ovarian'],
-  'polycystic ovarian syndrome':     ['pcos', 'polycystic ovary', 'polycystic ovarian'],
-  'pcos':                            ['pcos', 'polycystic ovary', 'polycystic ovarian'],
-  'premenstrual dysphoric disorder': ['pmdd', 'premenstrual dysphoric'],
-  'pmdd':                            ['pmdd', 'premenstrual dysphoric'],
-  'premenstrual syndrome':           ['pmdd', 'pms', 'premenstrual'],
-  'menopause':                       ['menopause', 'perimenopause', 'menopausal'],
-  'perimenopause':                   ['perimenopause', 'menopause', 'menopausal'],
-  'vulvodynia':                      ['vulvodynia', 'vulvar pain', 'vulvar'],
-  'endometriosis':                   ['endometriosis', 'endometrial'],
-  'adenomyosis':                     ['adenomyosis'],
-};
+function loadConditionOntology() {
+  const raw = JSON.parse(readFileSync(ONTOLOGY_JSON_PATH, 'utf8'));
+  if (!raw._meta || raw._meta.schema_version !== ONTOLOGY_SCHEMA_VERSION) {
+    throw new Error(
+      `conditions-ontology.json schema_version ${raw._meta && raw._meta.schema_version} ` +
+      `does not match the version this pipeline understands (${ONTOLOGY_SCHEMA_VERSION}).`
+    );
+  }
+  const efoMap = {};
+  const aliasMap = {};
+  for (const cond of raw.conditions) {
+    const otId = cond.opentargets_disease_id;
+    // Register the canonical short name, display name, slug, and all aliases.
+    const keys = new Set();
+    keys.add(cond.whel_short_name.toLowerCase());
+    keys.add(cond.display_name.toLowerCase());
+    keys.add(cond.slug.toLowerCase());
+    for (const term of cond.search_terms) keys.add(term.toLowerCase());
+    for (const alias of cond.opentargets_aliases) keys.add(alias.toLowerCase());
+    for (const k of keys) {
+      efoMap[k] = otId;
+      aliasMap[k] = cond.opentargets_aliases.slice();
+    }
+  }
+  return { efoMap, aliasMap };
+}
+
+const { efoMap: CONDITION_EFO_MAP, aliasMap: CONDITION_ALIASES } = loadConditionOntology();
 
 // ── .env.local loader ─────────────────────────────────────────────────────────
 

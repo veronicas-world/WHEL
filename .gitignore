@@ -66,6 +66,10 @@ scripts/build-validation-worksheet.py
 scripts/merge-pilot-into-worksheet.py
 scripts/audit-output/
 
+# Python bytecode (audit scripts in scripts/ generate these on import)
+__pycache__/
+*.pyc
+
 # Private working drafts (review notes, roadmap copy drafts)
 WHEL-Independent-Review-*.docx
 WHEL-Roadmap-page-draft.md

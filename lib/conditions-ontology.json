@@ -1,0 +1,133 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "purpose": "Canonical condition-to-ontology mapping for Whel.bio. This is the single source of truth for the six Whel conditions and the disease ontology identifiers we reference across the repository. The TypeScript wrapper at lib/conditions-ontology.ts re-exports this with types for the Next.js app. The Python audit script scripts/check-matrix-coverage.py and the Node pipelines under scripts/*.js read this file directly. When MONDO, EFO, or related ontologies release new versions, refresh the label_snapshot fields and re-run scripts/check-matrix-coverage.py to confirm id-and-name agreement still holds.",
+    "last_reviewed": "2026-06-01",
+    "reviewers": ["check-matrix-coverage.py phase 2", "whel-audit pre-publication review"]
+  },
+  "conditions": [
+    {
+      "slug": "endometriosis",
+      "whel_short_name": "Endometriosis",
+      "display_name": "Endometriosis",
+      "mondo_primary": "MONDO:0005133",
+      "mondo_primary_label_snapshot": "Endometriosis",
+      "mondo_candidates": [],
+      "efo_primary": "EFO_0001065",
+      "efo_primary_label_snapshot": "endometriosis",
+      "opentargets_disease_id": "EFO_0001065",
+      "opentargets_disease_id_note": null,
+      "opentargets_aliases": ["endometriosis", "endometrial"],
+      "search_terms": ["endometriosis"],
+      "ontology_gap_note": null,
+      "matrix_official_filter": null
+    },
+    {
+      "slug": "pcos",
+      "whel_short_name": "PCOS",
+      "display_name": "Polycystic ovary syndrome",
+      "mondo_primary": "MONDO:0008487",
+      "mondo_primary_label_snapshot": "Polycystic ovary syndrome",
+      "mondo_candidates": [],
+      "efo_primary": "EFO_0000660",
+      "efo_primary_label_snapshot": "polycystic ovary syndrome",
+      "opentargets_disease_id": "EFO_0000660",
+      "opentargets_disease_id_note": null,
+      "opentargets_aliases": ["pcos", "polycystic ovary", "polycystic ovarian"],
+      "search_terms": ["polycystic ovary syndrome", "stein-leventhal syndrome", "pcos"],
+      "ontology_gap_note": null,
+      "matrix_official_filter": null
+    },
+    {
+      "slug": "adenomyosis",
+      "whel_short_name": "Adenomyosis",
+      "display_name": "Adenomyosis",
+      "mondo_primary": "MONDO:0010888",
+      "mondo_primary_label_snapshot": "Adenomyosis",
+      "mondo_candidates": [],
+      "efo_primary": null,
+      "efo_primary_label_snapshot": null,
+      "opentargets_disease_id": "MONDO_0010888",
+      "opentargets_disease_id_note": null,
+      "opentargets_aliases": ["adenomyosis"],
+      "search_terms": ["adenomyosis"],
+      "ontology_gap_note": null,
+      "matrix_official_filter": null
+    },
+    {
+      "slug": "pmdd",
+      "whel_short_name": "PMDD",
+      "display_name": "Premenstrual dysphoric disorder",
+      "mondo_primary": "MONDO:1010182",
+      "mondo_primary_label_snapshot": "premenstrual dysphoric disorder",
+      "mondo_candidates": [
+        {
+          "id": "MONDO:0004169",
+          "label_snapshot": "premenstrual tension",
+          "relation": "parent",
+          "use_note": "MATRIX has zero direct predictions for MONDO:1010182 but 158 predictions for this parent term in shard 0. Coverage at the parent is reported separately when surfaced, never substituted for the literal PMDD number."
+        }
+      ],
+      "efo_primary": null,
+      "efo_primary_label_snapshot": null,
+      "opentargets_disease_id": "MONDO_0004169",
+      "opentargets_disease_id_note": "Open Targets currently indexes the parent term 'premenstrual tension' (MONDO_0004169) rather than the more precise PMDD term (MONDO_1010182). The OT pipeline queries the parent to maximise drug-target coverage; this is intentional and is documented separately from the literal MATRIX coverage number.",
+      "opentargets_aliases": ["pmdd", "premenstrual dysphoric", "pms", "premenstrual"],
+      "search_terms": ["premenstrual dysphoric disorder", "pmdd"],
+      "ontology_gap_note": "MATRIX scores the parent term 'premenstrual tension' (MONDO:0004169) rather than PMDD directly. Reported direct coverage is zero; parent-term coverage is captured separately for context.",
+      "matrix_official_filter": null
+    },
+    {
+      "slug": "vulvodynia",
+      "whel_short_name": "Vulvodynia",
+      "display_name": "Vulvodynia",
+      "mondo_primary": "MONDO:0021722",
+      "mondo_primary_label_snapshot": "Vulvodynia",
+      "mondo_candidates": [],
+      "efo_primary": null,
+      "efo_primary_label_snapshot": null,
+      "opentargets_disease_id": null,
+      "opentargets_disease_id_note": "Not indexed in Open Targets Platform; the OT pipeline falls back to target search.",
+      "opentargets_aliases": ["vulvodynia", "vulvar pain", "vulvar"],
+      "search_terms": ["vulvodynia"],
+      "ontology_gap_note": "Not indexed in Open Targets Platform; the OT pipeline falls back to target search.",
+      "matrix_official_filter": null
+    },
+    {
+      "slug": "menopause",
+      "whel_short_name": "Perimenopause & Menopause",
+      "display_name": "Perimenopause and menopause",
+      "mondo_primary": "MONDO:0001119",
+      "mondo_primary_label_snapshot": "Premature menopause",
+      "mondo_candidates": [
+        {
+          "id": "MONDO:0008159",
+          "label_snapshot": "Postmenopausal osteoporosis",
+          "relation": "phenotype",
+          "use_note": "Closest postmenopausal phenotype."
+        },
+        {
+          "id": "MONDO:0001410",
+          "label_snapshot": "Postmenopausal atrophic vaginitis",
+          "relation": "phenotype",
+          "use_note": "Closest postmenopausal phenotype."
+        }
+      ],
+      "efo_primary": null,
+      "efo_primary_label_snapshot": null,
+      "opentargets_disease_id": "GO_0042697",
+      "opentargets_disease_id_note": "KNOWN ISSUE: GO:0042697 is a Gene Ontology process term ('menopause' as a biological process), not a disease term. The OT pipeline has used this since April 2026 because no MONDO disease term cleanly maps to general menopause. This value is preserved verbatim in this canonical source so the OT pipeline's behaviour does not change unexpectedly. The migration to MONDO:0001119 with the same candidate cluster is tracked in scripts/audit-output/matrix-airtightness-audit.md item 1.2.",
+      "opentargets_aliases": ["menopause", "perimenopause", "menopausal"],
+      "search_terms": [
+        "premature menopause",
+        "postmenopausal osteoporosis",
+        "postmenopausal atrophic vaginitis",
+        "menopause",
+        "perimenopause",
+        "climacteric"
+      ],
+      "ontology_gap_note": "MONDO has no general 'menopause' or 'perimenopause' disease term. Coverage is computed against the closest disease phenotypes (premature menopause, postmenopausal osteoporosis, postmenopausal atrophic vaginitis) and will under-represent the lived experience of natural menopause. The Open Targets pipeline previously used GO:0042697 (a Gene Ontology process term, not a disease term) for this condition and should migrate to MONDO:0001119 with the same candidate cluster.",
+      "matrix_official_filter": null
+    }
+  ]
+}
