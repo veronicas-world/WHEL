@@ -1,0 +1,55 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "purpose": "Published MATRIX coverage snapshot for /about/external-references. Single source of truth for the headline numbers Whel displays publicly. Refreshed by scripts/check-matrix-coverage.py at the end of every run; manually copied from scripts/audit-output/matrix-coverage-report.json by the script's emit-snapshot step. Null values mean the audit has not been run since this file was created.",
+    "snapshot_label": "pre-run stub",
+    "audit_date": null,
+    "audit_script": "scripts/check-matrix-coverage.py",
+    "audit_output_report": "scripts/audit-output/matrix-coverage-report.json"
+  },
+  "dataset_snapshot": {
+    "matrix-scores": {
+      "repo": "everycure/matrix-scores",
+      "sha": null,
+      "last_modified": null
+    },
+    "matrix-disease": {
+      "repo": "everycure/disease-list",
+      "sha": null,
+      "last_modified": null
+    },
+    "matrix-drug": {
+      "repo": "everycure/drug-list",
+      "sha": null,
+      "last_modified": null
+    }
+  },
+  "headline": {
+    "compounds_total": null,
+    "compounds_matched_raw": null,
+    "compound_match_rate_raw": null,
+    "compounds_eligible_total": null,
+    "compounds_eligible_matched": null,
+    "compound_match_rate_adjusted": null,
+    "compounds_excluded_class_label": null,
+    "compounds_excluded_non_drug": null,
+    "compounds_rescued_by_brand_dict": null,
+    "conditions_total": null,
+    "conditions_confirmed_in_mondo": null,
+    "active_pairs": null,
+    "eligible_pairs_adjusted": null,
+    "pairs_with_matrix_score": null,
+    "coverage_rate_over_eligible_adjusted": null,
+    "coverage_rate_over_all_active": null
+  },
+  "per_condition": [],
+  "score_distribution": {
+    "n": null,
+    "min": null,
+    "p25": null,
+    "median": null,
+    "p75": null,
+    "max": null,
+    "mean": null
+  }
+}
