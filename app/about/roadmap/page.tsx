@@ -191,7 +191,7 @@ const REGISTER: { name: string; role: string; status: "Live" | "Under review" | 
   { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
   { name: "EudraVigilance", role: "European adverse-event data; populate or formally retire", status: "Under review" },
   { name: "SIDER", role: "Drug side-effect reference; populate or formally retire", status: "Under review" },
-  { name: "Every Cure MATRIX cross-reference", role: "Independent biological-plausibility layer from Every Cure's biomedical knowledge graph; displayed where MATRIX has coverage", status: "Under review" },
+  { name: "Every Cure MATRIX cross-reference", role: "Independent biological-plausibility layer from Every Cure's biomedical knowledge graph; displayed where MATRIX has coverage. Audit numbers and per-condition coverage published on /about/external-references", status: "Live" },
   { name: "Disproportionality statistics (PRR / ROR)", role: "Method upgrade to the adverse-event arm", status: "Planned" },
   { name: "Two-rater validation study", role: "Reliability measurement (Cohen's kappa)", status: "Planned" },
   { name: "Cross-arm concordance flag", role: "Display flag where two or more arms (Whel + MATRIX) support the same compound-condition pair", status: "Planned" },

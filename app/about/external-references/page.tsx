@@ -1,4 +1,13 @@
 import Link from "next/link";
+import {
+  BRAND_DICT_ENTRIES,
+  BRAND_DICT_META,
+  activeBrandCount,
+} from "@/lib/brand-name-dictionary";
+import {
+  MATRIX_AUDIT_SNAPSHOT,
+  isPopulated as matrixSnapshotPopulated,
+} from "@/lib/matrix-audit-snapshot";
 
 export const metadata = {
   title: "External references | Whel",
@@ -129,7 +138,8 @@ const SOURCES: {
     name: "Every Cure MATRIX",
     role: "Independent biological-plausibility layer; displayed where MATRIX has coverage",
     href: "https://huggingface.co/datasets/everycure/matrix-scores",
-    status: "Under review",
+    status: "Live",
+    note: "Disclosure layer; not blended into Whel grades",
   },
   {
     name: "EudraVigilance",
@@ -560,6 +570,383 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
+      {/* ── 01b · Coverage disclosure ────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className={SECTION_INNER}>
+          <SectionHeader
+            label="01b · Coverage disclosure"
+            title="How much of Whel sits inside MATRIX"
+            intro="Because Whel surfaces MATRIX scores as an independent layer rather than blending them into its own grades, the honest question is how much of Whel's universe MATRIX actually covers. The numbers below come from an audit script that joins Whel's active compound–condition pairs against the published MATRIX dataset. Raw, adjusted, and per-condition figures are all shown so readers can decide for themselves which denominator is fair."
+          />
+
+          {(() => {
+            const snap = MATRIX_AUDIT_SNAPSHOT;
+            const pct = (v: number | null) =>
+              v == null ? "—" : `${(v * 100).toFixed(1)}%`;
+            const num = (v: number | null) =>
+              v == null ? "—" : v.toLocaleString();
+            const trueFalse = (v: boolean | null) =>
+              v === null ? <em style={{ color: "var(--muted)" }}>n/a</em> : v ? "True" : "False";
+
+            if (!matrixSnapshotPopulated()) {
+              return (
+                <div
+                  style={{
+                    ...CARD,
+                    padding: "clamp(20px, 2.5vw, 28px)",
+                    borderLeft: "3px solid var(--muted)",
+                  }}
+                >
+                  <div
+                    style={{
+                      ...MONO,
+                      fontSize: "10.5px",
+                      fontWeight: 500,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "var(--muted)",
+                      marginBottom: 10,
+                    }}
+                  >
+                    Audit pending
+                  </div>
+                  <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--ink-2)", margin: 0 }}>
+                    The MATRIX coverage audit has not been run since this disclosure block was
+                    wired in. Published numbers will appear here once{" "}
+                    <code style={{ ...MONO, fontSize: "0.92em" }}>
+                      scripts/check-matrix-coverage.py
+                    </code>{" "}
+                    next completes a clean run and writes its snapshot back to{" "}
+                    <code style={{ ...MONO, fontSize: "0.92em" }}>
+                      lib/matrix-audit-snapshot.json
+                    </code>
+                    .
+                  </p>
+                </div>
+              );
+            }
+
+            const tiles: { label: string; value: string; sub?: string }[] = [
+              {
+                label: "Compound match rate (adjusted)",
+                value: pct(snap.headline.compound_match_rate_adjusted),
+                sub: `${num(snap.headline.compounds_eligible_matched)} of ${num(
+                  snap.headline.compounds_eligible_total,
+                )} eligible compounds`,
+              },
+              {
+                label: "Pairs with a MATRIX score",
+                value: num(snap.headline.pairs_with_matrix_score),
+                sub: `${pct(
+                  snap.headline.coverage_rate_over_eligible_adjusted,
+                )} of ${num(snap.headline.eligible_pairs_adjusted)} eligible pairs`,
+              },
+              {
+                label: "Active Whel pairs (raw)",
+                value: num(snap.headline.active_pairs),
+                sub: "Before excluding class labels and non-drug items",
+              },
+              {
+                label: "Rescued by brand-name dictionary",
+                value: num(snap.headline.compounds_rescued_by_brand_dict),
+                sub: "Compounds matched only via the Whel brand→generic crosswalk",
+              },
+            ];
+
+            return (
+              <>
+                {/* Headline tiles */}
+                <div
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                  style={{ gap: 14, marginBottom: 32 }}
+                >
+                  {tiles.map((t) => (
+                    <div
+                      key={t.label}
+                      style={{
+                        ...CARD,
+                        padding: "18px 18px 20px",
+                        borderLeft: "3px solid var(--green-mid)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          ...MONO,
+                          fontSize: "10.5px",
+                          letterSpacing: "0.14em",
+                          textTransform: "uppercase",
+                          color: "var(--muted)",
+                          marginBottom: 10,
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {t.label}
+                      </div>
+                      <div
+                        className="font-heading"
+                        style={{
+                          fontSize: "clamp(1.5rem, 2.4vw, 1.85rem)",
+                          fontWeight: 500,
+                          lineHeight: 1.05,
+                          letterSpacing: "-0.01em",
+                          color: "var(--ink)",
+                        }}
+                      >
+                        {t.value}
+                      </div>
+                      {t.sub && (
+                        <div
+                          style={{
+                            fontSize: 12.5,
+                            lineHeight: 1.5,
+                            color: "var(--ink-2)",
+                            marginTop: 8,
+                          }}
+                        >
+                          {t.sub}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Per-condition coverage table */}
+                <div style={{ marginBottom: 30 }}>
+                  <div
+                    style={{
+                      ...EYEBROW,
+                      marginBottom: 12,
+                    }}
+                  >
+                    Per condition
+                  </div>
+                  <div style={{ overflowX: "auto" }}>
+                    <table style={{ width: "100%", minWidth: 640, borderCollapse: "collapse" }}>
+                      <thead>
+                        <tr>
+                          {[
+                            ["Condition", "30%"],
+                            ["MONDO", "18%"],
+                            ["Official MATRIX filter¹", "22%"],
+                            ["Predictions in audit", "18%"],
+                            ["Note", "12%"],
+                          ].map(([h, w], i) => (
+                            <th
+                              key={h}
+                              style={{
+                                ...MONO,
+                                fontSize: "10.5px",
+                                fontWeight: 500,
+                                letterSpacing: "0.13em",
+                                textTransform: "uppercase",
+                                color: "var(--muted)",
+                                textAlign: "left",
+                                padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
+                                borderBottom: "1px solid var(--rule-strong)",
+                                width: w,
+                              }}
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {snap.per_condition.map((row) => (
+                          <tr key={row.condition}>
+                            <td
+                              style={{
+                                padding: "13px 14px 13px 0",
+                                borderBottom: "1px solid var(--rule)",
+                                verticalAlign: "baseline",
+                                fontSize: 14.5,
+                                color: "var(--ink)",
+                              }}
+                            >
+                              {row.condition}
+                            </td>
+                            <td
+                              style={{
+                                padding: "13px 14px",
+                                borderBottom: "1px solid var(--rule)",
+                                verticalAlign: "baseline",
+                                ...MONO,
+                                fontSize: 12.5,
+                                color: "var(--ink-2)",
+                              }}
+                            >
+                              {row.mondo}
+                            </td>
+                            <td
+                              style={{
+                                padding: "13px 14px",
+                                borderBottom: "1px solid var(--rule)",
+                                verticalAlign: "baseline",
+                                fontSize: 14,
+                                color: "var(--ink-2)",
+                              }}
+                            >
+                              {trueFalse(row.matrix_official_filter)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "13px 14px",
+                                borderBottom: "1px solid var(--rule)",
+                                verticalAlign: "baseline",
+                                ...MONO,
+                                fontSize: 13,
+                                color: "var(--ink)",
+                              }}
+                            >
+                              {num(row.predictions_in_audit)}
+                            </td>
+                            <td
+                              style={{
+                                padding: "13px 14px",
+                                borderBottom: "1px solid var(--rule)",
+                                verticalAlign: "baseline",
+                                fontSize: 12.5,
+                                lineHeight: 1.45,
+                                color: "var(--ink-2)",
+                              }}
+                            >
+                              {row.note || ""}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 12.5,
+                      lineHeight: 1.6,
+                      color: "var(--muted)",
+                      marginTop: 12,
+                      maxWidth: "72ch",
+                    }}
+                  >
+                    ¹ Whether the condition sits inside MATRIX&apos;s own official disease filter.
+                    This flag is intent, not a gate: predictions can still be present for
+                    conditions outside the official filter, and absent for conditions inside it.
+                  </p>
+                </div>
+
+                {/* Score distribution */}
+                {snap.score_distribution.n != null && (
+                  <div style={{ marginBottom: 30 }}>
+                    <div style={{ ...EYEBROW, marginBottom: 12 }}>Score distribution</div>
+                    <div
+                      style={{
+                        ...CARD,
+                        padding: "16px 18px",
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+                        gap: "14px 18px",
+                      }}
+                    >
+                      {[
+                        ["n", num(snap.score_distribution.n)],
+                        ["min", snap.score_distribution.min?.toFixed(3) ?? "—"],
+                        ["p25", snap.score_distribution.p25?.toFixed(3) ?? "—"],
+                        ["median", snap.score_distribution.median?.toFixed(3) ?? "—"],
+                        ["p75", snap.score_distribution.p75?.toFixed(3) ?? "—"],
+                        ["max", snap.score_distribution.max?.toFixed(3) ?? "—"],
+                        ["mean", snap.score_distribution.mean?.toFixed(3) ?? "—"],
+                      ].map(([label, value]) => (
+                        <div key={label}>
+                          <div
+                            style={{
+                              ...MONO,
+                              fontSize: "10px",
+                              letterSpacing: "0.14em",
+                              textTransform: "uppercase",
+                              color: "var(--muted)",
+                              marginBottom: 4,
+                            }}
+                          >
+                            {label}
+                          </div>
+                          <div
+                            style={{
+                              ...MONO,
+                              fontSize: 15,
+                              color: "var(--ink)",
+                            }}
+                          >
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Dataset snapshot */}
+                <div>
+                  <div style={{ ...EYEBROW, marginBottom: 12 }}>Dataset snapshot</div>
+                  <div
+                    style={{
+                      ...CARD,
+                      padding: "16px 18px",
+                    }}
+                  >
+                    {Object.entries(snap.dataset_snapshot).map(([key, entry], i, arr) => (
+                      <div
+                        key={key}
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "minmax(140px, 1fr) minmax(0, 2fr) minmax(0, 1.2fr)",
+                          gap: 16,
+                          padding: "10px 0",
+                          borderBottom:
+                            i < arr.length - 1 ? "1px solid var(--rule)" : "none",
+                          alignItems: "baseline",
+                        }}
+                      >
+                        <div style={{ ...MONO, fontSize: 12.5, color: "var(--ink)" }}>
+                          {key}
+                        </div>
+                        <a
+                          href={`https://huggingface.co/datasets/${entry.repo}/commit/${entry.sha ?? ""}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ ...MONO, ...LINK, fontSize: 12.5, wordBreak: "break-all" }}
+                        >
+                          {entry.sha ? entry.sha.slice(0, 12) : "—"}
+                        </a>
+                        <div style={{ ...MONO, fontSize: 12, color: "var(--ink-2)" }}>
+                          {entry.last_modified
+                            ? entry.last_modified.replace("T", " ").replace(/\.\d+/, "").replace("Z", " UTC")
+                            : "—"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 12.5,
+                      lineHeight: 1.6,
+                      color: "var(--muted)",
+                      marginTop: 14,
+                      maxWidth: "72ch",
+                    }}
+                  >
+                    Audit run: {snap._meta.audit_date ?? "—"} · Snapshot label:{" "}
+                    <code style={{ ...MONO, fontSize: "0.92em" }}>{snap._meta.snapshot_label}</code>.
+                    Raw report and reproducible script live at{" "}
+                    <code style={{ ...MONO, fontSize: "0.92em" }}>
+                      {snap._meta.audit_script}
+                    </code>
+                    .
+                  </p>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </section>
+
       {/* ── 02 · Underlying data sources ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className={SECTION_INNER}>
@@ -774,10 +1161,135 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
-      {/* ── 05 · This page ───────────────────────────────────────────────── */}
+      {/* ── 05 · Brand-name dictionary ───────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className={SECTION_INNER}>
+          <SectionHeader
+            label="05 · Crosswalk transparency"
+            title="Brand-name dictionary"
+            intro="Whel&apos;s compound list sometimes uses brand strings (e.g. &ldquo;Wellbutrin&rdquo;, &ldquo;Veozah&rdquo;) where the underlying generic is what the external biomedical graph keys on. The MATRIX coverage audit uses the small, finite dictionary below as a fallback to translate brand strings back to their generic equivalents before looking them up in DrugBank. This is the only translation step the crosswalk applies; every other match is a direct name or synonym lookup. The dictionary is intentionally short so it can be audited at a glance."
+          />
+
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", minWidth: 720, borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  {["Brand string", "Generic", "DrugBank ID", "Note"].map((h, i) => (
+                    <th
+                      key={h}
+                      style={{
+                        ...MONO,
+                        fontSize: "10.5px",
+                        fontWeight: 500,
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase",
+                        color: "var(--muted)",
+                        textAlign: "left",
+                        padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
+                        borderBottom: "1px solid var(--rule-strong)",
+                        width: ["18%", "20%", "14%", "48%"][i],
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {BRAND_DICT_ENTRIES.map((e) => (
+                  <tr key={e.brand}>
+                    <td
+                      className="font-heading"
+                      style={{
+                        fontSize: "14px",
+                        color: "var(--ink)",
+                        padding: "14px 14px 14px 0",
+                        borderBottom: "1px solid var(--rule)",
+                        verticalAlign: "baseline",
+                      }}
+                    >
+                      {e.brand}
+                    </td>
+                    <td
+                      style={{
+                        ...MONO,
+                        fontSize: "12.5px",
+                        color: e.generic ? "var(--ink-2)" : "var(--muted-2)",
+                        padding: "14px 14px",
+                        borderBottom: "1px solid var(--rule)",
+                        verticalAlign: "baseline",
+                      }}
+                    >
+                      {e.generic ?? "—"}
+                    </td>
+                    <td
+                      style={{
+                        ...MONO,
+                        fontSize: "11.5px",
+                        color: e.drugbank_id ? "var(--green-mid)" : "var(--muted-2)",
+                        padding: "14px 14px",
+                        borderBottom: "1px solid var(--rule)",
+                        verticalAlign: "baseline",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {e.drugbank_id ? (
+                        <a
+                          href={`https://go.drugbank.com/drugs/${e.drugbank_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={LINK}
+                        >
+                          {e.drugbank_id}
+                        </a>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
+                    <td
+                      style={{
+                        fontSize: "12.5px",
+                        lineHeight: 1.55,
+                        color: "var(--ink-2)",
+                        padding: "14px 14px",
+                        borderBottom: "1px solid var(--rule)",
+                        verticalAlign: "baseline",
+                      }}
+                    >
+                      {e.note}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <p
+            style={{
+              ...MONO,
+              fontSize: "11.5px",
+              lineHeight: 1.6,
+              color: "var(--muted)",
+              marginTop: 18,
+            }}
+          >
+            {activeBrandCount()} active mapping{activeBrandCount() === 1 ? "" : "s"}
+            {" "}·{" "}schema v{BRAND_DICT_META.schema_version}{" "}·{" "}last reviewed{" "}
+            {BRAND_DICT_META.last_reviewed}. Rows with &ldquo;—&rdquo; in the generic
+            column exist for documentation (e.g. medical-device combos) and do
+            not contribute to MATRIX matches. Source file:{" "}
+            <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+              lib/brand-name-dictionary.json
+            </code>
+            .
+          </p>
+        </div>
+      </section>
+
+      {/* ── 06 · This page ───────────────────────────────────────────────── */}
       <section>
         <div className={SECTION_INNER}>
-          <SectionHeader label="05 · This page" title="A living register" />
+          <SectionHeader label="06 · This page" title="A living register" />
 
           <p style={{ fontSize: 15, lineHeight: 1.72, color: "var(--ink-2)", maxWidth: "68ch" }}>
             The external reference register is dated and will change. New resources are added when they meet
