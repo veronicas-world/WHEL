@@ -1,4 +1,11 @@
 import Link from "next/link";
+import {
+  L_GRADE_META,
+  L_GRADE_LEVELS,
+  L_GRADE_SEARCH_PROCEDURE,
+  L_GRADE_ADJUDICATION,
+  totalRubricClauses,
+} from "@/lib/literature-grade-rubric";
 
 export const metadata = {
   title: "Validation methodology | Whel",
@@ -44,29 +51,6 @@ const CARD: React.CSSProperties = {
   padding: "20px 22px",
 };
 
-const VALIDATION_LEVELS = [
-  {
-    level: "L0",
-    label: "No external evidence",
-    desc: "No peer-reviewed study, no registered trial, and no guideline mention of the compound-condition pair could be located.",
-  },
-  {
-    level: "L1",
-    label: "Mentioned in published literature",
-    desc: "At least one peer-reviewed primary study, case series, or narrative review investigates the pair, regardless of effect direction.",
-  },
-  {
-    level: "L2",
-    label: "Trial or systematic review evidence",
-    desc: "At least one randomized controlled trial or systematic review of the pair exists, with a clearly reported outcome.",
-  },
-  {
-    level: "L3",
-    label: "Included in a major clinical guideline",
-    desc: "The compound is named as a treatment option for the condition in a guideline from ESHRE, ASRM, NICE, Cochrane, ACOG, or an equivalent body. Strength of recommendation and certainty of evidence are recorded.",
-  },
-];
-
 const EXTERNAL_SOURCES = [
   { label: "PubMed (NCBI)", href: "https://pubmed.ncbi.nlm.nih.gov/" },
   { label: "ClinicalTrials.gov", href: "https://clinicaltrials.gov/" },
@@ -83,6 +67,122 @@ const SAMPLE_NUMBERS = [
   { label: "Distinct compounds", value: "23" },
   { label: "Unique attached sources", value: "252" },
 ];
+
+function RubricSourceBlock({
+  title,
+  rows,
+}: {
+  title: string;
+  rows: Array<[string, string | undefined]>;
+}) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div
+        className="font-heading"
+        style={{
+          fontSize: "0.95rem",
+          fontWeight: 500,
+          color: "var(--ink)",
+        }}
+      >
+        {title}
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {rows
+          .filter((r): r is [string, string] => typeof r[1] === "string" && r[1].length > 0)
+          .map(([label, value]) => (
+            <div
+              key={label}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "minmax(0, 180px) 1fr",
+                gap: 12,
+                alignItems: "baseline",
+              }}
+            >
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: "10px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                }}
+              >
+                {label}
+              </div>
+              <div style={{ fontSize: "0.88rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
+                {value}
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+}
+
+function RubricRuleList({
+  heading,
+  items,
+}: {
+  heading: string;
+  items: string[];
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div>
+      <div
+        style={{
+          ...MONO,
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--muted)",
+          marginBottom: 6,
+        }}
+      >
+        {heading}
+      </div>
+      <ul style={{ paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6, margin: 0 }}>
+        {items.map((it, i) => (
+          <li
+            key={i}
+            style={{
+              fontSize: "0.9rem",
+              color: "var(--ink-2)",
+              lineHeight: 1.6,
+              listStyle: "disc",
+            }}
+          >
+            {it}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function RubricNamedParagraph({ heading, text }: { heading: string; text: string }) {
+  return (
+    <div>
+      <div
+        style={{
+          ...MONO,
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--muted)",
+          marginBottom: 6,
+        }}
+      >
+        {heading}
+      </div>
+      <p style={{ fontSize: "0.92rem", color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
+        {text}
+      </p>
+    </div>
+  );
+}
 
 export default function MethodologyPage() {
   return (
@@ -313,7 +413,7 @@ export default function MethodologyPage() {
 
               <div style={CARD}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  {VALIDATION_LEVELS.map((lvl) => (
+                  {L_GRADE_LEVELS.map((lvl) => (
                     <div
                       key={lvl.level}
                       style={{
@@ -342,7 +442,7 @@ export default function MethodologyPage() {
                           {lvl.label}
                         </div>
                         <div style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.55 }}>
-                          {lvl.desc}
+                          {lvl.summary}
                         </div>
                       </div>
                     </div>
@@ -356,6 +456,339 @@ export default function MethodologyPage() {
                 it, mixed, or unclear. This is reported alongside the level
                 but is not used to determine the level itself.
               </p>
+
+              <p style={BODY}>
+                The full rubric below records the exact search procedure that
+                produces an L assignment, the inclusion criterion at each
+                level, the boundary rule at each transition, and the source-
+                attribution requirement that lets any reader trace an L grade
+                back to a specific PMID, NCT ID, or guideline section. It is
+                schema-versioned so a revision is dated and visible.
+              </p>
+
+              <details className="disclose-block" style={{ marginTop: 4 }}>
+                <summary
+                  style={{
+                    ...MONO,
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    gap: 16,
+                    padding: "16px 18px",
+                    border: "1px solid var(--rule)",
+                    background: "var(--paper)",
+                    color: "var(--ink-2)",
+                  }}
+                  aria-label={`Open the full literature-grade rubric, ${totalRubricClauses()} clauses across the four levels`}
+                >
+                  <span style={{ display: "block", minWidth: 0 }}>
+                    <span
+                      className="font-heading"
+                      style={{
+                        display: "block",
+                        fontSize: "14px",
+                        color: "var(--ink)",
+                        letterSpacing: 0,
+                        textTransform: "none",
+                        marginBottom: 6,
+                      }}
+                    >
+                      Open the full rubric
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: "11px",
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase",
+                        color: "var(--muted)",
+                        lineHeight: 1.5,
+                        marginBottom: 4,
+                      }}
+                    >
+                      Rubric schema v{L_GRADE_META.schema_version} · last
+                      reviewed {L_GRADE_META.last_reviewed} ·{" "}
+                      {totalRubricClauses()} clauses across the four levels
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: "11px",
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase",
+                        color: "var(--muted-2)",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      Search procedure · inclusion criteria · boundary rules ·
+                      source attribution · conflict resolution
+                    </span>
+                  </span>
+                  <span
+                    className="disclose-chev"
+                    aria-hidden="true"
+                    style={{
+                      ...MONO,
+                      fontSize: "14px",
+                      color: "var(--muted)",
+                      flexShrink: 0,
+                      paddingTop: 2,
+                    }}
+                  >
+                    ↓
+                  </span>
+                </summary>
+
+                <div
+                  style={{
+                    marginTop: 22,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 32,
+                  }}
+                >
+                  {/* Search procedure */}
+                  <div>
+                    <div style={EYEBROW}>Search procedure</div>
+                    <h3
+                      className="font-heading"
+                      style={{
+                        fontSize: "1.1rem",
+                        fontWeight: 500,
+                        color: "var(--ink)",
+                        marginBottom: 12,
+                      }}
+                    >
+                      How the search is run
+                    </h3>
+                    <p style={BODY}>
+                      Searches are run per-pair against each named source.
+                      Compound terms are unioned from{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                        lib/brand-name-dictionary.json
+                      </code>
+                      , so the synonym set is reproducible against a specific
+                      brand-dictionary schema version. Condition terms are the
+                      canonical MeSH heading plus the named lay and clinical
+                      synonyms held in the Whel condition table. The full
+                      search transcript (query string, run date, dictionary
+                      schema version, condition-synonym set) is stored on the
+                      signal record.
+                    </p>
+
+                    <div
+                      style={{
+                        ...CARD,
+                        marginTop: 14,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 18,
+                      }}
+                    >
+                      <RubricSourceBlock
+                        title="PubMed (NCBI)"
+                        rows={[
+                          ["Query template", L_GRADE_SEARCH_PROCEDURE.PubMed.query_template],
+                          ["Compound synonyms", L_GRADE_SEARCH_PROCEDURE.PubMed.compound_synonym_source],
+                          ["Condition synonyms", L_GRADE_SEARCH_PROCEDURE.PubMed.condition_synonym_source],
+                          ["Filters", L_GRADE_SEARCH_PROCEDURE.PubMed.filters],
+                          ["Exclusions", L_GRADE_SEARCH_PROCEDURE.PubMed.exclusions],
+                        ]}
+                      />
+                      <RubricSourceBlock
+                        title="ClinicalTrials.gov"
+                        rows={[
+                          ["Query", L_GRADE_SEARCH_PROCEDURE["ClinicalTrials.gov"].query],
+                          ["Filters", L_GRADE_SEARCH_PROCEDURE["ClinicalTrials.gov"].filters],
+                          ["Notes", L_GRADE_SEARCH_PROCEDURE["ClinicalTrials.gov"].notes],
+                        ]}
+                      />
+                      <RubricSourceBlock
+                        title="Cochrane Library"
+                        rows={[
+                          ["Query", L_GRADE_SEARCH_PROCEDURE["Cochrane Library"].query],
+                        ]}
+                      />
+                      <RubricSourceBlock
+                        title="Named guideline bodies"
+                        rows={[
+                          [
+                            "Bodies",
+                            (L_GRADE_SEARCH_PROCEDURE["Named guideline bodies"].bodies ?? []).join(", "),
+                          ],
+                          [
+                            "Condition-specific additions",
+                            L_GRADE_SEARCH_PROCEDURE["Named guideline bodies"].condition_specific_bodies,
+                          ],
+                          [
+                            "Procedure",
+                            L_GRADE_SEARCH_PROCEDURE["Named guideline bodies"].procedure,
+                          ],
+                        ]}
+                      />
+                      <RubricSourceBlock
+                        title="Deduplication"
+                        rows={[["Rule", L_GRADE_SEARCH_PROCEDURE.deduplication]]}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Per-level full rules */}
+                  <div>
+                    <div style={EYEBROW}>Level definitions in full</div>
+                    <h3
+                      className="font-heading"
+                      style={{
+                        fontSize: "1.1rem",
+                        fontWeight: 500,
+                        color: "var(--ink)",
+                        marginBottom: 12,
+                      }}
+                    >
+                      What each L level requires
+                    </h3>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+                      {L_GRADE_LEVELS.map((lvl) => (
+                        <div
+                          key={lvl.level}
+                          style={{
+                            ...CARD,
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 12,
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "baseline",
+                              gap: 14,
+                            }}
+                          >
+                            <span
+                              style={{
+                                ...MONO,
+                                fontSize: "0.95rem",
+                                color: "var(--green-deep)",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {lvl.level}
+                            </span>
+                            <span
+                              className="font-heading"
+                              style={{
+                                fontSize: "1rem",
+                                fontWeight: 500,
+                                color: "var(--ink)",
+                              }}
+                            >
+                              {lvl.label}
+                            </span>
+                          </div>
+                          <p
+                            style={{
+                              fontSize: "0.92rem",
+                              color: "var(--ink-2)",
+                              lineHeight: 1.6,
+                              margin: 0,
+                            }}
+                          >
+                            {lvl.summary}
+                          </p>
+
+                          <RubricRuleList
+                            heading="Inclusion criteria"
+                            items={lvl.inclusion_criteria}
+                          />
+                          <RubricRuleList
+                            heading="Boundary rules"
+                            items={lvl.boundary_rules}
+                          />
+
+                          <div>
+                            <div
+                              style={{
+                                ...MONO,
+                                fontSize: "10px",
+                                letterSpacing: "0.2em",
+                                textTransform: "uppercase",
+                                color: "var(--muted)",
+                                marginBottom: 6,
+                              }}
+                            >
+                              Source attribution
+                            </div>
+                            <p
+                              style={{
+                                fontSize: "0.9rem",
+                                color: "var(--ink-2)",
+                                lineHeight: 1.6,
+                                margin: 0,
+                              }}
+                            >
+                              {lvl.source_attribution}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Adjudication */}
+                  <div>
+                    <div style={EYEBROW}>Adjudication</div>
+                    <h3
+                      className="font-heading"
+                      style={{
+                        fontSize: "1.1rem",
+                        fontWeight: 500,
+                        color: "var(--ink)",
+                        marginBottom: 12,
+                      }}
+                    >
+                      How disagreements and edge cases are resolved
+                    </h3>
+                    <div
+                      style={{
+                        ...CARD,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 16,
+                      }}
+                    >
+                      <RubricNamedParagraph
+                        heading="Direction handling"
+                        text={L_GRADE_ADJUDICATION.direction_handling}
+                      />
+                      <RubricNamedParagraph
+                        heading="Conflict resolution"
+                        text={L_GRADE_ADJUDICATION.conflict_resolution}
+                      />
+                      <RubricNamedParagraph
+                        heading="Recency and re-execution"
+                        text={L_GRADE_ADJUDICATION.recency_and_re_execution}
+                      />
+                    </div>
+                  </div>
+
+                  <p
+                    style={{
+                      ...MONO,
+                      fontSize: "11.5px",
+                      lineHeight: 1.6,
+                      color: "var(--muted)",
+                    }}
+                  >
+                    Source file:{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                      lib/literature-grade-rubric.json
+                    </code>
+                    . Reviewers: {L_GRADE_META.reviewers.join("; ")}. Review
+                    cadence: {L_GRADE_META.review_cadence}
+                  </p>
+                </div>
+              </details>
             </div>
           </section>
 
@@ -582,6 +1015,22 @@ export default function MethodologyPage() {
               paddingTop: 18,
             }}
           >
+            Methodology version 3.2, June 1 2026. The external-evidence
+            rubric (L0 / L1 / L2 / L3) is now codified in a
+            schema-versioned sidecar at{" "}
+            <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+              lib/literature-grade-rubric.json
+            </code>{" "}
+            and surfaced on this page as a collapsible block in Section 04.
+            v3.2 records the search procedure per source (PubMed,
+            ClinicalTrials.gov, Cochrane, named guideline bodies),
+            inclusion criteria and boundary rules at every level transition,
+            source-attribution requirements per L assignment, and the
+            conflict-resolution rule used when two reviewers disagree. No
+            change to the sample, the comparators, or the pre-specified
+            thresholds; the tightening makes the L assignment behind any
+            signal reproducible against the printed rules, which the v3.1
+            page implied but did not pin down.{" "}
             Methodology version 3.1, June 1 2026. Every Cure&apos;s MATRIX
             dataset is now surfaced as an independent biological-plausibility
             layer beside Whel&apos;s grades wherever MATRIX has coverage; it

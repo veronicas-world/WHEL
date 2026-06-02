@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "purpose": "Authoritative rubric used to assign an external-evidence level (L0 / L1 / L2 / L3) to every compound-condition pair in the Whel database during the validation benchmark. Codifies the search procedure, the inclusion criteria per level, the boundary rules at every level transition, the source-attribution requirement, the conflict-resolution rule, and the direction-handling rule. Surfaced on /about/methodology so the L assignment behind any signal is reproducible by an outside reader.",
+    "scope_note": "Covers external-evidence grading only. Whel's internal Strong / Emerging / Exploratory tier rubric is documented separately on /about/technical-architecture. The L scale is what the validation benchmark uses to check whether the internal tiers calibrate against the published clinical record.",
+    "last_reviewed": "2026-06-01",
+    "reviewers": ["Whel methodology — Veronica Agudelo", "External primary rater (NIMH/PCORI-funded clinician-researcher, women's health)"],
+    "review_cadence": "Quarterly. The structured search is re-executed each quarter; the rubric itself is revised only if a benchmark result requires it, and a revision bumps the schema_version and the methodology version tag in lockstep."
+  },
+
+  "search_procedure": {
+    "PubMed": {
+      "query_template": "((\"<INN>\"[Title/Abstract] OR \"<brand_or_synonym_1>\"[Title/Abstract] OR ...) AND (\"<condition_canonical>\"[MeSH Terms] OR \"<lay_synonym_1>\"[Title/Abstract] OR ...))",
+      "compound_synonym_source": "lib/brand-name-dictionary.json — every entry whose kind is brand, inn_variant, abbreviation, salt_form, formulation_variant, or combo and whose resolves-to-DrugBank-ID is not null is unioned into the compound term. The brand dictionary's schema_version is recorded with the search transcript so the synonym set is reproducible.",
+      "condition_synonym_source": "Canonical MeSH heading for the condition plus the named lay and clinical synonyms held in the Whel condition table (e.g. for PCOS: \"polycystic ovary syndrome\" OR \"Stein-Leventhal syndrome\" OR \"PCOS\"; for PMDD: \"premenstrual dysphoric disorder\" OR \"late luteal phase dysphoric disorder\" OR \"LLPDD\" OR \"PMDD\").",
+      "filters": "Humans. No language restriction. No date cutoff at the rubric level; the run date is recorded on the search transcript so the result can be reproduced at that point in time.",
+      "exclusions": "PMIDs already attached to the Whel signal as indexed evidence are excluded from the external-search hit count so the comparison stays external. A PMID retracted by the publisher is excluded from every L level."
+    },
+    "ClinicalTrials.gov": {
+      "query": "Intervention = compound (INN + every dictionary synonym whose resolves-to-DrugBank-ID is not null). Condition = condition name + standard synonyms (same list as PubMed).",
+      "filters": "All phases. All recruitment statuses except \"withdrawn before enrollment\", which is excluded from every L level.",
+      "notes": "A trial registered with a posted protocol but no peer-reviewed publication remains L1 only. The NCT ID is recorded so the registration can be retrieved at the version captured on the search date."
+    },
+    "Cochrane Library": {
+      "query": "Title/abstract search for compound + condition. Filter to systematic reviews and intervention reviews. Withdrawn Cochrane reviews are recorded but do not contribute to any L level."
+    },
+    "Named guideline bodies": {
+      "bodies": ["ESHRE", "ASRM", "NICE", "Cochrane (clinical answers)", "ACOG"],
+      "condition_specific_bodies": "When a condition has a recognised society-level guideline outside the standard five (e.g. IUGA for vulvar pain disorders, ESC for cardiovascular comorbidity, AACE for thyroid co-management), that body is added to the search for that condition and the addition is recorded on the search transcript.",
+      "procedure": "Hand-walk the active-guideline index of each named body for each condition in scope. For each named compound, record guideline_id, section number, recommendation text, recommendation strength (e.g. strong / conditional, A / B / C / D, or the body's local scale), and certainty of evidence (GRADE high / moderate / low / very low, or the body's local certainty scale). A guideline that has been formally withdrawn or superseded does not contribute to L3; the pair drops to its highest remaining level."
+    },
+    "deduplication": "Records that appear in more than one source (e.g. a Cochrane review also indexed on PubMed) are deduplicated by DOI or PMID before the level is assigned. The dedup transcript is stored on the signal record."
+  },
+
+  "levels": [
+    {
+      "level": "L0",
+      "label": "No external evidence",
+      "summary": "The structured search returns no record that satisfies any L1+ inclusion criterion below.",
+      "inclusion_criteria": [
+        "No peer-reviewed primary study, registered case series, narrative review, or scoping review investigates the pair.",
+        "No registered trial of the pair appears on ClinicalTrials.gov in a non-withdrawn status.",
+        "The pair is not named as a treatment option in any active guideline from a named body."
+      ],
+      "boundary_rules": [
+        "A single uncontrolled case report indexed on PubMed without a registered case-series parent does not lift the pair out of L0. The case report is recorded as a note on the signal but does not score L1.",
+        "A preprint that has not undergone peer review does not score L1 on its own. The preprint is recorded as a note."
+      ],
+      "source_attribution": "L0 signals carry the search transcript (query string, run date, brand-dictionary schema version, condition-synonym set) so the null result is itself reproducible."
+    },
+    {
+      "level": "L1",
+      "label": "Mentioned in published literature",
+      "summary": "At least one peer-reviewed venue indexes the pair as a study subject, in any direction.",
+      "inclusion_criteria": [
+        "At least one peer-reviewed primary study (cohort, case-control, registered case series with stated enrollment criteria, n >= 3), narrative review, scoping review, or umbrella review investigates the pair.",
+        "\"Investigates the pair\" means both the compound (or its INN / brand / salt / formulation / combo synonyms per the brand dictionary) and the condition (or its MeSH / lay synonyms) appear as study terms, not merely as background citations.",
+        "Conference abstracts indexed by an established society (e.g. ESHRE annual meeting, ENDO) count as L1; non-indexed posters do not."
+      ],
+      "boundary_rules": [
+        "A single uncontrolled case report is not L1 (see L0 boundary).",
+        "An RCT registered on ClinicalTrials.gov but never peer-published remains L1, with the NCT ID recorded.",
+        "A withdrawn Cochrane review is not L1 on its own; the underlying primary studies, if any, are evaluated independently."
+      ],
+      "source_attribution": "Every L1 assignment carries at least one PMID. The PMID set is rendered on the public signal record."
+    },
+    {
+      "level": "L2",
+      "label": "Trial or systematic review evidence",
+      "summary": "At least one peer-reviewed RCT or systematic review / meta-analysis of the pair exists, with a clearly reported result.",
+      "inclusion_criteria": [
+        "(a) At least one peer-reviewed randomized controlled trial of the pair (parallel, crossover, or factorial) with a pre-specified primary endpoint and a clearly reported result (point estimate plus variance, or response rate), OR",
+        "(b) At least one peer-reviewed systematic review or meta-analysis (PRISMA, Cochrane, or equivalent format) that includes the pair as a specific intervention-outcome comparison."
+      ],
+      "boundary_rules": [
+        "Scoping reviews, narrative reviews, and umbrella reviews do not reach L2. They remain at L1.",
+        "An RCT registered on ClinicalTrials.gov but never peer-published is not L2. It is L1 with the registration recorded.",
+        "Underpowered, terminated, or null RCTs reach L2 if a primary endpoint was reported. Trials terminated without a primary endpoint report stay at L1.",
+        "A meta-analysis whose only included trials are themselves L1 (e.g. a network meta-analysis of observational studies) is L1, not L2.",
+        "Retracted RCTs and retracted systematic reviews are excluded from L2."
+      ],
+      "source_attribution": "Every L2 assignment carries at least one PMID, the study_type tag (\"RCT\" or \"SR/MA\"), and the primary endpoint text as printed in the abstract."
+    },
+    {
+      "level": "L3",
+      "label": "Included in a major clinical guideline",
+      "summary": "The compound is named as a treatment option for the condition in an active guideline from a named body.",
+      "inclusion_criteria": [
+        "The compound (any INN / brand / salt synonym) is named in a recommendation, options table, or care algorithm in an active guideline from ESHRE, ASRM, NICE, Cochrane (clinical answers), ACOG, or a condition-specific body added for that condition.",
+        "\"Active\" means not withdrawn, not superseded, and not marked under review past its publisher-stated review date.",
+        "Strength of recommendation (e.g. strong / conditional, A / B / C / D, or the body's local scale) and certainty of evidence (GRADE or the body's local certainty scale) are extractable from the guideline text and are recorded with the L3 assignment."
+      ],
+      "boundary_rules": [
+        "Mention in the differential, background, or epidemiology section of a guideline does not reach L3. The compound must appear in a recommendation, options table, or algorithm step.",
+        "A guideline that has been formally withdrawn or superseded drops the pair to its highest remaining level (L0 / L1 / L2).",
+        "\"Not recommended\" recommendations score L3 (the level is direction-blind). The direction is recorded separately on the signal.",
+        "Off-label naming in a guideline (e.g. \"may be considered in selected patients\") scores L3. The qualifier is recorded with the strength field."
+      ],
+      "source_attribution": "Every L3 assignment carries the guideline_id, the section number or recommendation ID, the recommendation strength, and the certainty of evidence."
+    }
+  ],
+
+  "adjudication": {
+    "direction_handling": "L levels are direction-blind. A pair where every published trial is negative still scores L2 for the trial evidence; a pair where a guideline recommends against the compound still scores L3 for the guideline mention. Effect direction (supports the indexed direction, contradicts, mixed, unclear) is captured as a secondary field on the signal and is reported alongside the L level. The direction is used downstream when Whel assigns its internal tier; it is not used to assign the L level itself.",
+    "conflict_resolution": "Every signal in the validation sample is L-graded by the primary rater. A randomized 20%+ subsample is independently L-graded by a second reviewer blind to the primary's assignment and to Whel's internal tier. Disagreements are resolved by re-running the search transcript and re-applying the rubric verbatim. If the disagreement persists after re-application, the lower L wins (conservative default), and the disagreement is logged. Inter-rater agreement is reported as Cohen's kappa per Section 05 of the methodology page.",
+    "recency_and_re_execution": "Search transcripts carry a run date. The structured search is re-executed quarterly for the active sample. A pair whose level changes between quarterly runs is flagged for review; the rubric itself is not adjusted in response to a single-quarter shift. Rubric revisions require an external review cycle and bump both the schema_version of this file and the methodology version tag on the page."
+  }
+}
