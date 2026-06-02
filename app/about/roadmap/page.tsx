@@ -1,8 +1,16 @@
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 export const metadata = {
   title: "Roadmap | Whel",
 };
+
+// Mirror the homepage's runtime-fetching posture so the "Now / Live today"
+// signal count tracks the live database rather than freezing to a build-time
+// value. Without these, Next prerenders the page statically and the count
+// drifts as the DB grows.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 /* ──────────────────────────────────────────────────────────────────────────
    Shared style tokens — matched to the Mission and Technical Architecture pages
@@ -40,41 +48,53 @@ const PATHWAY_COLORS: Record<string, string> = {
    Content
    ────────────────────────────────────────────────────────────────────────── */
 
-const PHASES: { tag: string; sub: string; color: string; items: string[] }[] = [
-  {
-    tag: "Now",
-    sub: "Live today",
-    color: "var(--green-deep)",
-    items: [
-      "Six conditions: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, menopause",
-      "Five evidence pipelines running across four research arms",
-      "281 signals, each scored against a published five-dimension rubric",
-    ],
-  },
-  {
-    tag: "Next",
-    sub: "This work cycle",
-    color: "var(--green-mid)",
-    items: [
-      "Run the two-rater validation study and publish the agreement score",
-      "Add disproportionality statistics (PRR / ROR) to the adverse-event arm",
-      "Surface Every Cure's MATRIX scores as an independent biological-plausibility layer, displayed where MATRIX has coverage",
-      "Surface a cross-arm concordance flag where two or more arms support the same compound-condition pair",
-      "Make every citation reproduce the count it claims; finish source de-duplication",
-      "Publish an open CSV / JSON data export with a citable DOI",
-    ],
-  },
-  {
-    tag: "Later",
-    sub: "Beyond the next release",
-    color: "var(--muted-2)",
-    items: [
-      "Extend to further under-researched women's health conditions",
-      "Add complementary pipelines once the existing ones are solid",
-      "Deepen coverage of the conditions already in scope",
-    ],
-  },
-];
+// PHASES is built inside the async component so the "Now" signal count can
+// read from the live database. See buildPhases() below the page component.
+function buildPhases(totalSignals: number): { tag: string; sub: string; color: string; items: string[] }[] {
+  // Phrase the signal count exactly as the homepage CTA does: render the live
+  // number when the DB is reachable, fall back to a generic phrase otherwise
+  // so the page never shows "0 signals" if Supabase hiccups at request time.
+  const signalsLine =
+    totalSignals > 0
+      ? `${totalSignals} signals, each scored against a published five-dimension rubric`
+      : "Signals scored against a published five-dimension rubric";
+
+  return [
+    {
+      tag: "Now",
+      sub: "Live today",
+      color: "var(--green-deep)",
+      items: [
+        "Six conditions: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, menopause",
+        "Five evidence pipelines running across four research arms",
+        signalsLine,
+        "Every Cure MATRIX cross-reference published as an independent biological-plausibility layer, with per-condition coverage on the external references page",
+      ],
+    },
+    {
+      tag: "Next",
+      sub: "This work cycle",
+      color: "var(--green-mid)",
+      items: [
+        "Run the two-rater validation study and publish the agreement score",
+        "Add disproportionality statistics (PRR / ROR) to the adverse-event arm",
+        "Surface a cross-arm concordance flag where two or more arms (Whel + MATRIX) support the same compound-condition pair",
+        "Make every citation reproduce the count it claims; finish source de-duplication",
+        "Publish an open CSV / JSON data export with a citable DOI",
+      ],
+    },
+    {
+      tag: "Later",
+      sub: "Beyond the next release",
+      color: "var(--muted-2)",
+      items: [
+        "Extend to further under-researched women's health conditions",
+        "Add complementary pipelines once the existing ones are solid",
+        "Deepen coverage of the conditions already in scope",
+      ],
+    },
+  ];
+}
 
 const ORIENTATION_COPY: string[] = [
   "Whel is a research instrument: an evidence database rather than a consumer health tool or a drug-discovery algorithm. It does not tell anyone what to take, and it does not invent new compounds or predict new drug targets. What it does is build something the field currently lacks: a structured, scored, searchable evidence base for drug-repurposing signals across under-researched women's health conditions.",
@@ -305,7 +325,20 @@ function SectionHeader({
    Page
    ────────────────────────────────────────────────────────────────────────── */
 
-export default function RoadmapPage() {
+export default async function RoadmapPage() {
+  // Count active, scored signals the same way the homepage does, so the
+  // "Now / Live today" bullet stays in sync with the public CTA. A
+  // count-only query (head:true) is cheaper than fetching rows.
+  const { count: totalSignalsRaw } = await supabase
+    .from("repurposing_signals")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "active")
+    .not("total_evidence_score", "is", null)
+    .gt("total_evidence_score", 0);
+
+  const totalSignals = totalSignalsRaw ?? 0;
+  const PHASES = buildPhases(totalSignals);
+
   return (
     <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
 
@@ -794,7 +827,7 @@ export default function RoadmapPage() {
               marginTop: 28,
             }}
           >
-            Roadmap revised May 2026
+            Roadmap revised June 2026
           </div>
 
           <div
