@@ -26,6 +26,10 @@ OUTPUTS
 -------
   scripts/audit-output/matrix-coverage-report.json   raw data, every match attempt
   scripts/audit-output/matrix-coverage-summary.md    human-readable summary
+  lib/matrix-audit-snapshot.json                     public coverage snapshot
+  lib/evidence-grading-snapshot.json                 per-pair L0/L1/L2/L3
+                                                     derivation under
+                                                     lib/literature-grade-rubric.json
 
 DEPENDENCIES
 ------------
@@ -96,6 +100,26 @@ SUMMARY_MD = OUT_DIR / "matrix-coverage-summary.md"
 PUBLIC_SNAPSHOT_JSON = REPO_ROOT / "lib" / "matrix-audit-snapshot.json"
 PUBLIC_SNAPSHOT_SCHEMA_VERSION = 1
 
+# Literature-grade (L0/L1/L2/L3) rubric. The audit script loads this file,
+# asserts the schema_version it expects, derives the max-supportable level
+# for every active signal from its attached sources, and grades every
+# validation-agent dossier under the same rules. The derived levels are
+# written to a separate sidecar (GRADING_SNAPSHOT_JSON) so condition pages
+# can render the per-claim L grade without re-applying the rubric at
+# request time. The rubric file itself is the single source of truth — the
+# methodology page reads it, this script reads it, any future re-grader
+# reads it. A schema_version drift between the JSON and this script is
+# fatal (the rubric was bumped without updating the derivation rules).
+RUBRIC_JSON_PATH = REPO_ROOT / "lib" / "literature-grade-rubric.json"
+RUBRIC_EXPECTED_SCHEMA_VERSION = 1
+
+# Sidecar consumed by condition pages and /about/methodology to render per-
+# claim L grades. Written by the Phase 6 grading pass. Kept separate from
+# PUBLIC_SNAPSHOT_JSON because the L grade is a different question from
+# MATRIX coverage and the consumers are different surfaces.
+GRADING_SNAPSHOT_JSON = REPO_ROOT / "lib" / "evidence-grading-snapshot.json"
+GRADING_SNAPSHOT_SCHEMA_VERSION = 1
+
 # Per-phase caches: if these JSON files exist the script reuses them
 # instead of re-fetching. Delete the cache file (or the whole cache/ dir)
 # to force a fresh run of that phase.
@@ -107,6 +131,10 @@ CROSSWALK_CACHE = CACHE_DIR / "phase3-crosswalk.json"
 # JSON-serialisable). This protects ~36 GB of shard downloads from being
 # discarded if compose_report or markdown writing throws later.
 MATRIX_HITS_CACHE = CACHE_DIR / "phase4-matrix-hits.json"
+# Phase 6 caches the per-signal source rows pulled from Supabase so the
+# rubric pass does not re-fetch on every audit run. Cheap re-fetch (~30s)
+# but cached for symmetry with the other phases.
+SIGNAL_SOURCES_CACHE = CACHE_DIR / "phase6-signal-sources.json"
 
 # Per-cache schema versions. Bump the constant for the relevant cache
 # whenever the SHAPE of its serialised payload changes (new fields, renamed
@@ -116,11 +144,12 @@ MATRIX_HITS_CACHE = CACHE_DIR / "phase4-matrix-hits.json"
 # .stale-2026-05-30 incident, where MONDO:0006471 = Tracheal carcinoma sat
 # in cache for a day before being noticed).
 CACHE_SCHEMA_VERSIONS = {
-    "phase1-whel.json":        1,
+    "phase1-whel.json":        2,  # v2 adds signal `id` so Phase 6 can join sources
     "phase2-mondo.json":       3,  # v2 added match_status; v3 adds matrix_official_filter
     "phase3-drug-list.json":   1,
     "phase3-crosswalk.json":   4,  # v3 added exclusion flags; v4 adds matched_via_brand_dict
     "phase4-matrix-hits.json": 1,
+    "phase6-signal-sources.json": 1,
 }
 
 
@@ -473,6 +502,35 @@ def _load_conditions_ontology() -> list[dict[str, Any]]:
 WHEL_CONDITIONS: list[dict[str, Any]] = _load_conditions_ontology()
 
 
+def _load_l_grade_rubric() -> dict[str, Any]:
+    """Load the literature-grade rubric and assert the schema_version this
+    script knows how to derive against. The rubric is also imported by the
+    methodology page; the JSON is the single source of truth. A drift
+    between the file's _meta.schema_version and RUBRIC_EXPECTED_SCHEMA_VERSION
+    means the rubric was revised without updating the derivation rules in
+    derive_live_signal_l_grades() / derive_validation_dossier_grades(), so
+    the script refuses to proceed.
+    """
+    if not RUBRIC_JSON_PATH.exists():
+        raise FileNotFoundError(
+            f"Literature-grade rubric not found at {RUBRIC_JSON_PATH}. "
+            f"This file is required; the rubric is shared with the "
+            f"methodology page (lib/literature-grade-rubric.ts)."
+        )
+    raw = json.loads(RUBRIC_JSON_PATH.read_text())
+    actual_version = raw.get("_meta", {}).get("schema_version")
+    if actual_version != RUBRIC_EXPECTED_SCHEMA_VERSION:
+        raise ValueError(
+            f"literature-grade-rubric.json schema_version "
+            f"{actual_version!r} does not match the version this script "
+            f"understands ({RUBRIC_EXPECTED_SCHEMA_VERSION}). Update "
+            f"derive_live_signal_l_grades() / "
+            f"derive_validation_dossier_grades() and bump "
+            f"RUBRIC_EXPECTED_SCHEMA_VERSION in lockstep with the rubric."
+        )
+    return raw
+
+
 # ---------------------------------------------------------------------------
 # Env loading -- matches the pattern of the existing .mjs scripts
 # ---------------------------------------------------------------------------
@@ -521,10 +579,13 @@ def pull_whel_data() -> dict[str, Any]:
     compounds = http_get_json(url, headers)
     print(f"     {len(compounds)} compounds in database")
 
-    # Active signals (the pairs we actually care about covering)
+    # Active signals (the pairs we actually care about covering). The `id`
+    # column is needed by Phase 6 to join attached sources for the
+    # literature-grade derivation; without it the rubric pass cannot key
+    # source rows back to the signal they support.
     url = (
         f"{base}/rest/v1/repurposing_signals"
-        f"?select=compound_id,condition_id,signal_type,confidence_tier"
+        f"?select=id,compound_id,condition_id,signal_type,confidence_tier"
         f"&status=eq.active"
     )
     signals = http_get_json(url, headers)
@@ -1568,6 +1629,429 @@ def write_markdown_summary(report: dict[str, Any]) -> None:
 # internal review.
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Phase 6: Literature-grade derivation
+#
+# Two streams:
+#
+#   6a. Live signal grading. Pull every `sources` row attached to an active
+#       signal from Supabase, apply the rubric's source-attribution rules
+#       to the structure of attached evidence, and record the max-supportable
+#       L per signal. The live sources table carries PMID (external_id on
+#       source_type='pubmed') and the source_type tag, so derivation reaches
+#       L2 where the source_type identifies an RCT or systematic review and
+#       a PMID is present. L3 is not derivable from live sources because
+#       structured guideline_id / strength / certainty columns do not exist
+#       on the live schema; the rubric requires those fields for L3
+#       attribution.
+#
+#   6b. Validation-dossier grading. Walk every V###.json in
+#       scripts/validation-agent-output/, pool the citation text into a
+#       corpus, regex PMIDs / NCT IDs / SR-or-MA markers / RCT markers out
+#       of it, and apply the same rubric rules. The dossier pass reaches L3
+#       when a guideline entry is attached with a non-empty citation_or_url
+#       (the guideline_id surrogate available in the dossier shape).
+#
+# Both streams are direction-blind, matching the rubric's
+# adjudication.direction_handling clause.
+# ---------------------------------------------------------------------------
+
+# Regex patterns applied to dossier citation corpus. The dossier shape is
+# free-text per-citation, so the L assignment is driven by structural
+# markers the citation text leaves behind rather than schema fields. The
+# PubMed indexing identifier is matched in three forms because the dossier
+# agent has used all three across the V### corpus:
+#   PMID:NNNN              — canonical PMID prefix form
+#   pubmed.ncbi.nlm.nih.gov/NNNN — URL form (path digits ARE the PMID)
+#   PMC<digits>            — PubMed Central ID for open-access full text,
+#                            which the rubric treats as equivalent for
+#                            L1 source attribution because both reference
+#                            the same peer-reviewed indexed record.
+_PMID_PREFIX_RE = re.compile(r"PMID[:\s]*(\d+)", re.IGNORECASE)
+_PMID_URL_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)", re.IGNORECASE)
+_PMCID_RE = re.compile(r"\bPMC(\d+)\b", re.IGNORECASE)
+_NCT_RE = re.compile(r"\bNCT\d+\b", re.IGNORECASE)
+_SR_OR_MA_RE = re.compile(
+    r"\b(systematic review|meta[- ]?analysis|cochrane review|PRISMA)\b",
+    re.IGNORECASE,
+)
+_RCT_RE = re.compile(
+    r"\b(randomi[sz]ed|RCT|placebo[- ]controlled|phase 2/3|phase 3|phase III)\b",
+    re.IGNORECASE,
+)
+
+
+def _extract_pubmed_ids(corpus: str) -> set[str]:
+    """Pool every PubMed-indexing identifier extractable from the corpus
+    into a single set. The rubric's L1 source_attribution requires at
+    least one such identifier; the dossier agent uses three different
+    citation styles, all three of which point at the same indexing system."""
+    ids: set[str] = set()
+    ids.update(f"PMID:{n}" for n in _PMID_PREFIX_RE.findall(corpus))
+    ids.update(f"PMID:{n}" for n in _PMID_URL_RE.findall(corpus))
+    ids.update(f"PMC{n}" for n in _PMCID_RE.findall(corpus))
+    return ids
+
+
+def pull_signal_sources(active_signal_ids: list[str]) -> list[dict[str, Any]]:
+    """Pull every `sources` row whose signal_id is in the active set. The
+    request is batched because PostgREST refuses very long IN-lists in the
+    URL; 200 IDs per batch keeps each URL well under the cap."""
+    print("[6a/6] Pulling indexed sources for active signals ...")
+    base = os.environ["NEXT_PUBLIC_SUPABASE_URL"].rstrip("/")
+    key = os.environ["NEXT_PUBLIC_SUPABASE_ANON_KEY"]
+    headers = {"apikey": key, "Authorization": f"Bearer {key}"}
+
+    BATCH = 200
+    out: list[dict[str, Any]] = []
+    for i in range(0, len(active_signal_ids), BATCH):
+        batch = active_signal_ids[i : i + BATCH]
+        in_list = ",".join(batch)
+        url = (
+            f"{base}/rest/v1/sources"
+            f"?select=id,signal_id,source_type,external_id,title"
+            f"&signal_id=in.({in_list})"
+        )
+        out.extend(http_get_json(url, headers))
+    print(
+        f"     {len(out)} source rows across {len(active_signal_ids)} active signals"
+    )
+    return out
+
+
+def derive_live_signal_l_grades(
+    signals: list[dict[str, Any]],
+    sources: list[dict[str, Any]],
+    rubric: dict[str, Any],
+) -> dict[str, Any]:
+    """Apply the rubric's source-attribution rules to every active signal's
+    indexed sources. Returns per-signal records plus the aggregate level
+    distribution. The derivation is direction-blind, matching the rubric's
+    adjudication.direction_handling clause. The ceiling on live data is L2;
+    L3 requires structured guideline fields that do not exist on the live
+    sources table."""
+    by_signal: dict[str, list[dict[str, Any]]] = {}
+    for src in sources:
+        by_signal.setdefault(src["signal_id"], []).append(src)
+
+    per_signal: list[dict[str, Any]] = []
+    attribution_violations: list[dict[str, Any]] = []
+
+    for s in signals:
+        sid = s["id"]
+        srcs = by_signal.get(sid, [])
+
+        # PMID count (rubric L1 source_attribution: at least one PMID).
+        pmid_sources = [
+            x for x in srcs
+            if x.get("source_type") == "pubmed" and x.get("external_id")
+        ]
+        # Any pubmed-typed row missing its PMID is a rubric attribution
+        # violation, regardless of the level the signal otherwise reaches.
+        pubmed_missing_pmid = [
+            x for x in srcs
+            if x.get("source_type") == "pubmed" and not x.get("external_id")
+        ]
+        if pubmed_missing_pmid:
+            attribution_violations.append({
+                "signal_id": sid,
+                "pubmed_rows_missing_pmid": len(pubmed_missing_pmid),
+            })
+
+        # Rubric L2 source_attribution: RCT or SR/MA WITH a PMID. The live
+        # source_type tag is the only structural hint that distinguishes
+        # peer-reviewed RCT / SR-MA from a generic pubmed indexing.
+        rct_rows = [
+            x for x in srcs
+            if x.get("source_type") == "clinical_trial_finding"
+            and x.get("external_id")
+        ]
+        sr_or_ma_rows = [
+            x for x in srcs
+            if x.get("source_type") == "review_article"
+            and x.get("external_id")
+        ]
+
+        if rct_rows or sr_or_ma_rows:
+            level = "L2"
+        elif pmid_sources:
+            level = "L1"
+        else:
+            level = "L0"
+
+        per_signal.append({
+            "signal_id": sid,
+            "compound_id": s["compound_id"],
+            "condition_id": s["condition_id"],
+            "signal_type": s.get("signal_type"),
+            "max_supportable_L": level,
+            "pmid_count": len(pmid_sources),
+            "rct_source_count": len(rct_rows),
+            "sr_or_ma_source_count": len(sr_or_ma_rows),
+            "pubmed_rows_missing_pmid": len(pubmed_missing_pmid),
+        })
+
+    distribution = {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
+    for r in per_signal:
+        distribution[r["max_supportable_L"]] += 1
+
+    return {
+        "rubric_schema_version": rubric["_meta"]["schema_version"],
+        "rubric_last_reviewed": rubric["_meta"]["last_reviewed"],
+        "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "signals_graded": len(per_signal),
+        "live_signal_l_distribution": distribution,
+        "attribution_violations": attribution_violations,
+        "per_signal": per_signal,
+    }
+
+
+def derive_validation_dossier_grades(
+    rubric: dict[str, Any],
+) -> dict[str, Any]:
+    """Walk every V###.json in scripts/validation-agent-output/ and apply
+    the rubric's source-attribution rules to the structure of the attached
+    evidence. The dossier shape stores citations as free text rather than
+    typed fields, so PMIDs / NCT IDs / SR-or-MA / RCT markers are extracted
+    by regex from the pooled citation corpus. The dossier pass can reach
+    L3 because dossiers attach guideline entries with a citation_or_url —
+    the rubric's L3 source_attribution requires guideline_id, and the
+    citation_or_url is the dossier's guideline_id surrogate."""
+    dossier_dir = REPO_ROOT / "scripts" / "validation-agent-output"
+    if not dossier_dir.exists():
+        return {
+            "rubric_schema_version": rubric["_meta"]["schema_version"],
+            "rubric_last_reviewed": rubric["_meta"]["last_reviewed"],
+            "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "dossier_dir_present": False,
+            "rows_graded": 0,
+            "distribution": {"L0": 0, "L1": 0, "L2": 0, "L3": 0},
+            "per_row": [],
+            "below_l1_floor": [],
+        }
+
+    per_row: list[dict[str, Any]] = []
+    below_l1_floor: list[dict[str, Any]] = []
+
+    for path in sorted(dossier_dir.glob("V*.json")):
+        try:
+            d = json.loads(path.read_text())
+        except Exception as e:  # noqa: BLE001
+            print(f"     [dossier invalid] {path.name}: {e}")
+            continue
+
+        # Pool every citation field into a single corpus so the regex
+        # markers (PMID, NCT, SR/MA, RCT) can be extracted in one pass.
+        # The corpus is constructed defensively: missing keys are treated
+        # as empty strings rather than raising.
+        parts: list[str] = []
+        for c in d.get("pubmed_citations", []) or []:
+            parts.append(str(c.get("citation", "")))
+            parts.append(str(c.get("url", "")))
+            parts.append(str(c.get("one_line_finding", "")))
+        for c in d.get("clinicaltrials", []) or []:
+            parts.append(str(c.get("title", "")))
+            parts.append(str(c.get("nct_id", "")))
+            parts.append(str(c.get("phase", "")))
+            parts.append(str(c.get("status", "")))
+            parts.append(str(c.get("url", "")))
+        for c in d.get("guidelines", []) or []:
+            parts.append(str(c.get("source", "")))
+            parts.append(str(c.get("citation_or_url", "")))
+            parts.append(str(c.get("one_line_finding", "")))
+        for c in d.get("other_evidence", []) or []:
+            parts.append(str(c.get("type", "")))
+            parts.append(str(c.get("citation_or_url", "")))
+            parts.append(str(c.get("one_line_finding", "")))
+        corpus = " | ".join(parts)
+
+        pmids = _extract_pubmed_ids(corpus)
+        ncts = set(_NCT_RE.findall(corpus))
+        has_sr_or_ma = bool(_SR_OR_MA_RE.search(corpus))
+        has_rct = bool(_RCT_RE.search(corpus))
+
+        # L3 source_attribution surrogate for the dossier shape. The
+        # rubric's L3 inclusion criterion is "the compound is named in a
+        # recommendation, options table, or care algorithm in an active
+        # guideline from a named body." The boundary rule explicitly
+        # excludes mentions in the differential, background, or
+        # epidemiology section. The dossier shape is too loose to
+        # discriminate every boundary case, but we can apply two
+        # structural gates that reject the most common over-grade:
+        #   (1) at least one guideline entry attached with a non-empty
+        #       citation_or_url (the guideline_id surrogate), AND
+        #   (2) the compound name (or a normalised substring of it)
+        #       appears in at least one guideline entry's one_line_finding
+        #       or source, which signals that the guideline actually
+        #       references the compound rather than the broader class.
+        # The rubric is direction-blind, so a negative recommendation
+        # ("does not recommend") still scores L3 provided the compound is
+        # named. A pattern like "no mention of GLP-1 agonists" where the
+        # compound itself is absent from the guideline text fails gate (2)
+        # and drops to L2.
+        guideline_entries = d.get("guidelines", []) or []
+        compound_name = (d.get("compound") or "").strip().lower()
+        compound_substr = compound_name.split()[0] if compound_name else ""
+        guideline_corpus_compound_hit = False
+        if compound_substr:
+            for c in guideline_entries:
+                fields = (
+                    (c.get("source") or "")
+                    + " "
+                    + (c.get("one_line_finding") or "")
+                ).lower()
+                if compound_substr and compound_substr in fields:
+                    guideline_corpus_compound_hit = True
+                    break
+        l3_supported = (
+            guideline_corpus_compound_hit
+            and any(
+                (c.get("citation_or_url") or "").strip()
+                for c in guideline_entries
+            )
+        )
+
+        # L2 source_attribution: at least one PMID AND a peer-reviewed RCT
+        # or SR/MA marker somewhere in the corpus.
+        l2_supported = len(pmids) > 0 and (has_rct or has_sr_or_ma)
+
+        if l3_supported:
+            level = "L3"
+        elif l2_supported:
+            level = "L2"
+        elif len(pmids) > 0:
+            level = "L1"
+        else:
+            level = "L0"
+
+        if level == "L0":
+            below_l1_floor.append({
+                "row_id": d.get("row_id"),
+                "compound": d.get("compound"),
+                "condition": d.get("condition"),
+            })
+
+        per_row.append({
+            "row_id": d.get("row_id"),
+            "compound": d.get("compound"),
+            "condition": d.get("condition"),
+            "signal_type": d.get("signal_type"),
+            "max_supportable_L": level,
+            "pmid_count": len(pmids),
+            "nct_count": len(ncts),
+            "has_rct_marker": has_rct,
+            "has_sr_or_ma_marker": has_sr_or_ma,
+            "guideline_entry_count": len(guideline_entries),
+            "guideline_names_compound": guideline_corpus_compound_hit,
+        })
+
+    distribution = {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
+    for r in per_row:
+        distribution[r["max_supportable_L"]] += 1
+
+    return {
+        "rubric_schema_version": rubric["_meta"]["schema_version"],
+        "rubric_last_reviewed": rubric["_meta"]["last_reviewed"],
+        "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "dossier_dir_present": True,
+        "rows_graded": len(per_row),
+        "distribution": distribution,
+        "per_row": per_row,
+        "below_l1_floor": below_l1_floor,
+    }
+
+
+def emit_grading_snapshot(
+    rubric: dict[str, Any],
+    live_grades: dict[str, Any],
+    dossier_grades: dict[str, Any],
+    pair_records: list[dict[str, Any]],
+) -> None:
+    """Write the evidence-grading sidecar consumed by condition pages and
+    the methodology page. Per-pair grades are derived by taking the max
+    level across every signal attached to the pair (since condition pages
+    render at the pair level, not the signal level). Aggregate distributions
+    are emitted both site-wide and per condition."""
+
+    # Index per-signal grades by (compound_id, condition_id) so we can
+    # collapse to pair level.
+    grade_order = {"L0": 0, "L1": 1, "L2": 2, "L3": 3}
+    by_pair: dict[tuple[str, str], list[str]] = {}
+    for g in live_grades.get("per_signal", []):
+        key = (g["compound_id"], g["condition_id"])
+        by_pair.setdefault(key, []).append(g["max_supportable_L"])
+
+    pair_grades: list[dict[str, Any]] = []
+    for p in pair_records:
+        key = (p["compound_id"], p["condition_id"])
+        levels = by_pair.get(key, ["L0"])
+        max_level = max(levels, key=lambda L: grade_order[L])
+        pair_grades.append({
+            "compound_id": p["compound_id"],
+            "compound_name": p.get("compound_name"),
+            "condition_id": p["condition_id"],
+            "condition_name": p.get("condition_name"),
+            "max_supportable_L": max_level,
+            "signal_count": len(levels),
+        })
+
+    # Per-condition distribution at the pair level.
+    per_condition: dict[str, dict[str, int]] = {}
+    for pg in pair_grades:
+        cond = pg["condition_name"] or "?"
+        bucket = per_condition.setdefault(
+            cond, {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
+        )
+        bucket[pg["max_supportable_L"]] += 1
+
+    snapshot = {
+        "_meta": {
+            "schema_version": GRADING_SNAPSHOT_SCHEMA_VERSION,
+            "purpose": (
+                "Per-pair literature-grade (L0/L1/L2/L3) derivation, "
+                "consumed by /conditions/[slug] and /about/methodology to "
+                "render the max-supportable L grade behind every Whel "
+                "compound-condition claim. Refreshed at the end of every "
+                "scripts/check-matrix-coverage.py run."
+            ),
+            "rubric_path": str(RUBRIC_JSON_PATH.relative_to(REPO_ROOT)),
+            "rubric_schema_version": rubric["_meta"]["schema_version"],
+            "rubric_last_reviewed": rubric["_meta"]["last_reviewed"],
+            "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "audit_script": "scripts/check-matrix-coverage.py",
+            "live_ceiling_note": (
+                "Live signal grading ceils at L2. The rubric's L3 "
+                "source_attribution requires structured guideline_id / "
+                "strength / certainty fields, which do not exist on the "
+                "live sources table. L3 is only reachable through the "
+                "validation-dossier pass below."
+            ),
+        },
+        "live_signal_grading": {
+            "signals_graded": live_grades.get("signals_graded", 0),
+            "distribution": live_grades.get("live_signal_l_distribution"),
+            "attribution_violations_count": len(
+                live_grades.get("attribution_violations", [])
+            ),
+        },
+        "validation_dossier_grading": {
+            "rows_graded": dossier_grades.get("rows_graded", 0),
+            "distribution": dossier_grades.get("distribution"),
+            "below_l1_floor": dossier_grades.get("below_l1_floor", []),
+            "per_row": dossier_grades.get("per_row", []),
+        },
+        "per_pair": pair_grades,
+        "per_condition_pair_distribution": per_condition,
+    }
+    GRADING_SNAPSHOT_JSON.write_text(
+        json.dumps(snapshot, indent=2, default=str)
+    )
+    print(
+        f"  Grading:      {GRADING_SNAPSHOT_JSON.relative_to(REPO_ROOT)} "
+        f"(consumed by /conditions/[slug] + /about/methodology)"
+    )
+
+
 def emit_public_snapshot(report: dict[str, Any]) -> None:
     s = report["summary"]
     dataset_snapshot = report.get("dataset_snapshot", {})
@@ -1749,12 +2233,38 @@ def main() -> None:
     write_markdown_summary(report)
     emit_public_snapshot(report)
 
+    # ----------------------------------------------------------------------
+    # Phase 6: literature-grade derivation. Loaded last because it has its
+    # own enforcement gate (schema_version mismatch is fatal) and we want
+    # the matrix-coverage outputs already on disk before we trip that gate
+    # — a stale audit run is still useful even if the rubric file drifted.
+    # ----------------------------------------------------------------------
+    print()
+    print("[6/6] Literature-grade derivation under rubric v"
+          f"{RUBRIC_EXPECTED_SCHEMA_VERSION} ...")
+    rubric = _load_l_grade_rubric()
+    active_signal_ids = [s["id"] for s in whel["signals"] if s.get("id")]
+    signal_sources = _cached(
+        SIGNAL_SOURCES_CACHE,
+        "Signal sources (phase 6a)",
+        pull_signal_sources,
+        active_signal_ids,
+    )
+    live_grades = derive_live_signal_l_grades(
+        whel["signals"], signal_sources, rubric,
+    )
+    dossier_grades = derive_validation_dossier_grades(rubric)
+    emit_grading_snapshot(
+        rubric, live_grades, dossier_grades, report["pair_records"],
+    )
+
     print()
     print("=" * 60)
     print("DONE.")
     print(f"  Raw report:   {REPORT_JSON.relative_to(REPO_ROOT)}")
     print(f"  Summary:      {SUMMARY_MD.relative_to(REPO_ROOT)}")
     print(f"  Public snap:  {PUBLIC_SNAPSHOT_JSON.relative_to(REPO_ROOT)}")
+    print(f"  Grading:      {GRADING_SNAPSHOT_JSON.relative_to(REPO_ROOT)}")
     print("=" * 60)
     s = report["summary"]
     print()
@@ -1782,6 +2292,43 @@ def main() -> None:
         f"{s['pairs_with_matrix_score']}/{s['active_pair_count']} "
         f"({s['coverage_rate_over_all_active'] * 100:.1f}%)"
     )
+
+    # ----------------------------------------------------------------------
+    # L-grade summary print. The distribution lines mirror what the
+    # grading sidecar carries, so a reader of stdout sees the same numbers
+    # the condition pages will render.
+    # ----------------------------------------------------------------------
+    live_dist = live_grades["live_signal_l_distribution"]
+    live_total = live_grades["signals_graded"]
+    dossier_dist = dossier_grades["distribution"]
+    dossier_total = dossier_grades["rows_graded"]
+    print()
+    print(
+        f"  Live signal L-grades   (n={live_total}): "
+        f"L0={live_dist['L0']} L1={live_dist['L1']} "
+        f"L2={live_dist['L2']} L3={live_dist['L3']}"
+    )
+    if dossier_grades.get("dossier_dir_present"):
+        print(
+            f"  Dossier L-grades       (n={dossier_total}): "
+            f"L0={dossier_dist['L0']} L1={dossier_dist['L1']} "
+            f"L2={dossier_dist['L2']} L3={dossier_dist['L3']}"
+        )
+    violation_count = len(live_grades.get("attribution_violations", []))
+    if violation_count:
+        print(
+            f"  Attribution violations: {violation_count} active signal(s) "
+            f"carry a pubmed source with NULL external_id (rubric L1 "
+            f"source_attribution requires a PMID; investigate and either "
+            f"backfill the PMID or downgrade the source_type)."
+        )
+    below_l1 = dossier_grades.get("below_l1_floor", [])
+    if below_l1:
+        print(
+            f"  Dossier rows below L1 floor: "
+            f"{', '.join(r['row_id'] for r in below_l1)} "
+            f"(no PMIDs extractable from citation corpus — investigate)"
+        )
 
 
 if __name__ == "__main__":
