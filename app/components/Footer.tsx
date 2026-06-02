@@ -50,7 +50,7 @@ export default function Footer() {
               Women&apos;s Health Evidence Lab
             </p>
             <p style={{ fontSize: "12.5px", color: "var(--muted)", lineHeight: 1.6, maxWidth: "28ch" }}>
-              An evidence index for under-researched women&apos;s health conditions.
+              An evidence index for under-studied women&apos;s health conditions.
             </p>
             <a
               href={LINKEDIN_URL}
