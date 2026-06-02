@@ -1,14 +1,15 @@
 {
   "_meta": {
-    "schema_version": 1,
-    "purpose": "Brand-name -> generic-name dictionary for the compound crosswalk. Whel's compound list contains entries written as brand strings ('Wellbutrin') or as 'Brand (generic)' parentheticals. The MATRIX drug-list keys by generic / DrugBank ID, so brand strings need an explicit translation step before crosswalking. This file lists every brand-to-generic mapping the audit script knows about, with provenance. Surfaced on /about/external-references so users can see exactly which translations the audit applies.",
+    "schema_version": 2,
+    "purpose": "Brand-name and synonym dictionary for the compound crosswalk. Whel's compound list contains entries written as brand strings ('Wellbutrin'), as INN/USAN variants ('Paracetamol' vs 'Acetaminophen'), as salt forms ('Clomiphene Citrate'), as formulation/route descriptors ('Testosterone (transdermal)'), or as multi-ingredient combo strings ('Drospirenone/Ethinyl Estradiol (24/4 Regimen)'). The MATRIX drug-list keys by a single canonical name, so each of these forms needs an explicit translation step before crosswalking. This file lists every translation the audit script knows about, with provenance. Surfaced on /about/external-references so users can audit which translations the crosswalk applies. The `kind` field distinguishes brand (proprietary trade name), inn_variant (alternate INN/USAN spelling), abbreviation (acronym), salt_form (generic + salt suffix), formulation_variant (generic + route/form qualifier), and combo (multi-ingredient product mapped to its primary component).",
     "last_reviewed": "2026-06-01",
     "reviewers": ["whel-audit"],
-    "scope_note": "Intentionally finite. Each entry is a real compound that appeared as a brand string in Whel's data and was missed by the name-only crosswalk. New entries should be added only when a brand string fails to match and the underlying generic IS in MATRIX. Do NOT add entries for class labels, supplements, or experimental compounds -- those are handled by the is_class_label / is_non_drug flags in scripts/check-matrix-coverage.py."
+    "scope_note": "Tightly scoped. Entries fall into two buckets. (1) Reactive: every entry was a real Whel compound string that failed the name-only crosswalk and whose underlying generic IS in MATRIX. The audit's matched_via_brand_dict count reflects these rescues. (2) Proactive: alternate INN spellings of generics already in MATRIX (e.g. paracetamol -> acetaminophen, norethisterone -> norethindrone), added to keep future Whel rows from re-introducing known crosswalk gaps. Do NOT add entries for class labels, supplements, vitamins, or experimental compounds outside MATRIX -- those remain on the is_class_label / is_non_drug exclusion paths in scripts/check-matrix-coverage.py. Do NOT add misspellings; ambiguous lookups are a false-positive risk."
   },
   "entries": [
     {
       "brand": "Wellbutrin",
+      "kind": "brand",
       "generic": "bupropion",
       "drugbank_id": "DB01156",
       "first_seen_as": "Wellbutrin (bupropion)",
@@ -16,6 +17,7 @@
     },
     {
       "brand": "Veozah",
+      "kind": "brand",
       "generic": "fezolinetant",
       "drugbank_id": "DB16703",
       "first_seen_as": "Veozah (fezolinetant)",
@@ -23,6 +25,7 @@
     },
     {
       "brand": "Cymbalta",
+      "kind": "brand",
       "generic": "duloxetine",
       "drugbank_id": "DB00476",
       "first_seen_as": "Cymbalta",
@@ -30,6 +33,7 @@
     },
     {
       "brand": "Linzess",
+      "kind": "brand",
       "generic": "linaclotide",
       "drugbank_id": "DB08890",
       "first_seen_as": "Linzess",
@@ -37,6 +41,7 @@
     },
     {
       "brand": "Valium",
+      "kind": "brand",
       "generic": "diazepam",
       "drugbank_id": "DB00829",
       "first_seen_as": "Diazepam (Valium) Suppositories",
@@ -44,6 +49,7 @@
     },
     {
       "brand": "Mirena",
+      "kind": "brand",
       "generic": "levonorgestrel",
       "drugbank_id": "DB00367",
       "first_seen_as": "Levonorgestrel Intrauterine System (Mirena)",
@@ -51,6 +57,7 @@
     },
     {
       "brand": "Depo-Provera",
+      "kind": "brand",
       "generic": "medroxyprogesterone acetate",
       "drugbank_id": "DB00603",
       "first_seen_as": "Depot Medroxyprogesterone Acetate (Depo-Provera)",
@@ -58,6 +65,7 @@
     },
     {
       "brand": "Implanon",
+      "kind": "brand",
       "generic": "etonogestrel",
       "drugbank_id": "DB00294",
       "first_seen_as": "Etonogestrel Implant (Implanon)",
@@ -65,6 +73,7 @@
     },
     {
       "brand": "Botox",
+      "kind": "brand",
       "generic": "onabotulinumtoxinA",
       "drugbank_id": "DB00083",
       "first_seen_as": "Botulinum Toxin A (Botox, 20 IU)",
@@ -72,6 +81,7 @@
     },
     {
       "brand": "Ozempic",
+      "kind": "brand",
       "generic": "semaglutide",
       "drugbank_id": "DB13928",
       "first_seen_as": "GLP-1 Receptor Agonists (Ozempic/semaglutide)",
@@ -79,6 +89,7 @@
     },
     {
       "brand": "Zyrtec",
+      "kind": "brand",
       "generic": "cetirizine",
       "drugbank_id": "DB00341",
       "first_seen_as": "Antihistamines (Zyrtec/cetirizine, ...)",
@@ -86,6 +97,7 @@
     },
     {
       "brand": "Benadryl",
+      "kind": "brand",
       "generic": "diphenhydramine",
       "drugbank_id": "DB01075",
       "first_seen_as": "Antihistamines (..., Benadryl/diphenhydramine)",
@@ -93,6 +105,7 @@
     },
     {
       "brand": "Myfembree",
+      "kind": "brand",
       "generic": "relugolix",
       "drugbank_id": "DB12388",
       "first_seen_as": "Myfembree (relugolix/estradiol/norethindrone)",
@@ -100,10 +113,163 @@
     },
     {
       "brand": "UBIGEL Donna",
+      "kind": "brand",
       "generic": null,
       "drugbank_id": null,
       "first_seen_as": "Spermidine-Hyaluronate Complex (UBIGEL Donna)",
       "note": "Medical-device combo product, not a drug in DrugBank. Listed here for documentation only -- this entry will NOT match a DrugBank ID and the underlying compound remains in the experimental / device category."
+    },
+    {
+      "brand": "Drospirenone/Ethinyl Estradiol (24/4 Regimen)",
+      "kind": "combo",
+      "generic": "drospirenone",
+      "drugbank_id": "DB01395",
+      "first_seen_as": "Drospirenone/Ethinyl Estradiol (24/4 Regimen)",
+      "note": "Combined oral contraceptive on the 24/4 dosing regimen (e.g. Yaz). Maps to drospirenone as the progestin component; ethinyl estradiol is its own DrugBank entry (DB00977) and would be matched separately if Whel ever listed it on its own."
+    },
+    {
+      "brand": "Drospirenone/Ethinylestradiol (combined Oral Contraceptive)",
+      "kind": "combo",
+      "generic": "drospirenone",
+      "drugbank_id": "DB01395",
+      "first_seen_as": "Drospirenone/Ethinylestradiol (combined Oral Contraceptive)",
+      "note": "Generic combined oral contraceptive (no fixed regimen). Maps to drospirenone as the progestin component; the concatenated 'Ethinylestradiol' spelling (no space) is a frequent European variant."
+    },
+    {
+      "brand": "5-Aminolevulinic Acid (ALA) Photodynamic Therapy",
+      "kind": "formulation_variant",
+      "generic": "aminolevulinic acid",
+      "drugbank_id": "DB00855",
+      "first_seen_as": "5-Aminolevulinic Acid (ALA) Photodynamic Therapy",
+      "note": "Photosensitiser used in endometriosis lesion ablation research. Whel's row carries the delivery modality (PDT) in the string; the underlying drug is aminolevulinic acid, DrugBank DB00855."
+    },
+    {
+      "brand": "Lidocaine (mucoadhesive Thin Film Delivery)",
+      "kind": "formulation_variant",
+      "generic": "lidocaine",
+      "drugbank_id": "DB00281",
+      "first_seen_as": "Lidocaine (mucoadhesive Thin Film Delivery)",
+      "note": "Topical anaesthetic in vulvodynia and provoked vestibulodynia protocols. The MATRIX drug-list keys on lidocaine; the parenthetical delivery descriptor here blocks the direct lookup."
+    },
+    {
+      "brand": "Low Dose Naltrexone (LDN)",
+      "kind": "formulation_variant",
+      "generic": "naltrexone",
+      "drugbank_id": "DB00704",
+      "first_seen_as": "Low Dose Naltrexone (LDN)",
+      "note": "Off-label compounded dosing (typically 1.5-4.5 mg/day) of naltrexone, used in endometriosis-pain and fibromyalgia literature. MATRIX keys on naltrexone."
+    },
+    {
+      "brand": "Micronized Progesterone (oral)",
+      "kind": "formulation_variant",
+      "generic": "progesterone",
+      "drugbank_id": "DB00396",
+      "first_seen_as": "Micronized Progesterone (oral)",
+      "note": "Oral micronized progesterone (e.g. Prometrium) used in HRT and luteal-phase support. MATRIX keys on progesterone."
+    },
+    {
+      "brand": "Progesterone (bioidentical/supplemental)",
+      "kind": "formulation_variant",
+      "generic": "progesterone",
+      "drugbank_id": "DB00396",
+      "first_seen_as": "Progesterone (bioidentical/supplemental)",
+      "note": "Bioidentical / compounded progesterone formulations referenced in perimenopause and PMDD literature. MATRIX keys on progesterone."
+    },
+    {
+      "brand": "Testosterone (transdermal)",
+      "kind": "formulation_variant",
+      "generic": "testosterone",
+      "drugbank_id": "DB00624",
+      "first_seen_as": "Testosterone (transdermal)",
+      "note": "Transdermal testosterone used in HSDD (hypoactive sexual desire disorder) and perimenopause libido protocols. MATRIX keys on testosterone."
+    },
+    {
+      "brand": "Testosterone (topical/compounded)",
+      "kind": "formulation_variant",
+      "generic": "testosterone",
+      "drugbank_id": "DB00624",
+      "first_seen_as": "Testosterone (topical/compounded)",
+      "note": "Topical compounded testosterone (creams, gels) used in vulvar tissue health and HSDD literature. MATRIX keys on testosterone."
+    },
+    {
+      "brand": "Vaginal Estradiol Cream",
+      "kind": "formulation_variant",
+      "generic": "estradiol",
+      "drugbank_id": "DB00783",
+      "first_seen_as": "Vaginal Estradiol Cream",
+      "note": "Local oestrogen for genitourinary syndrome of menopause. MATRIX keys on estradiol."
+    },
+    {
+      "brand": "Vaginal Estrogen",
+      "kind": "formulation_variant",
+      "generic": "estradiol",
+      "drugbank_id": "DB00783",
+      "first_seen_as": "Vaginal Estrogen",
+      "note": "Generic mention covering local oestrogen formulations (cream, ring, tablet). MATRIX keys on estradiol; conjugated estrogens (Premarin) would be a separate entry if it ever appears in Whel data."
+    },
+    {
+      "brand": "Estrogen (systemic HRT)",
+      "kind": "formulation_variant",
+      "generic": "estradiol",
+      "drugbank_id": "DB00783",
+      "first_seen_as": "Estrogen (systemic HRT)",
+      "note": "Systemic hormone replacement therapy in menopause. MATRIX keys on estradiol; conjugated equine estrogens (Premarin) would be a separate entry."
+    },
+    {
+      "brand": "Estetrol (E4)",
+      "kind": "abbreviation",
+      "generic": "estetrol",
+      "drugbank_id": "DB12235",
+      "first_seen_as": "Estetrol (E4)",
+      "note": "Native fetal oestrogen used in combined contraceptives (Nextstellis); E4 is the standard biochemical abbreviation. MATRIX keys on estetrol."
+    },
+    {
+      "brand": "Triiodothyronine (liothyronine)",
+      "kind": "inn_variant",
+      "generic": "liothyronine",
+      "drugbank_id": "DB00279",
+      "first_seen_as": "Triiodothyronine (liothyronine)",
+      "note": "T3 thyroid hormone. Triiodothyronine is the chemical name; liothyronine is the INN/USAN. MATRIX keys on liothyronine."
+    },
+    {
+      "brand": "Clomiphene Citrate",
+      "kind": "salt_form",
+      "generic": "clomiphene",
+      "drugbank_id": "DB00882",
+      "first_seen_as": "Clomiphene Citrate",
+      "note": "Ovulation induction in PCOS and unexplained infertility. Citrate is the dispensed salt; MATRIX keys on clomiphene (canonical name in MATRIX drug-list is Clomifene, the INN spelling)."
+    },
+    {
+      "brand": "Paracetamol",
+      "kind": "inn_variant",
+      "generic": "acetaminophen",
+      "drugbank_id": "DB00316",
+      "first_seen_as": "(proactive) UK/INN spelling of acetaminophen",
+      "note": "Proactive entry. Frequent in European literature on dysmenorrhoea and chronic pelvic pain. Added so future Whel rows using the INN spelling resolve to the same DrugBank entry as acetaminophen."
+    },
+    {
+      "brand": "Norethisterone",
+      "kind": "inn_variant",
+      "generic": "norethindrone",
+      "drugbank_id": "DB00717",
+      "first_seen_as": "(proactive) UK/INN spelling of norethindrone",
+      "note": "Proactive entry. Frequent in UK and European contraceptive literature. Norethindrone is the USAN; norethisterone is the INN. Same compound."
+    },
+    {
+      "brand": "Lignocaine",
+      "kind": "inn_variant",
+      "generic": "lidocaine",
+      "drugbank_id": "DB00281",
+      "first_seen_as": "(proactive) UK/INN spelling of lidocaine",
+      "note": "Proactive entry. Frequent in UK and Australian vulvodynia / pelvic-pain literature. MATRIX keys on lidocaine."
+    },
+    {
+      "brand": "Frusemide",
+      "kind": "inn_variant",
+      "generic": "furosemide",
+      "drugbank_id": "DB00695",
+      "first_seen_as": "(proactive) UK/INN spelling of furosemide",
+      "note": "Proactive entry. Frusemide is the older BAN/INN spelling still common in UK and Australian literature; furosemide is the USAN. Same compound. Relevant where diuretics appear in PMDD or perimenopause symptom-management lists."
     }
   ]
 }

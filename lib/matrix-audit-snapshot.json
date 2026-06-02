@@ -3,7 +3,7 @@
     "schema_version": 1,
     "purpose": "Published MATRIX coverage snapshot for /about/external-references. Refreshed at the end of every scripts/check-matrix-coverage.py run.",
     "snapshot_label": "audit run",
-    "audit_date": "2026-06-01",
+    "audit_date": "2026-06-02",
     "audit_script": "scripts/check-matrix-coverage.py",
     "audit_output_report": "scripts/audit-output/matrix-coverage-report.json"
   },
@@ -26,21 +26,21 @@
   },
   "headline": {
     "compounds_total": 136,
-    "compounds_matched_raw": 71,
-    "compound_match_rate_raw": 0.522,
+    "compounds_matched_raw": 86,
+    "compound_match_rate_raw": 0.632,
     "compounds_eligible_total": 98,
-    "compounds_eligible_matched": 69,
-    "compound_match_rate_adjusted": 0.704,
+    "compounds_eligible_matched": 84,
+    "compound_match_rate_adjusted": 0.857,
     "compounds_excluded_class_label": 17,
     "compounds_excluded_non_drug": 21,
-    "compounds_rescued_by_brand_dict": 9,
+    "compounds_rescued_by_brand_dict": 24,
     "conditions_total": 6,
     "conditions_confirmed_in_mondo": 6,
     "active_pairs": 271,
-    "eligible_pairs_adjusted": 198,
-    "pairs_with_matrix_score": 164,
-    "coverage_rate_over_eligible_adjusted": 0.828,
-    "coverage_rate_over_all_active": 0.605
+    "eligible_pairs_adjusted": 212,
+    "pairs_with_matrix_score": 176,
+    "coverage_rate_over_eligible_adjusted": 0.83,
+    "coverage_rate_over_all_active": 0.649
   },
   "per_condition": [
     {
@@ -54,7 +54,7 @@
       "condition": "PCOS",
       "mondo": "MONDO:0008487",
       "matrix_official_filter": true,
-      "predictions_in_audit": 37,
+      "predictions_in_audit": 38,
       "note": null
     },
     {
@@ -75,24 +75,24 @@
       "condition": "Vulvodynia",
       "mondo": "MONDO:0021722",
       "matrix_official_filter": true,
-      "predictions_in_audit": 15,
+      "predictions_in_audit": 18,
       "note": "Not indexed in Open Targets Platform; the OT pipeline falls back to target search."
     },
     {
       "condition": "Perimenopause & Menopause",
       "mondo": "MONDO:0001119",
       "matrix_official_filter": true,
-      "predictions_in_audit": 40,
+      "predictions_in_audit": 48,
       "note": "MONDO has no general 'menopause' or 'perimenopause' disease term. Coverage is computed against the closest disease phenotypes (premature menopause, postmenopausal osteoporosis, postmenopausal atrophic vaginitis) and will under-represent the lived experience of natural menopause. The Open Targets pipeline previously used GO:0042697 (a Gene Ontology process term, not a disease term) for this condition and should migrate to MONDO:0001119 with the same candidate cluster."
     }
   ],
   "score_distribution": {
-    "n": 152,
+    "n": 160,
     "min": 3.11389633821949,
-    "p25": 3.327409626942073,
-    "median": 3.460221577537473,
-    "p75": 3.654901119513715,
+    "p25": 3.3333047270385032,
+    "median": 3.4845401070355773,
+    "p75": 3.6920960708162305,
     "max": 4.553531082572356,
-    "mean": 3.505538159403259
+    "mean": 3.526208900923597
   }
 }

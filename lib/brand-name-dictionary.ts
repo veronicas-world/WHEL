@@ -10,8 +10,24 @@
 
 import data from "./brand-name-dictionary.json";
 
+// Categories the audit uses to distinguish why an entry exists:
+//   brand                proprietary trade name (Wellbutrin, Botox)
+//   inn_variant          alternate INN/USAN spelling (paracetamol vs acetaminophen)
+//   abbreviation         acronym for the generic (E4 -> estetrol)
+//   salt_form            generic + dispensed salt suffix (Clomiphene Citrate)
+//   formulation_variant  generic + route/form qualifier (Testosterone (transdermal))
+//   combo                multi-ingredient product mapped to its primary component
+export type BrandDictKind =
+  | "brand"
+  | "inn_variant"
+  | "abbreviation"
+  | "salt_form"
+  | "formulation_variant"
+  | "combo";
+
 export type BrandDictEntry = {
   brand: string;
+  kind: BrandDictKind;
   generic: string | null;
   drugbank_id: string | null;
   first_seen_as: string;
@@ -49,4 +65,23 @@ export function lookupBrand(input: string): BrandDictEntry | undefined {
 // documentation-only rows like UBIGEL Donna).
 export function activeBrandCount(): number {
   return BRAND_DICT_ENTRIES.filter((e) => e.drugbank_id !== null).length;
+}
+
+// Tally entries by kind, for transparency surfaces. Documentation-only rows
+// (generic === null) are excluded from the totals so the counts reflect actual
+// rescues available to the crosswalk.
+export function countByKind(): Record<BrandDictKind, number> {
+  const init: Record<BrandDictKind, number> = {
+    brand: 0,
+    inn_variant: 0,
+    abbreviation: 0,
+    salt_form: 0,
+    formulation_variant: 0,
+    combo: 0,
+  };
+  for (const e of BRAND_DICT_ENTRIES) {
+    if (e.drugbank_id === null) continue;
+    init[e.kind] += 1;
+  }
+  return init;
 }

@@ -587,7 +587,7 @@ export default function MethodologyPage() {
             layer beside Whel&apos;s grades wherever MATRIX has coverage; it
             is not blended into the grades. A reproducible audit of MATRIX
             coverage over Whel&apos;s active compound–condition universe was
-            run and published on this site (70.4% adjusted compound match
+            run and published on this site (85.7% adjusted compound match
             rate, six of six conditions confirmed, full per-condition
             breakdown and dataset SHAs at{" "}
             <Link

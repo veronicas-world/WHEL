@@ -320,7 +320,11 @@ NON_DRUG_LABELS_NORMALIZED = {_normalize_compound_name(s) for s in NON_DRUG_LABE
 # ---------------------------------------------------------------------------
 
 BRAND_DICT_JSON_PATH = REPO_ROOT / "lib" / "brand-name-dictionary.json"
-BRAND_DICT_SCHEMA_VERSION = 1
+# v2 (2026-06-01): adds the `kind` field (brand / inn_variant / abbreviation /
+# salt_form / formulation_variant / combo) and broadens scope from brands-only
+# to brand + synonym dictionary. Existing match logic is unchanged; the new
+# kind field is informational and not used by the lookup itself.
+BRAND_DICT_SCHEMA_VERSION = 2
 
 
 def _load_brand_dictionary() -> list[dict[str, Any]]:

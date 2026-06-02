@@ -4,6 +4,7 @@ import {
   BRAND_DICT_ENTRIES,
   BRAND_DICT_META,
   activeBrandCount,
+  countByKind,
 } from "@/lib/brand-name-dictionary";
 import {
   MATRIX_AUDIT_SNAPSHOT,
@@ -930,10 +931,9 @@ export default function ExternalReferencesPage() {
                   >
                     Whel covers a small set of women&apos;s health conditions; MATRIX is a
                     general-purpose drug-repurposing graph trained across the whole disease
-                    space. A 70.4% adjusted compound match rate is high for that kind of
-                    cross-reference. When both sides of a Whel pair exist in MATRIX, MATRIX
-                    has a published score for that pair 82.8% of the time. The cross-reference
-                    is meaningful, not ornamental.
+                    space. An 85.7% adjusted compound match rate is high for that kind of
+                    cross-reference, and when both sides of a Whel pair exist in MATRIX,
+                    MATRIX has a published score for that pair 83.0% of the time.
                   </p>
                   <p
                     style={{
@@ -967,12 +967,12 @@ export default function ExternalReferencesPage() {
                         tail: "MATRIX returns useful scores here even though Endometriosis isn't in its official disease list. Surfacing those scores is exactly what the disclosure layer is for.",
                       },
                       {
-                        head: "9 compounds matched only via the brand-name dictionary.",
-                        tail: "Roughly one in seven matches would have been missed without the brand-to-generic crosswalk published in section 05. That number is small but real, and explicitly auditable.",
+                        head: "24 compounds matched only via the brand and synonym dictionary.",
+                        tail: "Without the brand-to-generic, INN-variant, salt-form, and formulation-qualifier translations published in section 05, roughly 29% of matched compounds would have been missed. The translation step is explicit and auditable.",
                       },
                       {
                         head: "17 class labels and 21 non-drug entries excluded from the denominator.",
-                        tail: "Umbrella categories like 'GLP-1 RAs' and supplements like 'Magnesium' can't be looked up in MATRIX the way individual drugs can. Excluding them is what the word 'adjusted' is doing in the 70.4% headline.",
+                        tail: "Umbrella categories like 'GLP-1 RAs' and supplements like 'Magnesium' can't be looked up in MATRIX the way individual drugs can. Excluding them is what the word 'adjusted' is doing in the 85.7% headline.",
                       },
                     ].map((item) => (
                       <li
@@ -1081,15 +1081,15 @@ export default function ExternalReferencesPage() {
                       },
                       {
                         head: "Whel's compound vocabulary maps cleanly into standard CURIE space.",
-                        tail: "70.4% of eligible compounds match into the CHEBI / UNII / DrugBank identifier system MATRIX uses. For a niche women's-health subset that's a high crosswalk rate, and it means Whel's drug layer isn't speaking a parallel language from the rest of pharmacology.",
+                        tail: "85.7% of eligible compounds resolve into the CHEBI / UNII / DrugBank identifier system MATRIX uses. For a niche women's-health subset that is a high crosswalk rate, and it indicates Whel's drug layer is not running on a parallel vocabulary from the rest of pharmacology.",
                       },
                       {
                         head: "Whel covers conditions where MATRIX is silent.",
-                        tail: "PMDD sits inside MATRIX's official disease filter, yet MATRIX's model produced no predictions for it. Whel has graded, source-anchored signals for PMDD anyway. That's not duplicate work — it's filling a gap a general-purpose model couldn't fill, in exactly the kind of underserved women's-health condition Whel exists to serve.",
+                        tail: "PMDD sits inside MATRIX's official disease filter, yet MATRIX's model produced no predictions for it. Whel has graded, source-anchored signals for PMDD that cover ground a general-purpose model did not.",
                       },
                       {
-                        head: "The brand-name dictionary is Whel's contribution back.",
-                        tail: "9 of the 69 matched compounds were only recoverable via Whel's brand→generic crosswalk (section 05). That dictionary is published openly and reusable by anyone else doing this kind of cross-referencing. It's a small artifact, but it's net-new infrastructure Whel ships that MATRIX doesn't.",
+                        head: "The brand and synonym dictionary is Whel's contribution back.",
+                        tail: "24 of the 84 matched compounds were recoverable only via Whel's brand-to-generic and INN-variant translations (section 05). The dictionary is published openly on this same audit page and reusable by anyone doing similar cross-referencing.",
                       },
                     ].map((item) => (
                       <li
@@ -1475,15 +1475,15 @@ export default function ExternalReferencesPage() {
         <div className={SECTION_INNER}>
           <SectionHeader
             label="05 · Crosswalk transparency"
-            title="Brand-name dictionary"
-            intro="Whel&apos;s compound list sometimes uses brand strings (e.g. &ldquo;Wellbutrin&rdquo;, &ldquo;Veozah&rdquo;) where the underlying generic is what the external biomedical graph keys on. The MATRIX coverage audit uses the small, finite dictionary below as a fallback to translate brand strings back to their generic equivalents before looking them up in DrugBank. This is the only translation step the crosswalk applies; every other match is a direct name or synonym lookup. The dictionary is intentionally short so it can be audited at a glance."
+            title="Brand and synonym dictionary"
+            intro="Whel&apos;s compound list sometimes uses brand strings (&ldquo;Wellbutrin&rdquo;), alternate INN spellings (&ldquo;paracetamol&rdquo; vs &ldquo;acetaminophen&rdquo;), salt forms (&ldquo;Clomiphene Citrate&rdquo;), formulation or route qualifiers (&ldquo;Testosterone (transdermal)&rdquo;), or multi-ingredient combo strings, where the MATRIX drug-list keys on a single canonical name. The dictionary below is the only translation step the crosswalk applies; every other match is a direct name or synonym lookup against MATRIX. The `kind` column records why each entry exists. The list stays short enough to audit at a glance."
           />
 
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", minWidth: 720, borderCollapse: "collapse" }}>
               <thead>
                 <tr>
-                  {["Brand string", "Generic", "DrugBank ID", "Note"].map((h, i) => (
+                  {["Source string", "Kind", "Resolves to", "DrugBank ID", "Note"].map((h, i) => (
                     <th
                       key={h}
                       style={{
@@ -1496,7 +1496,7 @@ export default function ExternalReferencesPage() {
                         textAlign: "left",
                         padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
                         borderBottom: "1px solid var(--rule-strong)",
-                        width: ["18%", "20%", "14%", "48%"][i],
+                        width: ["26%", "11%", "17%", "12%", "34%"][i],
                       }}
                     >
                       {h}
@@ -1518,6 +1518,19 @@ export default function ExternalReferencesPage() {
                       }}
                     >
                       {e.brand}
+                    </td>
+                    <td
+                      style={{
+                        ...MONO,
+                        fontSize: "11px",
+                        color: "var(--muted)",
+                        padding: "14px 14px",
+                        borderBottom: "1px solid var(--rule)",
+                        verticalAlign: "baseline",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {e.kind.replace(/_/g, " ")}
                     </td>
                     <td
                       style={{
@@ -1591,6 +1604,38 @@ export default function ExternalReferencesPage() {
               lib/brand-name-dictionary.json
             </code>
             .
+          </p>
+
+          <p
+            style={{
+              ...MONO,
+              fontSize: "11.5px",
+              lineHeight: 1.6,
+              color: "var(--muted)",
+              marginTop: 10,
+            }}
+          >
+            {(() => {
+              const k = countByKind();
+              const parts = [
+                ["brand", k.brand],
+                ["inn variant", k.inn_variant],
+                ["abbreviation", k.abbreviation],
+                ["salt form", k.salt_form],
+                ["formulation variant", k.formulation_variant],
+                ["combo", k.combo],
+              ] as const;
+              return (
+                <>
+                  By kind:{" "}
+                  {parts
+                    .filter(([, n]) => n > 0)
+                    .map(([label, n]) => `${n} ${label}${n === 1 ? "" : "s"}`)
+                    .join(" · ")}
+                  .
+                </>
+              );
+            })()}
           </p>
         </div>
       </section>
