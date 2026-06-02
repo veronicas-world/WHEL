@@ -230,14 +230,8 @@ export default async function Home() {
                   marginBottom: 20,
                 }}
               >
-                Women&rsquo;s health conditions are persistently{" "}
-                <Link
-                  href="/about/external-references"
-                  style={{ color: "inherit", textDecoration: "underline", textDecorationThickness: "1px", textUnderlineOffset: "3px" }}
-                >
-                  underfunded
-                </Link>
-                , undertreated, and underdiagnosed relative to disease burden.
+                Women&rsquo;s health conditions are persistently underfunded,
+                undertreated, and underdiagnosed relative to disease burden.
                 Across the conditions Whel covers, diagnostic delays of years
                 are common, FDA-approved therapies indicated for the syndrome
                 itself are rare, and the published research base is thin.
@@ -266,14 +260,8 @@ export default async function Home() {
               className="font-serif"
               style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", marginBottom: 16 }}
             >
-              Women&rsquo;s health conditions are persistently{" "}
-              <Link
-                href="/about/external-references"
-                style={{ color: "inherit", textDecoration: "underline", textDecorationThickness: "1px", textUnderlineOffset: "3px" }}
-              >
-                underfunded
-              </Link>
-              , undertreated, and underdiagnosed relative to disease burden.
+              Women&rsquo;s health conditions are persistently underfunded,
+              undertreated, and underdiagnosed relative to disease burden.
               Across the conditions Whel covers, diagnostic delays of years
               are common, FDA-approved therapies indicated for the syndrome
               itself are rare, and the published research base is thin.
