@@ -1479,164 +1479,218 @@ export default function ExternalReferencesPage() {
             intro="Whel&apos;s compound list sometimes uses brand strings (&ldquo;Wellbutrin&rdquo;), alternate INN spellings (&ldquo;paracetamol&rdquo; vs &ldquo;acetaminophen&rdquo;), salt forms (&ldquo;Clomiphene Citrate&rdquo;), formulation or route qualifiers (&ldquo;Testosterone (transdermal)&rdquo;), or multi-ingredient combo strings, where the MATRIX drug-list keys on a single canonical name. The dictionary below is the only translation step the crosswalk applies; every other match is a direct name or synonym lookup against MATRIX. The `kind` column records why each entry exists. The list stays short enough to audit at a glance."
           />
 
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", minWidth: 720, borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  {["Source string", "Kind", "Resolves to", "DrugBank ID", "Note"].map((h, i) => (
-                    <th
-                      key={h}
-                      style={{
-                        ...MONO,
-                        fontSize: "10.5px",
-                        fontWeight: 500,
-                        letterSpacing: "0.13em",
-                        textTransform: "uppercase",
-                        color: "var(--muted)",
-                        textAlign: "left",
-                        padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
-                        borderBottom: "1px solid var(--rule-strong)",
-                        width: ["26%", "11%", "17%", "12%", "34%"][i],
-                      }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {BRAND_DICT_ENTRIES.map((e) => (
-                  <tr key={e.brand}>
-                    <td
-                      className="font-heading"
-                      style={{
-                        fontSize: "14px",
-                        color: "var(--ink)",
-                        padding: "14px 14px 14px 0",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                      }}
-                    >
-                      {e.brand}
-                    </td>
-                    <td
-                      style={{
-                        ...MONO,
-                        fontSize: "11px",
-                        color: "var(--muted)",
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {e.kind.replace(/_/g, " ")}
-                    </td>
-                    <td
-                      style={{
-                        ...MONO,
-                        fontSize: "12.5px",
-                        color: e.generic ? "var(--ink-2)" : "var(--muted-2)",
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                      }}
-                    >
-                      {e.generic ?? "—"}
-                    </td>
-                    <td
-                      style={{
-                        ...MONO,
-                        fontSize: "11.5px",
-                        color: e.drugbank_id ? "var(--green-mid)" : "var(--muted-2)",
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {e.drugbank_id ? (
-                        <a
-                          href={`https://go.drugbank.com/drugs/${e.drugbank_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={LINK}
-                        >
-                          {e.drugbank_id}
-                        </a>
-                      ) : (
-                        "—"
-                      )}
-                    </td>
-                    <td
-                      style={{
-                        fontSize: "12.5px",
-                        lineHeight: 1.55,
-                        color: "var(--ink-2)",
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                      }}
-                    >
-                      {e.note}
-                    </td>
+          <details className="disclose-block" style={{ marginTop: 4 }}>
+            <summary
+              style={{
+                ...MONO,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "16px 18px",
+                border: "1px solid var(--rule)",
+                background: "var(--surface)",
+                color: "var(--ink-2)",
+              }}
+              aria-label={`Open the brand and synonym dictionary, ${activeBrandCount()} active mappings`}
+            >
+              <span style={{ display: "block", minWidth: 0 }}>
+                <span
+                  className="font-heading"
+                  style={{
+                    display: "block",
+                    fontSize: "14px",
+                    color: "var(--ink)",
+                    letterSpacing: 0,
+                    textTransform: "none",
+                    marginBottom: 6,
+                  }}
+                >
+                  Open the dictionary
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted)",
+                    lineHeight: 1.5,
+                    marginBottom: 4,
+                  }}
+                >
+                  {activeBrandCount()} active mapping
+                  {activeBrandCount() === 1 ? "" : "s"} · schema v
+                  {BRAND_DICT_META.schema_version} · last reviewed{" "}
+                  {BRAND_DICT_META.last_reviewed}
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-2)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {(() => {
+                    const k = countByKind();
+                    const parts = [
+                      ["brand", k.brand],
+                      ["inn variant", k.inn_variant],
+                      ["abbreviation", k.abbreviation],
+                      ["salt form", k.salt_form],
+                      ["formulation variant", k.formulation_variant],
+                      ["combo", k.combo],
+                    ] as const;
+                    return parts
+                      .filter(([, n]) => n > 0)
+                      .map(([label, n]) => `${n} ${label}${n === 1 ? "" : "s"}`)
+                      .join(" · ");
+                  })()}
+                </span>
+              </span>
+              <span
+                className="disclose-chev"
+                aria-hidden="true"
+                style={{
+                  ...MONO,
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  flexShrink: 0,
+                  paddingTop: 2,
+                }}
+              >
+                ↓
+              </span>
+            </summary>
+
+            <div style={{ overflowX: "auto", marginTop: 18 }}>
+              <table style={{ width: "100%", minWidth: 720, borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    {["Source string", "Kind", "Resolves to", "DrugBank ID", "Note"].map((h, i) => (
+                      <th
+                        key={h}
+                        style={{
+                          ...MONO,
+                          fontSize: "10.5px",
+                          fontWeight: 500,
+                          letterSpacing: "0.13em",
+                          textTransform: "uppercase",
+                          color: "var(--muted)",
+                          textAlign: "left",
+                          padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
+                          borderBottom: "1px solid var(--rule-strong)",
+                          width: ["26%", "11%", "17%", "12%", "34%"][i],
+                        }}
+                      >
+                        {h}
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {BRAND_DICT_ENTRIES.map((e) => (
+                    <tr key={e.brand}>
+                      <td
+                        className="font-heading"
+                        style={{
+                          fontSize: "14px",
+                          color: "var(--ink)",
+                          padding: "14px 14px 14px 0",
+                          borderBottom: "1px solid var(--rule)",
+                          verticalAlign: "baseline",
+                        }}
+                      >
+                        {e.brand}
+                      </td>
+                      <td
+                        style={{
+                          ...MONO,
+                          fontSize: "11px",
+                          color: "var(--muted)",
+                          padding: "14px 14px",
+                          borderBottom: "1px solid var(--rule)",
+                          verticalAlign: "baseline",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {e.kind.replace(/_/g, " ")}
+                      </td>
+                      <td
+                        style={{
+                          ...MONO,
+                          fontSize: "12.5px",
+                          color: e.generic ? "var(--ink-2)" : "var(--muted-2)",
+                          padding: "14px 14px",
+                          borderBottom: "1px solid var(--rule)",
+                          verticalAlign: "baseline",
+                        }}
+                      >
+                        {e.generic ?? "—"}
+                      </td>
+                      <td
+                        style={{
+                          ...MONO,
+                          fontSize: "11.5px",
+                          color: e.drugbank_id ? "var(--green-mid)" : "var(--muted-2)",
+                          padding: "14px 14px",
+                          borderBottom: "1px solid var(--rule)",
+                          verticalAlign: "baseline",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {e.drugbank_id ? (
+                          <a
+                            href={`https://go.drugbank.com/drugs/${e.drugbank_id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={LINK}
+                          >
+                            {e.drugbank_id}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                      <td
+                        style={{
+                          fontSize: "12.5px",
+                          lineHeight: 1.55,
+                          color: "var(--ink-2)",
+                          padding: "14px 14px",
+                          borderBottom: "1px solid var(--rule)",
+                          verticalAlign: "baseline",
+                        }}
+                      >
+                        {e.note}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          <p
-            style={{
-              ...MONO,
-              fontSize: "11.5px",
-              lineHeight: 1.6,
-              color: "var(--muted)",
-              marginTop: 18,
-            }}
-          >
-            {activeBrandCount()} active mapping{activeBrandCount() === 1 ? "" : "s"}
-            {" "}·{" "}schema v{BRAND_DICT_META.schema_version}{" "}·{" "}last reviewed{" "}
-            {BRAND_DICT_META.last_reviewed}. Rows with &ldquo;—&rdquo; in the generic
-            column exist for documentation (e.g. medical-device combos) and do
-            not contribute to MATRIX matches. Source file:{" "}
-            <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-              lib/brand-name-dictionary.json
-            </code>
-            .
-          </p>
-
-          <p
-            style={{
-              ...MONO,
-              fontSize: "11.5px",
-              lineHeight: 1.6,
-              color: "var(--muted)",
-              marginTop: 10,
-            }}
-          >
-            {(() => {
-              const k = countByKind();
-              const parts = [
-                ["brand", k.brand],
-                ["inn variant", k.inn_variant],
-                ["abbreviation", k.abbreviation],
-                ["salt form", k.salt_form],
-                ["formulation variant", k.formulation_variant],
-                ["combo", k.combo],
-              ] as const;
-              return (
-                <>
-                  By kind:{" "}
-                  {parts
-                    .filter(([, n]) => n > 0)
-                    .map(([label, n]) => `${n} ${label}${n === 1 ? "" : "s"}`)
-                    .join(" · ")}
-                  .
-                </>
-              );
-            })()}
-          </p>
+            <p
+              style={{
+                ...MONO,
+                fontSize: "11.5px",
+                lineHeight: 1.6,
+                color: "var(--muted)",
+                marginTop: 18,
+              }}
+            >
+              Rows with &ldquo;—&rdquo; in the &ldquo;Resolves to&rdquo; column
+              exist for documentation (e.g. medical-device combos) and do not
+              contribute to MATRIX matches. Source file:{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                lib/brand-name-dictionary.json
+              </code>
+              .
+            </p>
+          </details>
         </div>
       </section>
 
