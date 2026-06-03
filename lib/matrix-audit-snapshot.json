@@ -3,7 +3,7 @@
     "schema_version": 1,
     "purpose": "Published MATRIX coverage snapshot for /about/external-references. Refreshed at the end of every scripts/check-matrix-coverage.py run.",
     "snapshot_label": "audit run",
-    "audit_date": "2026-06-02",
+    "audit_date": "2026-06-03",
     "audit_script": "scripts/check-matrix-coverage.py",
     "audit_output_report": "scripts/audit-output/matrix-coverage-report.json"
   },

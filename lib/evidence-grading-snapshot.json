@@ -1,0 +1,2478 @@
+{
+  "_meta": {
+    "schema_version": 1,
+    "purpose": "Per-pair literature-grade (L0/L1/L2/L3) derivation, consumed by /conditions/[slug] and /about/methodology to render the max-supportable L grade behind every Whel compound-condition claim. Refreshed at the end of every scripts/check-matrix-coverage.py run.",
+    "rubric_path": "lib/literature-grade-rubric.json",
+    "rubric_schema_version": 1,
+    "rubric_last_reviewed": "2026-06-01",
+    "derived_at": "2026-06-03T15:17:41Z",
+    "audit_script": "scripts/check-matrix-coverage.py",
+    "live_ceiling_note": "Live signal grading ceils at L1. The live sources table tags rows by source_type (pubmed, clinical_trial, faers, reddit, opentargets) but does not carry a study_type column, so the rubric's L2 source_attribution requirement (PMID + study_type + endpoint) cannot be satisfied from live data. L3 likewise needs structured guideline_id / strength / certainty fields the live schema does not carry. L2 and L3 are reachable only through the validation-dossier pass below, which has the evidence shape the rubric requires."
+  },
+  "live_signal_grading": {
+    "signals_graded": 271,
+    "distribution": {
+      "L0": 217,
+      "L1": 54,
+      "L2": 0,
+      "L3": 0
+    },
+    "live_ceiling": "L1",
+    "live_ceiling_reason": "The live sources table tags rows with a source_type (pubmed, clinical_trial, faers, reddit, opentargets) but does not carry the study_type, primary-endpoint, or guideline_id fields the rubric requires for L2 or L3 source_attribution. A pubmed source_type can refer to a primary study, a review, or an RCT report; the live tag does not distinguish them. Grading above L1 from live data would require backfilling a study_type column on sources. The validation-dossier pass below has the richer evidence shape needed to grade at L2 and L3.",
+    "attribution_violations_count": 0
+  },
+  "validation_dossier_grading": {
+    "rows_graded": 18,
+    "distribution": {
+      "L0": 0,
+      "L1": 0,
+      "L2": 6,
+      "L3": 12
+    },
+    "below_l1_floor": [],
+    "per_row": [
+      {
+        "row_id": "V001",
+        "compound": "AbobotulinumtoxinA",
+        "condition": "Vulvodynia",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 7,
+        "nct_count": 2,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": false
+      },
+      {
+        "row_id": "V002",
+        "compound": "Sertraline",
+        "condition": "Premenstrual Dysphoric Disorder (PMDD)",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 4,
+        "nct_count": 1,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V003",
+        "compound": "Semaglutide",
+        "condition": "Polycystic Ovary Syndrome (PCOS)",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 5,
+        "nct_count": 3,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": false
+      },
+      {
+        "row_id": "V004",
+        "compound": "Diclofenac",
+        "condition": "Perimenopause & Menopause",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 5,
+        "nct_count": 0,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V005",
+        "compound": "Continuous Oral Contraceptive",
+        "condition": "Adenomyosis",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 5,
+        "nct_count": 3,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": false,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V006",
+        "compound": "Selective Progesterone Receptor Modulators (SPRMs)",
+        "condition": "Endometriosis",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 5,
+        "nct_count": 2,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": false,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": false
+      },
+      {
+        "row_id": "V007",
+        "compound": "Danazol",
+        "condition": "Adenomyosis",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 7,
+        "nct_count": 1,
+        "has_rct_marker": false,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V008",
+        "compound": "Chinese Herbal Medicine (CHM) Formulations",
+        "condition": "Endometriosis",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 9,
+        "nct_count": 1,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": false
+      },
+      {
+        "row_id": "V009",
+        "compound": "Escitalopram",
+        "condition": "PMDD",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 4,
+        "nct_count": 1,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V010",
+        "compound": "Paroxetine",
+        "condition": "PMDD",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 5,
+        "nct_count": 2,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V011",
+        "compound": "Liraglutide",
+        "condition": "Endometriosis",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 4,
+        "nct_count": 2,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": false,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": false
+      },
+      {
+        "row_id": "V012",
+        "compound": "Letrozole",
+        "condition": "Perimenopause & Menopause",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 7,
+        "nct_count": 3,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V013",
+        "compound": "Anastrozole",
+        "condition": "PCOS",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 6,
+        "nct_count": 0,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V014",
+        "compound": "Metformin",
+        "condition": "Endometriosis",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 4,
+        "nct_count": 1,
+        "has_rct_marker": false,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 2,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V015",
+        "compound": "GnRH Agonists (Leuprolide, Triptorelin, Goserelin, Nafarelin)",
+        "condition": "Adenomyosis",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 4,
+        "nct_count": 2,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V016",
+        "compound": "Metformin",
+        "condition": "PCOS",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 4,
+        "nct_count": 3,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V017",
+        "compound": "Testosterone (transdermal)",
+        "condition": "Perimenopause & Menopause",
+        "signal_type": null,
+        "max_supportable_L": "L3",
+        "pmid_count": 8,
+        "nct_count": 3,
+        "has_rct_marker": true,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 3,
+        "guideline_names_compound": true
+      },
+      {
+        "row_id": "V018",
+        "compound": "Tirzepatide",
+        "condition": "Endometriosis",
+        "signal_type": null,
+        "max_supportable_L": "L2",
+        "pmid_count": 7,
+        "nct_count": 1,
+        "has_rct_marker": false,
+        "has_sr_or_ma_marker": true,
+        "guideline_entry_count": 1,
+        "guideline_names_compound": false
+      }
+    ]
+  },
+  "per_pair": [
+    {
+      "compound_id": "69f96843-30a0-4411-83f4-860cc8806f68",
+      "compound_name": "Azithromycin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "68637c71-f36b-453f-b870-aaa4333a4f21",
+      "compound_name": "Chinese Herbal Medicine (CHM) Formulations",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ea47b889-0304-48a0-9277-4504102d59b2",
+      "compound_name": "GnRH Antagonists (e.g., Elagolix, Relugolix)",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "14591dc2-988f-45dd-867c-c89e0fbdd1e5",
+      "compound_name": "Very-Low-Dose Combined Oral Contraceptives (estradiol-Based)",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "cfacc2eb-51b0-48a5-a60e-40f57a2c907a",
+      "compound_name": "Levonorgestrel Intrauterine System (Mirena) / Depot Medroxyprogesterone Acetate (Depo-Provera) / Etonogestrel Implant (Implanon)",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "80622c2b-1b6f-4b5f-91a8-d3a409dcb3bf",
+      "compound_name": "Selective Progesterone Receptor Modulators (SPRMs)",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "6580092a-5456-4fd0-a4c9-889224db384d",
+      "compound_name": "Myo-Inositol",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "7eb36fd7-e901-44fb-b3c3-5929e06bb19e",
+      "compound_name": "Magnesium (various Forms Including Glycinate)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c8befb1a-7343-4cee-81b9-1f05671bf2fc",
+      "compound_name": "Metformin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "82afd9ee-14a8-4abe-93be-f93893b6234c",
+      "compound_name": "GLP-1 Receptor Agonists (e.g., Liraglutide, Exenatide)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c2f5af46-87c4-46a9-88cc-f3ee536541ec",
+      "compound_name": "Aprepitant",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5173ab32-0aef-404b-aa04-c9f6dbd1ceaa",
+      "compound_name": "SGLT2 Inhibitors (e.g., Empagliflozin, Dapagliflozin)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d1751d02-775a-41f7-b36b-e93660ff720a",
+      "compound_name": "Statins (HMG-CoA Reductase Inhibitors)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bdd2a98c-94e8-4a11-90fe-d014bf609af2",
+      "compound_name": "Vitamin D",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d4b28f04-29c8-468b-b1b6-9ca52fea9bf1",
+      "compound_name": "Drospirenone/Ethinylestradiol (combined Oral Contraceptive)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "10061182-7657-4fa5-9866-403d5f8ab67c",
+      "compound_name": "Drospirenone/Ethinyl Estradiol (24/4 Regimen)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0a4e264d-885f-44b3-b378-7eb99b03e177",
+      "compound_name": "Sertraline",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "630ca554-143a-4415-8e71-de8224587748",
+      "compound_name": "Levetiracetam",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c691aa7b-a1d8-41ba-9454-f646d9ca4c93",
+      "compound_name": "Chromium (supplementation)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "e833cdcc-2749-450f-a762-6d31a096fd68",
+      "compound_name": "Levonorgestrel Intrauterine System (LNG-IUS)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bdb2823c-0c64-49c8-8698-48e26ebb907a",
+      "compound_name": "GnRH Agonists (e.g., Leuprolide, Triptorelin)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5183c03b-8771-4f36-8736-952c9d10238d",
+      "compound_name": "GnRH Antagonists (oral, E.g., Elagolix, Relugolix, Linzagolix)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d916d7ff-4203-486c-b340-082cad225401",
+      "compound_name": "Aromatase Inhibitors (e.g., Letrozole, Anastrozole)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "7df0cf46-9d6a-49e0-b89a-809051e012d8",
+      "compound_name": "Selective Progesterone Receptor Modulators (SPRMs, E.g., Ulipristal Acetate, Mifepristone)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2cc130bf-16a5-4296-aaad-f5e7d20279b1",
+      "compound_name": "Danazol",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d19f6b6f-5852-4f7d-bdb8-02173053f3d6",
+      "compound_name": "Combined Oral Contraceptives (estrogen-Progestogen)",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "df90196b-d41f-4e05-b243-c2534b88ec34",
+      "compound_name": "Micronized Progesterone (oral)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ca572573-2ace-423f-a2a7-1e4a2a2bb7e4",
+      "compound_name": "AbobotulinumtoxinA (aboBoNT-A)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "e637b3a2-990a-4c85-8aeb-26f8c34fc0ac",
+      "compound_name": "Spermidine-Hyaluronate Complex (UBIGEL Donna)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d570b4ff-52b5-4d19-921c-f880cef2e9c2",
+      "compound_name": "5-Aminolevulinic Acid (ALA) Photodynamic Therapy",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9aa866d5-a516-43c1-9789-eb11c5ab8d3c",
+      "compound_name": "Lidocaine (mucoadhesive Thin Film Delivery)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "17594e66-7cfc-414b-b882-a9ed87a5b2c6",
+      "compound_name": "Testosterone (transdermal)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "be6743e7-15e6-4707-a3a0-6bb615ae8c86",
+      "compound_name": "Botulinum Toxin A (Botox, 20 IU)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b9da9a7a-c727-49da-a087-c23d0cd769b2",
+      "compound_name": "Estetrol (E4)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b35de737-7115-4004-b0ac-ba2b12d3aa33",
+      "compound_name": "Estrogen (systemic HRT)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2964b8b2-9227-49ef-9432-68f5ae410c30",
+      "compound_name": "Venlafaxine",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "eba2a46e-faa9-49ae-a37a-c29a3aff6a76",
+      "compound_name": "Cinnamon Extract",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2574cf6f-f8a1-40c2-afd4-041c5af0def6",
+      "compound_name": "Oxytocin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "1c748179-bb5c-4fb6-b9c7-73934f4cfc9c",
+      "compound_name": "Flutamide",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d89a4142-28a4-4c63-b27b-2867659ec1e9",
+      "compound_name": "Continuous Oral Contraceptive",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d89a4142-28a4-4c63-b27b-2867659ec1e9",
+      "compound_name": "Continuous Oral Contraceptive",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dc13de4f-8531-4218-ae06-67a93b58d609",
+      "compound_name": "Quinagolide",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dc13de4f-8531-4218-ae06-67a93b58d609",
+      "compound_name": "Quinagolide",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d89a4142-28a4-4c63-b27b-2867659ec1e9",
+      "compound_name": "Continuous Oral Contraceptive",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b1a5a2f1-91bf-4141-a992-0cc868d77c74",
+      "compound_name": "Milnacipran",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "1dda8b31-d7e3-43c2-a3a8-84be1844f22e",
+      "compound_name": "Abobotulinumtoxina",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5787d9f3-32b3-4072-9843-81ee7f31d8af",
+      "compound_name": "Gabapentin",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0ebfe01b-61de-4f9e-934b-0dee1395425c",
+      "compound_name": "Cabergoline",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0ebfe01b-61de-4f9e-934b-0dee1395425c",
+      "compound_name": "Cabergoline",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b9daa1f1-8272-4fa6-8531-831ce6d85c46",
+      "compound_name": "Rosiglitazone",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dd1c8ac0-5f8f-4fba-93d0-1455c654826b",
+      "compound_name": "Vitamin D (D3)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2010e258-610e-4c6e-8335-4dd1b9b6e425",
+      "compound_name": "Myfembree (relugolix/estradiol/norethindrone)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb2e2bf-5ca0-4a86-a271-7511a4f168da",
+      "compound_name": "Progesterone (bioidentical/supplemental)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "db5be89c-d790-4ea3-a852-a8a09ccc034c",
+      "compound_name": "Calcium",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a123fd70-41dc-429f-9c47-d610b489cd18",
+      "compound_name": "Tanezumab",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a123fd70-41dc-429f-9c47-d610b489cd18",
+      "compound_name": "Tanezumab",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a123fd70-41dc-429f-9c47-d610b489cd18",
+      "compound_name": "Tanezumab",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "079765a4-1273-4ff1-a136-163e9bcb49db",
+      "compound_name": "Filgrastim",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dc19c6c9-07fe-4482-aa30-60af6ac8b9ba",
+      "compound_name": "Spearmint Tea",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bf27eda7-309b-45dc-9ef0-f76dd56fe451",
+      "compound_name": "Epelsiban",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bf27eda7-309b-45dc-9ef0-f76dd56fe451",
+      "compound_name": "Epelsiban",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9b46408f-efa7-43ad-a08a-9fec0312783d",
+      "compound_name": "Bromocriptine",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9b46408f-efa7-43ad-a08a-9fec0312783d",
+      "compound_name": "Bromocriptine",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "26c2f3fa-3509-4257-8c4b-4e8a9691d0ef",
+      "compound_name": "Aspirin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "26c2f3fa-3509-4257-8c4b-4e8a9691d0ef",
+      "compound_name": "Aspirin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "485dea18-2ba2-4725-8474-9c715877f50d",
+      "compound_name": "Drospirenone",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "f1a138fc-76e5-488a-aec7-16ebefa7954e",
+      "compound_name": "Desvenlafaxine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c272736b-f6b9-4013-8202-fa59dc681e83",
+      "compound_name": "Enzalutamide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "37a6ef11-2ec7-40d2-bd62-f6c84a692470",
+      "compound_name": "Trimebutine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ecd3c0d6-4b3c-4c25-9f00-b9ee16986e37",
+      "compound_name": "Tasimelteon",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0c9a0214-49b2-4dd8-aa41-93ba1d9206b1",
+      "compound_name": "Bentamapimod",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0c9a0214-49b2-4dd8-aa41-93ba1d9206b1",
+      "compound_name": "Bentamapimod",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "80b9b946-8a3d-41d5-95cb-0c1458db0e40",
+      "compound_name": "Olaparib",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b1a5a2f1-91bf-4141-a992-0cc868d77c74",
+      "compound_name": "Milnacipran",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d4d8d7d2-7abc-4d6b-ad5d-caf331e9c7e1",
+      "compound_name": "Triiodothyronine (liothyronine)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ec66ff3c-d4ec-459e-93f0-10db197ee7ce",
+      "compound_name": "Simvastatin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "db52a995-70a5-4325-890b-aca8c6665687",
+      "compound_name": "Pavinetant",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "68d47654-6311-4394-b02f-968e7b4ce8d2",
+      "compound_name": "Mirabegron",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "6a32f1e0-f0ff-45d4-bcfc-3c74d99e87c2",
+      "compound_name": "Dapagliflozin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "6fef0558-f698-4661-bae9-296b3b38d2eb",
+      "compound_name": "Pioglitazone",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "8bb99fbf-738b-495a-b3a7-130e8602cb42",
+      "compound_name": "Raloxifene",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "238b8302-b316-478d-87fc-c086f31542e9",
+      "compound_name": "Semaglutide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "641797ea-ecc0-4675-9793-6eb355d094b6",
+      "compound_name": "Melatonin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ff6e0e64-19b7-4fd9-a358-adaacb3e7266",
+      "compound_name": "Ergocalciferol",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "485dea18-2ba2-4725-8474-9c715877f50d",
+      "compound_name": "Drospirenone",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e756b1e-cf82-4f88-8f14-aadfdbe9bfa1",
+      "compound_name": "Eltanolone",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "4e1dadd7-7ea8-4066-8afc-4b5c78182668",
+      "compound_name": "Fosnetupitant",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb6e32be-6549-4c0e-b689-98a833c96039",
+      "compound_name": "Prinaberel",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb6e32be-6549-4c0e-b689-98a833c96039",
+      "compound_name": "Prinaberel",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "6b38a71b-3db9-44ff-835b-1d8cb75112f0",
+      "compound_name": "Tradipitant",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b9daa1f1-8272-4fa6-8531-831ce6d85c46",
+      "compound_name": "Rosiglitazone",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b9daa1f1-8272-4fa6-8531-831ce6d85c46",
+      "compound_name": "Rosiglitazone",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "4401e435-3636-48a5-8aa1-2b77118ab5a0",
+      "compound_name": "Ulipristal Acetate",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c0953765-1a70-4342-a208-94d1894728a9",
+      "compound_name": "Vaginal Estrogen",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3f7df25f-cf59-43f9-b54d-2773c7c63e82",
+      "compound_name": "NKB Receptor Antagonists (NK3R Antagonists)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "8bb99fbf-738b-495a-b3a7-130e8602cb42",
+      "compound_name": "Raloxifene",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "8bb99fbf-738b-495a-b3a7-130e8602cb42",
+      "compound_name": "Raloxifene",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a21a8cfd-afa8-409a-8168-95b70acc3342",
+      "compound_name": "Liraglutide",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "1c748179-bb5c-4fb6-b9c7-73934f4cfc9c",
+      "compound_name": "Flutamide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dc13de4f-8531-4218-ae06-67a93b58d609",
+      "compound_name": "Quinagolide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "95ab782c-e242-4c7d-af06-49cbc19772e5",
+      "compound_name": "Pentoxifylline",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "95ab782c-e242-4c7d-af06-49cbc19772e5",
+      "compound_name": "Pentoxifylline",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b8946731-fd98-42e7-98f1-97763a759a08",
+      "compound_name": "Testosterone",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a230af74-c635-403e-a8e3-608708c05912",
+      "compound_name": "Wellbutrin (bupropion)",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "e83ebb3d-33b1-4425-a4b3-6ac86f003207",
+      "compound_name": "Dienogest",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fd79468c-66d6-4e62-b3b9-6bdd26b3a755",
+      "compound_name": "Linaclotide (Linzess)",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fd314162-1aec-488a-88b4-ab1eac650abc",
+      "compound_name": "Inositol (Myo-Inositol / D-Chiro-Inositol)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3bad4009-db53-4814-ad8b-bdcff95f2f92",
+      "compound_name": "GLP-1 Receptor Agonists (Ozempic/semaglutide, Mounjaro/tirzepatide, Wegovy, Victoza/liraglutide)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3e5c3a83-83f8-44fc-9fb4-2a455e1dc90f",
+      "compound_name": "Vitamin D (high-dose Supplementation)",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "abce3fa3-b9b6-4cd9-b894-d07933f8bde8",
+      "compound_name": "Saw Palmetto",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3f6351a4-285e-4636-a23f-d44adcb5af7f",
+      "compound_name": "Creatine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "e55f5c72-023b-42cb-946a-49d8e7ed9305",
+      "compound_name": "Magnesium Glycinate",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "33abce40-0641-4d26-8bd1-4df4fd5019cf",
+      "compound_name": "Vaginal Estradiol Cream",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a44e1b45-6fa1-4818-a8df-26299acda331",
+      "compound_name": "Collagen Supplements",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "56d412b4-e34e-482b-8593-90f5bee8a97a",
+      "compound_name": "Testosterone (topical/compounded)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "6e6f11c2-3d5d-4176-8b6b-5bff9b134738",
+      "compound_name": "Veozah (fezolinetant)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "96c21c2d-e846-4bc0-a892-67d9253c3b19",
+      "compound_name": "DHEA",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "1f5debbb-ad50-4801-9d3a-c0eb8b6a9eb8",
+      "compound_name": "Iron/Ferritin Supplementation",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ab35e123-4731-4f03-b2e3-daab006b0c7e",
+      "compound_name": "Vitamin D Supplementation",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a137111d-b4de-4485-a8f9-980a88df415e",
+      "compound_name": "Alcohol Cessation",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "8bebd635-a458-4f91-a791-307e510e07a3",
+      "compound_name": "CBD Oil (medical Grade)",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "789eedf6-1882-46f5-ab6e-be73d0f4a430",
+      "compound_name": "Amitriptyline",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "154c2bcf-01f0-4833-b3d7-16f76c91f8d2",
+      "compound_name": "Diazepam (Valium) Suppositories",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c0086e6a-13dd-46d6-ba6f-76d33d50e260",
+      "compound_name": "Antihistamines (Zyrtec/cetirizine, Benadryl/diphenhydramine)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fae2f468-7fd1-4225-aeb0-1688e9200cc4",
+      "compound_name": "Magnesium Supplements",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b82e0d8a-dc74-4b21-8e61-b7fc759a1122",
+      "compound_name": "Low Dose Naltrexone (LDN)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ee0076fc-4291-4b2f-afaf-9fb098d7f951",
+      "compound_name": "Duloxetine (Cymbalta)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "d4ef9fac-e10d-43c8-9b8b-7caa3527bbe9",
+      "compound_name": "Topical Estrogen/testosterone Cream",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a988804c-e2d3-4608-8ecb-c41ea5413fef",
+      "compound_name": "CBD (topical)",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ec66ff3c-d4ec-459e-93f0-10db197ee7ce",
+      "compound_name": "Simvastatin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ec66ff3c-d4ec-459e-93f0-10db197ee7ce",
+      "compound_name": "Simvastatin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "ec66ff3c-d4ec-459e-93f0-10db197ee7ce",
+      "compound_name": "Simvastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "246d5bb6-0cc6-443a-8afe-3c07301637c4",
+      "compound_name": "Atorvastatin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "246d5bb6-0cc6-443a-8afe-3c07301637c4",
+      "compound_name": "Atorvastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "246d5bb6-0cc6-443a-8afe-3c07301637c4",
+      "compound_name": "Atorvastatin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "246d5bb6-0cc6-443a-8afe-3c07301637c4",
+      "compound_name": "Atorvastatin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "58509172-17d5-4cb7-827d-2bb492524a40",
+      "compound_name": "Rosuvastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "58509172-17d5-4cb7-827d-2bb492524a40",
+      "compound_name": "Rosuvastatin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "58509172-17d5-4cb7-827d-2bb492524a40",
+      "compound_name": "Rosuvastatin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "58509172-17d5-4cb7-827d-2bb492524a40",
+      "compound_name": "Rosuvastatin",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "58509172-17d5-4cb7-827d-2bb492524a40",
+      "compound_name": "Rosuvastatin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "716e91c2-73d9-49fc-bf9d-c19df3654987",
+      "compound_name": "Pravastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "716e91c2-73d9-49fc-bf9d-c19df3654987",
+      "compound_name": "Pravastatin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "716e91c2-73d9-49fc-bf9d-c19df3654987",
+      "compound_name": "Pravastatin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "716e91c2-73d9-49fc-bf9d-c19df3654987",
+      "compound_name": "Pravastatin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9c4a3281-32ef-4c36-b817-1440c27e5fdd",
+      "compound_name": "Lovastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9c4a3281-32ef-4c36-b817-1440c27e5fdd",
+      "compound_name": "Lovastatin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9c4a3281-32ef-4c36-b817-1440c27e5fdd",
+      "compound_name": "Lovastatin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "7648b236-373a-49db-8952-0b7895c7b980",
+      "compound_name": "Fluvastatin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "7648b236-373a-49db-8952-0b7895c7b980",
+      "compound_name": "Fluvastatin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "238b8302-b316-478d-87fc-c086f31542e9",
+      "compound_name": "Semaglutide",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "238b8302-b316-478d-87fc-c086f31542e9",
+      "compound_name": "Semaglutide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "238b8302-b316-478d-87fc-c086f31542e9",
+      "compound_name": "Semaglutide",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "238b8302-b316-478d-87fc-c086f31542e9",
+      "compound_name": "Semaglutide",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fecef6bd-bb6f-4248-9695-24d3dcc977db",
+      "compound_name": "Tirzepatide",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a21a8cfd-afa8-409a-8168-95b70acc3342",
+      "compound_name": "Liraglutide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a21a8cfd-afa8-409a-8168-95b70acc3342",
+      "compound_name": "Liraglutide",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a21a8cfd-afa8-409a-8168-95b70acc3342",
+      "compound_name": "Liraglutide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a21a8cfd-afa8-409a-8168-95b70acc3342",
+      "compound_name": "Liraglutide",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "f4a05966-b68a-4d09-97d6-16e64b32786a",
+      "compound_name": "Dulaglutide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "f4a05966-b68a-4d09-97d6-16e64b32786a",
+      "compound_name": "Dulaglutide",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "f4a05966-b68a-4d09-97d6-16e64b32786a",
+      "compound_name": "Dulaglutide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dec91841-0796-4a47-ba4e-bedcd50c04c6",
+      "compound_name": "Exenatide",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "dec91841-0796-4a47-ba4e-bedcd50c04c6",
+      "compound_name": "Exenatide",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0ebfe01b-61de-4f9e-934b-0dee1395425c",
+      "compound_name": "Cabergoline",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0ebfe01b-61de-4f9e-934b-0dee1395425c",
+      "compound_name": "Cabergoline",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0ebfe01b-61de-4f9e-934b-0dee1395425c",
+      "compound_name": "Cabergoline",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9b46408f-efa7-43ad-a08a-9fec0312783d",
+      "compound_name": "Bromocriptine",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9b46408f-efa7-43ad-a08a-9fec0312783d",
+      "compound_name": "Bromocriptine",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "9b46408f-efa7-43ad-a08a-9fec0312783d",
+      "compound_name": "Bromocriptine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb5edac5-e4fa-4069-b40e-307f508be98f",
+      "compound_name": "Pramipexole",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb5edac5-e4fa-4069-b40e-307f508be98f",
+      "compound_name": "Pramipexole",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb5edac5-e4fa-4069-b40e-307f508be98f",
+      "compound_name": "Pramipexole",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb5edac5-e4fa-4069-b40e-307f508be98f",
+      "compound_name": "Pramipexole",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "fb5edac5-e4fa-4069-b40e-307f508be98f",
+      "compound_name": "Pramipexole",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb14f3b-120c-403a-81c6-a73c68c89b9d",
+      "compound_name": "Ropinirole",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb14f3b-120c-403a-81c6-a73c68c89b9d",
+      "compound_name": "Ropinirole",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb14f3b-120c-403a-81c6-a73c68c89b9d",
+      "compound_name": "Ropinirole",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb14f3b-120c-403a-81c6-a73c68c89b9d",
+      "compound_name": "Ropinirole",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5bb14f3b-120c-403a-81c6-a73c68c89b9d",
+      "compound_name": "Ropinirole",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "338a6c21-6b2d-4751-8879-b26aebc23252",
+      "compound_name": "Rotigotine",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "338a6c21-6b2d-4751-8879-b26aebc23252",
+      "compound_name": "Rotigotine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "338a6c21-6b2d-4751-8879-b26aebc23252",
+      "compound_name": "Rotigotine",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0a4e264d-885f-44b3-b378-7eb99b03e177",
+      "compound_name": "Sertraline",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0a4e264d-885f-44b3-b378-7eb99b03e177",
+      "compound_name": "Sertraline",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0a4e264d-885f-44b3-b378-7eb99b03e177",
+      "compound_name": "Sertraline",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "0a4e264d-885f-44b3-b378-7eb99b03e177",
+      "compound_name": "Sertraline",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "5967df86-f68e-4f46-bc28-b7de481dbfe1",
+      "compound_name": "Fluoxetine",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b501fcfe-f51a-43b6-bc6c-f30ceb4792fe",
+      "compound_name": "Diclofenac",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59c30953-5cb4-455c-af43-9f8c04b18f2e",
+      "compound_name": "Escitalopram",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "555bc2da-f8d0-45a7-8efd-a72d3046aeca",
+      "compound_name": "Citalopram",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "85935d1f-5a9b-4481-a18f-a043c7aad8f8",
+      "compound_name": "Paroxetine",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "85935d1f-5a9b-4481-a18f-a043c7aad8f8",
+      "compound_name": "Paroxetine",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "548798af-8654-4fe3-8f70-67f74fa8e06d",
+      "compound_name": "Ibuprofen",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "548798af-8654-4fe3-8f70-67f74fa8e06d",
+      "compound_name": "Ibuprofen",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "548798af-8654-4fe3-8f70-67f74fa8e06d",
+      "compound_name": "Ibuprofen",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "548798af-8654-4fe3-8f70-67f74fa8e06d",
+      "compound_name": "Ibuprofen",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "548798af-8654-4fe3-8f70-67f74fa8e06d",
+      "compound_name": "Ibuprofen",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "edb511f3-d6e4-40fd-bdff-4cbd325ebff4",
+      "compound_name": "Naproxen",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3c62e3f8-f976-4755-bd6a-b4722042bb20",
+      "compound_name": "Celecoxib",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3c62e3f8-f976-4755-bd6a-b4722042bb20",
+      "compound_name": "Celecoxib",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3c62e3f8-f976-4755-bd6a-b4722042bb20",
+      "compound_name": "Celecoxib",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3c62e3f8-f976-4755-bd6a-b4722042bb20",
+      "compound_name": "Celecoxib",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b501fcfe-f51a-43b6-bc6c-f30ceb4792fe",
+      "compound_name": "Diclofenac",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b501fcfe-f51a-43b6-bc6c-f30ceb4792fe",
+      "compound_name": "Diclofenac",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b501fcfe-f51a-43b6-bc6c-f30ceb4792fe",
+      "compound_name": "Diclofenac",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b501fcfe-f51a-43b6-bc6c-f30ceb4792fe",
+      "compound_name": "Diclofenac",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3fb180e2-a1e7-4620-828c-aa4f551a20cd",
+      "compound_name": "Meloxicam",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3fb180e2-a1e7-4620-828c-aa4f551a20cd",
+      "compound_name": "Meloxicam",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3fb180e2-a1e7-4620-828c-aa4f551a20cd",
+      "compound_name": "Meloxicam",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3fb180e2-a1e7-4620-828c-aa4f551a20cd",
+      "compound_name": "Meloxicam",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "3fb180e2-a1e7-4620-828c-aa4f551a20cd",
+      "compound_name": "Meloxicam",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "1bc4f863-c120-46b2-9c5d-885fe4f82458",
+      "compound_name": "Indomethacin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "59809478-bb45-4d50-89ca-7b3c01d30b1e",
+      "compound_name": "Letrozole",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "a7169b2b-5c48-43fc-afe7-e6f847675d1a",
+      "compound_name": "Anastrozole",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e84823a-e6d4-4124-a0e5-51e9ff0a3312",
+      "compound_name": "Exemestane",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e84823a-e6d4-4124-a0e5-51e9ff0a3312",
+      "compound_name": "Exemestane",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e84823a-e6d4-4124-a0e5-51e9ff0a3312",
+      "compound_name": "Exemestane",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e84823a-e6d4-4124-a0e5-51e9ff0a3312",
+      "compound_name": "Exemestane",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "2e84823a-e6d4-4124-a0e5-51e9ff0a3312",
+      "compound_name": "Exemestane",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c8befb1a-7343-4cee-81b9-1f05671bf2fc",
+      "compound_name": "Metformin",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c8befb1a-7343-4cee-81b9-1f05671bf2fc",
+      "compound_name": "Metformin",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c8befb1a-7343-4cee-81b9-1f05671bf2fc",
+      "compound_name": "Metformin",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "c8befb1a-7343-4cee-81b9-1f05671bf2fc",
+      "compound_name": "Metformin",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L1",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "bbfe6652-f565-4f7b-a4ad-248a2e433d23",
+      "compound_name": "Spironolactone",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "05e5cf0c-b348-4660-bf1b-ad8ad7a40e51",
+      "condition_name": "PMDD",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
+      "condition_name": "Perimenopause & Menopause",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
+      "condition_name": "Endometriosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "084c5d6d-a648-413a-a7f0-c84b1fb6270c",
+      "condition_name": "Adenomyosis",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
+      "condition_name": "PCOS",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    },
+    {
+      "compound_id": "b3f8879b-cd9d-4301-a4e7-a01c173e19d6",
+      "compound_name": "Naltrexone",
+      "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
+      "condition_name": "Vulvodynia",
+      "max_supportable_L": "L0",
+      "signal_count": 1
+    }
+  ],
+  "per_condition_pair_distribution": {
+    "Endometriosis": {
+      "L0": 37,
+      "L1": 10,
+      "L2": 0,
+      "L3": 0
+    },
+    "PCOS": {
+      "L0": 37,
+      "L1": 13,
+      "L2": 0,
+      "L3": 0
+    },
+    "PMDD": {
+      "L0": 37,
+      "L1": 7,
+      "L2": 0,
+      "L3": 0
+    },
+    "Perimenopause & Menopause": {
+      "L0": 52,
+      "L1": 7,
+      "L2": 0,
+      "L3": 0
+    },
+    "Adenomyosis": {
+      "L0": 34,
+      "L1": 11,
+      "L2": 0,
+      "L3": 0
+    },
+    "Vulvodynia": {
+      "L0": 20,
+      "L1": 6,
+      "L2": 0,
+      "L3": 0
+    }
+  }
+}
