@@ -1725,11 +1725,32 @@ def derive_live_signal_l_grades(
     rubric: dict[str, Any],
 ) -> dict[str, Any]:
     """Apply the rubric's source-attribution rules to every active signal's
-    indexed sources. Returns per-signal records plus the aggregate level
-    distribution. The derivation is direction-blind, matching the rubric's
-    adjudication.direction_handling clause. The ceiling on live data is L2;
-    L3 requires structured guideline fields that do not exist on the live
-    sources table."""
+    indexed sources.
+
+    The live `sources` table carries `source_type` values
+    {pubmed, clinical_trial, faers, reddit, opentargets} plus the
+    `external_id` (PMID for pubmed, NCT for clinical_trial). What it does
+    NOT carry is a structured `study_type` tag distinguishing peer-reviewed
+    primary studies from RCTs from systematic reviews — a `pubmed` row can
+    refer to any of them. The rubric's L2 source_attribution requires "at
+    least one PMID, the study_type tag ('RCT' or 'SR/MA'), and the primary
+    endpoint text as printed in the abstract." Without a study_type column
+    the live derivation cannot honestly grade above L1. L3 likewise needs
+    structured guideline_id / strength / certainty fields that the live
+    schema does not carry.
+
+    So this pass ceils at L1 from live data and records the gap as a
+    documented limitation, not a bug. Grading above L1 lives in the
+    validation-dossier pass, which has the richer evidence shape the
+    rubric needs. The derivation is direction-blind, matching the rubric's
+    adjudication.direction_handling clause.
+
+    Attribution-violation reporting: any pubmed source row with NULL
+    external_id violates the rubric's L1 source_attribution ("Every L1
+    assignment carries at least one PMID"), and any clinical_trial source
+    row with NULL external_id violates the same rule for trial
+    registrations. Both are flagged for backfill.
+    """
     by_signal: dict[str, list[dict[str, Any]]] = {}
     for src in sources:
         by_signal.setdefault(src["signal_id"], []).append(src)
@@ -1746,35 +1767,31 @@ def derive_live_signal_l_grades(
             x for x in srcs
             if x.get("source_type") == "pubmed" and x.get("external_id")
         ]
-        # Any pubmed-typed row missing its PMID is a rubric attribution
-        # violation, regardless of the level the signal otherwise reaches.
+        nct_sources = [
+            x for x in srcs
+            if x.get("source_type") == "clinical_trial" and x.get("external_id")
+        ]
+
+        # Attribution-violation count: pubmed or clinical_trial rows whose
+        # required external_id (PMID or NCT respectively) is NULL.
         pubmed_missing_pmid = [
             x for x in srcs
             if x.get("source_type") == "pubmed" and not x.get("external_id")
         ]
-        if pubmed_missing_pmid:
+        ctgov_missing_nct = [
+            x for x in srcs
+            if x.get("source_type") == "clinical_trial" and not x.get("external_id")
+        ]
+        if pubmed_missing_pmid or ctgov_missing_nct:
             attribution_violations.append({
                 "signal_id": sid,
                 "pubmed_rows_missing_pmid": len(pubmed_missing_pmid),
+                "clinical_trial_rows_missing_nct": len(ctgov_missing_nct),
             })
 
-        # Rubric L2 source_attribution: RCT or SR/MA WITH a PMID. The live
-        # source_type tag is the only structural hint that distinguishes
-        # peer-reviewed RCT / SR-MA from a generic pubmed indexing.
-        rct_rows = [
-            x for x in srcs
-            if x.get("source_type") == "clinical_trial_finding"
-            and x.get("external_id")
-        ]
-        sr_or_ma_rows = [
-            x for x in srcs
-            if x.get("source_type") == "review_article"
-            and x.get("external_id")
-        ]
-
-        if rct_rows or sr_or_ma_rows:
-            level = "L2"
-        elif pmid_sources:
+        # L1 is the live ceiling. See docstring above for why L2/L3 are
+        # not reachable from the current sources schema.
+        if pmid_sources:
             level = "L1"
         else:
             level = "L0"
@@ -1786,9 +1803,9 @@ def derive_live_signal_l_grades(
             "signal_type": s.get("signal_type"),
             "max_supportable_L": level,
             "pmid_count": len(pmid_sources),
-            "rct_source_count": len(rct_rows),
-            "sr_or_ma_source_count": len(sr_or_ma_rows),
+            "nct_count": len(nct_sources),
             "pubmed_rows_missing_pmid": len(pubmed_missing_pmid),
+            "clinical_trial_rows_missing_nct": len(ctgov_missing_nct),
         })
 
     distribution = {"L0": 0, "L1": 0, "L2": 0, "L3": 0}
@@ -1801,6 +1818,19 @@ def derive_live_signal_l_grades(
         "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "signals_graded": len(per_signal),
         "live_signal_l_distribution": distribution,
+        "live_ceiling": "L1",
+        "live_ceiling_reason": (
+            "The live sources table tags rows with a source_type "
+            "(pubmed, clinical_trial, faers, reddit, opentargets) but "
+            "does not carry the study_type, primary-endpoint, or "
+            "guideline_id fields the rubric requires for L2 or L3 "
+            "source_attribution. A pubmed source_type can refer to a "
+            "primary study, a review, or an RCT report; the live tag "
+            "does not distinguish them. Grading above L1 from live data "
+            "would require backfilling a study_type column on sources. "
+            "The validation-dossier pass below has the richer evidence "
+            "shape needed to grade at L2 and L3."
+        ),
         "attribution_violations": attribution_violations,
         "per_signal": per_signal,
     }
@@ -2020,16 +2050,23 @@ def emit_grading_snapshot(
             "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "audit_script": "scripts/check-matrix-coverage.py",
             "live_ceiling_note": (
-                "Live signal grading ceils at L2. The rubric's L3 "
-                "source_attribution requires structured guideline_id / "
-                "strength / certainty fields, which do not exist on the "
-                "live sources table. L3 is only reachable through the "
-                "validation-dossier pass below."
+                "Live signal grading ceils at L1. The live sources table "
+                "tags rows by source_type (pubmed, clinical_trial, faers, "
+                "reddit, opentargets) but does not carry a study_type "
+                "column, so the rubric's L2 source_attribution requirement "
+                "(PMID + study_type + endpoint) cannot be satisfied from "
+                "live data. L3 likewise needs structured guideline_id / "
+                "strength / certainty fields the live schema does not "
+                "carry. L2 and L3 are reachable only through the "
+                "validation-dossier pass below, which has the evidence "
+                "shape the rubric requires."
             ),
         },
         "live_signal_grading": {
             "signals_graded": live_grades.get("signals_graded", 0),
             "distribution": live_grades.get("live_signal_l_distribution"),
+            "live_ceiling": live_grades.get("live_ceiling"),
+            "live_ceiling_reason": live_grades.get("live_ceiling_reason"),
             "attribution_violations_count": len(
                 live_grades.get("attribution_violations", [])
             ),
