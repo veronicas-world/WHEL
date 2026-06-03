@@ -641,6 +641,7 @@ export default async function ConditionDetailPage({
         <ResearchSignalsTabs
           signals={signals}
           signalIds={signalIds}
+          conditionName={condition.name}
         />
       </div>
 

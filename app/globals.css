@@ -44,6 +44,20 @@
  --arm-cross:     #6B5B3E;
  --arm-pathway:   #2E3D2B;
  --arm-community: #8C4A2E;
+
+ /* Literature-grade accents (L0–L3 external evidence levels)
+    Distinct family from tier accents: tier is Whel's internal scoring,
+    L-grade is external literature support. L0 = no published evidence,
+    L1 = PMID mention, L2 = RCT or systematic review, L3 = named in
+    active clinical guideline. */
+ --lgrade-l0:      #8E867A;   /* taupe — no external evidence */
+ --lgrade-l0-soft: #E5E0D8;
+ --lgrade-l1:      #4D5C44;   /* mid-sage — mentioned in published literature */
+ --lgrade-l1-soft: #DFE2CC;
+ --lgrade-l2:      #2E3D2B;   /* deep green — trial / systematic review */
+ --lgrade-l2-soft: #C7D2B8;
+ --lgrade-l3:      #14180F;   /* ink — named in a major clinical guideline */
+ --lgrade-l3-soft: #BFBDB1;
 }
 
 @theme inline {

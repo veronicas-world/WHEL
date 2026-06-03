@@ -5,7 +5,9 @@ import {
   L_GRADE_SEARCH_PROCEDURE,
   L_GRADE_ADJUDICATION,
   totalRubricClauses,
+  type LGradeLevel,
 } from "@/lib/literature-grade-rubric";
+import { EVIDENCE_GRADING_SNAPSHOT } from "@/lib/evidence-grading-snapshot";
 
 export const metadata = {
   title: "Validation methodology | Whel",
@@ -179,6 +181,232 @@ function RubricNamedParagraph({ heading, text }: { heading: string; text: string
       </div>
       <p style={{ fontSize: "0.92rem", color: "var(--ink-2)", lineHeight: 1.6, margin: 0 }}>
         {text}
+      </p>
+    </div>
+  );
+}
+
+// ── Live L-grade scan block ──────────────────────────────────────────────
+// Renders the distribution table for the audit-script Phase 6 pass plus the
+// validation-dossier distribution and the explicit L1-ceiling declaration.
+// All numbers are read from lib/evidence-grading-snapshot.json so the block
+// stays in sync with each audit run; no values are hard-coded here.
+
+const L_GRADE_BAR_TOKEN: Record<LGradeLevel, string> = {
+  L0: "var(--lgrade-l0)",
+  L1: "var(--lgrade-l1)",
+  L2: "var(--lgrade-l2)",
+  L3: "var(--lgrade-l3)",
+};
+
+const L_LEVELS_ORDER: LGradeLevel[] = ["L0", "L1", "L2", "L3"];
+
+function LGradeDistributionRow({
+  level,
+  count,
+  total,
+}: {
+  level: LGradeLevel;
+  count: number;
+  total: number;
+}) {
+  const pct = total > 0 ? (count / total) * 100 : 0;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span
+        style={{
+          ...MONO,
+          fontSize: 10,
+          letterSpacing: "0.1em",
+          color: "var(--muted)",
+          width: 28,
+          flexShrink: 0,
+        }}
+      >
+        {level}
+      </span>
+      <div
+        style={{
+          flex: 1,
+          height: 14,
+          background: "var(--rule)",
+          position: "relative",
+        }}
+      >
+        {pct > 0 && (
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: `${pct}%`,
+              background: L_GRADE_BAR_TOKEN[level],
+            }}
+          />
+        )}
+      </div>
+      <span
+        style={{
+          ...MONO,
+          fontSize: 12,
+          color: "var(--ink)",
+          width: 32,
+          textAlign: "right",
+          flexShrink: 0,
+        }}
+      >
+        {count}
+      </span>
+    </div>
+  );
+}
+
+function LiveLGradeScanBlock() {
+  const snap = EVIDENCE_GRADING_SNAPSHOT;
+  const live = snap.live_signal_grading;
+  const dossier = snap.validation_dossier_grading;
+  return (
+    <div style={CARD}>
+      <div
+        style={{
+          ...MONO,
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--muted)",
+          marginBottom: 10,
+        }}
+      >
+        Pre-run scan · audit Phase 6
+      </div>
+      <h3
+        className="font-heading"
+        style={{
+          fontSize: "1.05rem",
+          fontWeight: 500,
+          color: "var(--ink)",
+          marginBottom: 8,
+          letterSpacing: "-0.01em",
+        }}
+      >
+        Where the indexed signals already sit on the rubric
+      </h3>
+      <p style={{ fontSize: "0.92rem", color: "var(--ink-2)", lineHeight: 1.6, margin: "0 0 18px" }}>
+        Before the validation sample is scored externally, the audit script
+        derives a max-supportable L grade for every active pair from the
+        sources already attached to the signal record. The pre-run
+        distribution is reported here unchanged. The script ceils live data
+        at L1: the live <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
+        table tags rows with a source_type (pubmed, clinical_trial, faers,
+        reddit, opentargets) but does not carry the study_type,
+        primary-endpoint, or guideline_id fields the rubric requires for L2
+        or L3 source attribution. L2 and L3 are reachable only through the
+        validation-dossier pass below, which has the structured evidence
+        shape the rubric requires.
+      </p>
+
+      <div
+        style={{
+          display: "grid",
+          gap: 24,
+          gridTemplateColumns: "1fr",
+        }}
+        className="md:grid-cols-2"
+      >
+        <div>
+          <div
+            style={{
+              ...MONO,
+              fontSize: "10px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: 10,
+            }}
+          >
+            Live signal pass · n = {live.signals_graded}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {L_LEVELS_ORDER.map((lvl) => (
+              <LGradeDistributionRow
+                key={lvl}
+                level={lvl}
+                count={live.distribution[lvl]}
+                total={live.signals_graded}
+              />
+            ))}
+          </div>
+          <p
+            style={{
+              ...MONO,
+              fontSize: "10.5px",
+              letterSpacing: "0.04em",
+              color: "var(--muted)",
+              marginTop: 12,
+              lineHeight: 1.55,
+            }}
+          >
+            Live ceiling: {live.live_ceiling} · attribution violations:{" "}
+            {live.attribution_violations_count}
+          </p>
+        </div>
+
+        <div>
+          <div
+            style={{
+              ...MONO,
+              fontSize: "10px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: 10,
+            }}
+          >
+            Validation dossier pass · n = {dossier.rows_graded}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {L_LEVELS_ORDER.map((lvl) => (
+              <LGradeDistributionRow
+                key={lvl}
+                level={lvl}
+                count={dossier.distribution[lvl]}
+                total={dossier.rows_graded}
+              />
+            ))}
+          </div>
+          <p
+            style={{
+              ...MONO,
+              fontSize: "10.5px",
+              letterSpacing: "0.04em",
+              color: "var(--muted)",
+              marginTop: 12,
+              lineHeight: 1.55,
+            }}
+          >
+            Dossier rows carry structured PMID, NCT, and guideline fields,
+            so the rubric's L2 and L3 source-attribution requirements can be
+            checked.
+          </p>
+        </div>
+      </div>
+
+      <p
+        style={{
+          ...MONO,
+          fontSize: "10.5px",
+          letterSpacing: "0.04em",
+          color: "var(--muted)",
+          marginTop: 18,
+          lineHeight: 1.55,
+        }}
+      >
+        Derived {snap._meta.derived_at} · snapshot v{snap._meta.schema_version} ·
+        rubric v{snap._meta.rubric_schema_version} · source:{" "}
+        <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+          lib/evidence-grading-snapshot.json
+        </code>
       </p>
     </div>
   );
@@ -449,6 +677,13 @@ export default function MethodologyPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Pre-run L-grade scan: the audit-script Phase 6 pass that
+                  derives a max-supportable L for every active pair from the
+                  attached source records, with a live ceiling honestly
+                  declared. Reads from lib/evidence-grading-snapshot.json,
+                  refreshed at the end of each check-matrix-coverage.py run. */}
+              <LiveLGradeScanBlock />
 
               <p style={BODY}>
                 Effect direction in the external record is captured as a

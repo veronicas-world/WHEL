@@ -3,6 +3,8 @@
 import { useState } from "react";
 import ExternalLinkIcon from "../../components/ExternalLinkIcon";
 import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
+import { getLGradeForPair } from "@/lib/evidence-grading-snapshot";
+import { L_GRADE_LEVELS, type LGradeLevel } from "@/lib/literature-grade-rubric";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,6 +63,22 @@ const ARMS: { key: ArmKey; label: string; fill: string }[] = [
   { key: "pathway",   label: ARM_LABELS.pathway,   fill: "var(--arm-pathway)"   },
   { key: "community", label: ARM_LABELS.community, fill: "var(--arm-community)" },
 ];
+
+// Literature-grade chip styling. Distinct family from tier chips: tier is
+// internal scoring, L-grade is external literature support per the L0/L1/L2/L3
+// rubric in lib/literature-grade-rubric.json. Tooltip copy is sourced from
+// the rubric's per-level .summary field at render time, so a rubric edit
+// flows through without code changes.
+const L_GRADE_STYLE: Record<LGradeLevel, { fill: string; soft: string }> = {
+  L0: { fill: "var(--lgrade-l0)", soft: "var(--lgrade-l0-soft)" },
+  L1: { fill: "var(--lgrade-l1)", soft: "var(--lgrade-l1-soft)" },
+  L2: { fill: "var(--lgrade-l2)", soft: "var(--lgrade-l2-soft)" },
+  L3: { fill: "var(--lgrade-l3)", soft: "var(--lgrade-l3-soft)" },
+};
+
+function getLGradeSummary(level: LGradeLevel): string {
+  return L_GRADE_LEVELS.find((l) => l.level === level)?.summary ?? "";
+}
 
 const DIRECTION_LABELS: Record<string, string> = {
   improves: "Improves condition",
@@ -467,9 +485,11 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
 function SignalCard({
   signal,
   signalId,
+  conditionName,
 }: {
   signal: Signal;
   signalId: string;
+  conditionName: string;
 }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -478,6 +498,8 @@ function SignalCard({
   const direction = getDirectionLabel(signal);
   const sourceLabel = getSourceLabels(signal.sources);
   const studyCount  = getStudyCount(signal.sources);
+  const lGrade      = getLGradeForPair(signal.compounds?.name, conditionName);
+  const lGradeStyle = lGrade ? L_GRADE_STYLE[lGrade] : null;
 
   const hasScore = signal.total_evidence_score != null && signal.total_evidence_score > 0;
   const hasDetails =
@@ -521,7 +543,7 @@ function SignalCard({
   return (
     <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 24, paddingBottom: 24 }}>
 
-      {/* Top row: arm eyebrow + tier chip */}
+      {/* Top row: arm eyebrow + tier chip + L-grade chip */}
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12, gap: 12 }}>
         <span
           style={{
@@ -537,25 +559,50 @@ function SignalCard({
           {armInfo.label}
         </span>
 
-        {tierInfo && (
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              padding: "4px 8px",
-              background: tierInfo.fill,
-              color: "var(--paper)",
-              ...MONO,
-              fontSize: 10,
-              letterSpacing: "0.1em",
-              flexShrink: 0,
-            }}
-          >
-            <span style={{ width: 7, height: 7, background: "var(--paper)", display: "inline-block" }} />
-            {signal.confidence_tier?.toUpperCase()}
-          </span>
-        )}
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+          {lGrade && lGradeStyle && (
+            <span
+              title={`Literature grade ${lGrade} — ${getLGradeSummary(lGrade)}`}
+              aria-label={`Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "4px 8px",
+                background: lGradeStyle.soft,
+                color: lGradeStyle.fill,
+                border: `1px solid ${lGradeStyle.fill}`,
+                ...MONO,
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                flexShrink: 0,
+              }}
+            >
+              <span style={{ width: 7, height: 7, background: lGradeStyle.fill, display: "inline-block" }} />
+              LIT · {lGrade}
+            </span>
+          )}
+
+          {tierInfo && (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "4px 8px",
+                background: tierInfo.fill,
+                color: "var(--paper)",
+                ...MONO,
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                flexShrink: 0,
+              }}
+            >
+              <span style={{ width: 7, height: 7, background: "var(--paper)", display: "inline-block" }} />
+              {signal.confidence_tier?.toUpperCase()}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* H3: compound name */}
@@ -786,9 +833,11 @@ function SignalCard({
 export default function ResearchSignalsTabs({
   signals,
   signalIds,
+  conditionName,
 }: {
   signals: Signal[];
   signalIds: Record<string, string>;
+  conditionName: string;
 }) {
   const [activeTier, setActiveTier] = useState<TierKey | null>(null);
   const [activeArm,  setActiveArm]  = useState<ArmKey | null>(null);
@@ -948,6 +997,7 @@ export default function ResearchSignalsTabs({
               key={signal.id}
               signal={signal}
               signalId={signalIds[signal.id] ?? signal.id}
+              conditionName={conditionName}
             />
           ))}
         </div>
