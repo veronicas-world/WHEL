@@ -104,6 +104,14 @@ function parseMedline(text) {
       current._authors = current._authors ? `${current._authors}, ${v}` : v;
     } else if (tag === 'PMID') {
       current.PMID = v.split(' ')[0]; // strip version suffix
+    } else if (tag === 'PT') {
+      // PubMed routinely emits multiple PT (Publication Type) lines per
+      // record. Keep them as an array so mapPubtypesToStudyType() can pick
+      // the highest-priority taxonomy bucket rather than parsing concat
+      // text. See lib/literature-grade-rubric.json line 82 for the L2
+      // source-attribution requirement that motivates this field.
+      if (!current._pubtypes) current._pubtypes = [];
+      current._pubtypes.push(v);
     } else {
       current[tag] = current[tag] ? `${current[tag]} ${v}` : v;
     }
@@ -130,14 +138,86 @@ function parseMedline(text) {
 
   return records
     .map(r => ({
-      pmid:     r.PMID ?? '',
-      title:    (r.TI ?? '').replace(/\.$/, ''),
-      abstract: r.AB ?? '',
-      authors:  r._authors ?? '',
-      journal:  r.TA ?? r.JT ?? '',
-      date:     r.DP ?? '',
+      pmid:               r.PMID ?? '',
+      title:              (r.TI ?? '').replace(/\.$/, ''),
+      abstract:           r.AB ?? '',
+      authors:            r._authors ?? '',
+      journal:            r.TA ?? r.JT ?? '',
+      date:               r.DP ?? '',
+      pubtypes:           r._pubtypes ?? [],
+      studyType:          mapPubtypesToStudyType(r._pubtypes ?? []),
+      primaryEndpoint:    extractPrimaryEndpoint(r.AB ?? ''),
     }))
     .filter(r => r.pmid && r.abstract.length > 50); // skip records with no real abstract
+}
+
+// ── Literature-grade tagging helpers ──────────────────────────────────────────
+//
+// These two helpers convert PubMed publication metadata into the two L-grade
+// rubric fields documented in lib/literature-grade-rubric.json:
+//
+//   studyType         → sources.study_type        (required for L2 grading)
+//   primaryEndpoint   → sources.primary_endpoint_text (required for L2 grading)
+//
+// The taxonomy and precedence here MUST stay in sync with the regex
+// classifier in scripts/classify-sources-study-type.py (PUBMED_PUBTYPE_PRIORITY).
+// When the rubric is amended, both sides update together.
+
+const PUBTYPE_PRIORITY = [
+  ['Randomized Controlled Trial',         'RCT'],
+  ['Clinical Trial, Phase IV',            'RCT'],
+  ['Clinical Trial, Phase III',           'RCT'],
+  ['Adaptive Clinical Trial',             'RCT'],
+  ['Pragmatic Clinical Trial',            'RCT'],
+  ['Equivalence Trial',                   'RCT'],
+  ['Controlled Clinical Trial',           'RCT'],
+  ['Meta-Analysis',                       'SR/MA'],
+  ['Systematic Review',                   'SR/MA'],
+  ['Practice Guideline',                  'guideline'],
+  ['Guideline',                           'guideline'],
+  ['Consensus Development Conference',    'guideline'],
+  ['Case Reports',                        'case_report'],
+  ['Observational Study',                 'observational'],
+  ['Multicenter Study',                   'observational'],
+  ['Clinical Trial, Phase II',            'other'],
+  ['Clinical Trial, Phase I',             'other'],
+  ['Clinical Trial',                      'other'],
+  ['Editorial',                           'expert_opinion'],
+  ['Letter',                              'expert_opinion'],
+  ['Comment',                             'expert_opinion'],
+  ['Review',                              'expert_opinion'],
+];
+
+function mapPubtypesToStudyType(pubtypes) {
+  if (!pubtypes || pubtypes.length === 0) return null;
+  const set = new Set(pubtypes);
+  for (const [mesh, bucket] of PUBTYPE_PRIORITY) {
+    if (set.has(mesh)) return bucket;
+  }
+  return null;
+}
+
+// Extracts the primary outcome text from a PubMed AB (Abstract) field.
+// CONSORT-style structured abstracts put the label inline ("MAIN OUTCOME
+// MEASURE(S): ...") and other journals use free-text phrasing ("the
+// primary endpoint was ..."). We try the structured form first because
+// it is unambiguous, then fall back to the free-text regex.
+function extractPrimaryEndpoint(abstract) {
+  if (!abstract) return null;
+
+  // Structured CONSORT label: "MAIN OUTCOME MEASURE(S): Ovulation, based on ..."
+  // The (?:\([sS]\))? handles PubMed's parenthesised plural marker.
+  const labelRe = /\b(?:MAIN OUTCOME MEASURES?|PRIMARY OUTCOMES?(?: MEASURES?)?|PRIMARY ENDPOINTS?)(?:\([sS]\))?\s*[:.-]\s*([^.;]{8,200})/i;
+  let m = abstract.match(labelRe);
+  if (m && m[1]) return m[1].trim().slice(0, 200);
+
+  // Free-text fallback: "the primary endpoint was X" / "primary outcome of
+  // the meta-analysis was Y" / "primary efficacy endpoint was Z" etc.
+  const freeRe = /(?:primary (?:efficacy |safety |composite )?(?:endpoint|outcome(?:s)?(?: measure(?:s)?)?|objective)|co-?primary endpoint|main outcome(?:s)?(?: measure(?:s)?)?)\s+(?:was|were|of|is|are|comprised|consisted of|defined as|included|to (?:assess|evaluate|determine|measure|compare))\s+([^.;]{8,200})/i;
+  m = abstract.match(freeRe);
+  if (m && m[1]) return m[1].trim().slice(0, 200);
+
+  return null;
 }
 
 // ── Claude ────────────────────────────────────────────────────────────────────
@@ -575,7 +655,7 @@ function generateSQL(condition, conditionId, signals, articlesByPmid) {
         : art.authors;
 
       out.push(`INSERT INTO sources`);
-      out.push(`  (id, signal_id, source_type, external_id, title, authors, journal, publication_date, url)`);
+      out.push(`  (id, signal_id, source_type, external_id, title, authors, journal, publication_date, url, study_type, primary_endpoint_text)`);
       out.push(`SELECT`);
       out.push(`  gen_random_uuid(),`);
       out.push(`  rs.id,`);
@@ -585,7 +665,9 @@ function generateSQL(condition, conditionId, signals, articlesByPmid) {
       out.push(`  ${esc(authors)},`);
       out.push(`  ${esc(art.journal)},`);
       out.push(`  ${esc(parsePubmedDate(art.date))},`);
-      out.push(`  ${esc(`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`)}`);
+      out.push(`  ${esc(`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`)},`);
+      out.push(`  ${esc(art.studyType)},`);
+      out.push(`  ${esc(art.primaryEndpoint)}`);
       out.push(`FROM repurposing_signals rs`);
       out.push(`JOIN compounds c ON rs.compound_id = c.id`);
       out.push(`WHERE c.name = ${esc(s.compound_name)}`);

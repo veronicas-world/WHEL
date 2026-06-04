@@ -65,6 +65,10 @@ scripts/validation-agent-output/
 scripts/build-validation-worksheet.py
 scripts/merge-pilot-into-worksheet.py
 scripts/audit-output/
+# Classifier API response cache (PubMed E-utilities + CT.gov v2 designs).
+# Repopulated on demand by scripts/classify-sources-study-type.py; safe to
+# delete locally to force refetch.
+scripts/.cache/
 
 # Python bytecode (audit scripts in scripts/ generate these on import)
 __pycache__/

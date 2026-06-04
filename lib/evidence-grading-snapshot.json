@@ -5,20 +5,20 @@
     "rubric_path": "lib/literature-grade-rubric.json",
     "rubric_schema_version": 1,
     "rubric_last_reviewed": "2026-06-01",
-    "derived_at": "2026-06-03T15:17:41Z",
+    "derived_at": "2026-06-04T15:04:12Z",
     "audit_script": "scripts/check-matrix-coverage.py",
-    "live_ceiling_note": "Live signal grading ceils at L1. The live sources table tags rows by source_type (pubmed, clinical_trial, faers, reddit, opentargets) but does not carry a study_type column, so the rubric's L2 source_attribution requirement (PMID + study_type + endpoint) cannot be satisfied from live data. L3 likewise needs structured guideline_id / strength / certainty fields the live schema does not carry. L2 and L3 are reachable only through the validation-dossier pass below, which has the evidence shape the rubric requires."
+    "live_ceiling_note": "Live signal grading reaches L2 when a pubmed row carries PMID + study_type \u2208 {RCT, SR/MA} + non-empty primary_endpoint_text (migration 041). L3 remains out of reach from live data: the rubric's L3 source_attribution requires curated guideline_id + strength + certainty fields, which the classifier cannot derive. L3 is reachable only through the validation-dossier pass below."
   },
   "live_signal_grading": {
     "signals_graded": 271,
     "distribution": {
       "L0": 217,
-      "L1": 54,
-      "L2": 0,
+      "L1": 48,
+      "L2": 6,
       "L3": 0
     },
-    "live_ceiling": "L1",
-    "live_ceiling_reason": "The live sources table tags rows with a source_type (pubmed, clinical_trial, faers, reddit, opentargets) but does not carry the study_type, primary-endpoint, or guideline_id fields the rubric requires for L2 or L3 source_attribution. A pubmed source_type can refer to a primary study, a review, or an RCT report; the live tag does not distinguish them. Grading above L1 from live data would require backfilling a study_type column on sources. The validation-dossier pass below has the richer evidence shape needed to grade at L2 and L3.",
+    "live_ceiling": "L2",
+    "live_ceiling_reason": "Live sources rows now carry study_type and primary_endpoint_text (migration 041), so L2 is reachable when a pubmed row has PMID + study_type \u2208 {RCT, SR/MA} + non-empty primary_endpoint_text on the same row. L3 remains out of reach from live data: the rubric requires a structured guideline_id + strength + certainty triple, and those fields are populated by human curation only. The validation-dossier pass below carries the richer guideline shape needed to grade at L3.",
     "attribution_violations_count": 0
   },
   "validation_dossier_grading": {
@@ -497,7 +497,7 @@
       "compound_name": "AbobotulinumtoxinA (aboBoNT-A)",
       "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
       "condition_name": "Vulvodynia",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -537,7 +537,7 @@
       "compound_name": "Botulinum Toxin A (Botox, 20 IU)",
       "condition_id": "d5cfa2ce-01fe-4701-a44d-cf63714c24c4",
       "condition_name": "Vulvodynia",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -681,7 +681,7 @@
       "compound_name": "Rosiglitazone",
       "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
       "condition_name": "PCOS",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -929,7 +929,7 @@
       "compound_name": "Pavinetant",
       "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
       "condition_name": "PCOS",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -961,7 +961,7 @@
       "compound_name": "Raloxifene",
       "condition_id": "fe49fb1b-2f64-4b3b-8e3e-04a2a4ee5820",
       "condition_name": "PCOS",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -1129,7 +1129,7 @@
       "compound_name": "Pentoxifylline",
       "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
       "condition_name": "Endometriosis",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L2",
       "signal_count": 1
     },
     {
@@ -2440,14 +2440,14 @@
   "per_condition_pair_distribution": {
     "Endometriosis": {
       "L0": 37,
-      "L1": 10,
-      "L2": 0,
+      "L1": 9,
+      "L2": 1,
       "L3": 0
     },
     "PCOS": {
       "L0": 37,
-      "L1": 13,
-      "L2": 0,
+      "L1": 10,
+      "L2": 3,
       "L3": 0
     },
     "PMDD": {
@@ -2470,8 +2470,8 @@
     },
     "Vulvodynia": {
       "L0": 20,
-      "L1": 6,
-      "L2": 0,
+      "L1": 4,
+      "L2": 2,
       "L3": 0
     }
   }
