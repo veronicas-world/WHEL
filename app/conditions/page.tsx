@@ -2,6 +2,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ConditionsList from "./ConditionsList";
 import type { TierKey } from "@/app/components/TierHeatmap";
+import { getLGradeDistributionForCondition } from "@/lib/evidence-grading-snapshot";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -40,11 +41,18 @@ export default async function ConditionsPage() {
       if (t in tierCounts) tierCounts[t]++;
       else tierCounts.exploratory++;
     }
+    // Per-condition L-grade distribution from the audit snapshot. Keyed by
+    // canonical condition.name (the same name passed to the chip lookup on
+    // the detail page), so /conditions and /conditions/[slug] grade the
+    // same pairs against the same rubric.
+    const lGradeCounts = getLGradeDistributionForCondition(c.name);
+
     return {
       ...c,
       conditionCode: `C-${String(i + 1).padStart(2, "0")}`,
       totalSignals: cSigs.length,
       tierCounts,
+      lGradeCounts,
     };
   });
 
