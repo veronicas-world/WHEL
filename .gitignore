@@ -70,6 +70,13 @@ scripts/audit-output/
 # delete locally to force refetch.
 scripts/.cache/
 
+# Guideline curation worklist CSV. Emitted by scripts/curate-guidelines.py
+# --worklist as a local-only working file; the curator fills the three
+# guideline_* columns by hand and feeds the result back via --apply, which
+# emits a numbered SQL migration that *is* committed. The intermediate CSV
+# is regenerable on demand.
+scripts/guideline-curation-worklist.csv
+
 # Python bytecode (audit scripts in scripts/ generate these on import)
 __pycache__/
 *.pyc

@@ -149,7 +149,7 @@ CACHE_SCHEMA_VERSIONS = {
     "phase3-drug-list.json":   1,
     "phase3-crosswalk.json":   4,  # v3 added exclusion flags; v4 adds matched_via_brand_dict
     "phase4-matrix-hits.json": 1,
-    "phase6-signal-sources.json": 3,  # v2 added study_type + primary_endpoint_text per row; v3 paginates within each PostgREST batch (prior caches were silently truncated at PostgREST's max-rows cap)
+    "phase6-signal-sources.json": 4,  # v2 added study_type + primary_endpoint_text per row; v3 paginates within each PostgREST batch (prior caches were silently truncated at PostgREST's max-rows cap); v4 added guideline_id + guideline_strength + guideline_certainty per row to support live L3 grading
 }
 
 
@@ -1758,19 +1758,25 @@ def pull_signal_sources(active_signal_ids: list[str]) -> list[dict[str, Any]]:
     headers = {"apikey": key, "Authorization": f"Bearer {key}"}
 
     # Probe once: does the sources table carry the L-grade columns?
-    # Migration 041 adds them. If not present, fall back to the legacy
-    # select and let the grading step ceil at L1 with a clear note.
+    # Migration 041 adds all five at once (study_type, primary_endpoint_text,
+    # plus the three guideline_* fields), so a single probe on study_type
+    # is sufficient to detect the migration's presence. If absent, fall
+    # back to the legacy select and let the grading step ceil at L1.
     sources_have_lgrade_cols = _probe_sources_lgrade_columns(base, headers)
     if sources_have_lgrade_cols:
-        select = "id,signal_id,source_type,external_id,title,study_type,primary_endpoint_text"
+        select = (
+            "id,signal_id,source_type,external_id,title,"
+            "study_type,primary_endpoint_text,"
+            "guideline_id,guideline_strength,guideline_certainty"
+        )
     else:
         select = "id,signal_id,source_type,external_id,title"
         print(
-            "     note: study_type / primary_endpoint_text columns are not "
-            "present on `sources` (migration 041 not applied). The live "
-            "grading pass will ceil at L1 until the migration runs and "
-            "scripts/classify-sources-study-type.py --write backfills the "
-            "columns."
+            "     note: study_type / primary_endpoint_text / guideline_* "
+            "columns are not present on `sources` (migration 041 not "
+            "applied). The live grading pass will ceil at L1 until the "
+            "migration runs and scripts/classify-sources-study-type.py "
+            "--write backfills the columns."
         )
 
     BATCH = 200
@@ -1822,13 +1828,22 @@ def derive_live_signal_l_grades(
     {pubmed, clinical_trial, faers, reddit, opentargets} plus `external_id`
     (PMID for pubmed, NCT for clinical_trial). As of migration 041 it also
     carries `study_type` (one of {RCT, SR/MA, observational, case_report,
-    guideline, mechanistic, expert_opinion, other}) and
-    `primary_endpoint_text` (the primary endpoint string as printed in the
-    abstract). Together these unlock L2 grading from live data.
+    guideline, mechanistic, expert_opinion, other}), `primary_endpoint_text`
+    (the primary endpoint string as printed in the abstract), and three
+    guideline_* fields (`guideline_id`, `guideline_strength`,
+    `guideline_certainty`) populated by manual curation via
+    scripts/curate-guidelines.py. Together these unlock L2 AND L3 grading
+    from live data.
 
-    L-grade promotion ladder (live):
-      L0 — no PMID anywhere on the signal.
-      L1 — at least one pubmed row with a non-NULL external_id.
+    L-grade promotion ladder (live), evaluated top-down — first match wins:
+      L3 — at least one source row has non-empty guideline_id AND non-empty
+           guideline_strength AND non-empty guideline_certainty (all three
+           on the same row). The rubric requires the triple, not a specific
+           study_type, so this is permissive: any row can carry the triple
+           if a curator has linked it to a specific guideline recommendation.
+           In practice the rows that get the triple will be either the
+           guideline document itself (study_type='guideline') or a primary
+           study cited by a guideline that the curator chose to crosswalk.
       L2 — at least one pubmed row whose study_type ∈ {RCT, SR/MA} AND
            whose primary_endpoint_text is non-empty AND whose external_id
            is a valid PMID. All three are independent rubric requirements;
@@ -1837,13 +1852,8 @@ def derive_live_signal_l_grades(
            boundary rule ("Trials terminated without a primary endpoint
            report stay at L1") makes the endpoint string a gating field,
            not a tiebreaker.
-      L3 — REMAINS OUT OF REACH from live data. The rubric requires a
-           structured guideline_id + strength + certainty triple, and
-           those columns (also added by migration 041) are populated
-           by human curation only — the regex/PubMed/CT.gov classifier
-           cannot derive them. The L3 path lives in the validation-
-           dossier pass below, which carries the structured guideline
-           shape. Curating guidelines is a documented backlog item.
+      L1 — at least one pubmed row with a non-NULL external_id.
+      L0 — no PMID anywhere on the signal.
 
     The derivation is direction-blind, matching the rubric's
     adjudication.direction_handling clause.
@@ -1894,6 +1904,21 @@ def derive_live_signal_l_grades(
             and (x.get("primary_endpoint_text") or "").strip()
         ]
 
+        # L3 candidates: ANY source row (pubmed, clinical_trial, or
+        # otherwise) where all three guideline_* fields are populated.
+        # The rubric requires guideline_id + guideline_strength +
+        # guideline_certainty as a triple, not a specific source_type or
+        # study_type, so this filter is permissive by design — a curator
+        # who links a guideline recommendation to a primary-study row can
+        # promote that signal to L3 without forcing the recommendation to
+        # be its own PubMed entry. Empty strings count as missing.
+        l3_sources = [
+            x for x in srcs
+            if (x.get("guideline_id") or "").strip()
+            and (x.get("guideline_strength") or "").strip()
+            and (x.get("guideline_certainty") or "").strip()
+        ]
+
         # Sub-counts: signals that have the study_type but lack the
         # endpoint string. These are the manual-curation queue for the
         # gap between live L1 and live L2.
@@ -1901,6 +1926,19 @@ def derive_live_signal_l_grades(
             x for x in pmid_sources
             if x.get("study_type") in L2_STUDY_TYPES
             and not (x.get("primary_endpoint_text") or "").strip()
+        ]
+
+        # Sub-count: guideline-typed rows that are still awaiting
+        # manual curation (no guideline_id triple yet). These surface in
+        # the curation worklist generated by scripts/curate-guidelines.py.
+        guideline_typed_uncurated = [
+            x for x in srcs
+            if x.get("study_type") == "guideline"
+            and not (
+                (x.get("guideline_id") or "").strip()
+                and (x.get("guideline_strength") or "").strip()
+                and (x.get("guideline_certainty") or "").strip()
+            )
         ]
 
         # Attribution-violation count: pubmed or clinical_trial rows whose
@@ -1920,10 +1958,13 @@ def derive_live_signal_l_grades(
                 "clinical_trial_rows_missing_nct": len(ctgov_missing_nct),
             })
 
-        # Apply the promotion ladder. L3 is unreachable from live data
-        # by design — guideline_id / strength / certainty are curated
-        # by hand, not derived.
-        if l2_sources:
+        # Apply the promotion ladder, evaluating top-down so L3 wins
+        # over L2 wins over L1 wins over L0. L3 is reachable when a
+        # curator has populated all three guideline_* fields on at
+        # least one source row tied to the signal.
+        if l3_sources:
+            level = "L3"
+        elif l2_sources:
             level = "L2"
         elif pmid_sources:
             level = "L1"
@@ -1939,7 +1980,9 @@ def derive_live_signal_l_grades(
             "pmid_count": len(pmid_sources),
             "nct_count": len(nct_sources),
             "l2_eligible_pmid_count": len(l2_sources),
+            "l3_eligible_source_count": len(l3_sources),
             "rct_or_sr_without_endpoint_count": len(rct_or_sr_without_endpoint),
+            "guideline_typed_uncurated_count": len(guideline_typed_uncurated),
             "pubmed_rows_missing_pmid": len(pubmed_missing_pmid),
             "clinical_trial_rows_missing_nct": len(ctgov_missing_nct),
         })
@@ -1948,21 +1991,35 @@ def derive_live_signal_l_grades(
     for r in per_signal:
         distribution[r["max_supportable_L"]] += 1
 
-    # Live ceiling label + reason vary by whether migration 041 + the
-    # classifier backfill have actually landed. If the columns are
-    # absent, the live pass still ceils at L1 and we say so plainly.
-    if sources_have_lgrade_cols:
+    # Live ceiling label + reason vary by whether migration 041 has been
+    # applied AND whether any signal actually reached L3 via curated
+    # guideline_* fields. Three states:
+    #   pre-041                            → ceil at L1
+    #   post-041, no L3 curation yet       → ceil at L2
+    #   post-041, ≥1 signal graded L3      → ceil at L3
+    any_l3 = distribution["L3"] > 0
+    if sources_have_lgrade_cols and any_l3:
+        live_ceiling = "L3"
+        live_ceiling_reason = (
+            "Live sources rows now carry the full L-grade column set "
+            "(migration 041) AND at least one signal has a curated "
+            "guideline_id + strength + certainty triple on a tied "
+            "sources row, so the rubric's L3 source_attribution can "
+            "be satisfied from live data. Curation lives in "
+            "scripts/curate-guidelines.py + the emitted "
+            "supabase/migrations/043+ files."
+        )
+    elif sources_have_lgrade_cols:
         live_ceiling = "L2"
         live_ceiling_reason = (
             "Live sources rows now carry study_type and "
             "primary_endpoint_text (migration 041), so L2 is reachable "
             "when a pubmed row has PMID + study_type ∈ {RCT, SR/MA} + "
-            "non-empty primary_endpoint_text on the same row. L3 "
-            "remains out of reach from live data: the rubric requires "
-            "a structured guideline_id + strength + certainty triple, "
-            "and those fields are populated by human curation only. "
-            "The validation-dossier pass below carries the richer "
-            "guideline shape needed to grade at L3."
+            "non-empty primary_endpoint_text on the same row. L3 is "
+            "reachable in principle — the guideline_id / strength / "
+            "certainty columns exist — but no signal has been curated "
+            "with the full triple yet. Run scripts/curate-guidelines.py "
+            "--worklist to start the manual-curation pass."
         )
     else:
         live_ceiling = "L1"
@@ -2147,6 +2204,53 @@ def derive_validation_dossier_grades(
     }
 
 
+def _build_live_ceiling_note(live_grades: dict[str, Any]) -> str:
+    """Three-state explanation that mirrors the dynamic live_ceiling
+    value in the live_signal_grading block. Kept as a helper rather
+    than inlined so the emit_grading_snapshot call site stays readable.
+
+    States:
+      1. Migration 041 not applied      → ceiled at L1
+      2. Applied, no L3 curation yet    → ceiled at L2
+      3. Applied, ≥1 signal at L3       → ceiled at L3
+    """
+    if not live_grades.get("sources_have_lgrade_cols"):
+        return (
+            "Live signal grading ceils at L1. Migration 041 has not "
+            "been applied: the live sources table does not yet carry "
+            "study_type or primary_endpoint_text columns, so the "
+            "rubric's L2 source_attribution requirement (PMID + "
+            "study_type + endpoint) cannot be satisfied row-by-row. "
+            "Apply supabase/migrations/041_sources_lgrade_fields.sql "
+            "and run scripts/classify-sources-study-type.py --write "
+            "to unlock the L2 path. L3 stays out of reach from live "
+            "data regardless and requires a separate manual-curation "
+            "pass via scripts/curate-guidelines.py."
+        )
+    dist = live_grades.get("live_signal_l_distribution") or {}
+    if dist.get("L3", 0) > 0:
+        return (
+            "Live signal grading reaches L3 for at least one signal: "
+            "the rubric's L3 source_attribution (guideline_id + "
+            "strength + certainty as a triple on a single source row) "
+            "is satisfied by curated entries from "
+            "scripts/curate-guidelines.py. L2 is reachable for any "
+            "pubmed row that carries PMID + study_type ∈ {RCT, SR/MA} "
+            "+ non-empty primary_endpoint_text (migration 041 + "
+            "scripts/classify-sources-study-type.py)."
+        )
+    return (
+        "Live signal grading reaches L2 when a pubmed row carries "
+        "PMID + study_type ∈ {RCT, SR/MA} + non-empty "
+        "primary_endpoint_text (migration 041 + "
+        "scripts/classify-sources-study-type.py). L3 is reachable in "
+        "principle — the guideline_id / strength / certainty columns "
+        "exist — but no signal has been curated with the full triple "
+        "yet. Run scripts/curate-guidelines.py --worklist to start "
+        "the manual-curation pass."
+    )
+
+
 def emit_grading_snapshot(
     rubric: dict[str, Any],
     live_grades: dict[str, Any],
@@ -2205,41 +2309,7 @@ def emit_grading_snapshot(
             "rubric_last_reviewed": rubric["_meta"]["last_reviewed"],
             "derived_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "audit_script": "scripts/check-matrix-coverage.py",
-            "live_ceiling_note": (
-                # When migration 041 + the classifier backfill have run,
-                # the live ceiling is L2 — the audit can grade pubmed
-                # rows that carry PMID + study_type ∈ {RCT, SR/MA} +
-                # non-empty primary_endpoint_text. L3 stays out of reach
-                # from live data: guideline_id / strength / certainty
-                # are curated by hand, not derived. Until 041 is applied,
-                # the live pass falls back to an L1 ceiling for the
-                # whole audit.
-                (
-                    "Live signal grading reaches L2 when a pubmed row "
-                    "carries PMID + study_type ∈ {RCT, SR/MA} + non-"
-                    "empty primary_endpoint_text (migration 041). L3 "
-                    "remains out of reach from live data: the rubric's "
-                    "L3 source_attribution requires curated guideline_id "
-                    "+ strength + certainty fields, which the classifier "
-                    "cannot derive. L3 is reachable only through the "
-                    "validation-dossier pass below."
-                )
-                if live_grades.get("sources_have_lgrade_cols")
-                else (
-                    "Live signal grading ceils at L1. Migration 041 has "
-                    "not been applied: the live sources table does not "
-                    "yet carry study_type or primary_endpoint_text "
-                    "columns, so the rubric's L2 source_attribution "
-                    "requirement (PMID + study_type + endpoint) cannot "
-                    "be satisfied row-by-row. Apply "
-                    "supabase/migrations/041_sources_lgrade_fields.sql "
-                    "and run scripts/classify-sources-study-type.py "
-                    "--write to unlock the L2 path. L3 stays out of "
-                    "reach from live data regardless and remains "
-                    "reachable only through the validation-dossier "
-                    "pass below."
-                )
-            ),
+            "live_ceiling_note": _build_live_ceiling_note(live_grades),
         },
         "live_signal_grading": {
             "signals_graded": live_grades.get("signals_graded", 0),
