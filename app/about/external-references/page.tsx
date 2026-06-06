@@ -144,6 +144,13 @@ const SOURCES: {
     note: "Disclosure layer; not blended into Whel grades",
   },
   {
+    name: "Named society guidelines (ESHRE, ISSWSH, NAMS)",
+    role: "Published clinical guidelines from named society bodies, human-curated into strength \u00d7 certainty pairs that drive the L3 external-validation grade where a named recommendation covers a compound\u2013condition pair",
+    href: "https://www.eshre.eu/Guidelines-and-Legal/Guidelines",
+    status: "Live",
+    note: "Three bodies curated to date (ESHRE 2022, ISSWSH 2021, NAMS 2020); expansion ongoing",
+  },
+  {
     name: "EudraVigilance",
     role: "European adverse-event data; under review for parity with openFDA",
     href: "https://www.adrreports.eu/",

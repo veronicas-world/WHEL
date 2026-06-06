@@ -69,6 +69,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "Five evidence pipelines running across four research arms",
         signalsLine,
         "Every Cure MATRIX cross-reference published as an independent biological-plausibility layer, with per-condition coverage on the external references page",
+        "L0\u2013L3 external-validation grade per compound\u2013condition pair, with L3 unlocked by a human-curated layer of clinical-guideline strength and certainty",
       ],
     },
     {
@@ -212,6 +213,7 @@ const REGISTER: { name: string; role: string; status: "Live" | "Under review" | 
   { name: "EudraVigilance", role: "European adverse-event data; populate or formally retire", status: "Under review" },
   { name: "SIDER", role: "Drug side-effect reference; populate or formally retire", status: "Under review" },
   { name: "Every Cure MATRIX cross-reference", role: "Independent biological-plausibility layer from Every Cure's biomedical knowledge graph; displayed where MATRIX has coverage. Audit numbers and per-condition coverage published on /about/external-references", status: "Live" },
+  { name: "Human guideline curation", role: "Strength \u00d7 certainty layer drawn from named society guidelines (ESHRE 2022, ISSWSH 2021, NAMS 2020) and normalized into L3 source attribution; covers 12 validation-dossier conditions to date, expansion ongoing", status: "Live" },
   { name: "Disproportionality statistics (PRR / ROR)", role: "Method upgrade to the adverse-event arm", status: "Planned" },
   { name: "Two-rater validation study", role: "Reliability measurement (Cohen's kappa)", status: "Planned" },
   { name: "Cross-arm concordance flag", role: "Display flag where two or more arms (Whel + MATRIX) support the same compound-condition pair", status: "Planned" },

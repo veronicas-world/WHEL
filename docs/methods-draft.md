@@ -1,6 +1,6 @@
-# WHEL: A Multi-Source Drug Repurposing Signal Database for Under-Researched Women's Hormonal Conditions
+# Whel: A Multi-Source Drug Repurposing Signal Database for Under-Researched Women's Hormonal Conditions
 
-**Methods writeup, v0.1 (May 2026) — DRAFT**
+**Methods writeup, v0.1 (revised June 2026) — DRAFT**
 
 Veronica Agudelo¹, [Co-author name]²
 ¹ Columbia University · ² [Affiliation]
@@ -9,16 +9,13 @@ Correspondence: vla2117@columbia.edu
 Project URL: https://rediscover-coral.vercel.app
 Code repository: https://github.com/veronicas-world/WHEL
 
-Cite as (provisional):
-> Agudelo V & [Co-author], 2026. *WHEL: A Multi-Source Drug Repurposing Signal Database for Under-Researched Women's Hormonal Conditions, v0.1.* https://rediscover-coral.vercel.app · DOI: [pending Zenodo deposit]
-
 License: Content and aggregated data: CC-BY-4.0. Code: MIT.
 
 ---
 
 ## Abstract
 
-Drug repurposing — the identification of new therapeutic uses for existing approved compounds — is a particularly attractive avenue in disease areas where traditional drug development has stalled. Women's hormonal and reproductive conditions, including endometriosis, adenomyosis, polycystic ovary syndrome (PCOS), premenstrual dysphoric disorder (PMDD), vulvodynia, and the menopausal transition, are chronically underrepresented in the research literature relative to their prevalence and morbidity burden. We present WHEL (Women's Health Evidence Lab), an aggregator that surfaces drug repurposing hypotheses for these six conditions by ingesting structured and unstructured data from five complementary sources: PubMed, ClinicalTrials.gov, the FDA Adverse Event Reporting System (FAERS), the Open Targets Platform, and condition-specific Reddit communities. Each ingested signal is scored on five evidence dimensions (replication, source quality, specificity, biological plausibility, and direction consistency) by Claude Opus 4.6 against a published rubric, then mapped to one of four confidence tiers. The current database snapshot (May 2026) contains 281 scored signals across the six conditions drawn from 2,228 source citations. WHEL is positioned as a hypothesis-generation tool, not a clinical recommendation engine, and is offered freely to researchers, clinicians, and patient advocates. This document describes the methodology, scoring framework, validation plan, limitations, and known sources of bias.
+Drug repurposing — the identification of new therapeutic uses for existing approved compounds — is a particularly attractive avenue in disease areas where traditional drug development has stalled. Women's hormonal and reproductive conditions, including endometriosis, adenomyosis, polycystic ovary syndrome (PCOS), premenstrual dysphoric disorder (PMDD), vulvodynia, and the menopausal transition, are chronically underrepresented in the research literature relative to their prevalence and morbidity burden. We present Whel (Women's Health Evidence Lab), an aggregator that surfaces drug repurposing hypotheses for these six conditions by ingesting structured and unstructured data from five complementary sources: PubMed, ClinicalTrials.gov, the FDA Adverse Event Reporting System (FAERS), the Open Targets Platform, and condition-specific Reddit communities. Each ingested signal is scored on five evidence dimensions (replication, source quality, specificity, biological plausibility, and direction consistency) by Claude Opus 4.6 against a published rubric, then mapped to one of four confidence tiers. The current database snapshot (May 2026) contains 271 scored signals across the six conditions drawn from 2,166 source citations. Whel is positioned as a hypothesis-generation tool, not a clinical recommendation engine, and is offered freely to researchers, clinicians, and patient advocates. This document describes the methodology, scoring framework, validation plan, limitations, and known sources of bias.
 
 ## 1. Background
 
@@ -28,15 +25,15 @@ The structural underrepresentation of women in biomedical research is well-docum
 
 ### 1.2 Why drug repurposing
 
-Drug repurposing — investigating whether an already-approved compound has a previously unrecognized therapeutic effect — is structurally well-suited to this gap. Compared to de novo drug development, repurposing leverages existing safety pharmacology, prior pharmacokinetic characterization, and (often) existing manufacturing infrastructure, allowing comparatively rapid and inexpensive paths to clinical investigation (Pushpakom et al., 2019). The conceptual premise of WHEL is that, for under-studied conditions, the relevant signals frequently exist already — distributed across published trial secondary endpoints, adverse event reports, mechanistic pathway databases, and patient-reported community discussion — but have not been aggregated into a single condition-specific view.
+Drug repurposing — investigating whether an already-approved compound has a previously unrecognized therapeutic effect — is structurally well-suited to this gap. Compared to de novo drug development, repurposing leverages existing safety pharmacology, prior pharmacokinetic characterization, and (often) existing manufacturing infrastructure, allowing comparatively rapid and inexpensive paths to clinical investigation (Pushpakom et al., 2019). The conceptual premise of Whel is that, for under-studied conditions, the relevant signals frequently exist already — distributed across published trial secondary endpoints, adverse event reports, mechanistic pathway databases, and patient-reported community discussion — but have not been aggregated into a single condition-specific view.
 
-### 1.3 What WHEL is and is not
+### 1.3 What Whel is and is not
 
-WHEL is a **signal aggregator**. It does not generate clinical evidence; it surfaces existing evidence and hypothesizes about its relevance to women's hormonal conditions. Its outputs are structured starting points for further investigation by qualified researchers, not therapeutic recommendations. Patient-facing language across the site reinforces this framing.
+Whel is a **signal aggregator**. It does not generate clinical evidence; it surfaces existing evidence and hypothesizes about its relevance to women's hormonal conditions. Its outputs are structured starting points for further investigation by qualified researchers, not therapeutic recommendations. Patient-facing language across the site reinforces this framing.
 
 ## 2. Architecture
 
-WHEL consists of (i) a set of automated ingestion pipelines, (ii) a Postgres database hosted on Supabase, and (iii) a Next.js web frontend deployed on Vercel. The codebase is open-source under MIT and the aggregated signal data is released under CC-BY-4.0.
+Whel consists of (i) a set of automated ingestion pipelines, (ii) a Postgres database hosted on Supabase, and (iii) a Next.js web frontend deployed on Vercel. The codebase is open-source under MIT and the aggregated signal data is released under CC-BY-4.0.
 
 ### 2.1 Conditions covered
 
@@ -87,9 +84,9 @@ Tab assignment on each condition page is determined at render time by the `sourc
 
 ### 3.1 Why an LLM as the scoring layer
 
-WHEL uses Claude Opus 4.6 (claude-opus-4-6) as the scoring and classification layer for every signal across all five active pipelines. The decision to use a large language model for evidence scoring is the single most consequential methodological choice in the project, and we want to be explicit about it.
+Whel uses Claude Opus 4.6 (claude-opus-4-6) as the scoring and classification layer for every signal across all five active pipelines. The decision to use a large language model for evidence scoring is the single most consequential methodological choice in the project, and we want to be explicit about it.
 
-The signals being scored are heterogeneous: a peer-reviewed RCT abstract, a registry trial protocol, an adverse event reaction-frequency summary, a pathway-database mechanism-of-action description, and a Reddit thread are each fundamentally different data structures. A consistent scoring framework requires a layer capable of reading text, applying domain-grounded judgment, and emitting a structured score. Smaller and faster models were evaluated during development and were found to produce flatter, less discriminating scores — particularly on the biological plausibility and consistency-of-direction dimensions. We selected Claude Opus 4.6 specifically for its performance on multi-criteria reasoning tasks. We acknowledge that this choice introduces dependencies (model versioning, prompt sensitivity, hallucination risk) that are discussed in §6.
+The signals being scored are heterogeneous: a peer-reviewed RCT abstract, a registry trial protocol, an adverse event reaction-frequency summary, a pathway-database mechanism-of-action description, and a Reddit thread are each fundamentally different data structures. A consistent scoring framework requires a layer capable of reading text, applying domain-grounded judgment, and emitting a structured score. Smaller and faster models were evaluated during development and were found to produce flatter, less discriminating scores — particularly on the biological plausibility and consistency-of-direction dimensions. We selected Claude Opus 4.6 specifically for its performance on multi-criteria reasoning tasks. At the time of platform construction, Opus 4.6 was the top-ranked model on WHBench (Maurya, Saboo & Kumar, 2026, [arXiv:2604.00024](https://arxiv.org/abs/2604.00024)), an independent expert-validated benchmark of frontier LLMs on women's health questions that evaluated 22 models against a 23-criterion rubric covering clinical accuracy, completeness, safety, equity, and guideline adherence. We acknowledge that this choice introduces dependencies (model versioning, prompt sensitivity, hallucination risk) that are discussed in §6.
 
 ### 3.2 The five-dimension rubric
 
@@ -121,7 +118,7 @@ In addition to the numerical rubric, each evidence arm carries a minimum admissi
 - **Direct Research.** Highest bar: at least one peer-reviewed human study with clearly identified population, drug, outcome, and effect direction. Mechanistic-only signals with no human data are excluded. Quality criteria privilege replication and outcome relevance over citation count.
 - **Cross-Condition Signals.** Hypothesis-generating by nature. Signals must appear in at least two independent evidence domains (literature plus FAERS, FAERS plus community, etc.) with the same direction and a plausible shared biological mechanism. Three or more formal source mentions with consistent direction also qualify. Vague phenotypic similarity is insufficient — a documented shared pathway is required.
 - **Pathway Insights.** Easy to overinterpret. Minimum requirements: a specific named mechanism (mast cell activation, prostaglandin signaling, androgen receptor modulation — not generic "inflammation"), at least one known drug-target link, and at least one disease-pathway link. Pathway-only signals without human or pharmacovigilance corroboration are classified Exploratory and labeled accordingly.
-- **Community Forum Reports.** The strictest framing-level guardrails. Minimum requirements: ≥5 distinct posts with specific exposure-outcome language from unique users; the framework requires specificity, directionality, and unique-user diversity. Reposts, promotional content, and low-content comments are excluded. Replication is graded 0–2 based on post volume (0 = 5–7, 1 = 8–14, 2 = 15+). Signals with 15+ qualifying mentions and consistent direction are eligible for Moderate classification only when triangulated with a formal source. WHEL also tracks the time period of discussion and whether a signal persists or reflects a temporary spike.
+- **Community Forum Reports.** The strictest framing-level guardrails. Minimum requirements: ≥5 distinct posts with specific exposure-outcome language from unique users; the framework requires specificity, directionality, and unique-user diversity. Reposts, promotional content, and low-content comments are excluded. Replication is graded 0–2 based on post volume (0 = 5–7, 1 = 8–14, 2 = 15+). Signals with 15+ qualifying mentions and consistent direction are eligible for Moderate classification only when triangulated with a formal source. Whel also tracks the time period of discussion and whether a signal persists or reflects a temporary spike.
 
 ### 3.5 Cross-cutting reliability checks
 
@@ -137,6 +134,12 @@ For every signal, regardless of arm, the system applies five additional reliabil
 
 **Frequency is not truth.** A rare but specific, repeatedly observed signal from a credible source may carry greater evidential weight than a high-volume but vague pattern. The scoring framework privileges specificity, reproducibility, and triangulation over raw volume.
 
+### 3.7 External evidence levels (L0–L3)
+
+In parallel with the five-dimension confidence-tier rubric (§3.2–3.3), every compound–condition pair carries an external-validation grade on a four-step ladder: **L0** (no external evidence identified), **L1** (signal appears in a single independent source — study, trial, adverse-event report, or guideline), **L2** (signal replicated across independent evidence types, or appears as a primary endpoint in a trial), and **L3** (signal appears in a published clinical guideline with explicit recommendation or guidance). The L-grade is independent of the confidence tier: tier reflects Whel's internal scoring; L-grade reflects what exists in the external record. A signal that surfaces in a guideline as a discouraged option still scores L3, and the direction is recorded separately.
+
+L3 source attribution requires three fields on the source row: `guideline_id`, `guideline_strength`, and `guideline_certainty`. These values come from a separate human curation pass, not the LLM scoring pipeline. Strength and certainty are recorded using the originating guideline body's own framework where available (GRADE for ESHRE; NAMS Levels I/II/III; ISSWSH modified Delphi), then normalized into a strength × certainty pair so grades from different bodies are comparable. Coverage is intentionally narrow at this stage: Whel currently surfaces guideline-backed L3 evidence from three society bodies — ESHRE (2022) on endometriosis, ISSWSH (2021) on hypoactive sexual desire disorder, and NAMS (2020) on the genitourinary syndrome of menopause — across 12 validation-dossier conditions. The curation script and the migrations it emits are open in the repository, and the worklist is regenerated whenever new guideline-classified sources are ingested.
+
 ## 4. Validation plan
 
 We acknowledge that the LLM-as-classifier methodology requires empirical validation, and that the current snapshot does not yet include such a study. A planned validation pass (planned for completion before submission of the project for academic review) will:
@@ -149,12 +152,12 @@ We acknowledge that the LLM-as-classifier methodology requires empirical validat
 
 ## 5. Related work
 
-WHEL builds on, and is positioned relative to, several existing strands of work. A more detailed Related Work section is available at [link to /about/related-work].
+Whel builds on, and is positioned relative to, several existing strands of work. A more detailed Related Work section is available at [link to /about/related-work].
 
-- **Patient-generated health data for endometriosis.** Phendo and Citizen Endo (Columbia University DBMI; McKillop, Mamykina, Elhadad, and colleagues) demonstrate the feasibility and scientific value of structured patient self-tracking for understanding endometriosis phenotypes and trajectories. WHEL's Community Forum Reports arm is conceptually adjacent but methodologically distinct: Phendo collects structured prospective self-reports under ethical oversight; WHEL ingests retrospective unstructured public discussion as hypothesis-generating signal. We see the two as complementary, not competing.
-- **Drug repurposing knowledge bases.** DrugBank, Open Targets Platform, RepoDB, and RepurposeDB provide drug-target and drug-indication associations at scale. WHEL ingests Open Targets directly (§2.2) and is structurally compatible with the others.
-- **Drug repurposing methodology.** Pushpakom et al. (2019) and Hurle et al. (2013) provide the foundational frameworks within which WHEL operates.
-- **Pharmacovigilance signal detection.** Disproportionality methods (PRR, ROR, IC) developed for FAERS are well-established (Bate & Evans, 2009). WHEL does not replicate these methods; the FDA FAERS pipeline relies on raw report-frequency summaries plus LLM-mediated cross-condition reasoning. Triangulation against disproportionality scores is on the development roadmap.
+- **Patient-generated health data for endometriosis.** Phendo and Citizen Endo (Columbia University DBMI; McKillop, Mamykina, Elhadad, and colleagues) demonstrate the feasibility and scientific value of structured patient self-tracking for understanding endometriosis phenotypes and trajectories. Whel's Community Forum Reports arm is conceptually adjacent but methodologically distinct: Phendo collects structured prospective self-reports under ethical oversight; Whel ingests retrospective unstructured public discussion as hypothesis-generating signal. We see the two as complementary, not competing.
+- **Drug repurposing knowledge bases.** DrugBank, Open Targets Platform, RepoDB, and RepurposeDB provide drug-target and drug-indication associations at scale. Whel ingests Open Targets directly (§2.2) and is structurally compatible with the others.
+- **Drug repurposing methodology.** Pushpakom et al. (2019) and Hurle et al. (2013) provide the foundational frameworks within which Whel operates.
+- **Pharmacovigilance signal detection.** Disproportionality methods (PRR, ROR, IC) developed for FAERS are well-established (Bate & Evans, 2009). Whel does not replicate these methods; the FDA FAERS pipeline relies on raw report-frequency summaries plus LLM-mediated cross-condition reasoning. Triangulation against disproportionality scores is on the development roadmap.
 - **Women's health research gap quantification.** Mazure & Jones (2015) and the Society for Women's Health Research have documented the structural underrepresentation that motivates this project.
 
 ## 6. Limitations
@@ -172,8 +175,8 @@ A standalone Limitations section is published and continuously updated at [link 
 - **Generalizability stratification.** The current database does not stratify by race, age band, or geography. Signals reflect aggregate patterns that may not generalize to specific subpopulations.
 - **Geographic and language scope.** The current database is English-only. EudraVigilance integration (§2.2) will partially expand European coverage but not language coverage.
 - **Scope limitation.** Six conditions, not all women's health.
-- **Temporal staleness.** Pipelines run on demand, not continuously. Last refresh: May 2026.
-- **Conflict of interest disclosure.** WHEL receives no funding from the pharmaceutical industry. The authors declare no commercial conflicts.
+- **Temporal staleness.** Pipelines run on demand, not continuously. Last refresh: June 2026.
+- **Conflict of interest disclosure.** Whel receives no funding from the pharmaceutical industry. The authors declare no commercial conflicts.
 
 ## 7. Data and code availability
 
@@ -184,7 +187,7 @@ A standalone Limitations section is published and continuously updated at [link 
 
 ## 8. Ethics
 
-WHEL ingests publicly accessible data only. The Reddit pipeline retrieves public forum posts via Reddit's public JSON API; no usernames or post bodies are stored verbatim in the signal database (only post URLs as source records). No personally identifying information is collected or republished. The project does not constitute human-subjects research as defined by 45 CFR 46 and is not under IRB oversight, but we explicitly endorse the ethical principles of transparency, minimum-necessary data use, and respect for the originating communities.
+Whel ingests publicly accessible data only. The Reddit pipeline retrieves public forum posts via Reddit's public JSON API; no usernames or post bodies are stored verbatim in the signal database (only post URLs as source records). No personally identifying information is collected or republished. The project does not constitute human-subjects research as defined by 45 CFR 46 and is not under IRB oversight, but we explicitly endorse the ethical principles of transparency, minimum-necessary data use, and respect for the originating communities.
 
 ## 9. Acknowledgements
 
@@ -196,6 +199,7 @@ A formatted references section will be assembled before formal release. Working 
 
 - Bate A, Evans SJW. Quantitative methods for pharmacovigilance signal detection. *Pharmacoepidemiol Drug Saf.* 2009;18(6):427-436.
 - Hurle MR, Yang L, Xie Q, Rajpal DK, Sanseau P, Agarwal P. Computational drug repositioning: from data to therapeutics. *Clin Pharmacol Ther.* 2013;93(4):335-341.
+- Maurya S, Saboo P, Kumar G. WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics. *arXiv preprint.* 2026; [arXiv:2604.00024](https://arxiv.org/abs/2604.00024).
 - Mazure CM, Jones DP. Twenty years and still counting: including women as participants and studying sex and gender in biomedical research. *BMC Womens Health.* 2015;15:94.
 - McKillop M, Mamykina L, Elhadad N, et al. Designing in the dark: eliciting self-tracking dimensions for understanding enigmatic disease. *Proc CHI.* 2018.
 - Nnoaham KE, Hummelshoj L, Webster P, et al. Impact of endometriosis on quality of life and work productivity: a multicenter study across ten countries. *Fertil Steril.* 2011;96(2):366-373.
@@ -205,4 +209,4 @@ A formatted references section will be assembled before formal release. Working 
 
 ---
 
-*Document version: v0.1 (May 2026). For working draft only. Comments welcome via vla2117@columbia.edu.*
+*Document version: v0.1 (revised June 2026). For working draft only. Comments welcome via vla2117@columbia.edu.*
