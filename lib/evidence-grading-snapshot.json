@@ -5,20 +5,20 @@
     "rubric_path": "lib/literature-grade-rubric.json",
     "rubric_schema_version": 1,
     "rubric_last_reviewed": "2026-06-01",
-    "derived_at": "2026-06-04T15:04:12Z",
+    "derived_at": "2026-06-06T01:02:23Z",
     "audit_script": "scripts/check-matrix-coverage.py",
-    "live_ceiling_note": "Live signal grading reaches L2 when a pubmed row carries PMID + study_type \u2208 {RCT, SR/MA} + non-empty primary_endpoint_text (migration 041). L3 remains out of reach from live data: the rubric's L3 source_attribution requires curated guideline_id + strength + certainty fields, which the classifier cannot derive. L3 is reachable only through the validation-dossier pass below."
+    "live_ceiling_note": "Live signal grading reaches L3 for at least one signal: the rubric's L3 source_attribution (guideline_id + strength + certainty as a triple on a single source row) is satisfied by curated entries from scripts/curate-guidelines.py. L2 is reachable for any pubmed row that carries PMID + study_type \u2208 {RCT, SR/MA} + non-empty primary_endpoint_text (migration 041 + scripts/classify-sources-study-type.py)."
   },
   "live_signal_grading": {
     "signals_graded": 271,
     "distribution": {
       "L0": 217,
-      "L1": 48,
+      "L1": 45,
       "L2": 6,
-      "L3": 0
+      "L3": 3
     },
-    "live_ceiling": "L2",
-    "live_ceiling_reason": "Live sources rows now carry study_type and primary_endpoint_text (migration 041), so L2 is reachable when a pubmed row has PMID + study_type \u2208 {RCT, SR/MA} + non-empty primary_endpoint_text on the same row. L3 remains out of reach from live data: the rubric requires a structured guideline_id + strength + certainty triple, and those fields are populated by human curation only. The validation-dossier pass below carries the richer guideline shape needed to grade at L3.",
+    "live_ceiling": "L3",
+    "live_ceiling_reason": "Live sources rows now carry the full L-grade column set (migration 041) AND at least one signal has a curated guideline_id + strength + certainty triple on a tied sources row, so the rubric's L3 source_attribution can be satisfied from live data. Curation lives in scripts/curate-guidelines.py + the emitted supabase/migrations/043+ files.",
     "attribution_violations_count": 0
   },
   "validation_dossier_grading": {
@@ -529,7 +529,7 @@
       "compound_name": "Testosterone (transdermal)",
       "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
       "condition_name": "Perimenopause & Menopause",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L3",
       "signal_count": 1
     },
     {
@@ -601,7 +601,7 @@
       "compound_name": "Continuous Oral Contraceptive",
       "condition_id": "b98dc0b9-da6a-4012-a80a-8d2e1eca0b72",
       "condition_name": "Endometriosis",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L3",
       "signal_count": 1
     },
     {
@@ -1065,7 +1065,7 @@
       "compound_name": "Vaginal Estrogen",
       "condition_id": "9001ca55-3a20-49ed-8ec6-280271d07631",
       "condition_name": "Perimenopause & Menopause",
-      "max_supportable_L": "L1",
+      "max_supportable_L": "L3",
       "signal_count": 1
     },
     {
@@ -2440,9 +2440,9 @@
   "per_condition_pair_distribution": {
     "Endometriosis": {
       "L0": 37,
-      "L1": 9,
+      "L1": 8,
       "L2": 1,
-      "L3": 0
+      "L3": 1
     },
     "PCOS": {
       "L0": 37,
@@ -2458,9 +2458,9 @@
     },
     "Perimenopause & Menopause": {
       "L0": 52,
-      "L1": 7,
+      "L1": 5,
       "L2": 0,
-      "L3": 0
+      "L3": 2
     },
     "Adenomyosis": {
       "L0": 34,
