@@ -58,6 +58,15 @@
  --lgrade-l2-soft: #C7D2B8;
  --lgrade-l3:      #14180F;   /* ink — named in a major clinical guideline */
  --lgrade-l3-soft: #BFBDB1;
+
+ /* ── Typography (§07 · two families, no more) ────────────────────────── */
+ /* Newsreader carries the editorial weight — headlines, body, long-form.
+    IBM Plex Mono carries the technical voice — labels, captions, data.
+    Backward-compat: the legacy names below alias to --font-newsreader so
+    older inline `fontFamily: var(--font-source-serif, ...)` references in
+    chart and graph components continue to resolve. */
+ --font-source-serif: var(--font-newsreader);
+ --font-plex-sans:    var(--font-newsreader);
 }
 
 @theme inline {
@@ -70,10 +79,12 @@
  --color-sage-dark: #3E4E3E;
  --color-sage-light: #EDEAE4;
  --color-warm-border: #E0DDD8;
- /* Source Serif 4 for display, IBM Plex Sans for body, IBM Plex Mono for meta */
- --font-sans: var(--font-plex-sans);
- --font-serif: var(--font-source-serif);
- --font-mono: var(--font-plex-mono);
+ /* §07 Typography — Newsreader for editorial weight, IBM Plex Mono for the
+    technical voice. font-sans and font-serif both resolve to Newsreader so
+    Tailwind's font-sans utility does not reintroduce a sans-serif. */
+ --font-sans:  var(--font-newsreader);
+ --font-serif: var(--font-newsreader);
+ --font-mono:  var(--font-plex-mono);
  /* Force all border-radius utilities to 0 except full */
  --radius: 0;
  --radius-sm: 0;
@@ -89,39 +100,40 @@
 body {
  background: var(--background);
  color: var(--foreground);
- font-family: var(--font-plex-sans, var(--font-dm-sans, system-ui, sans-serif));
+ /* §07 · Newsreader carries body. Georgia is the documented fallback. */
+ font-family: var(--font-newsreader, Georgia, serif);
  font-size: 16px;
  line-height: 1.65;
  -webkit-font-smoothing: antialiased;
  -moz-osx-font-smoothing: grayscale;
 }
 
-/* All heading elements use Source Serif 4 by default */
+/* All heading elements use Newsreader by default */
 h1, h2, h3, h4 {
- font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
+ font-family: var(--font-newsreader, Georgia, serif);
 }
 
 /* ── Font utilities ────────────────────────────────────────────────────── */
 
-/* Headings — Source Serif 4 */
+/* Headings — Newsreader */
 .font-heading {
- font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
+ font-family: var(--font-newsreader, Georgia, serif);
  letter-spacing: -0.01em;
 }
 
-/* Explicit serif (nav brand, display use) */
+/* Explicit serif (nav brand, display use) — Newsreader */
 .font-serif {
- font-family: var(--font-source-serif, var(--font-playfair, Georgia, serif));
+ font-family: var(--font-newsreader, Georgia, serif);
 }
 
-/* Mono — IBM Plex Mono for meta / labels / kickers */
+/* Mono — IBM Plex Mono for meta / labels / kickers / data */
 .font-mono {
  font-family: var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
 
-/* Section labels — small, uppercase, spaced, mono */
+/* Section labels — small, uppercase, spaced, mono. Tracking +4% per §7.2. */
 .section-label {
- font-family: var(--font-plex-mono, var(--font-dm-sans, system-ui, sans-serif));
+ font-family: var(--font-plex-mono, ui-monospace, monospace);
  font-size: 0.7rem;
  font-weight: 500;
  text-transform: uppercase;
@@ -131,7 +143,7 @@ h1, h2, h3, h4 {
 
 /* Breadcrumb nav */
 .font-label {
- font-family: var(--font-plex-mono, var(--font-dm-sans, system-ui, sans-serif));
+ font-family: var(--font-plex-mono, ui-monospace, monospace);
  font-size: 0.75rem;
 }
 
@@ -144,7 +156,7 @@ h1, h2, h3, h4 {
  color: var(--muted);
 }
 
-/* Kicker (small mono inline metadata) */
+/* Kicker (small mono inline metadata). +4% tracking matches §7.2 small caps. */
 .kicker {
  font-family: var(--font-plex-mono, ui-monospace, monospace);
  font-size: 12px;
