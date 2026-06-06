@@ -357,6 +357,11 @@ export default async function Home() {
       </section>
 
       {/* ── Featured signal teaser ───────────────────────────────────────────── */}
+      {/* Surfaces a single live L3 signal (guideline-backed) as the homepage
+          headline example, paired with its internal-tier and external-grade
+          framing. See app/about/methodology section 04 for the L-grade ladder
+          and section 3.7 of the methods PDF for the human guideline curation
+          step that unlocks L3. */}
       <section style={{ borderBottom: "1px solid var(--rule)", backgroundColor: "var(--bg-2)" }}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8 lg:gap-14 items-start">
@@ -373,9 +378,9 @@ export default async function Home() {
                   lineHeight: 1.7,
                 }}
               >
-                <div>Endometriosis · Anastrozole</div>
-                <div>Pathway Insights · Strong (10 / 10)</div>
-                <div>11 sources</div>
+                <div>Perimenopause &amp; Menopause · Vaginal Estrogen</div>
+                <div>Direct Research · Strong (9 / 10)</div>
+                <div>3 sources · L3 (NAMS 2020 · Recommended &middot; Moderate)</div>
               </div>
             </div>
 
@@ -390,10 +395,10 @@ export default async function Home() {
                   letterSpacing: "-0.012em",
                   color: "var(--ink)",
                   marginBottom: 16,
-                  maxWidth: "30ch",
+                  maxWidth: "32ch",
                 }}
               >
-                A breast cancer drug surfaces as a top endometriosis lead.
+                Vaginal estrogen prevents recurrent UTIs after menopause. It is still rarely prescribed for that purpose.
               </h2>
               <p
                 style={{
@@ -404,12 +409,15 @@ export default async function Home() {
                   marginBottom: 18,
                 }}
               >
-                Anastrozole is an aromatase inhibitor approved for hormone
-                receptor-positive breast cancer. Aromatase is also locally
-                overexpressed in endometriotic lesions, where it sustains an
-                estrogen loop that drives lesion growth. A walkthrough of how
-                that connection surfaced in the database, the eleven sources it
-                rests on, and the external clinical evidence it lines up with.
+                Vaginal estrogen restores the protective acidic microbiome that
+                disappears with menopause, sharply reducing urinary tract
+                infection recurrence. The 2020 NAMS position statement on the
+                genitourinary syndrome of menopause names it as the prevention
+                of choice for postmenopausal women with recurrent UTIs, yet
+                indefinite prophylactic antibiotics remain the more common
+                prescription. This is one of three live L3 signals in the
+                database: a Whel-Strong internal tier paired with formal
+                guideline backing in the external record.
               </p>
               <Link
                 href="/featured"
@@ -424,7 +432,7 @@ export default async function Home() {
                   paddingBottom: 2,
                 }}
               >
-                Read the walkthrough →
+                Read the walkthrough &rarr;
               </Link>
             </div>
 
