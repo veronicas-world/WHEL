@@ -386,8 +386,8 @@ function LiveLGradeScanBlock() {
             }}
           >
             Dossier rows carry structured PMID, NCT, and guideline fields,
-            so the rubric's L2 and L3 source-attribution requirements can be
-            checked.
+            so the rubric&apos;s L2 and L3 source-attribution requirements can
+            be checked.
           </p>
         </div>
       </div>
@@ -677,6 +677,24 @@ export default function MethodologyPage() {
                   ))}
                 </div>
               </div>
+
+              <p style={BODY}>
+                L3 source attribution requires three fields populated on the
+                source row: <code>guideline_id</code>,{" "}
+                <code>guideline_strength</code>, and{" "}
+                <code>guideline_certainty</code>. These values come from a
+                separate human curation pass, not from the LLM scoring
+                pipeline. Strength and certainty are recorded using the
+                originating guideline body&apos;s own framework where available
+                (GRADE for ESHRE, NAMS Levels I/II/III, ISSWSH modified
+                Delphi), then normalized into a strength and certainty pair so
+                grades from different bodies can be compared. Coverage is
+                intentionally narrow at this stage. Whel currently surfaces
+                guideline-backed L3 evidence from three society bodies (ESHRE
+                2022, ISSWSH 2021, NAMS 2020) across 12 validation-dossier
+                conditions, with expansion following the same curation
+                workflow.
+              </p>
 
               {/* Pre-run L-grade scan: the audit-script Phase 6 pass that
                   derives a max-supportable L for every active pair from the

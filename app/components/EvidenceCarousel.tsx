@@ -28,7 +28,8 @@ interface CarouselCard {
 const CARDS: CarouselCard[] = [
   {
     title: "Model Selection",
-    body: "All signal analysis is performed using Claude Opus 4.6, Anthropic's most capable model. Opus was selected specifically for its performance on complex multi-criteria reasoning, simultaneously assessing source quality, replication, biological plausibility, and confounding risk in a single analytical pass. Smaller models were evaluated and produced flatter, less discriminating scores. For a tool where evidence evaluation is the core product, model selection is not a minor implementation detail.",
+    body: "All signal analysis is performed using Claude Opus 4.6. When Whel's evidence engine was built, Opus 4.6 was Anthropic's most capable model and the top-ranked model on WHBench, an independent expert-validated benchmark for women's health reasoning. Opus was selected specifically for its performance on complex multi-criteria reasoning, simultaneously assessing source quality, replication, biological plausibility, and confounding risk in a single analytical pass. Smaller models were evaluated and produced flatter, less discriminating scores.",
+    link: { text: "View the WHBench benchmark", href: "https://arxiv.org/abs/2604.00024" },
   },
   {
     title: "Five-Dimension Scoring",
@@ -218,11 +219,14 @@ function CardContent({ card }: { card: CarouselCard }) {
         </ul>
       )}
 
-      {/* Link (Card 6) */}
+      {/* Link (Cards with citations or follow-on reading) */}
       {card.link && (
         <div style={{ marginTop: "auto", paddingTop: "0.5rem" }}>
           <Link
             href={card.link.href}
+            {...(card.link.href.startsWith("http")
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             style={{
               fontSize: "0.85rem",
               fontWeight: 600,

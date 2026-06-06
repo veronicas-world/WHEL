@@ -100,8 +100,8 @@ const PIPELINES: {
 const SCORING_INTRO =
   "Whel applies a structured, multidimensional inclusion framework to every signal before it enters the database. The goal is a tiered evidence framework with minimum standards for reliability, reproducibility, and actionability, rather than a single universal cutoff. The framework was developed in consultation with published research on evidence synthesis and pharmacovigilance methodology, drawing on established practices in systematic review design and drug repurposing research.";
 
-const MODEL_NOTE =
-  "All signal analysis and scoring is performed using Claude Opus 4.6 (claude-opus-4-6), Anthropic's most capable model. Opus 4.6 was selected specifically for its performance on complex multicriteria reasoning tasks. Independent benchmarks consistently place Opus at the top of evaluations requiring simultaneous assessment across multiple analytical dimensions, precisely what evidence scoring requires. Smaller or faster models were evaluated and found to produce flatter, less discriminating scores, particularly on biological plausibility and confounding risk assessment. For a tool where the quality of the evidence evaluation is the core product, model selection is not a minor implementation detail.";
+// Model-selection prose is rendered inline as JSX in the Figure 2 callout
+// below so the WHBench citation can sit inside the paragraph as a hyperlink.
 
 const FRAMEWORK_INTRO =
   "Every signal is independently scored from 0 to 2 on five dimensions, for a maximum total score of 10. Scores are assigned by Claude Opus 4.6 based on the full source content, not just metadata.";
@@ -622,7 +622,30 @@ export default function TechnicalArchitecturePage() {
               Model Selection: Claude Opus 4.6
             </p>
             <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)" }}>
-              {MODEL_NOTE}
+              All signal analysis and scoring is performed using Claude Opus 4.6
+              (claude-opus-4-6). At the time Whel&apos;s evidence engine was
+              built, Opus 4.6 was Anthropic&apos;s most capable model and the
+              top-ranked model on{" "}
+              <a
+                href="https://arxiv.org/abs/2604.00024"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: "var(--ink)",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "2px",
+                }}
+              >
+                WHBench
+              </a>
+              , an independent expert-validated benchmark for women&apos;s
+              health reasoning. Opus 4.6 was selected for its performance on
+              complex multicriteria reasoning, where signals must be
+              simultaneously assessed across source quality, replication,
+              biological plausibility, and confounding risk in a single
+              analytical pass. Smaller and faster models were evaluated and
+              produced flatter, less discriminating scores, particularly on
+              biological plausibility and confounding risk assessment.
             </p>
           </div>
 
