@@ -607,7 +607,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="01b · Coverage disclosure"
             title="How much of Whel sits inside MATRIX"
-            intro="Because Whel surfaces MATRIX scores as an independent layer rather than blending them into its own grades, the honest question is how much of Whel's universe MATRIX actually covers. The numbers below come from an audit script that joins Whel's active compound–condition pairs against the published MATRIX dataset. Raw, adjusted, and per-condition figures are all shown so readers can decide for themselves which denominator is fair."
+            intro="Because Whel surfaces MATRIX scores as an independent layer rather than blending them into its own grades, the honest question is how much of Whel's universe MATRIX actually covers. The numbers below come from an audit script that joins Whel's active compound–condition pairs against the published MATRIX dataset. Raw, adjusted, and per-condition figures are all shown so readers can decide for themselves which denominator is fair. Per-pair scores from the same audit are also surfaced on each condition page beside the L-grade chip, so a reader can see MATRIX's biological-plausibility score for any individual compound–condition pair where MATRIX has coverage, not just the aggregate."
           />
 
           {(() => {

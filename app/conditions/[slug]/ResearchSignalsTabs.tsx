@@ -6,13 +6,19 @@ import ExternalLinkIcon from "../../components/ExternalLinkIcon";
 import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
 import { getLGradeForPair } from "@/lib/evidence-grading-snapshot";
 import { L_GRADE_LEVELS, type LGradeLevel } from "@/lib/literature-grade-rubric";
+import {
+  getMatrixScoreForPair,
+  formatMatrixPercentile,
+} from "@/lib/matrix-pair-scores-snapshot";
 
-// Anchor targets on the methodology and technical-architecture pages that
-// the per-signal chips link to. Centralized here so a future rename of any
-// of these anchors only has to be touched in one place.
+// Anchor targets on the methodology, technical-architecture, and
+// external-references pages that the per-signal chips link to. Centralized
+// here so a future rename of any of these anchors only has to be touched
+// in one place.
 const ANCHOR_L_GRADE = "/about/methodology#l-grade-ladder";
 const ANCHOR_STRENGTH_CERTAINTY = "/about/methodology#guideline-strength-certainty";
 const ANCHOR_CONFIDENCE_TIERS = "/about/technical-architecture#confidence-tiers";
+const ANCHOR_MATRIX = "/about/external-references#coverage-disclosure";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -515,6 +521,17 @@ function SignalCard({
   const lGrade      = getLGradeForPair(signal.compounds?.name, conditionName);
   const lGradeStyle = lGrade ? L_GRADE_STYLE[lGrade] : null;
 
+  // Look up the per-pair MATRIX score from the audit snapshot. Most pairs
+  // do have a score (176 of the 271 active pairs in the most recent audit
+  // run); pairs that do not are 'matrix silent' (compound not in MATRIX's
+  // drug list, or score below MATRIX's publication threshold) and the
+  // MATRIX chip is not rendered. The lookup is keyed on the same
+  // compound-condition name pair the L-grade snapshot uses.
+  const matrixScore = getMatrixScoreForPair(
+    signal.compounds?.name,
+    conditionName,
+  );
+
   // Find the curated guideline source (if any) so the chip can surface
   // the strength / certainty pair beside the L-grade level. Curation lives
   // on the sources row; see methodology page section 04 and methods PDF
@@ -652,6 +669,40 @@ function SignalCard({
               }}
             >
               {guidelineMeta.strength} · {guidelineMeta.certainty}
+            </Link>
+          )}
+
+          {/* MATRIX chip. Renders only when the per-pair MATRIX snapshot
+              has a score for this compound-condition pair. Shows the
+              transformed_score with one decimal and the quantile rank as
+              a 'Top N%' percentile (lower quantile_rank is better, so
+              'Top 8%' means MATRIX ranks this pair in its top 8% of all
+              predictions). Visually anchored in the green family to match
+              the rest of the external-references / MATRIX disclosure
+              treatment elsewhere on the site. */}
+          {matrixScore && matrixScore.transformed_score != null && matrixScore.quantile_rank != null && (
+            <Link
+              href={ANCHOR_MATRIX}
+              title={`Every Cure MATRIX biological-plausibility score: transformed_score ${matrixScore.transformed_score.toFixed(3)}, quantile rank ${(matrixScore.quantile_rank * 100).toFixed(1)} percent (lower is better; MATRIX ranks this pair in the top ${Math.max(1, Math.round(matrixScore.quantile_rank * 100))} percent of its predictions). MATRIX scores come from a graph-ML model trained on a biomedical knowledge graph and are surfaced beside Whel's grade rather than blended into it. Click to read the MATRIX coverage disclosure on the external references page.`}
+              aria-label={`MATRIX score ${matrixScore.transformed_score.toFixed(2)}, ${formatMatrixPercentile(matrixScore.quantile_rank)}. Opens the MATRIX coverage disclosure on the external references page.`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "4px 8px",
+                background: "var(--green-soft)",
+                color: "var(--green-deep)",
+                border: "1px solid var(--green-deep)",
+                ...MONO,
+                fontSize: 10,
+                letterSpacing: "0.1em",
+                flexShrink: 0,
+                textDecoration: "none",
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ width: 7, height: 7, background: "var(--green-deep)", display: "inline-block" }} />
+              MATRIX · {matrixScore.transformed_score.toFixed(1)}
             </Link>
           )}
 
