@@ -610,6 +610,52 @@ export default function ExternalReferencesPage() {
             intro="Because Whel surfaces MATRIX scores as an independent layer rather than blending them into its own grades, the honest question is how much of Whel's universe MATRIX actually covers. The numbers below come from an audit script that joins Whel's active compound–condition pairs against the published MATRIX dataset. Raw, adjusted, and per-condition figures are all shown so readers can decide for themselves which denominator is fair. Per-pair scores from the same audit are also surfaced on each condition page beside the L-grade chip, so a reader can see MATRIX's biological-plausibility score for any individual compound–condition pair where MATRIX has coverage, not just the aggregate."
           />
 
+          {/* Plain-English explainer for what MATRIX's two numbers mean.
+              Sits between the SectionHeader and the audit headline tiles
+              so any reader landing here (including via the MATRIX chip
+              click on a signal card) finds the scale described before
+              they encounter the numeric tiles below. */}
+          <div
+            style={{
+              ...CARD,
+              padding: "clamp(20px, 2.5vw, 28px)",
+              borderLeft: "3px solid var(--green-mid)",
+              marginBottom: 32,
+            }}
+          >
+            <div style={{ ...EYEBROW, color: "var(--green-mid)", marginBottom: 12 }}>
+              How to read these numbers
+            </div>
+            <p
+              style={{
+                fontSize: 14.5,
+                lineHeight: 1.7,
+                color: "var(--ink-2)",
+                maxWidth: "72ch",
+                margin: 0,
+              }}
+            >
+              MATRIX returns two values per scored pair, and Whel surfaces
+              both. The <strong style={{ color: "var(--ink)", fontWeight: 500 }}>transformed score</strong>{" "}
+              is MATRIX&apos;s raw biological-plausibility score; in the
+              audit run summarized below it ranges roughly 3.0 to 4.5 across
+              the matched pairs, with higher meaning MATRIX&apos;s model
+              predicts the pair is more likely to be a real treatment match.
+              The <strong style={{ color: "var(--ink)", fontWeight: 500 }}>quantile rank</strong>,
+              shown on each signal card as &ldquo;Top N%&rdquo;, is
+              MATRIX&apos;s own percentile across all of its predictions
+              (roughly 39.5 million drug&ndash;disease pairs): lower is
+              better. A pair shown as &ldquo;Top 8%&rdquo; on a Whel signal
+              card means MATRIX ranks that pair in the top eight percent of
+              every drug&ndash;disease pair its model has scored. Most of
+              Whel&apos;s matched pairs land in MATRIX&apos;s top eight
+              percent or so, which is the kind of agreement we want from an
+              independent disclosure layer. Raw transformed scores are kept
+              in the chip tooltip and in the full audit numbers below for
+              readers who want the underlying value.
+            </p>
+          </div>
+
           {(() => {
             const snap = MATRIX_AUDIT_SNAPSHOT;
             const pct = (v: number | null) =>

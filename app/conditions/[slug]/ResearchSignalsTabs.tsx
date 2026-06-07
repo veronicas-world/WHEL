@@ -683,8 +683,8 @@ function SignalCard({
           {matrixScore && matrixScore.transformed_score != null && matrixScore.quantile_rank != null && (
             <Link
               href={ANCHOR_MATRIX}
-              title={`Every Cure MATRIX biological-plausibility score: transformed_score ${matrixScore.transformed_score.toFixed(3)}, quantile rank ${(matrixScore.quantile_rank * 100).toFixed(1)} percent (lower is better; MATRIX ranks this pair in the top ${Math.max(1, Math.round(matrixScore.quantile_rank * 100))} percent of its predictions). MATRIX scores come from a graph-ML model trained on a biomedical knowledge graph and are surfaced beside Whel's grade rather than blended into it. Click to read the MATRIX coverage disclosure on the external references page.`}
-              aria-label={`MATRIX score ${matrixScore.transformed_score.toFixed(2)}, ${formatMatrixPercentile(matrixScore.quantile_rank)}. Opens the MATRIX coverage disclosure on the external references page.`}
+              title={`Every Cure MATRIX biological-plausibility score: this pair sits in ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of MATRIX's predictions (raw transformed score ${matrixScore.transformed_score.toFixed(3)}; quantile rank ${(matrixScore.quantile_rank * 100).toFixed(1)} percent, where lower is better). MATRIX scores come from a graph-ML model trained on a biomedical knowledge graph and are surfaced beside Whel's grade rather than blended into it. Click to read the MATRIX coverage disclosure on the external references page.`}
+              aria-label={`MATRIX biological-plausibility: ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of MATRIX's predictions. Opens the MATRIX coverage disclosure on the external references page.`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -702,7 +702,7 @@ function SignalCard({
               }}
             >
               <span style={{ width: 7, height: 7, background: "var(--green-deep)", display: "inline-block" }} />
-              MATRIX · {matrixScore.transformed_score.toFixed(1)}
+              MATRIX · {formatMatrixPercentile(matrixScore.quantile_rank)}
             </Link>
           )}
 
