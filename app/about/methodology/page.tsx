@@ -1322,665 +1322,124 @@ export default function MethodologyPage() {
             </div>
           </div>
 
-          {/* Methodology version log, collapsed by default. Each entry is
-              its own block with a small uppercase header so the changelog
-              reads as a scannable list rather than a single wall of monospace
-              prose. The newest entry sits on top; each subsequent entry is
-              separated by a thin dashed rule. The whole log is wrapped in a
-              <details> so dense changelog content stays out of the way for
-              a reader scanning the page, but is one click away when needed. */}
-          <details className="disclose-block" style={{ marginTop: 24 }}>
-            <summary
-              style={{
-                ...MONO,
-                display: "flex",
-                alignItems: "flex-start",
-                justifyContent: "space-between",
-                gap: 16,
-                padding: "16px 18px",
-                border: "1px solid var(--rule)",
-                background: "var(--surface)",
-                color: "var(--ink-2)",
-              }}
-              aria-label="Open the methodology update log"
-            >
-              <span style={{ display: "block", minWidth: 0 }}>
-                <span
-                  className="font-heading"
-                  style={{
-                    display: "block",
-                    fontSize: "14px",
-                    color: "var(--ink)",
-                    letterSpacing: 0,
-                    textTransform: "none",
-                    marginBottom: 6,
-                  }}
-                >
-                  Methodology update log
-                </span>
-                <span
-                  style={{
-                    display: "block",
-                    fontSize: "11px",
-                    letterSpacing: "0.13em",
-                    textTransform: "uppercase",
-                    color: "var(--muted)",
-                    lineHeight: 1.5,
-                  }}
-                >
-                  7 dated entries &middot; current version v3.6 &middot; June 2026
-                </span>
-              </span>
-              <span
-                className="disclose-chev"
-                aria-hidden="true"
-                style={{
-                  ...MONO,
-                  fontSize: "14px",
-                  color: "var(--muted)",
-                  flexShrink: 0,
-                  paddingTop: 2,
-                }}
-              >
-                &darr;
-              </span>
-            </summary>
-
+          {/* Methodology revision history. The full versioned changelog
+              lives on its own page so dense changelog content doesn't
+              crowd the methodology body. The card below pins the most
+              recent revision inline as a recency signal and links out
+              to the full history. */}
           <div
             style={{
-              borderTop: "1px solid var(--rule)",
-              paddingTop: 24,
-              marginTop: 18,
+              marginTop: 24,
+              border: "1px solid var(--rule)",
+              background: "var(--surface)",
+              padding: "18px 20px",
               display: "flex",
               flexDirection: "column",
-              gap: 22,
+              gap: 14,
             }}
           >
-            {/* v3.6 */}
-            <div>
-              <div
+            <div
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                gap: 16,
+                flexWrap: "wrap",
+              }}
+            >
+              <span
+                className="font-heading"
+                style={{
+                  fontSize: "14px",
+                  color: "var(--ink)",
+                  letterSpacing: 0,
+                }}
+              >
+                Latest revision
+              </span>
+              <span
                 style={{
                   ...MONO,
-                  fontSize: 10,
+                  fontSize: "10px",
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
+                  color: "var(--muted)",
                 }}
               >
                 Methodology v3.6 &middot; June 7, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                LLM output validation strategy made explicit. The structured
-                grounding layers in v3.4 (Path A and Path B, recorded in
-                section 01c on{" "}
-                <Link
-                  href="/about/external-references#structured-grounding-in-progress"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /about/external-references
-                </Link>
-                ) constrain what data the LLM works with. A separate failure
-                surface applies to what the LLM produces as output. Three
-                failure modes are documented in the literature and apply to
-                Whel&apos;s specific pipeline: per-source extraction
-                misclassification (an LLM that reads a PubMed abstract and
-                assigns the wrong study type, wrong direction of effect, or
-                hallucinates mechanism details not present in the source);
-                summary drift (an LLM-written summary that extends beyond
-                what the source actually says, the Gong et al. 2026 risk
-                pattern in Bioengineering applied to Whel&apos;s task); and
-                citation fabrication or misattribution in long-form prose
-                Whel publishes (featured signal walkthroughs, the methods
-                PDF, written drafts), where the LLM is asked to generate
-                references rather than classify ones it was given.
-              </p>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                Whel&apos;s response is a three-part output validation
-                pipeline, recorded as Path C on the Roadmap. Phase 1 is a
-                citation validation step that resolves every PMID against
-                NCBI E-utilities and every DOI against the Crossref REST
-                API, returning the canonical title, authors, journal, and
-                year, and comparing those against the LLM-claimed metadata.
-                References that fail to resolve or whose returned metadata
-                mismatch the LLM&apos;s claims are blocked from publication.
-                Phase 2 is sentence-level summary grounding using a
-                sentence-transformer model (Sentence-BERT or equivalent) to
-                compute the cosine similarity between each sentence in an
-                LLM-generated summary and the source abstract. Sentences
-                that fall below a calibrated similarity threshold are
-                flagged as &ldquo;not directly supported by the source&rdquo;
-                and either suppressed or surfaced with that marker on the
-                signal card. Phase 3 is prompt hardening for any
-                LLM-generated long-form prose that ships to users. The
-                hardened prompt forbids citation generation (the LLM may
-                only cite from a pre-verified reference list provided to
-                it), forbids numerical claims unless they appear verbatim
-                in the input context, and requires the LLM to produce,
-                alongside the text, a sentence-by-sentence list of
-                supporting input sources that Phase 1 then checks.
-              </p>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                A fourth strategy in the broader literature, multi-sample
-                consistency checking through re-querying the model, was
-                considered and deferred. The cost (three to five times the
-                Claude API spend) does not favorably trade against the
-                marginal gain on Whel&apos;s constrained extraction task,
-                and Phase 2 grounding addresses the same failure modes more
-                cheaply. The deferred entry is recorded here so a future
-                decision to revisit it has the design history available.
-              </p>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                Path C is distinct from Path A and Path B. A and B ground
-                the LLM&apos;s inputs (canonical ontologies for entity
-                resolution; a domain-restricted knowledge graph for
-                scoring-time context). C validates the LLM&apos;s outputs
-                (citations, summary statements, published prose). They are
-                complementary layers in the same overall pipeline
-                architecture and are designed to ship in parallel rather
-                than sequentially. The Path C disclosure surface lives in
-                section 01d on{" "}
-                <Link
-                  href="/about/external-references#output-validation-in-progress"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /about/external-references
-                </Link>
-                .
-              </p>
+              </span>
             </div>
 
-            {/* v3.5 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
+            <p
+              style={{
+                ...MONO,
+                fontSize: 11,
+                letterSpacing: "0.04em",
+                lineHeight: 1.7,
+                color: "var(--muted)",
+                margin: 0,
+              }}
+            >
+              LLM output validation strategy made explicit. Whel&apos;s
+              response is a three-part output validation pipeline,
+              recorded as Path C on the Roadmap: Phase 1 resolves every
+              PMID against NCBI E-utilities and every DOI against the
+              Crossref REST API and blocks references that fail to
+              resolve or whose metadata mismatch the LLM&apos;s claims;
+              Phase 2 is sentence-level summary grounding using a
+              sentence-transformer model (Sentence-BERT or equivalent);
+              Phase 3 is prompt hardening for long-form prose. Path C
+              is distinct from Path A and Path B: A and B ground the
+              LLM&apos;s inputs, C validates the LLM&apos;s outputs.
+              The Path C disclosure surface lives in section 01d on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
               >
-                Methodology v3.5 &middot; June 7, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                MATRIX cross-reference reaches per-signal display. The Every
-                Cure MATRIX coverage layer (live since v3.1) was previously
-                surfaced only as an aggregate audit on the external-references
-                page (compound match rate, per-condition counts, score
-                distribution). Per-pair MATRIX scores are now surfaced on
-                each signal card on{" "}
-                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-                  /conditions/[slug]
-                </code>{" "}
-                pages as a &ldquo;MATRIX &middot; Top N%&rdquo; chip alongside
-                the L-grade chip and the tier chip, where the percentile is
-                MATRIX&apos;s own quantile rank across its roughly 39.5
-                million drug&ndash;disease predictions. Per-pair scores are
-                sourced from a new public snapshot at{" "}
-                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-                  lib/matrix-pair-scores-snapshot.json
-                </code>
-                , extracted from the same audit report that produces the
-                aggregate snapshot. 176 of 271 active compound&ndash;condition
-                pairs in the current audit run have a MATRIX score and now
-                show the chip; 95 pairs are &ldquo;matrix silent&rdquo;
-                (compound not in MATRIX&apos;s drug list, or score below
-                MATRIX&apos;s publication threshold) and correctly show no
-                chip.
-              </p>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                The external-references coverage disclosure at{" "}
-                <Link
-                  href="/about/external-references#coverage-disclosure"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /about/external-references &rarr; 01b
-                </Link>{" "}
-                was extended with a &ldquo;How to read these numbers&rdquo;
-                explainer card that defines both MATRIX values in Every
-                Cure&apos;s own framing (treatment-probability prediction
-                from a model trained on a biomedical knowledge graph),
-                explains what &ldquo;Top N%&rdquo; does and does not say,
-                quotes Every Cure&apos;s &ldquo;research use only&rdquo;
-                disclaimer verbatim, and explains why Whel surfaces an
-                independent ML layer beside its own literature-driven grades.
-                The chip tooltip uses the same treatment-probability framing
-                for hover-state consistency. No change to Whel&apos;s
-                rubric, sample, or tier definitions; MATRIX remains separated
-                from Whel&apos;s grades rather than blended into them.
-              </p>
-            </div>
+                /about/external-references
+              </Link>
+              .
+            </p>
 
-            {/* v3.4 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
+            <div
+              style={{
+                borderTop: "1px dashed var(--rule)",
+                paddingTop: 12,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                flexWrap: "wrap",
+              }}
+            >
+              <span
                 style={{
                   ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
+                  fontSize: "11px",
+                  letterSpacing: "0.13em",
                   textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
-              >
-                Methodology v3.4 &middot; June 7, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
                   color: "var(--muted)",
-                  margin: 0,
                 }}
               >
-                Structured grounding strategy made explicit. Whel&apos;s
-                evidence extraction and scoring layer is built on Claude Opus
-                4.6, a large language model.{" "}
-                <Link
-                  href="https://arxiv.org/abs/2604.00024"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  WHBench
-                </Link>
-                , an independent 2026 benchmark of frontier LLMs on
-                women&apos;s health clinical questions (Maurya, Saboo &amp;
-                Kumar, 2026, arXiv:2604.00024), found that no model in its
-                22-model lineup exceeded 75% on the 23-criterion rubric, with
-                the top model fully correct in only 35.5% of scenarios. The
-                failure pattern is systematic rather than random: universal
-                blind spots in social determinants of health (0.7%&ndash;19.1%
-                across all 22 models), wide variation in safety harm rates
-                within the top tier, and persistent gaps in completeness on
-                follow-up timelines and monitoring plans. Empirical work on
-                biomedical LLM reference fabrication (Gong et al. 2026,
-                Bioengineering) documents hallucination rates of
-                47%&ndash;55% on citation tasks. The hybrid-architecture
-                literature (Zong et al. 2026{" "}
-                <Link
-                  href="https://arxiv.org/abs/2603.28325"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  EvidenceNet
-                </Link>
-                , arXiv:2603.28325; Li et al. 2025 on knowledge-guided
-                prompting, IEEE J. Biomed. Health Inform.; Zunzunegui Sanz et
-                al. 2025, bioRxiv) consistently shows that adding structured
-                external knowledge on top of LLM extraction improves accuracy
-                and interpretability.
-              </p>
-              <p
+                7 dated revisions &middot; v2 through v3.6
+              </span>
+              <Link
+                href="/about/methodology/changelog"
                 style={{
                   ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                Whel&apos;s response, recorded as two roadmap items, is to add
-                two structured grounding layers on top of the existing LLM
-                pipeline without replacing it. These are architectural
-                additions to the pipeline rather than post-hoc validation:
-                they change what data lands in the database and how the LLM
-                arrives at its scoring. Path A is ontology-grounded entity
-                resolution: every compound and condition the LLM extracts is
-                resolved against canonical biomedical registries (ChEMBL or
-                DrugBank for compounds, MONDO for conditions), rewritten with
-                the registry&apos;s standard identifier, and enriched with
-                the structured metadata that resolution returns (drug class,
-                ATC code, known targets; ontology lineage) before being
-                written to the database. Entities that fail to resolve are
-                flagged for human review rather than silently stored. This
-                addresses the structured-output hallucination class of error
-                directly and also moves the data Whel stores from free-text
-                strings to canonical identifiers with structured metadata.
-                Path B is knowledge-graph grounding, built using the{" "}
-                <Link
-                  href="https://biocypher.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  BioCypher
-                </Link>{" "}
-                framework (Lobentanzer et al., Nature Biotechnology 2023),
-                restricted to Whel&apos;s six conditions and active-signal
-                compounds. The knowledge graph informs the LLM at prompt
-                time, following the knowledge-guided prompting pattern of Li
-                et al. 2025 (IEEE J. Biomed. Health Inform.): mechanistic
-                paths drawn from the subgraph relevant to a given signal are
-                included as structured context during scoring, reducing the
-                model&apos;s reliance on parametric memory alone. The graph
-                also surfaces beside each signal as a disclosure layer
-                (&ldquo;graph supports&rdquo; or &ldquo;graph silent&rdquo;)
-                in the same shape as the existing MATRIX cross-reference at{" "}
-                <Link
-                  href="/about/external-references"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /about/external-references
-                </Link>
-                .
-              </p>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: "14px 0 0 0",
-                }}
-              >
-                Whel will not train a custom graph neural network for
-                drug-condition link prediction. The platform consumes machine
-                learning (Claude Opus 4.6 for extraction and scoring, MATRIX
-                scores from Every Cure&apos;s KGML-xDTD as an external
-                disclosure layer; see Fajgenbaum et al. 2024, The Lancet
-                Haematology) but does not develop its own ML models. The
-                knowledge-graph plus graph-neural-network prediction direction
-                (TxGNN; Huang et al. 2024, Nature Medicine) is acknowledged as
-                state-of-the-art for global drug repurposing prediction but is
-                out of scope for an evidence index focused on women&apos;s
-                hormonal health, where the value proposition is provenance and
-                interpretability rather than throughput.
-              </p>
-            </div>
-
-            {/* v3.3 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
+                  fontSize: "11px",
+                  letterSpacing: "0.13em",
                   textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
+                  color: "var(--green-mid)",
+                  textDecoration: "underline",
+                  textUnderlineOffset: "2px",
                 }}
               >
-                Methodology v3.3 &middot; June 7, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                Source-coverage philosophy made explicit. The four automated
-                pipelines (PubMed, ClinicalTrials.gov, FDA AEMS, Open Targets,
-                Reddit) ingest representative sources per
-                compound&ndash;condition pair through condition-keyed Boolean
-                searches with publication-date and article-type filters,
-                rather than exhaustive enumeration of every paper in the
-                literature. For under-researched conditions this is a
-                reasonable approximation of the available evidence base. For
-                well-studied compound-condition pairs it surfaces synthesis
-                papers (reviews, position statements, society guidelines) and
-                may leave the original RCTs cited inside them outside the
-                indexed sources. The L0&ndash;L3 grade carries the
-                independent-corroboration question as a separate layer. A
-                planned manual-curation extension, documented in the Roadmap
-                register as &ldquo;Manual primary-source curation pass,&rdquo;
-                will close the gap on high-evidence signals through the same
-                human-in-the-loop worklist pattern that produced the L3
-                grades. The featured-signal walkthrough on{" "}
-                <Link
-                  href="/featured"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /featured
-                </Link>{" "}
-                already documents this gap in prose for the one signal it
-                covers, in Section 04 &ldquo;Literature Whel did not
-                ingest.&rdquo;
-              </p>
-            </div>
-
-            {/* v3.2 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
-              >
-                Methodology v3.2 &middot; June 1, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                The external-evidence rubric (L0 / L1 / L2 / L3) is now
-                codified in a schema-versioned sidecar at{" "}
-                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-                  lib/literature-grade-rubric.json
-                </code>{" "}
-                and surfaced on this page as a collapsible block in
-                Section 04. v3.2 records the search procedure per source
-                (PubMed, ClinicalTrials.gov, Cochrane, named guideline
-                bodies), inclusion criteria and boundary rules at every
-                level transition, source-attribution requirements per L
-                assignment, and the conflict-resolution rule used when two
-                reviewers disagree. No change to the sample, the
-                comparators, or the pre-specified thresholds; the
-                tightening makes the L assignment behind any signal
-                reproducible against the printed rules, which the v3.1
-                page implied but did not pin down.
-              </p>
-            </div>
-
-            {/* v3.1 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
-              >
-                Methodology v3.1 &middot; June 1, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                Every Cure&apos;s MATRIX dataset is now surfaced as an
-                independent biological-plausibility layer beside
-                Whel&apos;s grades wherever MATRIX has coverage; it is not
-                blended into the grades. A reproducible audit of MATRIX
-                coverage over Whel&apos;s active compound&ndash;condition
-                universe was run and published on this site (85.7%
-                adjusted compound match rate, six of six conditions
-                confirmed, full per-condition breakdown and dataset SHAs
-                at{" "}
-                <Link
-                  href="/about/external-references#coverage-disclosure"
-                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-                >
-                  /about/external-references &rarr; 01b &middot; Coverage disclosure
-                </Link>
-                ). No change to Whel&apos;s rubric, sample, or tier
-                definitions.
-              </p>
-            </div>
-
-            {/* v3 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
-              >
-                Methodology v3 &middot; May 29, 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                v3 records the close of an independent external review
-                covering two findings. C1 (replication-score drift in the
-                LLM rater): the rater prompts in all four pipelines were
-                tightened to enforce literal source counting per the
-                published rubric; 14 signals were downgraded to the tier
-                the literature actually supports; 19 manually-verified
-                PubMed citations were added so each remaining
-                Moderate-tier signal carries the source count the strict
-                rubric requires. S3 (ClinicalTrials.gov citation/condition
-                mismatches across 21 audit rows): 10 signals were
-                deactivated, 5 were reassigned from clinical-trial-finding
-                to cross-condition framing, 1 source was dropped where the
-                signal retained independent support, 2 sources were
-                replaced with proper condition-specific citations (ESHRE
-                2022 endometriosis guideline; 2025 network meta-analysis
-                of hormone therapies for adenomyosis pain), and 1 row was
-                documented as a ClinicalTrials.gov API field limitation.
-                Recorded in database migrations 036 through 040. Planned
-                extensions, including external cross-reference to Every
-                Cure MATRIX scores and a cross-arm concordance flag, are
-                documented on the Roadmap page.
-              </p>
-            </div>
-
-            {/* v2 */}
-            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: 10,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 8,
-                }}
-              >
-                Methodology v2 &middot; May 2026
-              </div>
-              <p
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.04em",
-                  lineHeight: 1.7,
-                  color: "var(--muted)",
-                  margin: 0,
-                }}
-              >
-                Named an external clinician-researcher as the primary
-                rater in place of the project lead. The sample, the
-                rubric, the external comparators, and the pre-specified
-                thresholds are unchanged from v1. Sample numbers reflect
-                the Whel database snapshot at time of publication. Updates
-                to this page will be versioned and dated.
-              </p>
+                See full revision history &rarr;
+              </Link>
             </div>
           </div>
-          </details>
+
 
         </div>
       </div>

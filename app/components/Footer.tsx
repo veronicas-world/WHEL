@@ -9,6 +9,7 @@ const EXPLORE_LINKS = [
   { label: "Signal Types", href: "/signal-types" },
   { label: "Technical Architecture", href: "/about/technical-architecture" },
   { label: "Validation", href: "/about/methodology" },
+  { label: "Changelog", href: "/about/methodology/changelog" },
 ];
 
 const ABOUT_LINKS = [
