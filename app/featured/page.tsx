@@ -144,7 +144,7 @@ export default function FeaturedSignalPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Featured signal &middot; 01
+            Featured signal
           </div>
 
           <h1

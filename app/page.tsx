@@ -368,7 +368,7 @@ export default async function Home() {
 
             {/* Left: eyebrow + meta */}
             <div>
-              <div style={{ ...EYEBROW, marginBottom: 14 }}>Featured signal · 01</div>
+              <div style={{ ...EYEBROW, marginBottom: 14 }}>Featured signal</div>
               <div
                 style={{
                   ...MONO,
