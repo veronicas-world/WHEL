@@ -631,6 +631,39 @@ export default function MethodologyPage() {
             <h2 className="font-heading" style={H2}>What counts as a hit</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
+                This page is the home for one of Whel&apos;s corroboration
+                layers. Whel maintains and references four layers in total.
+                Two are shipped today, two are recorded as planned in
+                methodology v3.4. The L0&ndash;L3 grade documented in the
+                rest of this section is the first shipped layer; it asks
+                whether a Whel signal is independently supported by a
+                published clinical guideline. The second shipped layer is the
+                Every Cure MATRIX cross-reference, an independent
+                biological-plausibility score from a graph-machine-learning
+                model trained on an open biomedical knowledge graph, surfaced
+                beside Whel&apos;s grades wherever MATRIX has coverage. MATRIX
+                is not blended into Whel&apos;s grades; it sits beside them
+                as an independent layer. Full audit numbers, per-condition
+                coverage, dataset SHAs, and the score distribution for MATRIX
+                are published at{" "}
+                <Link
+                  href="/about/external-references#coverage-disclosure"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references &rarr; 01b &middot; Coverage disclosure
+                </Link>
+                . The two planned corroboration layers are ontology-grounded
+                entity resolution (Path A) and knowledge-graph grounding via
+                the BioCypher framework (Path B), both detailed at{" "}
+                <Link
+                  href="/about/external-references#structured-grounding-in-progress"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references &rarr; 01c &middot; Structured grounding in progress
+                </Link>
+                . The rest of this section covers L0&ndash;L3.
+              </p>
+              <p style={BODY}>
                 Each signal is assigned a single level on the scale below,
                 taking the highest applicable level. The level reflects what
                 exists in the external record, not whether the external
@@ -1285,17 +1318,75 @@ export default function MethodologyPage() {
             </div>
           </div>
 
-          {/* Methodology version log. Each entry is its own block with a
-              small uppercase header so the changelog reads as a scannable
-              list rather than a single wall of monospace prose. The newest
-              entry sits on top; the original outer border-top is preserved
-              on the wrapper, and each subsequent entry is separated by a
-              thin dashed rule. */}
+          {/* Methodology version log, collapsed by default. Each entry is
+              its own block with a small uppercase header so the changelog
+              reads as a scannable list rather than a single wall of monospace
+              prose. The newest entry sits on top; each subsequent entry is
+              separated by a thin dashed rule. The whole log is wrapped in a
+              <details> so dense changelog content stays out of the way for
+              a reader scanning the page, but is one click away when needed. */}
+          <details className="disclose-block" style={{ marginTop: 24 }}>
+            <summary
+              style={{
+                ...MONO,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "16px 18px",
+                border: "1px solid var(--rule)",
+                background: "var(--surface)",
+                color: "var(--ink-2)",
+              }}
+              aria-label="Open the methodology update log"
+            >
+              <span style={{ display: "block", minWidth: 0 }}>
+                <span
+                  className="font-heading"
+                  style={{
+                    display: "block",
+                    fontSize: "14px",
+                    color: "var(--ink)",
+                    letterSpacing: 0,
+                    textTransform: "none",
+                    marginBottom: 6,
+                  }}
+                >
+                  Methodology update log
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  5 dated entries &middot; current version v3.4 &middot; June 2026
+                </span>
+              </span>
+              <span
+                className="disclose-chev"
+                aria-hidden="true"
+                style={{
+                  ...MONO,
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  flexShrink: 0,
+                  paddingTop: 2,
+                }}
+              >
+                &darr;
+              </span>
+            </summary>
+
           <div
             style={{
               borderTop: "1px solid var(--rule)",
               paddingTop: 24,
-              marginTop: 8,
+              marginTop: 18,
               display: "flex",
               flexDirection: "column",
               gap: 22,
@@ -1673,6 +1764,7 @@ export default function MethodologyPage() {
               </p>
             </div>
           </div>
+          </details>
 
         </div>
       </div>
