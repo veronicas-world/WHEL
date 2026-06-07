@@ -1,0 +1,628 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-06-07T19:13:04+00:00",
+  "summary": {
+    "total": 14,
+    "resolved_match": 14,
+    "resolved_mismatch": 0,
+    "unresolved": 0
+  },
+  "results": [
+    {
+      "key": "bhattacharyya_2023_cureus",
+      "identifier_type": "doi",
+      "identifier_value": "10.7759/cureus.39238",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "High Rates of Fabricated and Inaccurate References in ChatGPT-Generated Medical Content",
+        "first_author_surname": "Bhattacharyya",
+        "container_title": "Cureus",
+        "year": 2023,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "High Rates of Fabricated and Inaccurate References in ChatGPT-Generated Medical Content",
+          "canonical": "High Rates of Fabricated and Inaccurate References in ChatGPT-Generated Medical Content",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Bhattacharyya",
+          "canonical": "Bhattacharyya",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Cureus",
+          "canonical": "Cureus",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2023,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "gravel_2023_mcpdig",
+      "identifier_type": "doi",
+      "identifier_value": "10.1016/j.mcpdig.2023.05.004",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Learning to Fake It: Limited Responses and Fabricated References Provided by ChatGPT for Medical Questions",
+        "first_author_surname": "Gravel",
+        "container_title": "Mayo Clinic Proceedings: Digital Health",
+        "year": 2023,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Learning to Fake It: Limited Responses and Fabricated References Provided by ChatGPT for Medical Questions",
+          "canonical": "Learning to Fake It: Limited Responses and Fabricated References Provided by ChatGPT for Medical Questions",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Gravel",
+          "canonical": "Gravel",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Mayo Clinic Proceedings: Digital Health",
+          "canonical": "Mayo Clinic Proceedings: Digital Health",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2023,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "ma_2023_gigascience_kgml_xdtd",
+      "identifier_type": "doi",
+      "identifier_value": "10.1093/gigascience/giad057",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "KGML-xDTD: a knowledge graph\u2013based machine learning framework for drug treatment prediction and mechanism description",
+        "first_author_surname": "Ma",
+        "container_title": "GigaScience",
+        "year": 2022,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "KGML-xDTD: a knowledge graph\u2013based machine learning framework for drug treatment prediction and mechanism description",
+          "canonical": "KGML-xDTD: a knowledge graph\u2013based machine learning framework for drug treatment prediction and mechanism description",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Ma",
+          "canonical": "Ma",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "GigaScience",
+          "canonical": "GigaScience",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2022,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "zong_2026_arxiv_evidencenet",
+      "identifier_type": "arxiv_id",
+      "identifier_value": "2603.28325",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Building evidence-based knowledge bases from full-text literature for disease-specific biomedical reasoning",
+        "first_author_surname": "Zong",
+        "container_title": "arXiv",
+        "year": 2026,
+        "source": "arXiv API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Building evidence-based knowledge bases from full-text literature for disease-specific biomedical reasoning",
+          "canonical": "Building evidence-based knowledge bases from full-text literature for disease-specific biomedical reasoning",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Zong",
+          "canonical": "Zong",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "arXiv",
+          "canonical": "arXiv",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2026,
+          "canonical": 2026,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "zunzunegui_sanz_2025_biorxiv",
+      "identifier_type": "doi",
+      "identifier_value": "10.1101/2025.06.13.659527",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Accelerating Drug Repurposing with AI: The Role of Large Language Models in Hypothesis Validation",
+        "first_author_surname": "Zunzunegui Sanz",
+        "container_title": "bioRxiv",
+        "year": 2025,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Accelerating Drug Repurposing with AI: The Role of Large Language Models in Hypothesis Validation",
+          "canonical": "Accelerating Drug Repurposing with AI: The Role of Large Language Models in Hypothesis Validation",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Zunzunegui Sanz",
+          "canonical": "Zunzunegui Sanz",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "bioRxiv",
+          "canonical": "bioRxiv",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2025,
+          "canonical": 2025,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "maurya_2026_arxiv_whbench",
+      "identifier_type": "arxiv_id",
+      "identifier_value": "2604.00024",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics",
+        "first_author_surname": "Maurya",
+        "container_title": "arXiv",
+        "year": 2026,
+        "source": "arXiv API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics",
+          "canonical": "WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Maurya",
+          "canonical": "Maurya",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "arXiv",
+          "canonical": "arXiv",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2026,
+          "canonical": 2026,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "lobentanzer_2023_natbiotech_biocypher",
+      "identifier_type": "doi",
+      "identifier_value": "10.1038/s41587-023-01848-y",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Democratizing knowledge representation with BioCypher",
+        "first_author_surname": "Lobentanzer",
+        "container_title": "Nature Biotechnology",
+        "year": 2023,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Democratizing knowledge representation with BioCypher",
+          "canonical": "Democratizing knowledge representation with BioCypher",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Lobentanzer",
+          "canonical": "Lobentanzer",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Nature Biotechnology",
+          "canonical": "Nature Biotechnology",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2023,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "huang_2024_natmed_txgnn",
+      "identifier_type": "doi",
+      "identifier_value": "10.1038/s41591-024-03233-x",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "A foundation model for clinician-centered drug repurposing",
+        "first_author_surname": "Huang",
+        "container_title": "Nature Medicine",
+        "year": 2024,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "A foundation model for clinician-centered drug repurposing",
+          "canonical": "A foundation model for clinician-centered drug repurposing",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Huang",
+          "canonical": "Huang",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Nature Medicine",
+          "canonical": "Nature Medicine",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2024,
+          "canonical": 2024,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "pushpakom_2019_nrdd",
+      "identifier_type": "doi",
+      "identifier_value": "10.1038/nrd.2018.168",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Drug repurposing: progress, challenges and recommendations",
+        "first_author_surname": "Pushpakom",
+        "container_title": "Nature Reviews Drug Discovery",
+        "year": 2018,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Drug repurposing: progress, challenges and recommendations",
+          "canonical": "Drug repurposing: progress, challenges and recommendations",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Pushpakom",
+          "canonical": "Pushpakom",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Nature Reviews Drug Discovery",
+          "canonical": "Nature Reviews Drug Discovery",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2019,
+          "canonical": 2018,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "bate_2009_pharmacoepidem",
+      "identifier_type": "doi",
+      "identifier_value": "10.1002/pds.1742",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Quantitative signal detection using spontaneous ADR reporting",
+        "first_author_surname": "Bate",
+        "container_title": "Pharmacoepidemiology and Drug Safety",
+        "year": 2009,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Quantitative signal detection using spontaneous ADR reporting",
+          "canonical": "Quantitative signal detection using spontaneous ADR reporting",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Bate",
+          "canonical": "Bate",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Pharmacoepidemiology and Drug Safety",
+          "canonical": "Pharmacoepidemiology and Drug Safety",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2009,
+          "canonical": 2009,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "hurle_2013_cpt",
+      "identifier_type": "doi",
+      "identifier_value": "10.1038/clpt.2013.1",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Computational Drug Repositioning: From Data to Therapeutics",
+        "first_author_surname": "Hurle",
+        "container_title": "Clinical Pharmacology &amp; Therapeutics",
+        "year": 2013,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Computational drug repositioning: from data to therapeutics",
+          "canonical": "Computational Drug Repositioning: From Data to Therapeutics",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Hurle",
+          "canonical": "Hurle",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Clinical Pharmacology & Therapeutics",
+          "canonical": "Clinical Pharmacology &amp; Therapeutics",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2013,
+          "canonical": 2013,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "nnoaham_2011_fertilsteril",
+      "identifier_type": "doi",
+      "identifier_value": "10.1016/j.fertnstert.2011.05.090",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Impact of endometriosis on quality of life and work productivity: a multicenter study across ten countries",
+        "first_author_surname": "Nnoaham",
+        "container_title": "Fertility and Sterility",
+        "year": 2011,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Impact of endometriosis on quality of life and work productivity: a multicenter study across ten countries",
+          "canonical": "Impact of endometriosis on quality of life and work productivity: a multicenter study across ten countries",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Nnoaham",
+          "canonical": "Nnoaham",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Fertility and Sterility",
+          "canonical": "Fertility and Sterility",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2011,
+          "canonical": 2011,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "ochoa_2023_nar_opentargets",
+      "identifier_type": "doi",
+      "identifier_value": "10.1093/nar/gkac1046",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "The next-generation Open Targets Platform: reimagined, redesigned, rebuilt",
+        "first_author_surname": "Ochoa",
+        "container_title": "Nucleic Acids Research",
+        "year": 2022,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "The next-generation Open Targets Platform: reimagined, redesigned, rebuilt",
+          "canonical": "The next-generation Open Targets Platform: reimagined, redesigned, rebuilt",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Ochoa",
+          "canonical": "Ochoa",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Nucleic Acids Research",
+          "canonical": "Nucleic Acids Research",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2022,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "mazure_2015_bmcwomenshealth",
+      "identifier_type": "doi",
+      "identifier_value": "10.1186/s12905-015-0251-9",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Twenty years and still counting: including women as participants and studying sex and gender in biomedical research",
+        "first_author_surname": "Mazure",
+        "container_title": "BMC Women's Health",
+        "year": 2015,
+        "source": "Crossref REST API"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Twenty years and still counting: including women as participants and studying sex and gender in biomedical research",
+          "canonical": "Twenty years and still counting: including women as participants and studying sex and gender in biomedical research",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Mazure",
+          "canonical": "Mazure",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "BMC Women's Health",
+          "canonical": "BMC Women's Health",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2015,
+          "canonical": 2015,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    }
+  ]
+}

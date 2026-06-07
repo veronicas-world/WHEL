@@ -10,6 +10,10 @@ import {
   MATRIX_AUDIT_SNAPSHOT,
   isPopulated as matrixSnapshotPopulated,
 } from "@/lib/matrix-audit-snapshot";
+import {
+  CITATION_AUDIT_SNAPSHOT,
+  citationAuditFormattedDate,
+} from "@/lib/citation-audit-snapshot";
 
 export const metadata = {
   title: "External references | Whel",
@@ -2199,7 +2203,127 @@ export default function ExternalReferencesPage() {
                     marginBottom: 8,
                   }}
                 >
-                  What the disclosure will display when shipped
+                  Phase 1 audit · live as of {citationAuditFormattedDate()}
+                </div>
+                <p
+                  style={{
+                    fontSize: 14,
+                    lineHeight: 1.65,
+                    color: "var(--ink-2)",
+                    maxWidth: "72ch",
+                    margin: "0 0 12px 0",
+                  }}
+                >
+                  Path C Phase 1 ships as <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-citations.py</code>{" "}
+                  and reads the pre-verified reference list at{" "}
+                  <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/whel-citations.json</code>. The
+                  script resolves every PMID against NCBI E-utilities,
+                  every DOI against the Crossref REST API, and every
+                  arXiv ID against the arXiv API, then compares returned
+                  canonical metadata (title, first-author surname, container
+                  title, year) against the claims in the manifest using
+                  fuzzy match with calibrated thresholds. Output is
+                  written to{" "}
+                  <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/citation-audit-report.json</code>{" "}
+                  and mirrored to{" "}
+                  <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/citation-audit-snapshot.json</code>, which this
+                  page reads from. <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>--strict</code> mode exits non-zero
+                  on any unresolved or mismatched entry and is wired for
+                  pre-publish use.
+                </p>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                    gap: 16,
+                    margin: "0 0 16px 0",
+                    padding: "16px 18px",
+                    border: "1px solid var(--rule)",
+                    background: "var(--surface)",
+                  }}
+                >
+                  {[
+                    {
+                      label: "Total citations",
+                      value: CITATION_AUDIT_SNAPSHOT.summary.total.toString(),
+                    },
+                    {
+                      label: "Resolved + match",
+                      value: CITATION_AUDIT_SNAPSHOT.summary.resolved_match.toString(),
+                    },
+                    {
+                      label: "Resolved + mismatch",
+                      value: CITATION_AUDIT_SNAPSHOT.summary.resolved_mismatch.toString(),
+                    },
+                    {
+                      label: "Unresolved",
+                      value: CITATION_AUDIT_SNAPSHOT.summary.unresolved.toString(),
+                    },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <div
+                        style={{
+                          ...MONO,
+                          fontSize: 10,
+                          letterSpacing: "0.2em",
+                          textTransform: "uppercase",
+                          color: "var(--muted)",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {label}
+                      </div>
+                      <div
+                        className="font-heading"
+                        style={{
+                          fontSize: "1.4rem",
+                          fontWeight: 500,
+                          color: "var(--ink)",
+                          lineHeight: 1.1,
+                        }}
+                      >
+                        {value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p
+                  style={{
+                    ...MONO,
+                    fontSize: 11,
+                    letterSpacing: "0.06em",
+                    lineHeight: 1.6,
+                    color: "var(--muted)",
+                    margin: "0 0 18px 0",
+                  }}
+                >
+                  First run on June 7, 2026 flagged five real issues: one wrong
+                  title attached to a real DOI (Bate &amp; Evans 2009 — the DOI
+                  resolved but the manifest title was wrong); three epub vs
+                  journal-issue year mismatches (Ma 2023 KGML-xDTD, Pushpakom
+                  2019 Drug repurposing, Ochoa 2023 Open Targets); and one
+                  Crossref-side metadata gap on the Zunzunegui Sanz bioRxiv DOI.
+                  All five were corrected in the manifest and the methods PDF
+                  reference list; the script picked up the wrong title even
+                  though the DOI itself was valid, which is the failure mode
+                  Phase 1 was built to catch. Audit report at{" "}
+                  <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/citation-audit-report.json</code>.
+                </p>
+
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What Phase 2 and Phase 3 will add later
                 </div>
                 <ul
                   style={{
@@ -2211,20 +2335,16 @@ export default function ExternalReferencesPage() {
                 >
                   {[
                     {
-                      head: "Citation resolution rate.",
-                      tail: "Percentage of stored PMIDs and DOIs that resolve cleanly against NCBI E-utilities and Crossref with title and author metadata matching the LLM-claimed metadata, by pipeline and by condition.",
-                    },
-                    {
-                      head: "Count of references blocked from publication.",
-                      tail: "References the LLM proposed that failed validation, with the failure reason (PMID does not exist; DOI returns 404; title mismatch; author mismatch).",
-                    },
-                    {
                       head: "Sentence-level grounding score distribution.",
-                      tail: "Cosine-similarity score per summary sentence, broken down by signal arm, so a reader can see how tightly summaries track the source abstracts they cite.",
+                      tail: "Cosine-similarity score per summary sentence, broken down by signal arm, so a reader can see how tightly summaries track the source abstracts they cite. Phase 2.",
                     },
                     {
                       head: "Sample of flagged sentences.",
-                      tail: "Concrete examples of sentences flagged as 'not directly supported by the source', with the source abstract sitting beside them, so the failure mode is visible rather than abstract.",
+                      tail: "Concrete examples of sentences flagged as 'not directly supported by the source', with the source abstract sitting beside them, so the failure mode is visible rather than abstract. Phase 2.",
+                    },
+                    {
+                      head: "Count of references blocked at publish time.",
+                      tail: "Once Phase 3 prompt hardening lands, this disclosure surfaces how many references the LLM proposed that failed the Phase 1 manifest check and were therefore stripped before publish, instead of the audit reporting on the pre-verified manifest only.",
                     },
                   ].map((item) => (
                     <li

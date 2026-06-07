@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.7
+            Revision history · current version v3.8
           </div>
 
           <h1
@@ -137,8 +137,114 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.7 */}
+          {/* v3.8 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.8 &middot; June 7, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Path C Phase 1 (citation validation) goes live as code.
+              The manual audit that produced the v3.7 entry was the
+              prototype; v3.8 ships the engineered version. The
+              implementation has three artifacts. A structured
+              pre-verified reference list at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                lib/whel-citations.json
+              </code>{" "}
+              records every external citation that appears on a public
+              surface, with its identifiers and the metadata claimed by
+              the citing surface. A verifier script at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/verify-citations.py
+              </code>{" "}
+              resolves every PMID against the NCBI E-utilities esummary
+              endpoint, every DOI against the Crossref REST API
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                {" "}works/&#123;doi&#125;
+              </code>{" "}
+              endpoint, and every arXiv ID against the arXiv API, then
+              compares returned canonical metadata (title,
+              first-author surname, container title, year) against the
+              claims in the manifest using fuzzy match with calibrated
+              thresholds. Output is written to two sinks: the
+              human-readable run log at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/audit-output/citation-audit-report.json
+              </code>{" "}
+              and a site-imported sidecar at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                lib/citation-audit-snapshot.json
+              </code>{" "}
+              that the external-references disclosure reads from. A
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                {" "}--strict
+              </code>{" "}
+              flag exits non-zero on any unresolved or mismatched
+              entry and is wired for pre-publish use in CI.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The first official run on June 7, 2026 found that the
+              audit script catches exactly the failure modes it was
+              built to catch. Five real issues surfaced in the initial
+              manifest, all of which had previously slipped past the
+              manual review process that produced the v3.7 cleanup.
+              One was a wrong title attached to a real DOI: the Bate
+              &amp; Evans 2009 reference in the methods PDF cited
+              &ldquo;Quantitative methods for pharmacovigilance signal
+              detection&rdquo; but the canonical title for DOI{" "}
+              <Link
+                href="https://doi.org/10.1002/pds.1742"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={ENTRY_LINK}
+              >
+                10.1002/pds.1742
+              </Link>{" "}
+              is &ldquo;Quantitative signal detection using spontaneous
+              ADR reporting.&rdquo; The DOI resolved, the authors
+              matched, the year matched, but the title was wrong. This
+              is the exact failure mode (real identifier, mangled
+              metadata) that Phase 1 was built to catch and that pure
+              identifier resolution misses. Three further issues were
+              epub-versus-journal-issue year mismatches on Ma 2023
+              KGML-xDTD, Pushpakom 2019 Drug repurposing, and Ochoa 2023
+              Open Targets, all of which are real and widely accepted
+              citations but whose Crossref records show the epub year
+              while site copy and the methods PDF use the journal-issue
+              year. The verifier was relaxed to accept a 1-year
+              tolerance for this real-world citation noise, with a
+              comment in the script explaining why. The fifth issue
+              was a Crossref-side metadata gap on the Zunzunegui Sanz
+              bioRxiv DOI; the verifier was patched to fall back to
+              the canonical container name when the DOI prefix
+              identifies the work as a bioRxiv preprint.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              After the manifest and verifier patches landed, the
+              re-run cleared all 14 entries (resolved + match for
+              every citation). The live audit numbers are now
+              surfaced on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references &rarr; 01d
+              </Link>{" "}
+              replacing the &ldquo;what the disclosure will display
+              when shipped&rdquo; placeholder, alongside the failure
+              modes the first run caught. Phase 2 (sentence-level
+              summary grounding via Sentence-BERT) and Phase 3 (prompt
+              hardening so the LLM can only cite from the pre-verified
+              manifest) remain Planned; the disclosure surface now
+              explicitly distinguishes Phase 1 results from what
+              Phases 2 and 3 will add. The strict-mode CI gate is in
+              place but not yet wired to the deploy pipeline; that
+              wiring is a separate small step recorded on the Roadmap.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.7 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.7 &middot; June 7, 2026
             </div>

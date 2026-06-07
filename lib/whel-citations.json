@@ -1,0 +1,267 @@
+{
+  "schema_version": "1.0",
+  "schema_description": "Pre-verified reference list for Whel. Every external citation that appears on a public surface (methodology, external-references, roadmap, changelog, featured signal pages, methods PDF) must appear here with its identifiers and claimed metadata. The scripts/verify-citations.py tool resolves each entry against the canonical external source (NCBI E-utilities for PMIDs, Crossref REST API for DOIs, arXiv for arXiv IDs) and compares returned metadata to the claimed_metadata block below. This file is the Path C Phase 1 manifest; Path C Phase 3 (prompt hardening) will eventually constrain LLM citation generation to entries in this file. See app/about/methodology/changelog v3.7 and roadmap row 'Citation validation and summary grounding (Path C)' for context.",
+  "last_audit": "2026-06-07",
+  "citations": [
+    {
+      "key": "bhattacharyya_2023_cureus",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.7759/cureus.39238",
+        "pmid": "37337480"
+      },
+      "claimed_metadata": {
+        "title": "High Rates of Fabricated and Inaccurate References in ChatGPT-Generated Medical Content",
+        "first_author_surname": "Bhattacharyya",
+        "container_title": "Cureus",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4, v3.6, v3.7)",
+        "/about/external-references (01c intro, 01d phase 2, 01d literature anchor)",
+        "/about/roadmap (Path A, Path C)",
+        "docs/methods-draft.md (§6, references)",
+        "docs/methods-print.html (§6, references)"
+      ]
+    },
+    {
+      "key": "gravel_2023_mcpdig",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1016/j.mcpdig.2023.05.004"
+      },
+      "claimed_metadata": {
+        "title": "Learning to Fake It: Limited Responses and Fabricated References Provided by ChatGPT for Medical Questions",
+        "first_author_surname": "Gravel",
+        "container_title": "Mayo Clinic Proceedings: Digital Health",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4, v3.7)",
+        "/about/external-references (01d literature anchor)",
+        "/about/roadmap (Path A, Path C)",
+        "docs/methods-draft.md (§6, references)",
+        "docs/methods-print.html (§6, references)"
+      ]
+    },
+    {
+      "key": "ma_2023_gigascience_kgml_xdtd",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1093/gigascience/giad057"
+      },
+      "claimed_metadata": {
+        "title": "KGML-xDTD: a knowledge graph–based machine learning framework for drug treatment prediction and mechanism description",
+        "first_author_surname": "Ma",
+        "container_title": "GigaScience",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/about/methodology (section 04)",
+        "/about/methodology/changelog (v3.4, v3.7)",
+        "/about/external-references (01c body)",
+        "/about/roadmap (MATRIX cross-reference row)",
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "zong_2026_arxiv_evidencenet",
+      "type": "preprint",
+      "identifiers": {
+        "arxiv_id": "2603.28325"
+      },
+      "claimed_metadata": {
+        "title": "Building evidence-based knowledge bases from full-text literature for disease-specific biomedical reasoning",
+        "first_author_surname": "Zong",
+        "container_title": "arXiv",
+        "year": 2026
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4, v3.7)",
+        "/about/external-references (01c body)",
+        "docs/methods-draft.md (§3.1, references)",
+        "docs/methods-print.html (§3.1, references)"
+      ]
+    },
+    {
+      "key": "zunzunegui_sanz_2025_biorxiv",
+      "type": "preprint",
+      "identifiers": {
+        "doi": "10.1101/2025.06.13.659527"
+      },
+      "claimed_metadata": {
+        "title": "Accelerating Drug Repurposing with AI: The Role of Large Language Models in Hypothesis Validation",
+        "first_author_surname": "Zunzunegui Sanz",
+        "container_title": "bioRxiv",
+        "year": 2025
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4, v3.7)",
+        "docs/methods-draft.md (§3.1, references)",
+        "docs/methods-print.html (§3.1, references)"
+      ]
+    },
+    {
+      "key": "maurya_2026_arxiv_whbench",
+      "type": "preprint",
+      "identifiers": {
+        "arxiv_id": "2604.00024"
+      },
+      "claimed_metadata": {
+        "title": "WHBench: Evaluating Frontier LLMs with Expert-in-the-Loop Validation on Women's Health Topics",
+        "first_author_surname": "Maurya",
+        "container_title": "arXiv",
+        "year": 2026
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4)",
+        "/about/external-references (01c, 01d literature anchors)",
+        "docs/methods-draft.md (§3.1, §6, references)",
+        "docs/methods-print.html (§3.1, §6, references)"
+      ]
+    },
+    {
+      "key": "lobentanzer_2023_natbiotech_biocypher",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1038/s41587-023-01848-y"
+      },
+      "claimed_metadata": {
+        "title": "Democratizing knowledge representation with BioCypher",
+        "first_author_surname": "Lobentanzer",
+        "container_title": "Nature Biotechnology",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/about/methodology/changelog (v3.4)",
+        "/about/external-references (01c, literature anchor)",
+        "/about/roadmap (Path B)",
+        "docs/methods-draft.md (§6, references)",
+        "docs/methods-print.html (§6, references)"
+      ]
+    },
+    {
+      "key": "huang_2024_natmed_txgnn",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1038/s41591-024-03233-x"
+      },
+      "claimed_metadata": {
+        "title": "A foundation model for clinician-centered drug repurposing",
+        "first_author_surname": "Huang",
+        "container_title": "Nature Medicine",
+        "year": 2024
+      },
+      "used_on_surfaces": [
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "pushpakom_2019_nrdd",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1038/nrd.2018.168"
+      },
+      "claimed_metadata": {
+        "title": "Drug repurposing: progress, challenges and recommendations",
+        "first_author_surname": "Pushpakom",
+        "container_title": "Nature Reviews Drug Discovery",
+        "year": 2019
+      },
+      "used_on_surfaces": [
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "bate_2009_pharmacoepidem",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1002/pds.1742"
+      },
+      "claimed_metadata": {
+        "title": "Quantitative signal detection using spontaneous ADR reporting",
+        "first_author_surname": "Bate",
+        "container_title": "Pharmacoepidemiology and Drug Safety",
+        "year": 2009
+      },
+      "used_on_surfaces": [
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ],
+      "audit_note": "Title was wrong in manifest and methods PDF on 2026-06-07 audit; corrected after Path C Phase 1 first run flagged title-mismatch against Crossref. DOI, authors, year, journal all correct."
+    },
+    {
+      "key": "hurle_2013_cpt",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1038/clpt.2013.1"
+      },
+      "claimed_metadata": {
+        "title": "Computational drug repositioning: from data to therapeutics",
+        "first_author_surname": "Hurle",
+        "container_title": "Clinical Pharmacology & Therapeutics",
+        "year": 2013
+      },
+      "used_on_surfaces": [
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "nnoaham_2011_fertilsteril",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1016/j.fertnstert.2011.05.090"
+      },
+      "claimed_metadata": {
+        "title": "Impact of endometriosis on quality of life and work productivity: a multicenter study across ten countries",
+        "first_author_surname": "Nnoaham",
+        "container_title": "Fertility and Sterility",
+        "year": 2011
+      },
+      "used_on_surfaces": [
+        "/about (section 02)",
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "ochoa_2023_nar_opentargets",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1093/nar/gkac1046"
+      },
+      "claimed_metadata": {
+        "title": "The next-generation Open Targets Platform: reimagined, redesigned, rebuilt",
+        "first_author_surname": "Ochoa",
+        "container_title": "Nucleic Acids Research",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/about (section 04)",
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    },
+    {
+      "key": "mazure_2015_bmcwomenshealth",
+      "type": "journal_article",
+      "identifiers": {
+        "doi": "10.1186/s12905-015-0251-9"
+      },
+      "claimed_metadata": {
+        "title": "Twenty years and still counting: including women as participants and studying sex and gender in biomedical research",
+        "first_author_surname": "Mazure",
+        "container_title": "BMC Women's Health",
+        "year": 2015
+      },
+      "used_on_surfaces": [
+        "docs/methods-draft.md (references)",
+        "docs/methods-print.html (references)"
+      ]
+    }
+  ]
+}
