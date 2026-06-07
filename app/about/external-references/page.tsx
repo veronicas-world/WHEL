@@ -1958,6 +1958,347 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
+      {/* ── 01d · Output validation in progress ──────────────────────────── */}
+      {/* Path C: the three-phase output validation pipeline recorded in
+          methodology v3.6. Distinct from sections 01c Path A and Path B,
+          which ground the LLM's inputs; Path C validates the LLM's
+          outputs (citations, summary statements, published prose). One
+          collapsible block, three phases described inside, all marked
+          Pending. Patterned on the section 05 brand-name dictionary's
+          <details> collapsible and on the existing Path A/B blocks
+          above. */}
+      <section
+        id="output-validation-in-progress"
+        style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}
+      >
+        <div className={SECTION_INNER}>
+          <SectionHeader
+            label="01d · Output validation in progress"
+            title="A three-part pipeline for LLM output validation"
+            intro="Whel's structured grounding layers (Path A and Path B, documented in section 01c above) constrain what data the LLM works with. A separate set of failure modes apply to what the LLM produces as output: per-source extraction misclassification, summary drift beyond the source, and fabricated or mis-attributed citations in long-form prose. Path C is a three-part pipeline that validates the LLM's outputs against external authoritative sources before publication. Recorded in methodology v3.6. Not shipped yet. This section sets out what each phase will do and what its disclosure will look like when populated. The block is collapsed by default; expand for the full plan."
+          />
+
+          {/* Path C: Citation validation, summary grounding, prompt hardening */}
+          <details className="disclose-block">
+            <summary
+              style={{
+                ...MONO,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "16px 18px",
+                border: "1px solid var(--rule)",
+                background: "var(--surface)",
+                color: "var(--ink-2)",
+              }}
+              aria-label="Open Path C: Citation validation and summary grounding"
+            >
+              <span style={{ display: "block", minWidth: 0 }}>
+                <span
+                  className="font-heading"
+                  style={{
+                    display: "block",
+                    fontSize: "14px",
+                    color: "var(--ink)",
+                    letterSpacing: 0,
+                    textTransform: "none",
+                    marginBottom: 6,
+                  }}
+                >
+                  Path C: Citation validation and summary grounding
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--tier-emerging)",
+                    lineHeight: 1.5,
+                    marginBottom: 4,
+                  }}
+                >
+                  Pending &middot; Three phases, designed to ship in parallel with Path A and Path B
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-2)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  NCBI E-utilities &middot; Crossref REST API &middot; Sentence-BERT
+                </span>
+              </span>
+              <span
+                className="disclose-chev"
+                aria-hidden="true"
+                style={{
+                  ...MONO,
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  flexShrink: 0,
+                  paddingTop: 2,
+                }}
+              >
+                &darr;
+              </span>
+            </summary>
+
+            <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Phase 1: citation validation
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Every PMID in Whel&apos;s database, and every reference in
+                  any prose Whel publishes (featured signal walkthroughs,
+                  the methods PDF, written drafts), is resolved against{" "}
+                  <a
+                    href="https://www.ncbi.nlm.nih.gov/books/NBK25501/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    NCBI E-utilities
+                  </a>
+                  ; DOIs are resolved against the{" "}
+                  <a
+                    href="https://www.crossref.org/documentation/retrieve-metadata/rest-api/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    Crossref REST API
+                  </a>
+                  . Each lookup returns canonical title, authors, journal,
+                  and year, which are compared against the LLM-claimed
+                  metadata. References that fail to resolve or whose
+                  returned metadata mismatch the LLM&apos;s claims are
+                  flagged for human review and blocked from publication.
+                  This addresses the citation fabrication and
+                  citation-misattribution failure modes directly.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Phase 2: sentence-level summary grounding
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  For every signal row in the database, a
+                  sentence-transformer model (the Sentence-BERT family of
+                  models published on Hugging Face) computes the cosine
+                  similarity between each sentence in the LLM-generated
+                  summary and the source abstract. Sentences that fall
+                  below a calibrated similarity threshold are flagged as
+                  &ldquo;not directly supported by the source&rdquo; and
+                  either suppressed or surfaced with that marker on the
+                  signal card. The threshold is tuned against a held-out
+                  human-validation set rather than picked by intuition.
+                  This addresses the summary-drift failure mode (Gong et
+                  al. 2026 in Bioengineering) applied to Whel&apos;s
+                  specific extraction task.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Phase 3: prompt hardening for published prose
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Any LLM-generated long-form prose that ships to users
+                  (featured walkthroughs, methods PDF text, future Substack
+                  drafts written through Whel&apos;s tooling) is generated
+                  under a hardened prompt that forbids citation generation
+                  outside a pre-verified reference list provided to the
+                  model, forbids numerical claims (prevalence rates, effect
+                  sizes) unless they appear verbatim in the input context,
+                  and requires the model to produce, alongside the text, a
+                  sentence-by-sentence list of which input sources support
+                  each sentence. The list is then checked by Phase 1 before
+                  the prose is published.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What the disclosure will display when shipped
+                </div>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    maxWidth: "72ch",
+                  }}
+                >
+                  {[
+                    {
+                      head: "Citation resolution rate.",
+                      tail: "Percentage of stored PMIDs and DOIs that resolve cleanly against NCBI E-utilities and Crossref with title and author metadata matching the LLM-claimed metadata, by pipeline and by condition.",
+                    },
+                    {
+                      head: "Count of references blocked from publication.",
+                      tail: "References the LLM proposed that failed validation, with the failure reason (PMID does not exist; DOI returns 404; title mismatch; author mismatch).",
+                    },
+                    {
+                      head: "Sentence-level grounding score distribution.",
+                      tail: "Cosine-similarity score per summary sentence, broken down by signal arm, so a reader can see how tightly summaries track the source abstracts they cite.",
+                    },
+                    {
+                      head: "Sample of flagged sentences.",
+                      tail: "Concrete examples of sentences flagged as 'not directly supported by the source', with the source abstract sitting beside them, so the failure mode is visible rather than abstract.",
+                    },
+                  ].map((item) => (
+                    <li
+                      key={item.head}
+                      style={{
+                        position: "relative",
+                        paddingLeft: 22,
+                        marginBottom: 10,
+                        fontSize: 14,
+                        lineHeight: 1.6,
+                        color: "var(--ink-2)",
+                      }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: "var(--green-mid)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        &rsaquo;
+                      </span>
+                      <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                        {item.head}
+                      </strong>{" "}
+                      {item.tail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Literature anchor
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Gong et al. 2026 (Bioengineering) documents biomedical
+                  LLM reference fabrication rates of 47 to 55 percent on
+                  citation tasks. WHBench (Maurya, Saboo &amp; Kumar 2026,{" "}
+                  <a
+                    href="https://arxiv.org/abs/2604.00024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    arXiv:2604.00024
+                  </a>
+                  ) documents the broader pattern of frontier LLMs
+                  producing confident structured output with systematic
+                  failure modes. Path C&apos;s three phases each target a
+                  specific failure surface within Whel&apos;s pipeline
+                  rather than attempting to address the LLM gap in
+                  aggregate.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Where this lives in the project
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Recorded in the methodology version log at v3.6 (see the
+                  log at the foot of{" "}
+                  <Link href="/about/methodology" style={LINK}>
+                    /about/methodology
+                  </Link>
+                  ). Listed as a Planned register row on the Roadmap as
+                  &ldquo;Citation validation and summary grounding (Path
+                  C).&rdquo; This disclosure block will switch from Pending
+                  to Live, and the structured fields above will populate
+                  with real validation numbers, when each phase ships. Path
+                  C is distinct from Path A (ontology-grounded entity
+                  resolution) and Path B (knowledge-graph grounding via
+                  BioCypher), which are documented in section 01c above.
+                  Path A and Path B ground the LLM&apos;s inputs; Path C
+                  validates the LLM&apos;s outputs.
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
       {/* ── 02 · Underlying data sources ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className={SECTION_INNER}>

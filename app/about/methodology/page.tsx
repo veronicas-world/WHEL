@@ -639,11 +639,15 @@ export default function MethodologyPage() {
                 whether a Whel signal is independently supported by a
                 published clinical guideline. The second shipped layer is the
                 Every Cure MATRIX cross-reference, an independent
-                biological-plausibility score from a graph-machine-learning
-                model trained on an open biomedical knowledge graph, surfaced
-                beside Whel&apos;s grades wherever MATRIX has coverage. MATRIX
-                is not blended into Whel&apos;s grades; it sits beside them
-                as an independent layer. Full audit numbers, per-condition
+                treatment-probability prediction from a graph-ML model
+                trained on an open biomedical knowledge graph (Fajgenbaum et
+                al., Lancet Haematology 2024). Per-pair MATRIX scores are
+                surfaced beside Whel&apos;s grades on individual condition
+                pages as a &ldquo;MATRIX &middot; Top N%&rdquo; chip on each
+                signal card, where the percentile is MATRIX&apos;s own
+                quantile rank across its full set of predictions. MATRIX is
+                not blended into Whel&apos;s grades; it sits beside them as
+                an independent layer. Full audit numbers, per-condition
                 coverage, dataset SHAs, and the score distribution for MATRIX
                 are published at{" "}
                 <Link
@@ -1364,7 +1368,7 @@ export default function MethodologyPage() {
                     lineHeight: 1.5,
                   }}
                 >
-                  5 dated entries &middot; current version v3.4 &middot; June 2026
+                  7 dated entries &middot; current version v3.6 &middot; June 2026
                 </span>
               </span>
               <span
@@ -1392,8 +1396,221 @@ export default function MethodologyPage() {
               gap: 22,
             }}
           >
-            {/* v3.4 */}
+            {/* v3.6 */}
             <div>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.6 &middot; June 7, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                LLM output validation strategy made explicit. The structured
+                grounding layers in v3.4 (Path A and Path B, recorded in
+                section 01c on{" "}
+                <Link
+                  href="/about/external-references#structured-grounding-in-progress"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references
+                </Link>
+                ) constrain what data the LLM works with. A separate failure
+                surface applies to what the LLM produces as output. Three
+                failure modes are documented in the literature and apply to
+                Whel&apos;s specific pipeline: per-source extraction
+                misclassification (an LLM that reads a PubMed abstract and
+                assigns the wrong study type, wrong direction of effect, or
+                hallucinates mechanism details not present in the source);
+                summary drift (an LLM-written summary that extends beyond
+                what the source actually says, the Gong et al. 2026 risk
+                pattern in Bioengineering applied to Whel&apos;s task); and
+                citation fabrication or misattribution in long-form prose
+                Whel publishes (featured signal walkthroughs, the methods
+                PDF, written drafts), where the LLM is asked to generate
+                references rather than classify ones it was given.
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                Whel&apos;s response is a three-part output validation
+                pipeline, recorded as Path C on the Roadmap. Phase 1 is a
+                citation validation step that resolves every PMID against
+                NCBI E-utilities and every DOI against the Crossref REST
+                API, returning the canonical title, authors, journal, and
+                year, and comparing those against the LLM-claimed metadata.
+                References that fail to resolve or whose returned metadata
+                mismatch the LLM&apos;s claims are blocked from publication.
+                Phase 2 is sentence-level summary grounding using a
+                sentence-transformer model (Sentence-BERT or equivalent) to
+                compute the cosine similarity between each sentence in an
+                LLM-generated summary and the source abstract. Sentences
+                that fall below a calibrated similarity threshold are
+                flagged as &ldquo;not directly supported by the source&rdquo;
+                and either suppressed or surfaced with that marker on the
+                signal card. Phase 3 is prompt hardening for any
+                LLM-generated long-form prose that ships to users. The
+                hardened prompt forbids citation generation (the LLM may
+                only cite from a pre-verified reference list provided to
+                it), forbids numerical claims unless they appear verbatim
+                in the input context, and requires the LLM to produce,
+                alongside the text, a sentence-by-sentence list of
+                supporting input sources that Phase 1 then checks.
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                A fourth strategy in the broader literature, multi-sample
+                consistency checking through re-querying the model, was
+                considered and deferred. The cost (three to five times the
+                Claude API spend) does not favorably trade against the
+                marginal gain on Whel&apos;s constrained extraction task,
+                and Phase 2 grounding addresses the same failure modes more
+                cheaply. The deferred entry is recorded here so a future
+                decision to revisit it has the design history available.
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                Path C is distinct from Path A and Path B. A and B ground
+                the LLM&apos;s inputs (canonical ontologies for entity
+                resolution; a domain-restricted knowledge graph for
+                scoring-time context). C validates the LLM&apos;s outputs
+                (citations, summary statements, published prose). They are
+                complementary layers in the same overall pipeline
+                architecture and are designed to ship in parallel rather
+                than sequentially. The Path C disclosure surface lives in
+                section 01d on{" "}
+                <Link
+                  href="/about/external-references#output-validation-in-progress"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references
+                </Link>
+                .
+              </p>
+            </div>
+
+            {/* v3.5 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.5 &middot; June 7, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                MATRIX cross-reference reaches per-signal display. The Every
+                Cure MATRIX coverage layer (live since v3.1) was previously
+                surfaced only as an aggregate audit on the external-references
+                page (compound match rate, per-condition counts, score
+                distribution). Per-pair MATRIX scores are now surfaced on
+                each signal card on{" "}
+                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                  /conditions/[slug]
+                </code>{" "}
+                pages as a &ldquo;MATRIX &middot; Top N%&rdquo; chip alongside
+                the L-grade chip and the tier chip, where the percentile is
+                MATRIX&apos;s own quantile rank across its roughly 39.5
+                million drug&ndash;disease predictions. Per-pair scores are
+                sourced from a new public snapshot at{" "}
+                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                  lib/matrix-pair-scores-snapshot.json
+                </code>
+                , extracted from the same audit report that produces the
+                aggregate snapshot. 176 of 271 active compound&ndash;condition
+                pairs in the current audit run have a MATRIX score and now
+                show the chip; 95 pairs are &ldquo;matrix silent&rdquo;
+                (compound not in MATRIX&apos;s drug list, or score below
+                MATRIX&apos;s publication threshold) and correctly show no
+                chip.
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                The external-references coverage disclosure at{" "}
+                <Link
+                  href="/about/external-references#coverage-disclosure"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references &rarr; 01b
+                </Link>{" "}
+                was extended with a &ldquo;How to read these numbers&rdquo;
+                explainer card that defines both MATRIX values in Every
+                Cure&apos;s own framing (treatment-probability prediction
+                from a model trained on a biomedical knowledge graph),
+                explains what &ldquo;Top N%&rdquo; does and does not say,
+                quotes Every Cure&apos;s &ldquo;research use only&rdquo;
+                disclaimer verbatim, and explains why Whel surfaces an
+                independent ML layer beside its own literature-driven grades.
+                The chip tooltip uses the same treatment-probability framing
+                for hover-state consistency. No change to Whel&apos;s
+                rubric, sample, or tier definitions; MATRIX remains separated
+                from Whel&apos;s grades rather than blended into them.
+              </p>
+            </div>
+
+            {/* v3.4 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
               <div
                 style={{
                   ...MONO,
