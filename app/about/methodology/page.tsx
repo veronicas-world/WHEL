@@ -1285,77 +1285,194 @@ export default function MethodologyPage() {
             </div>
           </div>
 
-          <p
+          {/* Methodology version log. Each entry is its own block with a
+              small uppercase header so the changelog reads as a scannable
+              list rather than a single wall of monospace prose. The newest
+              entry sits on top; the original outer border-top is preserved
+              on the wrapper, and each subsequent entry is separated by a
+              thin dashed rule. */}
+          <div
             style={{
-              ...MONO,
-              fontSize: 11,
-              letterSpacing: "0.04em",
-              color: "var(--muted)",
               borderTop: "1px solid var(--rule)",
-              paddingTop: 18,
+              paddingTop: 24,
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              gap: 22,
             }}
           >
-            Methodology version 3.2, June 1 2026. The external-evidence
-            rubric (L0 / L1 / L2 / L3) is now codified in a
-            schema-versioned sidecar at{" "}
-            <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-              lib/literature-grade-rubric.json
-            </code>{" "}
-            and surfaced on this page as a collapsible block in Section 04.
-            v3.2 records the search procedure per source (PubMed,
-            ClinicalTrials.gov, Cochrane, named guideline bodies),
-            inclusion criteria and boundary rules at every level transition,
-            source-attribution requirements per L assignment, and the
-            conflict-resolution rule used when two reviewers disagree. No
-            change to the sample, the comparators, or the pre-specified
-            thresholds; the tightening makes the L assignment behind any
-            signal reproducible against the printed rules, which the v3.1
-            page implied but did not pin down.{" "}
-            Methodology version 3.1, June 1 2026. Every Cure&apos;s MATRIX
-            dataset is now surfaced as an independent biological-plausibility
-            layer beside Whel&apos;s grades wherever MATRIX has coverage; it
-            is not blended into the grades. A reproducible audit of MATRIX
-            coverage over Whel&apos;s active compound–condition universe was
-            run and published on this site (85.7% adjusted compound match
-            rate, six of six conditions confirmed, full per-condition
-            breakdown and dataset SHAs at{" "}
-            <Link
-              href="/about/external-references#coverage-disclosure"
-              style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-            >
-              /about/external-references → 01b · Coverage disclosure
-            </Link>
-            ). No change to Whel&apos;s rubric, sample, or tier definitions.
-            {" "}
-            Methodology version 3, May 29 2026. v3 records the close of
-            an independent external review covering two findings. C1
-            (replication-score drift in the LLM rater): the rater prompts
-            in all four pipelines were tightened to enforce literal source
-            counting per the published rubric; 14 signals were downgraded
-            to the tier the literature actually supports; 19
-            manually-verified PubMed citations were added so each
-            remaining Moderate-tier signal carries the source count the
-            strict rubric requires. S3 (ClinicalTrials.gov
-            citation/condition mismatches across 21 audit rows): 10
-            signals were deactivated, 5 were reassigned from
-            clinical-trial-finding to cross-condition framing, 1 source
-            was dropped where the signal retained independent support, 2
-            sources were replaced with proper condition-specific
-            citations (ESHRE 2022 endometriosis guideline; 2025 network
-            meta-analysis of hormone therapies for adenomyosis pain), and
-            1 row was documented as a ClinicalTrials.gov API field
-            limitation. Recorded in database migrations 036 through 040.
-            Planned extensions, including external cross-reference to
-            Every Cure MATRIX scores and a cross-arm concordance flag,
-            are documented on the Roadmap page.
-            Methodology version 2, May 2026, named an external
-            clinician-researcher as the primary rater in place of the
-            project lead. The sample, the rubric, the external
-            comparators, and the pre-specified thresholds are unchanged
-            from v1. Sample numbers reflect the Whel database snapshot at
-            time of publication. Updates to this page will be versioned
-            and dated.
-          </p>
+            {/* v3.2 */}
+            <div>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.2 &middot; June 1, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                The external-evidence rubric (L0 / L1 / L2 / L3) is now
+                codified in a schema-versioned sidecar at{" "}
+                <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                  lib/literature-grade-rubric.json
+                </code>{" "}
+                and surfaced on this page as a collapsible block in
+                Section 04. v3.2 records the search procedure per source
+                (PubMed, ClinicalTrials.gov, Cochrane, named guideline
+                bodies), inclusion criteria and boundary rules at every
+                level transition, source-attribution requirements per L
+                assignment, and the conflict-resolution rule used when two
+                reviewers disagree. No change to the sample, the
+                comparators, or the pre-specified thresholds; the
+                tightening makes the L assignment behind any signal
+                reproducible against the printed rules, which the v3.1
+                page implied but did not pin down.
+              </p>
+            </div>
+
+            {/* v3.1 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.1 &middot; June 1, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                Every Cure&apos;s MATRIX dataset is now surfaced as an
+                independent biological-plausibility layer beside
+                Whel&apos;s grades wherever MATRIX has coverage; it is not
+                blended into the grades. A reproducible audit of MATRIX
+                coverage over Whel&apos;s active compound&ndash;condition
+                universe was run and published on this site (85.7%
+                adjusted compound match rate, six of six conditions
+                confirmed, full per-condition breakdown and dataset SHAs
+                at{" "}
+                <Link
+                  href="/about/external-references#coverage-disclosure"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references &rarr; 01b &middot; Coverage disclosure
+                </Link>
+                ). No change to Whel&apos;s rubric, sample, or tier
+                definitions.
+              </p>
+            </div>
+
+            {/* v3 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3 &middot; May 29, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                v3 records the close of an independent external review
+                covering two findings. C1 (replication-score drift in the
+                LLM rater): the rater prompts in all four pipelines were
+                tightened to enforce literal source counting per the
+                published rubric; 14 signals were downgraded to the tier
+                the literature actually supports; 19 manually-verified
+                PubMed citations were added so each remaining
+                Moderate-tier signal carries the source count the strict
+                rubric requires. S3 (ClinicalTrials.gov citation/condition
+                mismatches across 21 audit rows): 10 signals were
+                deactivated, 5 were reassigned from clinical-trial-finding
+                to cross-condition framing, 1 source was dropped where the
+                signal retained independent support, 2 sources were
+                replaced with proper condition-specific citations (ESHRE
+                2022 endometriosis guideline; 2025 network meta-analysis
+                of hormone therapies for adenomyosis pain), and 1 row was
+                documented as a ClinicalTrials.gov API field limitation.
+                Recorded in database migrations 036 through 040. Planned
+                extensions, including external cross-reference to Every
+                Cure MATRIX scores and a cross-arm concordance flag, are
+                documented on the Roadmap page.
+              </p>
+            </div>
+
+            {/* v2 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v2 &middot; May 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                Named an external clinician-researcher as the primary
+                rater in place of the project lead. The sample, the
+                rubric, the external comparators, and the pre-specified
+                thresholds are unchanged from v1. Sample numbers reflect
+                the Whel database snapshot at time of publication. Updates
+                to this page will be versioned and dated.
+              </p>
+            </div>
+          </div>
 
         </div>
       </div>
