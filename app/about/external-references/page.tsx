@@ -1442,7 +1442,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="01c · Structured grounding in progress"
             title="Two structured grounding layers planned on top of LLM extraction"
-            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; 47 to 55 percent reference fabrication rates reported by Gong et al. 2026) motivate adding structured external knowledge to the pipeline rather than relying on LLM output alone. Two such layers are planned and recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding via the BioCypher framework (Path B). Neither is shipped yet. These are architectural additions, not post-hoc checks: Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, changing the shape of every signal row that lands in the database. Path B builds a persistent domain-restricted knowledge graph that both informs LLM scoring at prompt time and surfaces beside each signal as a disclosure layer in the same shape as the MATRIX coverage block above. This section sets out what each layer does and what its disclosure will look like when populated. Both blocks are collapsed by default; expand for the full plan."
+            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; high reference-fabrication rates reported by Bhattacharyya et al. 2023 in Cureus — 47 percent of ChatGPT-generated medical references fully fabricated and 46 percent authentic but with bibliographic errors) motivate adding structured external knowledge to the pipeline rather than relying on LLM output alone. Two such layers are planned and recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding via the BioCypher framework (Path B). Neither is shipped yet. These are architectural additions, not post-hoc checks: Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, changing the shape of every signal row that lands in the database. Path B builds a persistent domain-restricted knowledge graph that both informs LLM scoring at prompt time and surfaces beside each signal as a disclosure layer in the same shape as the MATRIX coverage block above. This section sets out what each layer does and what its disclosure will look like when populated. Both blocks are collapsed by default; expand for the full plan."
           />
 
           {/* Path A: Entity validation */}
@@ -1642,9 +1642,20 @@ export default function ExternalReferencesPage() {
                   Literature anchor
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Gong et al. 2026 (Bioengineering) documents biomedical LLM
-                  reference fabrication rates of 47 to 55 percent on citation
-                  tasks. WHBench (Maurya, Saboo &amp; Kumar 2026,{" "}
+                  Bhattacharyya et al. 2023 (Cureus,{" "}
+                  <a
+                    href="https://doi.org/10.7759/cureus.39238"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    doi:10.7759/cureus.39238
+                  </a>
+                  ) examined 115 references across 30 ChatGPT-generated
+                  medical papers and found 47 percent fully fabricated, 46
+                  percent authentic but with bibliographic errors, and
+                  only 7 percent authentic and accurate. WHBench (Maurya,
+                  Saboo &amp; Kumar 2026,{" "}
                   <a
                     href="https://arxiv.org/abs/2604.00024"
                     target="_blank"
@@ -1791,8 +1802,8 @@ export default function ExternalReferencesPage() {
                   target-pathway, and pathway-disease relationships, and
                   PheKnowLator for ontology-aligned condition and gene
                   annotations. The KG informs Whel&apos;s LLM at prompt time,
-                  following the knowledge-guided prompting pattern documented
-                  by Li et al. 2025 (IEEE J. Biomed. Health Inform.): when
+                  following the knowledge-augmented prompting pattern
+                  documented in the biomedical NLP literature: when
                   the LLM scores a signal, the relevant subgraph of
                   mechanistic paths is included as structured context,
                   reducing the model&apos;s reliance on parametric memory
@@ -1903,7 +1914,10 @@ export default function ExternalReferencesPage() {
                   . The architectural pattern of layering structured
                   knowledge graphs on top of LLM extraction, rather than
                   replacing the LLM with classical ML, is the direction
-                  argued by Zong et al. 2026 (EvidenceNet,{" "}
+                  argued by Zong, Lv, Xue, Zheng, Wan &amp; Zhang 2026
+                  (&ldquo;Building evidence-based knowledge bases from
+                  full-text literature for disease-specific biomedical
+                  reasoning,&rdquo;{" "}
                   <a
                     href="https://arxiv.org/abs/2603.28325"
                     target="_blank"
@@ -1912,10 +1926,19 @@ export default function ExternalReferencesPage() {
                   >
                     arXiv:2603.28325
                   </a>
-                  ) and Li et al. 2025 on knowledge-guided prompting (IEEE J.
-                  Biomed. Health Inform.). Every Cure&apos;s KGML-xDTD
-                  (Fajgenbaum et al., Lancet Haematology 2024) demonstrates
-                  that knowledge graph plus machine learning systems
+                  , which introduces the EvidenceNet dataset). Every
+                  Cure&apos;s MATRIX builds on the KGML-xDTD framework (Ma,
+                  Zhou, Liu &amp; Koslicki,{" "}
+                  <a
+                    href="https://doi.org/10.1093/gigascience/giad057"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    GigaScience 2023
+                  </a>
+                  ) and demonstrates that knowledge graph plus machine
+                  learning systems
                   outperform LLM-only approaches for the separate problem of
                   global drug repurposing prediction, which Whel does not
                   attempt.
@@ -2120,9 +2143,18 @@ export default function ExternalReferencesPage() {
                   either suppressed or surfaced with that marker on the
                   signal card. The threshold is tuned against a held-out
                   human-validation set rather than picked by intuition.
-                  This addresses the summary-drift failure mode (Gong et
-                  al. 2026 in Bioengineering) applied to Whel&apos;s
-                  specific extraction task.
+                  This addresses the summary-drift failure mode
+                  documented in the medical LLM literature (Bhattacharyya
+                  et al. 2023 in Cureus,{" "}
+                  <a
+                    href="https://doi.org/10.7759/cureus.39238"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    doi:10.7759/cureus.39238
+                  </a>
+                  ) applied to Whel&apos;s specific extraction task.
                 </p>
               </div>
 
@@ -2242,9 +2274,31 @@ export default function ExternalReferencesPage() {
                   Literature anchor
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Gong et al. 2026 (Bioengineering) documents biomedical
-                  LLM reference fabrication rates of 47 to 55 percent on
-                  citation tasks. WHBench (Maurya, Saboo &amp; Kumar 2026,{" "}
+                  Bhattacharyya et al. 2023 (Cureus,{" "}
+                  <a
+                    href="https://doi.org/10.7759/cureus.39238"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    doi:10.7759/cureus.39238
+                  </a>
+                  ) examined 115 references across 30 ChatGPT-generated
+                  medical papers and found 47 percent fully fabricated, 46
+                  percent authentic but with bibliographic errors, and
+                  only 7 percent authentic and accurate; Gravel,
+                  D&apos;Amours-Gravel &amp; Osmanlliu 2023 (Mayo Clin Proc
+                  Digit Health,{" "}
+                  <a
+                    href="https://doi.org/10.1016/j.mcpdig.2023.05.004"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    doi:10.1016/j.mcpdig.2023.05.004
+                  </a>
+                  ) reported the same pattern across a separate medical
+                  question set. WHBench (Maurya, Saboo &amp; Kumar 2026,{" "}
                   <a
                     href="https://arxiv.org/abs/2604.00024"
                     target="_blank"
