@@ -1326,9 +1326,9 @@ export default function MethodologyPage() {
                   margin: 0,
                 }}
               >
-                LLM validation strategy made explicit. Whel&apos;s evidence
-                extraction and scoring layer is built on Claude Opus 4.6, a
-                large language model.{" "}
+                Structured grounding strategy made explicit. Whel&apos;s
+                evidence extraction and scoring layer is built on Claude Opus
+                4.6, a large language model.{" "}
                 <Link
                   href="https://arxiv.org/abs/2604.00024"
                   target="_blank"
@@ -1376,16 +1376,24 @@ export default function MethodologyPage() {
                 }}
               >
                 Whel&apos;s response, recorded as two roadmap items, is to add
-                a structured validation layer on top of the existing LLM
-                pipeline without replacing it. Path A is entity validation:
-                every compound, condition, and gene the LLM extracts is
-                resolved against canonical biomedical ontologies (ChEMBL or
-                DrugBank for compounds, MONDO for conditions, HGNC for genes)
-                before being written to the database, with entities that fail
-                to resolve flagged for human review rather than silently
-                stored. This addresses the structured-output hallucination
-                class of error directly. Path B is a domain-restricted
-                knowledge graph cross-reference, built using the{" "}
+                two structured grounding layers on top of the existing LLM
+                pipeline without replacing it. These are architectural
+                additions to the pipeline rather than post-hoc validation:
+                they change what data lands in the database and how the LLM
+                arrives at its scoring. Path A is ontology-grounded entity
+                resolution: every compound, condition, and gene the LLM
+                extracts is resolved against canonical biomedical registries
+                (ChEMBL or DrugBank for compounds, MONDO for conditions, HGNC
+                for genes), rewritten with the registry&apos;s standard
+                identifier, and enriched with the structured metadata that
+                resolution returns (drug class, ATC code, known targets;
+                ontology lineage; chromosome and aliases) before being
+                written to the database. Entities that fail to resolve are
+                flagged for human review rather than silently stored. This
+                addresses the structured-output hallucination class of error
+                directly and also moves the data Whel stores from free-text
+                strings to canonical identifiers with structured metadata.
+                Path B is knowledge-graph grounding, built using the{" "}
                 <Link
                   href="https://biocypher.org/"
                   target="_blank"
@@ -1396,8 +1404,14 @@ export default function MethodologyPage() {
                 </Link>{" "}
                 framework (Lobentanzer et al., Nature Biotechnology 2023),
                 restricted to Whel&apos;s six conditions and active-signal
-                compounds, displayed as a &ldquo;graph supports&rdquo; or
-                &ldquo;graph silent&rdquo; disclosure layer beside each signal
+                compounds. The knowledge graph informs the LLM at prompt
+                time, following the knowledge-guided prompting pattern of Li
+                et al. 2025 (IEEE J. Biomed. Health Inform.): mechanistic
+                paths drawn from the subgraph relevant to a given signal are
+                included as structured context during scoring, reducing the
+                model&apos;s reliance on parametric memory alone. The graph
+                also surfaces beside each signal as a disclosure layer
+                (&ldquo;graph supports&rdquo; or &ldquo;graph silent&rdquo;)
                 in the same shape as the existing MATRIX cross-reference at{" "}
                 <Link
                   href="/about/external-references"

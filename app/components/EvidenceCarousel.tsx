@@ -78,6 +78,11 @@ const CARDS: CarouselCard[] = [
     body: "Frequency is not truth. A rare but repeatedly observed, highly specific signal from a single credible source may carry more evidential weight than 500 vague forum mentions. Whel's scoring framework privileges specificity, reproducibility, and triangulation over raw volume.",
     link: { text: "Read the full methodology", href: "/about/technical-architecture" },
   },
+  {
+    title: "Structured Grounding (planned)",
+    body: "Two structured grounding layers are planned on top of the LLM pipeline, recorded in methodology v3.4. Ontology-grounded entity resolution (Path A) will canonicalize and enrich every extracted compound (ChEMBL or DrugBank), condition (MONDO), and gene (HGNC) against canonical biomedical registries before write, addressing the structured-output hallucination class of error documented in WHBench (Maurya et al. 2026) and Gong et al. 2026. Knowledge-graph grounding via the BioCypher framework (Path B; Lobentanzer et al. Nature Biotechnology 2023) will both inform the LLM at prompt time (following Li et al. 2025 on knowledge-guided prompting) and surface beside each signal as a disclosure layer in the same shape as the existing MATRIX cross-reference. Whel consumes machine learning but does not train custom ML models.",
+    link: { text: "See structured grounding in progress", href: "/about/external-references#structured-grounding-in-progress" },
+  },
 ];
 
 function ArrowButton({

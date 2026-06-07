@@ -1263,6 +1263,545 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
+      {/* ── 01c · Structured grounding in progress ───────────────────────── */}
+      {/* Two collapsible blocks for Path A (ontology-grounded entity
+          resolution) and Path B (knowledge-graph grounding via BioCypher)
+          recorded in methodology v3.4. Both are architectural additions to
+          the LLM pipeline, not pure post-hoc validation: Path A canonicalizes
+          and enriches every extracted entity against ChEMBL/DrugBank/MONDO/
+          HGNC before write, Path B adds a persistent KG that informs LLM
+          scoring at prompt time and surfaces as a disclosure layer beside
+          each signal. The block structure parallels the MATRIX disclosure
+          block above so the page reads as a single 'here are the grounding
+          layers' surface, with explicit 'Pending' status pills so no
+          synthetic numbers are implied. Patterned on the section 05
+          brand-name dictionary's <details> collapsible. */}
+      <section
+        id="structured-grounding-in-progress"
+        style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}
+      >
+        <div className={SECTION_INNER}>
+          <SectionHeader
+            label="01c · Structured grounding in progress"
+            title="Two structured grounding layers planned on top of LLM extraction"
+            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; 47 to 55 percent reference fabrication rates reported by Gong et al. 2026) motivate adding structured external knowledge to the pipeline rather than relying on LLM output alone. Two such layers are planned and recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding via the BioCypher framework (Path B). Neither is shipped yet. These are architectural additions, not post-hoc checks: Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, changing the shape of every signal row that lands in the database. Path B builds a persistent domain-restricted knowledge graph that both informs LLM scoring at prompt time and surfaces beside each signal as a disclosure layer in the same shape as the MATRIX coverage block above. This section sets out what each layer does and what its disclosure will look like when populated. Both blocks are collapsed by default; expand for the full plan."
+          />
+
+          {/* Path A: Entity validation */}
+          <details className="disclose-block" style={{ marginTop: 4, marginBottom: 18 }}>
+            <summary
+              style={{
+                ...MONO,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "16px 18px",
+                border: "1px solid var(--rule)",
+                background: "var(--surface)",
+                color: "var(--ink-2)",
+              }}
+              aria-label="Open Path A: Ontology-grounded entity resolution"
+            >
+              <span style={{ display: "block", minWidth: 0 }}>
+                <span
+                  className="font-heading"
+                  style={{
+                    display: "block",
+                    fontSize: "14px",
+                    color: "var(--ink)",
+                    letterSpacing: 0,
+                    textTransform: "none",
+                    marginBottom: 6,
+                  }}
+                >
+                  Path A: Ontology-grounded entity resolution
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--tier-emerging)",
+                    lineHeight: 1.5,
+                    marginBottom: 4,
+                  }}
+                >
+                  Pending &middot; Schema designed, not yet wired
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-2)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  ChEMBL or DrugBank &middot; MONDO &middot; HGNC
+                </span>
+              </span>
+              <span
+                className="disclose-chev"
+                aria-hidden="true"
+                style={{
+                  ...MONO,
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  flexShrink: 0,
+                  paddingTop: 2,
+                }}
+              >
+                &darr;
+              </span>
+            </summary>
+
+            <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What the layer does
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  This layer serves three functions, not one. First, it
+                  canonicalizes: every compound, condition, and gene the LLM
+                  extracts is resolved against a canonical biomedical
+                  registry and rewritten with that registry&apos;s standard
+                  identifier before being written to Whel&apos;s database.
+                  Compounds resolve against ChEMBL or DrugBank; conditions
+                  resolve against MONDO (the same ontology Whel already uses
+                  for the MATRIX cross-reference above); genes resolve
+                  against HGNC. Second, it enriches: the resolution call
+                  returns structured metadata (generic name, drug class,
+                  ATC code, known targets for a compound; ontology lineage
+                  for a condition; chromosome and aliases for a gene) that
+                  travels with the signal into the database, changing the
+                  shape of the data Whel stores. Third, it gates: entities
+                  that fail to resolve are flagged for human review rather
+                  than silently stored, which catches the structured-output
+                  hallucination class of error documented in the LLM
+                  literature.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What the disclosure will display when shipped
+                </div>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    maxWidth: "72ch",
+                  }}
+                >
+                  {[
+                    {
+                      head: "Per-pipeline entity resolution rate.",
+                      tail: "Percentage of LLM-extracted entities that resolved against the canonical ontology, broken down by pipeline (PubMed, ClinicalTrials.gov, FDA AEMS, Open Targets, Reddit). A pipeline with a noticeably lower resolution rate is a pipeline whose extraction prompt is producing more hallucinated entities.",
+                    },
+                    {
+                      head: "Per-condition resolution rate.",
+                      tail: "So resolution quality differences across the six conditions are visible rather than averaged away. A condition whose extracted compounds resolve at a lower rate is a condition where extraction is less trustworthy.",
+                    },
+                    {
+                      head: "Count of entities currently flagged for human review.",
+                      tail: "With the pipeline and condition each was extracted from, and the reason resolution failed (no matching identifier, ambiguous match across multiple registered compounds, deprecated identifier).",
+                    },
+                    {
+                      head: "Sample of unresolved entities from the most recent run.",
+                      tail: "So the failure mode is concrete rather than abstract. A reader can see the actual text the LLM produced and judge for themselves whether the rejection is a true positive or whether the canonical ontology is incomplete.",
+                    },
+                    {
+                      head: "Enrichment summary.",
+                      tail: "Average number of structured metadata fields attached to each resolved entity (drug class, ATC code, known targets for compounds; ontology lineage for conditions; chromosome and aliases for genes), so the data-shape change is visible rather than implicit.",
+                    },
+                  ].map((item) => (
+                    <li
+                      key={item.head}
+                      style={{
+                        position: "relative",
+                        paddingLeft: 22,
+                        marginBottom: 10,
+                        fontSize: 14,
+                        lineHeight: 1.6,
+                        color: "var(--ink-2)",
+                      }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: "var(--green-mid)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        &rsaquo;
+                      </span>
+                      <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                        {item.head}
+                      </strong>{" "}
+                      {item.tail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Literature anchor
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Gong et al. 2026 (Bioengineering) documents biomedical LLM
+                  reference fabrication rates of 47 to 55 percent on citation
+                  tasks. WHBench (Maurya, Saboo &amp; Kumar 2026,{" "}
+                  <a
+                    href="https://arxiv.org/abs/2604.00024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    arXiv:2604.00024
+                  </a>
+                  ) documents a 35.5 percent fully-correct rate for the top
+                  frontier LLM on women&apos;s health clinical questions, with
+                  systematic gaps in safety, completeness, and the
+                  social-determinants criterion. Resolution and enrichment
+                  against canonical ontologies addresses the structured-output
+                  failure mode that both papers describe and also moves the
+                  data Whel stores from free-text strings to canonical
+                  identifiers with structured metadata.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Where this lives in the project
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Recorded in the methodology version log at v3.4 (see the
+                  log at the foot of{" "}
+                  <Link href="/about/methodology" style={LINK}>
+                    /about/methodology
+                  </Link>
+                  ). Listed as a Planned register row on the Roadmap as
+                  &ldquo;Ontology-grounded entity resolution (Path A).&rdquo;
+                  This disclosure block will switch from Pending to Live, and
+                  the structured fields above will populate with real audit
+                  numbers, when the integration ships.
+                </p>
+              </div>
+            </div>
+          </details>
+
+          {/* Path B: BioCypher KG cross-reference */}
+          <details className="disclose-block">
+            <summary
+              style={{
+                ...MONO,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "space-between",
+                gap: 16,
+                padding: "16px 18px",
+                border: "1px solid var(--rule)",
+                background: "var(--surface)",
+                color: "var(--ink-2)",
+              }}
+              aria-label="Open Path B: Knowledge-graph grounding via BioCypher"
+            >
+              <span style={{ display: "block", minWidth: 0 }}>
+                <span
+                  className="font-heading"
+                  style={{
+                    display: "block",
+                    fontSize: "14px",
+                    color: "var(--ink)",
+                    letterSpacing: 0,
+                    textTransform: "none",
+                    marginBottom: 6,
+                  }}
+                >
+                  Path B: Knowledge-graph grounding via BioCypher
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--tier-emerging)",
+                    lineHeight: 1.5,
+                    marginBottom: 4,
+                  }}
+                >
+                  Pending &middot; Framework selected, schema not yet built
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "11px",
+                    letterSpacing: "0.13em",
+                    textTransform: "uppercase",
+                    color: "var(--muted-2)",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  BioCypher &middot; DRKG data &middot; PheKnowLator data
+                </span>
+              </span>
+              <span
+                className="disclose-chev"
+                aria-hidden="true"
+                style={{
+                  ...MONO,
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  flexShrink: 0,
+                  paddingTop: 2,
+                }}
+              >
+                &darr;
+              </span>
+            </summary>
+
+            <div style={{ marginTop: 18, display: "flex", flexDirection: "column", gap: 18 }}>
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What the layer does
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  This layer is both a grounding mechanism and a disclosure
+                  layer. A domain-restricted biomedical knowledge graph is
+                  built using the BioCypher framework (Lobentanzer et al.,
+                  Nature Biotechnology 2023), restricted to Whel&apos;s six
+                  conditions and the compounds attached to active signals.
+                  Edges are drawn from open biomedical sources: the Drug
+                  Repurposing Knowledge Graph (DRKG) for drug-target,
+                  target-pathway, and pathway-disease relationships, and
+                  PheKnowLator for ontology-aligned condition and gene
+                  annotations. The KG informs Whel&apos;s LLM at prompt time,
+                  following the knowledge-guided prompting pattern documented
+                  by Li et al. 2025 (IEEE J. Biomed. Health Inform.): when
+                  the LLM scores a signal, the relevant subgraph of
+                  mechanistic paths is included as structured context,
+                  reducing the model&apos;s reliance on parametric memory
+                  alone. The KG also surfaces beside each signal as a
+                  disclosure layer (graph supports or graph silent), in the
+                  same shape as the existing MATRIX score row above.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What the disclosure will display when shipped
+                </div>
+                <ul
+                  style={{
+                    listStyle: "none",
+                    padding: 0,
+                    margin: 0,
+                    maxWidth: "72ch",
+                  }}
+                >
+                  {[
+                    {
+                      head: "Knowledge graph size and shape.",
+                      tail: "Number of nodes by type (drug, condition, gene, pathway, adverse event) and edges by relationship type (targets, treats, interacts, associated-with, etc.). Reported as a snapshot table with the data-source SHAs each edge type was drawn from, identical in shape to the MATRIX dataset snapshot above.",
+                    },
+                    {
+                      head: "Per-condition graph coverage.",
+                      tail: "For each of the six conditions, the count of Whel compounds that have at least one graph-supported mechanistic path to that condition, and the count that have none. A condition with low graph coverage is a condition where the Whel grades stand alone without a graph cross-reference, and that fact is made visible.",
+                    },
+                    {
+                      head: "Signal-level graph support.",
+                      tail: "Each individual signal carries a 'graph supports' or 'graph silent' tag. 'Graph supports' means at least one mechanistic path exists in the KG that connects the compound to the condition through known targets, pathways, or co-occurring annotations. 'Graph silent' is not the same as 'graph contradicts'; it means the open KGs do not contain a relevant edge, which can reflect either a real biological gap or a known limitation of the source data.",
+                    },
+                    {
+                      head: "Cross-tabulation against Whel tiers.",
+                      tail: "How Whel's four confidence tiers (Strong, Moderate, Emerging, Exploratory) cross with graph support. A graph-supported Strong-tier signal is the strongest combined evidence the platform can present. A graph-silent Strong-tier signal is a signal where the literature replicates but the open knowledge graphs have not yet caught up; that pattern is also informative.",
+                    },
+                  ].map((item) => (
+                    <li
+                      key={item.head}
+                      style={{
+                        position: "relative",
+                        paddingLeft: 22,
+                        marginBottom: 10,
+                        fontSize: 14,
+                        lineHeight: 1.6,
+                        color: "var(--ink-2)",
+                      }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: "var(--green-mid)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        &rsaquo;
+                      </span>
+                      <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                        {item.head}
+                      </strong>{" "}
+                      {item.tail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Literature anchor
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  BioCypher is the peer-reviewed, EU-funded biomedical
+                  knowledge graph framework introduced in Lobentanzer et al.,
+                  Nature Biotechnology 2023, and{" "}
+                  <a
+                    href="https://biocypher.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    actively maintained
+                  </a>
+                  . The architectural pattern of layering structured
+                  knowledge graphs on top of LLM extraction, rather than
+                  replacing the LLM with classical ML, is the direction
+                  argued by Zong et al. 2026 (EvidenceNet,{" "}
+                  <a
+                    href="https://arxiv.org/abs/2603.28325"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    arXiv:2603.28325
+                  </a>
+                  ) and Li et al. 2025 on knowledge-guided prompting (IEEE J.
+                  Biomed. Health Inform.). Every Cure&apos;s KGML-xDTD
+                  (Fajgenbaum et al., Lancet Haematology 2024) demonstrates
+                  that knowledge graph plus machine learning systems
+                  outperform LLM-only approaches for the separate problem of
+                  global drug repurposing prediction, which Whel does not
+                  attempt.
+                </p>
+              </div>
+
+              <div>
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Where this lives in the project
+                </div>
+                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
+                  Recorded in the methodology version log at v3.4 (see the
+                  log at the foot of{" "}
+                  <Link href="/about/methodology" style={LINK}>
+                    /about/methodology
+                  </Link>
+                  ). Listed as a Planned register row on the Roadmap as
+                  &ldquo;Knowledge-graph grounding via BioCypher (Path
+                  B).&rdquo; This disclosure block will switch from Pending
+                  to Live, and the structured fields above will populate with
+                  real graph counts and per-signal tags, when the integration
+                  ships. Whel will not train a custom graph neural network;
+                  the platform consumes machine learning (Claude Opus 4.6 for
+                  extraction and scoring, MATRIX scores as the existing
+                  cross-reference) but does not develop its own ML models.
+                </p>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
       {/* ── 02 · Underlying data sources ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className={SECTION_INNER}>

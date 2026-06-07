@@ -593,7 +593,33 @@ export default async function Home() {
                 classified into a confidence tier, and sources and scores are visible
                 on every card.
               </p>
-              <div style={{ marginTop: 24 }}>
+              <p
+                style={{
+                  color: "var(--ink-2)",
+                  fontSize: 14,
+                  lineHeight: 1.65,
+                  maxWidth: "52ch",
+                  marginTop: 18,
+                }}
+              >
+                Two structured grounding layers are planned on top of the
+                scoring pipeline: ontology-grounded entity resolution against
+                canonical biomedical registries (ChEMBL or DrugBank, MONDO,
+                HGNC) and knowledge-graph grounding via the BioCypher
+                framework (Lobentanzer et al., Nature Biotechnology 2023).
+                Recorded in methodology v3.4 to address the LLM failure
+                modes documented by WHBench (Maurya et al. 2026) and the
+                hybrid-architecture literature.
+              </p>
+              <div
+                style={{
+                  marginTop: 24,
+                  display: "flex",
+                  gap: 28,
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                }}
+              >
                 <Link
                   href="/about/technical-architecture"
                   style={{
@@ -607,6 +633,20 @@ export default async function Home() {
                   }}
                 >
                   Read the methodology →
+                </Link>
+                <Link
+                  href="/about/external-references#structured-grounding-in-progress"
+                  style={{
+                    ...MONO,
+                    fontSize: "12px",
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    borderBottom: "1px solid var(--green-mid)",
+                    paddingBottom: 2,
+                    color: "var(--green-mid)",
+                  }}
+                >
+                  Structured grounding (planned) →
                 </Link>
               </div>
             </div>
