@@ -1301,8 +1301,139 @@ export default function MethodologyPage() {
               gap: 22,
             }}
           >
-            {/* v3.3 */}
+            {/* v3.4 */}
             <div>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.4 &middot; June 7, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                LLM validation strategy made explicit. Whel&apos;s evidence
+                extraction and scoring layer is built on Claude Opus 4.6, a
+                large language model.{" "}
+                <Link
+                  href="https://arxiv.org/abs/2604.00024"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  WHBench
+                </Link>
+                , an independent 2026 benchmark of frontier LLMs on
+                women&apos;s health clinical questions (Maurya, Saboo &amp;
+                Kumar, 2026, arXiv:2604.00024), found that no model in its
+                22-model lineup exceeded 75% on the 23-criterion rubric, with
+                the top model fully correct in only 35.5% of scenarios. The
+                failure pattern is systematic rather than random: universal
+                blind spots in social determinants of health (0.7%&ndash;19.1%
+                across all 22 models), wide variation in safety harm rates
+                within the top tier, and persistent gaps in completeness on
+                follow-up timelines and monitoring plans. Empirical work on
+                biomedical LLM reference fabrication (Gong et al. 2026,
+                Bioengineering) documents hallucination rates of
+                47%&ndash;55% on citation tasks. The hybrid-architecture
+                literature (Zong et al. 2026{" "}
+                <Link
+                  href="https://arxiv.org/abs/2603.28325"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  EvidenceNet
+                </Link>
+                , arXiv:2603.28325; Li et al. 2025 on knowledge-guided
+                prompting, IEEE J. Biomed. Health Inform.; Zunzunegui Sanz et
+                al. 2025, bioRxiv) consistently shows that adding structured
+                external knowledge on top of LLM extraction improves accuracy
+                and interpretability.
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                Whel&apos;s response, recorded as two roadmap items, is to add
+                a structured validation layer on top of the existing LLM
+                pipeline without replacing it. Path A is entity validation:
+                every compound, condition, and gene the LLM extracts is
+                resolved against canonical biomedical ontologies (ChEMBL or
+                DrugBank for compounds, MONDO for conditions, HGNC for genes)
+                before being written to the database, with entities that fail
+                to resolve flagged for human review rather than silently
+                stored. This addresses the structured-output hallucination
+                class of error directly. Path B is a domain-restricted
+                knowledge graph cross-reference, built using the{" "}
+                <Link
+                  href="https://biocypher.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  BioCypher
+                </Link>{" "}
+                framework (Lobentanzer et al., Nature Biotechnology 2023),
+                restricted to Whel&apos;s six conditions and active-signal
+                compounds, displayed as a &ldquo;graph supports&rdquo; or
+                &ldquo;graph silent&rdquo; disclosure layer beside each signal
+                in the same shape as the existing MATRIX cross-reference at{" "}
+                <Link
+                  href="/about/external-references"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /about/external-references
+                </Link>
+                .
+              </p>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: "14px 0 0 0",
+                }}
+              >
+                Whel will not train a custom graph neural network for
+                drug-condition link prediction. The platform consumes machine
+                learning (Claude Opus 4.6 for extraction and scoring, MATRIX
+                scores from Every Cure&apos;s KGML-xDTD as an external
+                disclosure layer; see Fajgenbaum et al. 2024, The Lancet
+                Haematology) but does not develop its own ML models. The
+                knowledge-graph plus graph-neural-network prediction direction
+                (TxGNN; Huang et al. 2024, Nature Medicine) is acknowledged as
+                state-of-the-art for global drug repurposing prediction but is
+                out of scope for an evidence index focused on women&apos;s
+                hormonal health, where the value proposition is provenance and
+                interpretability rather than throughput.
+              </p>
+            </div>
+
+            {/* v3.3 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
               <div
                 style={{
                   ...MONO,
