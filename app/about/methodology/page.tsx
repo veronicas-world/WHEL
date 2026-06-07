@@ -1301,8 +1301,63 @@ export default function MethodologyPage() {
               gap: 22,
             }}
           >
-            {/* v3.2 */}
+            {/* v3.3 */}
             <div>
+              <div
+                style={{
+                  ...MONO,
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  marginBottom: 8,
+                }}
+              >
+                Methodology v3.3 &middot; June 7, 2026
+              </div>
+              <p
+                style={{
+                  ...MONO,
+                  fontSize: 11,
+                  letterSpacing: "0.04em",
+                  lineHeight: 1.7,
+                  color: "var(--muted)",
+                  margin: 0,
+                }}
+              >
+                Source-coverage philosophy made explicit. The four automated
+                pipelines (PubMed, ClinicalTrials.gov, FDA AEMS, Open Targets,
+                Reddit) ingest representative sources per
+                compound&ndash;condition pair through condition-keyed Boolean
+                searches with publication-date and article-type filters,
+                rather than exhaustive enumeration of every paper in the
+                literature. For under-researched conditions this is a
+                reasonable approximation of the available evidence base. For
+                well-studied compound-condition pairs it surfaces synthesis
+                papers (reviews, position statements, society guidelines) and
+                may leave the original RCTs cited inside them outside the
+                indexed sources. The L0&ndash;L3 grade carries the
+                independent-corroboration question as a separate layer. A
+                planned manual-curation extension, documented in the Roadmap
+                register as &ldquo;Manual primary-source curation pass,&rdquo;
+                will close the gap on high-evidence signals through the same
+                human-in-the-loop worklist pattern that produced the L3
+                grades. The featured-signal walkthrough on{" "}
+                <Link
+                  href="/featured"
+                  style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  /featured
+                </Link>{" "}
+                already documents this gap in prose for the one signal it
+                covers, in Section 04 &ldquo;Literature Whel did not
+                ingest.&rdquo;
+              </p>
+            </div>
+
+            {/* v3.2 */}
+            <div style={{ borderTop: "1px dashed var(--rule)", paddingTop: 22 }}>
               <div
                 style={{
                   ...MONO,
