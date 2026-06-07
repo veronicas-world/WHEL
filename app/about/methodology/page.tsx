@@ -639,7 +639,7 @@ export default function MethodologyPage() {
                 direction is recorded separately.
               </p>
 
-              <div style={CARD}>
+              <div id="l-grade-ladder" style={{ ...CARD, scrollMarginTop: 80 }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                   {L_GRADE_LEVELS.map((lvl) => (
                     <div
@@ -696,7 +696,7 @@ export default function MethodologyPage() {
                 workflow.
               </p>
 
-              <p style={BODY}>
+              <p id="guideline-strength-certainty" style={{ ...BODY, scrollMarginTop: 80 }}>
                 The strength and certainty values themselves draw from small
                 vocabularies. The <code>guideline_strength</code> field
                 records whether the body endorses the indication:{" "}

@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import ExternalLinkIcon from "../../components/ExternalLinkIcon";
 import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
 import { getLGradeForPair } from "@/lib/evidence-grading-snapshot";
 import { L_GRADE_LEVELS, type LGradeLevel } from "@/lib/literature-grade-rubric";
+
+// Anchor targets on the methodology and technical-architecture pages that
+// the per-signal chips link to. Centralized here so a future rename of any
+// of these anchors only has to be touched in one place.
+const ANCHOR_L_GRADE = "/about/methodology#l-grade-ladder";
+const ANCHOR_STRENGTH_CERTAINTY = "/about/methodology#guideline-strength-certainty";
+const ANCHOR_CONFIDENCE_TIERS = "/about/technical-architecture#confidence-tiers";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -584,16 +592,17 @@ function SignalCard({
 
         <div style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {lGrade && lGradeStyle && (
-            <span
+            <Link
+              href={ANCHOR_L_GRADE}
               title={
                 guidelineMeta
-                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)} (guideline strength: ${guidelineMeta.strength}; certainty: ${guidelineMeta.certainty}${guidelineMeta.id ? `; id: ${guidelineMeta.id}` : ""})`
-                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`
+                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)} (guideline strength: ${guidelineMeta.strength}; certainty: ${guidelineMeta.certainty}${guidelineMeta.id ? `; id: ${guidelineMeta.id}` : ""}). Click to read the L-grade rubric.`
+                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}. Click to read the L-grade rubric.`
               }
               aria-label={
                 guidelineMeta
-                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}. Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}.`
-                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`
+                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}. Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}. Opens the L-grade rubric on the methodology page.`
+                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}. Opens the L-grade rubric on the methodology page.`
               }
               style={{
                 display: "inline-flex",
@@ -607,21 +616,25 @@ function SignalCard({
                 fontSize: 10,
                 letterSpacing: "0.1em",
                 flexShrink: 0,
+                textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               <span style={{ width: 7, height: 7, background: lGradeStyle.fill, display: "inline-block" }} />
               LIT · {lGrade}
-            </span>
+            </Link>
           )}
 
           {/* Sibling pill — guideline strength × certainty. Renders only when
               the signal has a curated guideline source row attached. Visually
               echoes the L-grade chip color but uses a dashed border to read
-              as a metadata badge rather than a primary grade. */}
+              as a metadata badge rather than a primary grade. Links to the
+              strength + certainty glossary block on the methodology page. */}
           {lGrade && lGradeStyle && guidelineMeta && (
-            <span
-              title={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}. Curated from ${guidelineMeta.id ?? "the originating guideline body"}.`}
-              aria-label={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}`}
+            <Link
+              href={ANCHOR_STRENGTH_CERTAINTY}
+              title={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}. Curated from ${guidelineMeta.id ?? "the originating guideline body"}. Click to read the strength and certainty glossary.`}
+              aria-label={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}. Opens the strength and certainty glossary on the methodology page.`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -634,14 +647,19 @@ function SignalCard({
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 flexShrink: 0,
+                textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               {guidelineMeta.strength} · {guidelineMeta.certainty}
-            </span>
+            </Link>
           )}
 
           {tierInfo && (
-            <span
+            <Link
+              href={ANCHOR_CONFIDENCE_TIERS}
+              title={`Whel confidence tier ${signal.confidence_tier}. Click to read the tier mapping on the technical architecture page.`}
+              aria-label={`Whel confidence tier ${signal.confidence_tier}. Opens the tier mapping on the technical architecture page.`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -653,11 +671,13 @@ function SignalCard({
                 fontSize: 10,
                 letterSpacing: "0.1em",
                 flexShrink: 0,
+                textDecoration: "none",
+                cursor: "pointer",
               }}
             >
               <span style={{ width: 7, height: 7, background: "var(--paper)", display: "inline-block" }} />
               {signal.confidence_tier?.toUpperCase()}
-            </span>
+            </Link>
           )}
         </div>
       </div>

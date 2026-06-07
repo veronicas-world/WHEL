@@ -802,7 +802,10 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 3 — Confidence tiers ──────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section
+        id="confidence-tiers"
+        style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 80 }}
+      >
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 3 · Tier mapping"
