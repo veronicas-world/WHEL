@@ -651,7 +651,12 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Right: Confidence tier widget */}
+            {/* Right column: Confidence Tiers + Structured Grounding Sources peer card.
+                Both share the same border treatment so they read as a matched pair
+                stacked vertically. The Sources card fills the whitespace the right
+                column previously had after the left-column structured-grounding
+                paragraph grew the left column past the Confidence Tiers card. */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <div style={{ border: "1px solid var(--ink)", background: "var(--paper)" }}>
               <div
                 style={{
@@ -726,6 +731,113 @@ export default async function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Structured Grounding Sources peer card. Same border + paper
+                treatment as Confidence Tiers above; rows match the same
+                three-column grid (chip · description · short tag). Chip uses
+                the green-soft / green-deep palette to read as 'planned' rather
+                than 'ranked' (the ranked colors live on Confidence Tiers). */}
+            <div style={{ border: "1px solid var(--ink)", background: "var(--paper)" }}>
+              <div
+                style={{
+                  padding: "14px 20px",
+                  borderBottom: "1px solid var(--rule)",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "var(--muted)",
+                  }}
+                >
+                  Structured grounding sources
+                </span>
+                <span
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    letterSpacing: "0.08em",
+                    color: "var(--muted)",
+                  }}
+                >
+                  Planned &middot; v3.4
+                </span>
+              </div>
+              {[
+                {
+                  label: "ChEMBL / DrugBank",
+                  desc: "Compound canonicalization plus enrichment with drug class, ATC code, and known targets",
+                  tag: "Path A",
+                },
+                {
+                  label: "MONDO",
+                  desc: "Condition ontology resolution; the same registry MATRIX uses for its cross-reference",
+                  tag: "Path A",
+                },
+                {
+                  label: "HGNC",
+                  desc: "Gene resolution and alias mapping for pathway-extracted gene mentions",
+                  tag: "Path A",
+                },
+                {
+                  label: "BioCypher",
+                  desc: "KG construction framework (Lobentanzer et al., Nature Biotechnology 2023) for the domain-restricted graph",
+                  tag: "Path B",
+                },
+              ].map((row, i, arr) => (
+                <div
+                  key={row.label}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "auto 1fr auto",
+                    gap: 16,
+                    alignItems: "center",
+                    padding: "16px 20px",
+                    borderBottom:
+                      i < arr.length - 1 ? "1px solid var(--rule)" : "none",
+                  }}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      padding: "4px 10px",
+                      fontSize: "11px",
+                      ...MONO,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      background: "var(--green-soft)",
+                      color: "var(--green-deep)",
+                      fontWeight: 500,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {row.label}
+                  </span>
+                  <div style={{ fontSize: 12.5, color: "var(--muted)", lineHeight: 1.4 }}>
+                    {row.desc}
+                  </div>
+                  <div
+                    style={{
+                      ...MONO,
+                      fontSize: 11,
+                      color: "var(--muted-2)",
+                      whiteSpace: "nowrap",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {row.tag}
+                  </div>
+                </div>
+              ))}
+            </div>
             </div>
 
           </div>
