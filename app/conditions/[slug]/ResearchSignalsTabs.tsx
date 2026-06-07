@@ -18,6 +18,12 @@ interface Source {
   publication_date: string | null;
   url: string | null;
   key_finding_excerpt: string | null;
+  // Curated guideline metadata (§07 of methodology). Populated only on
+  // source rows whose study_type='guideline' and have been hand-curated
+  // through scripts/curate-guidelines.py. Most rows are null on all three.
+  guideline_id: string | null;
+  guideline_strength: string | null;
+  guideline_certainty: string | null;
 }
 
 export interface Signal {
@@ -318,7 +324,7 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
                       </a>
                     )}
                     {s.key_finding_excerpt && (
-                      <p style={{ marginTop: 4, fontStyle: "italic", color: "var(--muted-2)" }}>
+                      <p style={{ marginTop: 4, color: "var(--ink-2)" }}>
                         &ldquo;{s.key_finding_excerpt}&rdquo;
                       </p>
                     )}
@@ -452,7 +458,7 @@ function CollapsibleSources({ sources }: { sources: Source[] }) {
                       <strong style={{ color: "var(--ink)" }}>{s.title ?? s.external_id ?? "Open Targets"}</strong>
                     )}
                     {s.key_finding_excerpt && (
-                      <p style={{ marginTop: 4, fontStyle: "italic", color: "var(--muted-2)" }}>
+                      <p style={{ marginTop: 4, color: "var(--ink-2)" }}>
                         &ldquo;{s.key_finding_excerpt}&rdquo;
                       </p>
                     )}
@@ -500,6 +506,23 @@ function SignalCard({
   const studyCount  = getStudyCount(signal.sources);
   const lGrade      = getLGradeForPair(signal.compounds?.name, conditionName);
   const lGradeStyle = lGrade ? L_GRADE_STYLE[lGrade] : null;
+
+  // Find the curated guideline source (if any) so the chip can surface
+  // the strength / certainty pair beside the L-grade level. Curation lives
+  // on the sources row; see methodology page section 04 and methods PDF
+  // section 3.7. Most signals will not have one of these — the field is
+  // only populated for the three guideline-society-backed live signals
+  // (ESHRE 2022, ISSWSH 2021, NAMS 2020) until further curation rounds.
+  const guidelineSource = signal.sources.find(
+    (s) => s.guideline_strength && s.guideline_certainty,
+  );
+  const guidelineMeta = guidelineSource
+    ? {
+        strength: guidelineSource.guideline_strength as string,
+        certainty: guidelineSource.guideline_certainty as string,
+        id: guidelineSource.guideline_id,
+      }
+    : null;
 
   const hasScore = signal.total_evidence_score != null && signal.total_evidence_score > 0;
   const hasDetails =
@@ -559,11 +582,19 @@ function SignalCard({
           {armInfo.label}
         </span>
 
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {lGrade && lGradeStyle && (
             <span
-              title={`Literature grade ${lGrade} — ${getLGradeSummary(lGrade)}`}
-              aria-label={`Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`}
+              title={
+                guidelineMeta
+                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)} (guideline strength: ${guidelineMeta.strength}; certainty: ${guidelineMeta.certainty}${guidelineMeta.id ? `; id: ${guidelineMeta.id}` : ""})`
+                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`
+              }
+              aria-label={
+                guidelineMeta
+                  ? `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}. Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}.`
+                  : `Literature grade ${lGrade}: ${getLGradeSummary(lGrade)}`
+              }
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -580,6 +611,32 @@ function SignalCard({
             >
               <span style={{ width: 7, height: 7, background: lGradeStyle.fill, display: "inline-block" }} />
               LIT · {lGrade}
+            </span>
+          )}
+
+          {/* Sibling pill — guideline strength × certainty. Renders only when
+              the signal has a curated guideline source row attached. Visually
+              echoes the L-grade chip color but uses a dashed border to read
+              as a metadata badge rather than a primary grade. */}
+          {lGrade && lGradeStyle && guidelineMeta && (
+            <span
+              title={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}. Curated from ${guidelineMeta.id ?? "the originating guideline body"}.`}
+              aria-label={`Guideline strength ${guidelineMeta.strength}, certainty ${guidelineMeta.certainty}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                padding: "4px 8px",
+                background: "transparent",
+                color: lGradeStyle.fill,
+                border: `1px dashed ${lGradeStyle.fill}`,
+                ...MONO,
+                fontSize: 9,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                flexShrink: 0,
+              }}
+            >
+              {guidelineMeta.strength} · {guidelineMeta.certainty}
             </span>
           )}
 

@@ -129,7 +129,10 @@ export default async function ConditionDetailPage({
         journal,
         publication_date,
         url,
-        key_finding_excerpt
+        key_finding_excerpt,
+        guideline_id,
+        guideline_strength,
+        guideline_certainty
       )
       `
     )

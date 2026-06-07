@@ -73,9 +73,13 @@ export default function AboutPage() {
           >
             About Whel.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "52ch" }}>
-            How a personal experience became an open evidence index for
-            conditions medicine has been slow to study.
+          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
+            Whel is an open evidence index for drug repurposing signals across
+            six under-researched women&apos;s hormonal and reproductive
+            conditions. This page explains why the project exists, who built
+            it, the specific gap in the women&apos;s health evidence base it
+            is built to address, the audiences it is designed to serve, and
+            what it is and is not intended to do.
           </p>
         </div>
       </div>

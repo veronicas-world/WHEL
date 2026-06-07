@@ -696,6 +696,33 @@ export default function MethodologyPage() {
                 workflow.
               </p>
 
+              <p style={BODY}>
+                The strength and certainty values themselves draw from small
+                vocabularies. The <code>guideline_strength</code> field
+                records whether the body endorses the indication:{" "}
+                <code>recommended</code> for an explicit endorsement and{" "}
+                <code>weak</code> for a conditional endorsement (often phrased
+                in the source guideline as &ldquo;consider&rdquo; or
+                &ldquo;may be considered&rdquo;). A future curated row could
+                also carry <code>discouraged</code> for an indication a body
+                explicitly recommends against, though none of the three
+                curated to date use that value. The{" "}
+                <code>guideline_certainty</code> field records the quality of
+                the evidence behind that strength on a four-step ladder
+                adapted from GRADE: <code>high</code>, <code>moderate</code>,{" "}
+                <code>low</code>, and <code>very low</code>. The two read
+                together. A row recorded as <code>recommended</code> paired
+                with <code>moderate</code> records that the body explicitly
+                endorses the use and judges the supporting evidence to be of
+                mid-grade quality. A row recorded as <code>weak</code> paired
+                with <code>low</code> records a conditional endorsement made
+                against limited evidence. These values surface on each
+                condition page as a small dashed pill beside the L-grade chip
+                on the signal card, with the full triple of strength,
+                certainty, and source <code>guideline_id</code> shown in the
+                chip&apos;s tooltip on hover.
+              </p>
+
               {/* Pre-run L-grade scan: the audit-script Phase 6 pass that
                   derives a max-supportable L for every active pair from the
                   attached source records, with a live ceiling honestly

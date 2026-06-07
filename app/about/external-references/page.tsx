@@ -1084,7 +1084,7 @@ export default function ExternalReferencesPage() {
                     {[
                       {
                         head: "All six conditions confirmed as exact MONDO matches.",
-                        tail: "Whel's disease definitions resolve to standard ontology entries the broader literature already indexes — PCOS, PMDD, Adenomyosis, Endometriosis, Vulvodynia, Perimenopause & Menopause. No in-house labels, no silent drift.",
+                        tail: "Whel's disease definitions resolve to standard ontology entries the broader literature already indexes: PCOS, PMDD, Adenomyosis, Endometriosis, Vulvodynia, Perimenopause & Menopause. No in-house labels, no silent drift.",
                       },
                       {
                         head: "Whel's compound vocabulary maps cleanly into standard CURIE space.",
@@ -1689,9 +1689,9 @@ export default function ExternalReferencesPage() {
                 marginTop: 18,
               }}
             >
-              Rows with &ldquo;—&rdquo; in the &ldquo;Resolves to&rdquo; column
-              exist for documentation (e.g. medical-device combos) and do not
-              contribute to MATRIX matches. Source file:{" "}
+              Rows with a dash in the &ldquo;Resolves to&rdquo; column exist
+              for documentation purposes (e.g. medical-device combos) and do
+              not contribute to MATRIX matches. Source file:{" "}
               <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
                 lib/brand-name-dictionary.json
               </code>
@@ -1724,7 +1724,7 @@ export default function ExternalReferencesPage() {
               marginTop: 28,
             }}
           >
-            Register revised May 2026
+            Register revised June 2026
           </div>
 
           <div

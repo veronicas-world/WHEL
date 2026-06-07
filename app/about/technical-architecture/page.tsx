@@ -317,7 +317,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
     items: [
       {
         label: "Data freshness",
-        body: "The signal database reflects a point-in-time snapshot based on when pipelines were last run. New literature and adverse event reports are not captured automatically. Last pipeline run: May 2026.",
+        body: "The signal database reflects a point-in-time snapshot based on when pipelines were last run. New literature and adverse event reports are not captured automatically. Last pipeline run: June 2026.",
       },
       {
         label: "Conflict of interest and funding",
@@ -422,9 +422,14 @@ export default function TechnicalArchitecturePage() {
           >
             Technical architecture.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "56ch" }}>
-            The data pipelines, the five-dimension scoring framework, the
-            infrastructure, and the documented limitations behind every signal.
+          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
+            This page documents the technical machinery behind every signal
+            in the Whel database. It covers the five active data pipelines
+            and the sources each one queries, the five-dimension rubric Whel
+            applies to every signal, the four confidence tiers scores map
+            into, the category-specific admission standards each evidence arm
+            enforces, and the documented limitations of the methodology as
+            currently shipped.
           </p>
 
           <div style={{ marginTop: 28 }}>
