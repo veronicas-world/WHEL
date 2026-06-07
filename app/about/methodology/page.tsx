@@ -1472,13 +1472,12 @@ export default function MethodologyPage() {
                 additions to the pipeline rather than post-hoc validation:
                 they change what data lands in the database and how the LLM
                 arrives at its scoring. Path A is ontology-grounded entity
-                resolution: every compound, condition, and gene the LLM
-                extracts is resolved against canonical biomedical registries
-                (ChEMBL or DrugBank for compounds, MONDO for conditions, HGNC
-                for genes), rewritten with the registry&apos;s standard
-                identifier, and enriched with the structured metadata that
-                resolution returns (drug class, ATC code, known targets;
-                ontology lineage; chromosome and aliases) before being
+                resolution: every compound and condition the LLM extracts is
+                resolved against canonical biomedical registries (ChEMBL or
+                DrugBank for compounds, MONDO for conditions), rewritten with
+                the registry&apos;s standard identifier, and enriched with
+                the structured metadata that resolution returns (drug class,
+                ATC code, known targets; ontology lineage) before being
                 written to the database. Entities that fail to resolve are
                 flagged for human review rather than silently stored. This
                 addresses the structured-output hallucination class of error

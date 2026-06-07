@@ -1268,13 +1268,13 @@ export default function ExternalReferencesPage() {
           resolution) and Path B (knowledge-graph grounding via BioCypher)
           recorded in methodology v3.4. Both are architectural additions to
           the LLM pipeline, not pure post-hoc validation: Path A canonicalizes
-          and enriches every extracted entity against ChEMBL/DrugBank/MONDO/
-          HGNC before write, Path B adds a persistent KG that informs LLM
-          scoring at prompt time and surfaces as a disclosure layer beside
-          each signal. The block structure parallels the MATRIX disclosure
-          block above so the page reads as a single 'here are the grounding
-          layers' surface, with explicit 'Pending' status pills so no
-          synthetic numbers are implied. Patterned on the section 05
+          and enriches every extracted compound and condition against
+          ChEMBL/DrugBank and MONDO before write, Path B adds a persistent KG
+          that informs LLM scoring at prompt time and surfaces as a disclosure
+          layer beside each signal. The block structure parallels the MATRIX
+          disclosure block above so the page reads as a single 'here are the
+          grounding layers' surface, with explicit 'Pending' status pills so
+          no synthetic numbers are implied. Patterned on the section 05
           brand-name dictionary's <details> collapsible. */}
       <section
         id="structured-grounding-in-progress"
@@ -1340,7 +1340,7 @@ export default function ExternalReferencesPage() {
                     lineHeight: 1.5,
                   }}
                 >
-                  ChEMBL or DrugBank &middot; MONDO &middot; HGNC
+                  ChEMBL or DrugBank &middot; MONDO
                 </span>
               </span>
               <span
@@ -1375,23 +1375,21 @@ export default function ExternalReferencesPage() {
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   This layer serves three functions, not one. First, it
-                  canonicalizes: every compound, condition, and gene the LLM
+                  canonicalizes: every compound and condition the LLM
                   extracts is resolved against a canonical biomedical
                   registry and rewritten with that registry&apos;s standard
                   identifier before being written to Whel&apos;s database.
                   Compounds resolve against ChEMBL or DrugBank; conditions
                   resolve against MONDO (the same ontology Whel already uses
-                  for the MATRIX cross-reference above); genes resolve
-                  against HGNC. Second, it enriches: the resolution call
-                  returns structured metadata (generic name, drug class,
-                  ATC code, known targets for a compound; ontology lineage
-                  for a condition; chromosome and aliases for a gene) that
-                  travels with the signal into the database, changing the
-                  shape of the data Whel stores. Third, it gates: entities
-                  that fail to resolve are flagged for human review rather
-                  than silently stored, which catches the structured-output
-                  hallucination class of error documented in the LLM
-                  literature.
+                  for the MATRIX cross-reference above). Second, it enriches:
+                  the resolution call returns structured metadata (generic
+                  name, drug class, ATC code, known targets for a compound;
+                  ontology lineage for a condition) that travels with the
+                  signal into the database, changing the shape of the data
+                  Whel stores. Third, it gates: entities that fail to
+                  resolve are flagged for human review rather than silently
+                  stored, which catches the structured-output hallucination
+                  class of error documented in the LLM literature.
                 </p>
               </div>
 
@@ -1436,7 +1434,7 @@ export default function ExternalReferencesPage() {
                     },
                     {
                       head: "Enrichment summary.",
-                      tail: "Average number of structured metadata fields attached to each resolved entity (drug class, ATC code, known targets for compounds; ontology lineage for conditions; chromosome and aliases for genes), so the data-shape change is visible rather than implicit.",
+                      tail: "Average number of structured metadata fields attached to each resolved entity (drug class, ATC code, known targets for compounds; ontology lineage for conditions), so the data-shape change is visible rather than implicit.",
                     },
                   ].map((item) => (
                     <li
