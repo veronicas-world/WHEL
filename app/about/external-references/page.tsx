@@ -610,11 +610,14 @@ export default function ExternalReferencesPage() {
             intro="Because Whel surfaces MATRIX scores as an independent layer rather than blending them into its own grades, the honest question is how much of Whel's universe MATRIX actually covers. The numbers below come from an audit script that joins Whel's active compound–condition pairs against the published MATRIX dataset. Raw, adjusted, and per-condition figures are all shown so readers can decide for themselves which denominator is fair. Per-pair scores from the same audit are also surfaced on each condition page beside the L-grade chip, so a reader can see MATRIX's biological-plausibility score for any individual compound–condition pair where MATRIX has coverage, not just the aggregate."
           />
 
-          {/* Plain-English explainer for what MATRIX's two numbers mean.
-              Sits between the SectionHeader and the audit headline tiles
-              so any reader landing here (including via the MATRIX chip
-              click on a signal card) finds the scale described before
-              they encounter the numeric tiles below. */}
+          {/* Plain-English explainer for what MATRIX's two numbers mean,
+              grounded in Every Cure's own dataset-card definitions. Sits
+              between the SectionHeader and the audit headline tiles so any
+              reader landing here (including via the MATRIX chip click on a
+              signal card) finds the scale described before they encounter
+              the numeric tiles below. Includes the Every Cure 'research use
+              only' disclaimer verbatim so any reader sees it before any
+              numbers. */}
           <div
             style={{
               ...CARD,
@@ -635,24 +638,133 @@ export default function ExternalReferencesPage() {
                 margin: 0,
               }}
             >
-              MATRIX returns two values per scored pair, and Whel surfaces
-              both. The <strong style={{ color: "var(--ink)", fontWeight: 500 }}>transformed score</strong>{" "}
-              is MATRIX&apos;s raw biological-plausibility score; in the
-              audit run summarized below it ranges roughly 3.0 to 4.5 across
-              the matched pairs, with higher meaning MATRIX&apos;s model
-              predicts the pair is more likely to be a real treatment match.
-              The <strong style={{ color: "var(--ink)", fontWeight: 500 }}>quantile rank</strong>,
-              shown on each signal card as &ldquo;Top N%&rdquo;, is
+              MATRIX returns two values per scored drug&ndash;disease pair,
+              and Whel surfaces both. Per Every Cure&apos;s own dataset
+              documentation on{" "}
+              <a
+                href="https://huggingface.co/datasets/everycure/matrix-scores"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={LINK}
+              >
+                Hugging Face
+              </a>
+              , both values are model predictions of treatment probability,
+              not clinical claims.
+            </p>
+            <p
+              style={{
+                fontSize: 14.5,
+                lineHeight: 1.7,
+                color: "var(--ink-2)",
+                maxWidth: "72ch",
+                margin: "14px 0 0 0",
+              }}
+            >
+              The{" "}
+              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                transformed score
+              </strong>{" "}
+              is MATRIX&apos;s prediction of treatment probability. Every
+              Cure trained their model on a biomedical knowledge graph (drug
+              targets, disease pathways, gene associations, and the set of
+              already-validated drug&ndash;disease treatments) and the model
+              learned to recognize the structural features that distinguish
+              pairs that are real treatments from pairs that are not. The
+              transformed score combines that raw treatment-probability with
+              the pair&apos;s rank inside the drug&apos;s other predictions
+              and inside the disease&apos;s other predictions, so it surfaces
+              pairs that look like treatments both globally and in context.
+              In the audit run summarized below it ranges roughly 3.0 to
+              4.5, with higher meaning MATRIX gives the pair a higher
+              treatment-probability.
+            </p>
+            <p
+              style={{
+                fontSize: 14.5,
+                lineHeight: 1.7,
+                color: "var(--ink-2)",
+                maxWidth: "72ch",
+                margin: "14px 0 0 0",
+              }}
+            >
+              The{" "}
+              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                quantile rank
+              </strong>
+              , shown on each signal card as &ldquo;Top N%&rdquo;, is
               MATRIX&apos;s own percentile across all of its predictions
-              (roughly 39.5 million drug&ndash;disease pairs): lower is
-              better. A pair shown as &ldquo;Top 8%&rdquo; on a Whel signal
-              card means MATRIX ranks that pair in the top eight percent of
-              every drug&ndash;disease pair its model has scored. Most of
-              Whel&apos;s matched pairs land in MATRIX&apos;s top eight
-              percent or so, which is the kind of agreement we want from an
-              independent disclosure layer. Raw transformed scores are kept
-              in the chip tooltip and in the full audit numbers below for
-              readers who want the underlying value.
+              (roughly 39.5 million drug&ndash;disease pairs). A pair shown
+              as &ldquo;Top 8%&rdquo; means MATRIX assigned this
+              drug&ndash;disease pair a higher treatment-probability than
+              ninety-two percent of every drug&ndash;disease pair its model
+              has scored across the biomedical knowledge graph.
+            </p>
+            <p
+              style={{
+                fontSize: 14.5,
+                lineHeight: 1.7,
+                color: "var(--ink-2)",
+                maxWidth: "72ch",
+                margin: "14px 0 0 0",
+              }}
+            >
+              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                What &ldquo;Top N%&rdquo; does and does not say.
+              </strong>{" "}
+              A high MATRIX score is a graph-based plausibility signal:
+              MATRIX&apos;s model thinks the structural features of this
+              drug&ndash;disease pair look like the structural features of
+              pairs that turned out to be real treatments. It is not a
+              clinical recommendation. It is not a confirmation that the
+              drug treats the disease. It is not a statement that the pair
+              is being investigated or that the pair is rare. Every Cure
+              makes the limit explicit in their own dataset card, and we
+              quote them verbatim: &ldquo;These scores are the output of a
+              computational research pipeline and do not constitute medical
+              advice, clinical recommendations, or endorsement of any drug
+              for any use. All findings require independent scientific and
+              clinical validation before any clinical application.&rdquo;
+            </p>
+            <p
+              style={{
+                fontSize: 14.5,
+                lineHeight: 1.7,
+                color: "var(--ink-2)",
+                maxWidth: "72ch",
+                margin: "14px 0 0 0",
+              }}
+            >
+              <strong style={{ color: "var(--ink)", fontWeight: 500 }}>
+                Why Whel surfaces this anyway.
+              </strong>{" "}
+              MATRIX is independent of Whel&apos;s literature pipeline.
+              MATRIX reads no papers; it predicts treatment plausibility
+              from the structure of a biomedical knowledge graph. Whel reads
+              published literature, trial registries, adverse-event data,
+              target databases, and patient communities, and scores each
+              signal against a five-dimension rubric. When the two layers
+              agree on a pair (Whel finds literature support for the use,
+              AND MATRIX assigns the pair a high treatment-probability),
+              that is two methodologically different approaches arriving at
+              the same hypothesis. The fact that most of Whel&apos;s matched
+              pairs land in MATRIX&apos;s top eight percent or so is the
+              kind of structural agreement an independent disclosure layer
+              is supposed to provide.
+            </p>
+            <p
+              style={{
+                ...MONO,
+                fontSize: 11.5,
+                lineHeight: 1.6,
+                color: "var(--muted)",
+                maxWidth: "72ch",
+                margin: "16px 0 0 0",
+              }}
+            >
+              Raw transformed scores are kept in the chip tooltip and in the
+              full audit numbers below for readers who want the underlying
+              value.
             </p>
           </div>
 

@@ -683,8 +683,8 @@ function SignalCard({
           {matrixScore && matrixScore.transformed_score != null && matrixScore.quantile_rank != null && (
             <Link
               href={ANCHOR_MATRIX}
-              title={`Every Cure MATRIX biological-plausibility score: this pair sits in ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of MATRIX's predictions (raw transformed score ${matrixScore.transformed_score.toFixed(3)}; quantile rank ${(matrixScore.quantile_rank * 100).toFixed(1)} percent, where lower is better). MATRIX scores come from a graph-ML model trained on a biomedical knowledge graph and are surfaced beside Whel's grade rather than blended into it. Click to read the MATRIX coverage disclosure on the external references page.`}
-              aria-label={`MATRIX biological-plausibility: ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of MATRIX's predictions. Opens the MATRIX coverage disclosure on the external references page.`}
+              title={`Every Cure MATRIX treatment-probability prediction: MATRIX's graph-ML model ranks this drug-condition pair in ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of all its predictions (roughly 39.5 million drug-disease pairs), based on the pair's structural features in a biomedical knowledge graph. Raw transformed score ${matrixScore.transformed_score.toFixed(3)}; quantile rank ${(matrixScore.quantile_rank * 100).toFixed(1)} percent, where lower is better. Not a clinical recommendation; surfaced beside Whel's grade rather than blended into it. Click to read 'How to read these numbers' on the external references page.`}
+              aria-label={`MATRIX treatment-probability prediction: ${formatMatrixPercentile(matrixScore.quantile_rank).toLowerCase()} of MATRIX's predictions. Opens the MATRIX coverage disclosure on the external references page.`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
