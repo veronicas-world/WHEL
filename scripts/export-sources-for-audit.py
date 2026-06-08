@@ -194,8 +194,20 @@ def fetch_sources_for_signals(
 ) -> list[dict[str, Any]]:
     """Return all sources attached to the given signal IDs. Batches the
     in.() filter at 200 signal IDs per request and paginates within
-    each batch to respect PostgREST's 1000-row cap."""
-    select = "id,signal_id,source_type,external_id,title,authors,journal,publication_date,url"
+    each batch to respect PostgREST's 1000-row cap.
+
+    Columns pulled: identifier fields (id, signal_id, source_type,
+    external_id) plus bibliographic metadata (title, authors, journal,
+    publication_date, url) used by Phase 1 plus the LLM-generated text
+    fields (key_finding_excerpt, primary_endpoint_text) used by Phase 2
+    (sentence-level summary grounding). key_finding_excerpt is the
+    per-source LLM-extracted finding text; primary_endpoint_text is the
+    rubric-line-82 extracted primary endpoint phrasing populated by
+    scripts/classify-sources-study-type.py."""
+    select = (
+        "id,signal_id,source_type,external_id,title,authors,journal,"
+        "publication_date,url,key_finding_excerpt,primary_endpoint_text"
+    )
     BATCH = 200
     out: list[dict[str, Any]] = []
     for i in range(0, len(signal_ids), BATCH):

@@ -1379,7 +1379,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                Methodology v3.11 &middot; June 7, 2026
+                Methodology v3.12 &middot; June 8, 2026
               </span>
             </div>
 
@@ -1393,27 +1393,25 @@ export default function MethodologyPage() {
                 margin: 0,
               }}
             >
-              OT-DRUGNAME backfill. The 10 unresolved Open Targets
-              source rows flagged in v3.10 have been backfilled to
-              canonical CHEMBL identifiers via Supabase migration
-              044, closing the architectural-debt finding from the
-              first database-sources audit run. Each row was updated
-              in two columns:{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
-              from{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
-              to the canonical CHEMBL ID, and{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>url</code>{" "}
-              from a disease-page link to the matching drug-page link
-              (e.g.{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-APREPITANT</code>{" "}
-              &rarr;{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>CHEMBL1471</code>),
-              matching the shape of the 38 existing canonical Open
-              Targets rows. After the migration runs, the next
-              audit&apos;s opentargets resolved_match count rises from
-              38 to 48 and the unresolved count drops from 10 to 0.
-              See full v3.11 entry on the{" "}
+              Path C Phase 2 tooling shipped. Two new verifiers cover
+              all five source types alongside the Phase 1 identifier
+              audit. Phase 2a (Sentence-BERT sentence-level grounding)
+              audits free-text sources: PubMed abstracts via NCBI
+              E-utilities, ClinicalTrials.gov briefSummary via API v2,
+              and Reddit post bodies via the public JSON endpoint;
+              all-MiniLM-L6-v2 embeddings; default flag threshold 0.40.
+              Phase 2b (structured-source verification) audits AEMS
+              reaction counts by re-querying the openFDA{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug/event</code>{" "}
+              endpoint and comparing to LLM-extracted counts within a
+              tolerance, and verifies Open Targets target attributions
+              against the canonical{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>linkedTargets</code>{" "}
+              list. Also: FAERS &rarr; AEMS naming sweep across recent
+              prose (database enum value stays as the literal{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>faers</code>;
+              user-facing prose uses AEMS). See full v3.12 entry on
+              the{" "}
               <Link
                 href="/about/methodology/changelog"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
@@ -1450,7 +1448,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                12 dated revisions &middot; v2 through v3.11
+                13 dated revisions &middot; v2 through v3.12
               </span>
               <Link
                 href="/about/methodology/changelog"

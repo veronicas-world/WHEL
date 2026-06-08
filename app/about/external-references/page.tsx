@@ -19,6 +19,16 @@ import {
   isPopulated as databaseSourcesAuditPopulated,
   formattedDate as databaseSourcesAuditFormattedDate,
 } from "@/lib/database-sources-audit-snapshot";
+import {
+  SUMMARY_GROUNDING_SNAPSHOT,
+  isPopulated as summaryGroundingPopulated,
+  formattedDate as summaryGroundingFormattedDate,
+} from "@/lib/summary-grounding-audit-snapshot";
+import {
+  STRUCTURED_SOURCES_SNAPSHOT,
+  isPopulated as structuredSourcesPopulated,
+  formattedDate as structuredSourcesFormattedDate,
+} from "@/lib/structured-sources-audit-snapshot";
 
 export const metadata = {
   title: "External references | Whel",
@@ -2350,7 +2360,7 @@ export default function ExternalReferencesPage() {
                       <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
                       table: every PMID from PubMed, every NCT ID from
                       ClinicalTrials.gov, every Open Targets identifier,
-                      and every FAERS / Reddit URL that the LLM
+                      and every AEMS / Reddit URL that the LLM
                       extraction pipeline attached to an active signal
                       and rendered on a drug card.
                     </p>
@@ -2461,7 +2471,7 @@ export default function ExternalReferencesPage() {
                     <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
                     table on the Whel database: every PMID from PubMed,
                     every NCT ID from ClinicalTrials.gov, every Open
-                    Targets identifier, and every FAERS / Reddit URL the
+                    Targets identifier, and every AEMS / Reddit URL the
                     LLM extraction pipeline attached to an active signal
                     and rendered on a drug card. The tooling to audit
                     those rows shipped on June 7, 2026 as{" "}
@@ -2470,7 +2480,7 @@ export default function ExternalReferencesPage() {
                     <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-database-sources.py</code>{" "}
                     (PMID against NCBI E-utilities, NCT against
                     ClinicalTrials.gov API v2, Open Targets ID against
-                    Open Targets GraphQL, FAERS and Reddit URL format
+                    Open Targets GraphQL, AEMS and Reddit URL format
                     checks). The first run requires running the export
                     locally (the script reads{" "}
                     <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>NEXT_PUBLIC_SUPABASE_URL</code>{" "}
@@ -2499,7 +2509,209 @@ export default function ExternalReferencesPage() {
                     marginBottom: 8,
                   }}
                 >
-                  What Phase 2 and Phase 3 will add later
+                  Phase 2a (summary grounding) ·{" "}
+                  {summaryGroundingPopulated()
+                    ? `live as of ${summaryGroundingFormattedDate()}`
+                    : "tooling shipped, awaiting first run"}
+                </div>
+                {summaryGroundingPopulated() ? (
+                  <>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        lineHeight: 1.65,
+                        color: "var(--ink-2)",
+                        maxWidth: "72ch",
+                        margin: "0 0 12px 0",
+                      }}
+                    >
+                      Sentence-level grounding for free-text sources
+                      (PubMed, ClinicalTrials.gov, Reddit). Each
+                      LLM-generated finding sentence on{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources.key_finding_excerpt</code>{" "}
+                      is embedded via{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>{SUMMARY_GROUNDING_SNAPSHOT.model}</code>{" "}
+                      and compared against canonical-source sentences
+                      using max cosine similarity. Sentences scoring
+                      below{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>{SUMMARY_GROUNDING_SNAPSHOT.similarity_threshold}</code>{" "}
+                      are flagged as not directly supported by the
+                      source.
+                    </p>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                        gap: 14,
+                        margin: "0 0 16px 0",
+                        padding: "14px 16px",
+                        border: "1px solid var(--rule)",
+                        background: "var(--surface)",
+                      }}
+                    >
+                      {[
+                        { label: "Sources audited", value: SUMMARY_GROUNDING_SNAPSHOT.summary.total.toString() },
+                        { label: "Summary sentences", value: SUMMARY_GROUNDING_SNAPSHOT.summary.sentence_total.toString() },
+                        { label: "Sentences flagged", value: SUMMARY_GROUNDING_SNAPSHOT.summary.sentences_flagged.toString() },
+                        { label: "Flag rate", value: `${(SUMMARY_GROUNDING_SNAPSHOT.summary.sentence_flag_rate * 100).toFixed(1)}%` },
+                      ].map(({ label, value }) => (
+                        <div key={label}>
+                          <div style={{ ...MONO, fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 4 }}>
+                            {label}
+                          </div>
+                          <div className="font-heading" style={{ fontSize: "1.3rem", fontWeight: 500, color: "var(--ink)", lineHeight: 1.1 }}>
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.65,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 18px 0",
+                    }}
+                  >
+                    Sentence-level grounding for free-text sources
+                    (PubMed, ClinicalTrials.gov, Reddit). Each
+                    LLM-generated finding sentence on{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources.key_finding_excerpt</code>{" "}
+                    will be embedded via Sentence-BERT
+                    (all-MiniLM-L6-v2) and compared against canonical
+                    source sentences using max cosine similarity.
+                    Sentences scoring below 0.40 will be flagged as
+                    not directly supported by the source. Tooling
+                    shipped as{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-summary-grounding.py</code>;
+                    runs after the export script is re-run to
+                    populate the{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>key_finding_excerpt</code>{" "}
+                    field on the sources snapshot and after{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>pip install sentence-transformers</code>{" "}
+                    on the host. This block switches to live numbers
+                    the moment{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/summary-grounding-audit-snapshot.json</code>{" "}
+                    is populated.
+                  </p>
+                )}
+
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Phase 2b (structured-source verification) ·{" "}
+                  {structuredSourcesPopulated()
+                    ? `live as of ${structuredSourcesFormattedDate()}`
+                    : "tooling shipped, awaiting first run"}
+                </div>
+                {structuredSourcesPopulated() ? (
+                  <>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        lineHeight: 1.65,
+                        color: "var(--ink-2)",
+                        maxWidth: "72ch",
+                        margin: "0 0 12px 0",
+                      }}
+                    >
+                      Field-by-field verification for structured
+                      sources. AEMS reaction counts are re-queried
+                      against the openFDA{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug/event</code>{" "}
+                      endpoint and compared to the count in the LLM-
+                      extracted title within a ±5 or ±10 percent
+                      tolerance (whichever is larger; AEMS data
+                      updates continuously). Open Targets attributions
+                      are verified by re-fetching the drug record
+                      through the OT GraphQL{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug(chemblId)</code>{" "}
+                      query and confirming the claimed target appears
+                      in the{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>linkedTargets</code>{" "}
+                      list.
+                    </p>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+                        gap: 14,
+                        margin: "0 0 18px 0",
+                        padding: "14px 16px",
+                        border: "1px solid var(--rule)",
+                        background: "var(--surface)",
+                      }}
+                    >
+                      {[
+                        { label: "Total rows audited", value: STRUCTURED_SOURCES_SNAPSHOT.summary.total.toString() },
+                        ...Object.entries(STRUCTURED_SOURCES_SNAPSHOT.summary.by_status).map(([status, n]) => ({
+                          label: status.replace(/_/g, " "),
+                          value: n.toString(),
+                        })),
+                      ].map(({ label, value }) => (
+                        <div key={label}>
+                          <div style={{ ...MONO, fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 4 }}>
+                            {label}
+                          </div>
+                          <div className="font-heading" style={{ fontSize: "1.3rem", fontWeight: 500, color: "var(--ink)", lineHeight: 1.1 }}>
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.65,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 18px 0",
+                    }}
+                  >
+                    Field-by-field verification for structured sources
+                    (AEMS reaction counts; Open Targets target
+                    attributions). AEMS counts will be re-queried
+                    against the openFDA{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug/event</code>{" "}
+                    endpoint and compared to the count in the LLM-
+                    extracted title. Open Targets target claims will
+                    be verified through the OT GraphQL{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug(chemblId)</code>{" "}
+                    query against the{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>linkedTargets</code>{" "}
+                    list. Tooling shipped as{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-structured-sources.py</code>;
+                    this block switches to live numbers the moment{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/structured-sources-audit-snapshot.json</code>{" "}
+                    is populated.
+                  </p>
+                )}
+
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  What Phase 3 will add later
                 </div>
                 <ul
                   style={{
@@ -2510,14 +2722,6 @@ export default function ExternalReferencesPage() {
                   }}
                 >
                   {[
-                    {
-                      head: "Sentence-level grounding score distribution.",
-                      tail: "Cosine-similarity score per summary sentence, broken down by signal arm, so a reader can see how tightly summaries track the source abstracts they cite. Phase 2.",
-                    },
-                    {
-                      head: "Sample of flagged sentences.",
-                      tail: "Concrete examples of sentences flagged as 'not directly supported by the source', with the source abstract sitting beside them, so the failure mode is visible rather than abstract. Phase 2.",
-                    },
                     {
                       head: "Count of references blocked at publish time.",
                       tail: "Once Phase 3 prompt hardening lands, this disclosure surfaces how many references the LLM proposed that failed the Phase 1 manifest check and were therefore stripped before publish, instead of the audit reporting on the pre-verified manifest only.",

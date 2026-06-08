@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.11
+            Revision history · current version v3.12
           </div>
 
           <h1
@@ -132,8 +132,141 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.11 */}
+          {/* v3.12 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.12 &middot; June 8, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Path C Phase 2 tooling shipped. Phase 1 (citation
+              validation against canonical publishers) is now joined by
+              Phase 2 (grounding the LLM-generated finding text on each
+              source row against the canonical content at the publisher).
+              Phase 2 is split into two mechanisms because Whel&apos;s
+              five source types divide cleanly into free-text and
+              structured-data categories, and the right verification
+              mechanism differs by category. Sentence-BERT
+              cosine-similarity grounding is appropriate when the
+              canonical source has a free-text abstract (PubMed,
+              ClinicalTrials.gov, Reddit); field-by-field structured
+              verification is appropriate when the canonical source is
+              a structured record (AEMS reaction counts; Open Targets
+              drug-target-disease attributions).
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Phase 2a (free-text grounding) ships as{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/verify-summary-grounding.py
+              </code>
+              . For every source row in{" "}
+              {`{`}pubmed, clinical_trial, reddit{`}`}, the script splits
+              the LLM-generated finding text on{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                sources.key_finding_excerpt
+              </code>{" "}
+              into sentences, fetches the canonical source text (NCBI
+              E-utilities efetch for PubMed abstracts, ClinicalTrials.gov
+              API v2 briefSummary plus detailedDescription for trial
+              records, Reddit&apos;s public JSON endpoint for post body
+              plus the top five comments), embeds both sides with{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                all-MiniLM-L6-v2
+              </code>{" "}
+              from sentence-transformers, and computes max cosine
+              similarity per LLM-summary sentence against the canonical
+              sentences. Sentences scoring below 0.40 are flagged as
+              &ldquo;not directly supported by the source.&rdquo;
+              Reddit posts are refetched on every audit run rather than
+              cached, so deleted or removed posts surface as
+              &ldquo;source no longer available,&rdquo; itself a useful
+              finding. Threshold tuning against a human-labeled
+              validation set is recorded on the Roadmap as a Planned
+              follow-on; the 0.40 default is documented and defensible
+              as a v0.1 baseline but is expected to move with calibration.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Phase 2b (structured-source verification) ships as{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/verify-structured-sources.py
+              </code>
+              . AEMS rows (source_type=&apos;faers&apos; in the schema;
+              referred to as AEMS in user-facing prose to reflect the
+              FDA&apos;s 2025 rename of the system formerly known as
+              FAERS) carry the canonical openFDA query in the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>url</code>{" "}
+              column. The verifier re-runs each url, reads{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>meta.results.total</code>{" "}
+              from the openFDA response, and compares it to the count
+              parsed out of the LLM-extracted title within a tolerance
+              of max(5, 10 percent of claimed count). The tolerance
+              accommodates the fact that AEMS is a continuously-updating
+              dataset; exact matches across two timepoints are not
+              expected and would themselves be evidence of caching.
+              Open Targets rows are verified by re-fetching the drug
+              record through the OT GraphQL{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                drug(chemblId: $id)
+              </code>{" "}
+              query and confirming that the target symbol claimed in
+              the LLM-extracted title appears in the canonical{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                linkedTargets
+              </code>{" "}
+              list. Numerical score comparison is deferred to a
+              follow-on once the OT GraphQL exposes per-drug per-disease
+              per-target scores in a single hop.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/export-sources-for-audit.py
+              </code>{" "}
+              export was extended in the same commit to include{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                key_finding_excerpt
+              </code>{" "}
+              and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                primary_endpoint_text
+              </code>
+              ; both columns were already present in the live database
+              per migration 041 but had not been pulled into the audit
+              snapshot. After the re-export and the two verifier runs,
+              the two new disclosure blocks on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references &rarr; 01d
+              </Link>{" "}
+              switch from &ldquo;tooling shipped, awaiting first
+              run&rdquo; to live numbers (audited row count, sentences
+              flagged, flag rate for Phase 2a; status breakdown by
+              source_type for Phase 2b). Phase 3 (prompt hardening that
+              forbids citation generation outside the Phase 1 manifest)
+              remains Planned.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Naming convention going forward: the source_type field
+              value in the database stays as the literal string{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                faers
+              </code>{" "}
+              (the schema enum value, unchanged), but all user-facing
+              prose on the site uses AEMS to reflect the FDA&apos;s
+              rename of the public dashboard from FAERS (FDA Adverse
+              Event Reporting System) to AEMS (FDA Adverse Event
+              Monitoring System). FAERS appears in the methodology only
+              when describing the literal database field value, in
+              code formatting. A small sweep of recent prose on the
+              v3.9 and v3.10 changelog entries and the
+              external-references disclosure block landed in the same
+              commit.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.11 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.11 &middot; June 7, 2026
             </div>
@@ -239,7 +372,7 @@ export default function MethodologyChangelogPage() {
               across all active signals, audited row by row against
               the canonical external source for each identifier type.
               Result: 170 fully resolved with matching metadata, 1,986
-              format-only passes (FAERS dashboard URLs and Reddit
+              format-only passes (AEMS dashboard URLs and Reddit
               permalinks that pass the well-formed-URL pattern but
               cannot be resolved further because neither publisher
               exposes a record-lookup API), and 10 unresolved. There
@@ -413,7 +546,7 @@ export default function MethodologyChangelogPage() {
               source for each identifier type: PMIDs against NCBI
               E-utilities, NCT IDs against ClinicalTrials.gov API v2,
               Open Targets identifiers against the Open Targets GraphQL
-              API, and FAERS and Reddit URLs against format checks
+              API, and AEMS and Reddit URLs against format checks
               (URLs are well-formed, point at the correct host,
               include the expected path segments). Output lands in{" "}
               <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "generated_at": null,
+  "status": "pending_first_run",
+  "status_note": "Tooling shipped on 2026-06-08 as scripts/verify-structured-sources.py. Audits AEMS reaction counts against the openFDA API and Open Targets target attributions against the OT GraphQL drug record's linkedTargets list. Run after lib/sources-audit-snapshot.json is refreshed via the export script. This placeholder will be overwritten by the verifier on first successful run.",
+  "summary": {
+    "total": 0,
+    "by_status": {},
+    "by_source_type": {}
+  },
+  "results": []
+}

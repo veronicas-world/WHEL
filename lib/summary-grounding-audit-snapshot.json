@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "generated_at": null,
+  "status": "pending_first_run",
+  "status_note": "Tooling shipped on 2026-06-08 as scripts/verify-summary-grounding.py. Requires the lib/sources-audit-snapshot.json re-export to include the key_finding_excerpt field (added to scripts/export-sources-for-audit.py in the same v3.12 commit). After re-export, run python3 scripts/verify-summary-grounding.py. This placeholder will be overwritten by the verifier on first successful run.",
+  "model": "all-MiniLM-L6-v2",
+  "similarity_threshold": 0.40,
+  "summary": {
+    "total": 0,
+    "by_status": {},
+    "by_source_type": {},
+    "sentence_total": 0,
+    "sentences_flagged": 0,
+    "sentence_flag_rate": 0,
+    "mean_score_distribution": {}
+  },
+  "results": []
+}
