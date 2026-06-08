@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.12
+            Revision history · current version v3.13
           </div>
 
           <h1
@@ -132,8 +132,133 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.12 */}
+          {/* v3.13 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.13 &middot; June 8, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Source-level LLM extraction pipeline built and shipped.
+              The Phase 2a smoke test on the same day surfaced a real
+              architectural finding: the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                sources.key_finding_excerpt
+              </code>{" "}
+              column that Phase 2a was designed to ground existed in
+              the schema since migration 041 but was 0 percent populated
+              across all 2,166 active-signal source rows. No script had
+              ever written to it. Phase 2a as originally designed
+              would have skipped every row. The smoke test reported
+              30 of 30 source rows skipped with the same error message:
+              &ldquo;source row has empty key_finding_excerpt; nothing
+              to ground.&rdquo; The smoke test itself was the audit
+              working as intended; the verifier surfaced the missing
+              data layer before any misleading public numbers shipped.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              v3.13 ships the data-layer fix:{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/extract-key-findings.py
+              </code>
+              . The script iterates every free-text source row, fetches
+              the canonical source text (NCBI E-utilities efetch for
+              PubMed abstracts, ClinicalTrials.gov API v2 briefSummary
+              plus detailedDescription for trial records, Reddit&apos;s
+              public JSON endpoint for post body plus top 5 comments
+              for forum signals), and calls Claude Opus 4.6 to extract
+              a 2 to 4 sentence key finding focused on the
+              drug-condition pair for that specific signal. The
+              extraction prompt is tight on purpose: outputs must use
+              only claims directly supported by the canonical source
+              text, must be specific (effect sizes, sample sizes,
+              direction of effect when present), and must return the
+              exact literal{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                NO_RELEVANT_FINDING
+              </code>{" "}
+              if the canonical source does not actually discuss the
+              drug-condition pair. The refusal path is itself a useful
+              audit signal: any row that returns NO_RELEVANT_FINDING is
+              a source that was attached to a signal but does not
+              actually evidence the claim, which Phase 2a then surfaces
+              as a flag-worthy citation.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The script emits two artifacts. A JSON run log at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/audit-output/key-finding-extractions.json
+              </code>{" "}
+              records every per-source result with the prompt input,
+              the raw model output, the latency, and the status
+              (extracted, no_relevant_finding, fetch_failed, api_failed,
+              skipped). A Supabase migration at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                supabase/migrations/045_backfill_key_finding_excerpts.sql
+              </code>{" "}
+              carries the UPDATE statements that write each successful
+              extraction back to the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                sources
+              </code>{" "}
+              table. Each UPDATE is guarded by{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                key_finding_excerpt IS NULL
+              </code>{" "}
+              so the migration is idempotent and safe to re-run.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Order of operations to land Phase 2a&apos;s first real
+              numbers: (1) run the extraction script locally
+              (requires{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                ANTHROPIC_API_KEY
+              </code>{" "}
+              and the Supabase env vars; roughly 30 to 40 minutes
+              dominated by Reddit&apos;s rate limit on 190 posts);
+              (2) review the generated migration in Supabase Studio,
+              spot-check a few UPDATE statements, run the migration;
+              (3) re-run the export to refresh the audit snapshot
+              with the now-populated{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                key_finding_excerpt
+              </code>{" "}
+              field; (4) run{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/verify-summary-grounding.py
+              </code>{" "}
+              for the first real Phase 2a numbers. The Phase 2a
+              disclosure block on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references &rarr; 01d
+              </Link>{" "}
+              switches from &ldquo;tooling shipped, awaiting first
+              run&rdquo; to live numbers at step (4).
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              A separate Roadmap row records signal-level summary
+              grounding as a Planned follow-on. The current{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                repurposing_signals.summary
+              </code>{" "}
+              and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                repurposing_signals.mechanism_hypothesis
+              </code>{" "}
+              fields are hand-written prose in seed migrations 002
+              through 007, not LLM-generated; they reference real
+              PMIDs and clinical findings in narrative form and would
+              also benefit from grounding against the cited source
+              corpus. That is a separate audit mechanism (per-signal
+              union of cited sources rather than per-source 1:1) and
+              not in scope for v3.13.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.12 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.12 &middot; June 8, 2026
             </div>

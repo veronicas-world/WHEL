@@ -1379,7 +1379,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                Methodology v3.12 &middot; June 8, 2026
+                Methodology v3.13 &middot; June 8, 2026
               </span>
             </div>
 
@@ -1393,37 +1393,33 @@ export default function MethodologyPage() {
                 margin: 0,
               }}
             >
-              Path C Phase 2 tooling shipped. Two new verifiers cover
-              all five source types alongside the Phase 1 identifier
-              audit. Phase 2a (Sentence-BERT sentence-level grounding)
-              audits free-text sources: PubMed abstracts via NCBI
-              E-utilities, ClinicalTrials.gov briefSummary via API v2,
-              and Reddit post bodies via the public JSON endpoint;
-              all-MiniLM-L6-v2 embeddings; default flag threshold 0.40.
-              Phase 2b (structured-source verification) audits AEMS
-              reaction counts by re-querying the openFDA{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug/event</code>{" "}
-              endpoint and comparing to LLM-extracted counts within a
-              tolerance, and verifies Open Targets target attributions
-              against the canonical{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>linkedTargets</code>{" "}
-              list. Also: FAERS &rarr; AEMS naming sweep across recent
-              prose (database enum value stays as the literal{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>faers</code>;
-              user-facing prose uses AEMS). See full v3.12 entry on
-              the{" "}
+              Source-level LLM extraction pipeline shipped, closing the
+              data-layer gap surfaced by the Phase 2a smoke test the
+              same day. The smoke test on 30 free-text source rows
+              showed{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources.key_finding_excerpt</code>{" "}
+              is 0 percent populated across all 2,166 rows: the column
+              exists per migration 041 but no script ever wrote to it,
+              so Phase 2a as originally designed would have skipped
+              every row.{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/extract-key-findings.py</code>{" "}
+              fills the gap. For each free-text source it fetches the
+              canonical text from the publisher (NCBI efetch /
+              ClinicalTrials.gov API v2 / Reddit JSON) and calls Claude
+              Opus 4.6 to extract a 2-4 sentence key finding focused on
+              the drug-condition pair, with a strict refusal path
+              (literal{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>NO_RELEVANT_FINDING</code>)
+              when the source does not discuss the pair. Output:
+              JSON run log plus Supabase migration 045 with the UPDATE
+              statements. After the script runs and migration 045 ships,
+              Phase 2a runs against real data for the first time. See
+              full v3.13 entry on the{" "}
               <Link
                 href="/about/methodology/changelog"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
               >
                 changelog
-              </Link>{" "}
-              and live audit numbers on{" "}
-              <Link
-                href="/about/external-references#output-validation-in-progress"
-                style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-              >
-                /about/external-references &rarr; 01d
               </Link>
               .
             </p>
@@ -1448,7 +1444,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                13 dated revisions &middot; v2 through v3.12
+                14 dated revisions &middot; v2 through v3.13
               </span>
               <Link
                 href="/about/methodology/changelog"
