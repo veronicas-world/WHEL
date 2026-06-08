@@ -587,7 +587,11 @@ export default function MethodologyPage() {
                   rubric to every Moderate-and-above signal and re-checked
                   the condition-attribution of every ClinicalTrials.gov
                   citation; the findings and resolutions are recorded in
-                  the methodology version log at the foot of this page.
+                  the methodology revision history at{" "}
+                  <Link href="/about/methodology/changelog" style={LINK}>
+                    /about/methodology/changelog
+                  </Link>
+                  .
                 </p>
               </div>
             </div>

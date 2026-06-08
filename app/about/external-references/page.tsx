@@ -1699,10 +1699,9 @@ export default function ExternalReferencesPage() {
                   Where this lives in the project
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Recorded in the methodology version log at v3.4 (see the
-                  log at the foot of{" "}
-                  <Link href="/about/methodology" style={LINK}>
-                    /about/methodology
+                  Recorded in the methodology revision history at v3.4 (see{" "}
+                  <Link href="/about/methodology/changelog" style={LINK}>
+                    /about/methodology/changelog
                   </Link>
                   ). Listed as a Planned register row on the Roadmap as
                   &ldquo;Ontology-grounded entity resolution (Path A).&rdquo;
@@ -1969,10 +1968,9 @@ export default function ExternalReferencesPage() {
                   Where this lives in the project
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Recorded in the methodology version log at v3.4 (see the
-                  log at the foot of{" "}
-                  <Link href="/about/methodology" style={LINK}>
-                    /about/methodology
+                  Recorded in the methodology revision history at v3.4 (see{" "}
+                  <Link href="/about/methodology/changelog" style={LINK}>
+                    /about/methodology/changelog
                   </Link>
                   ). Listed as a Planned register row on the Roadmap as
                   &ldquo;Knowledge-graph grounding via BioCypher (Path
@@ -2354,15 +2352,7 @@ export default function ExternalReferencesPage() {
                       ClinicalTrials.gov, every Open Targets identifier,
                       and every FAERS / Reddit URL that the LLM
                       extraction pipeline attached to an active signal
-                      and rendered on a drug card. The audit is scoped
-                      to sources attached to{" "}
-                      <em>active</em>{" "}
-                      signals; the homepage stat strip shows a slightly
-                      higher number that includes sources tied to
-                      deactivated signals that are not currently
-                      rendered on any{" "}
-                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>/conditions/[slug]</code>{" "}
-                      page.
+                      and rendered on a drug card.
                     </p>
                     <div
                       style={{
@@ -2637,21 +2627,30 @@ export default function ExternalReferencesPage() {
                   Where this lives in the project
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Recorded in the methodology version log at v3.6 (see the
-                  log at the foot of{" "}
-                  <Link href="/about/methodology" style={LINK}>
-                    /about/methodology
+                  Recorded in the methodology revision history at v3.6
+                  (definition), v3.7 (manual audit prototype), v3.8 (Phase
+                  1 live for the hand-written manifest), v3.9 (Phase 1
+                  tooling for the database-sources audit), v3.10 (Phase
+                  1 first database-sources run), and v3.11 (OT-DRUGNAME
+                  backfill closing the v3.10 architectural-debt finding).
+                  Full revision history at{" "}
+                  <Link href="/about/methodology/changelog" style={LINK}>
+                    /about/methodology/changelog
                   </Link>
-                  ). Listed as a Planned register row on the Roadmap as
+                  . Phase 1 is now a Live register row on the Roadmap as
                   &ldquo;Citation validation and summary grounding (Path
-                  C).&rdquo; This disclosure block will switch from Pending
-                  to Live, and the structured fields above will populate
-                  with real validation numbers, when each phase ships. Path
-                  C is distinct from Path A (ontology-grounded entity
-                  resolution) and Path B (knowledge-graph grounding via
-                  BioCypher), which are documented in section 01c above.
-                  Path A and Path B ground the LLM&apos;s inputs; Path C
-                  validates the LLM&apos;s outputs.
+                  C);&rdquo; Phase 2 (sentence-level summary grounding
+                  via Sentence-BERT) and Phase 3 (prompt hardening that
+                  forbids citation generation outside the Phase 1
+                  manifest) remain Planned. The structured fields above
+                  carry real audit numbers for Phase 1 and will populate
+                  the remaining fields when Phase 2 and Phase 3 ship.
+                  Path C is distinct from Path A (ontology-grounded
+                  entity resolution) and Path B (knowledge-graph
+                  grounding via BioCypher), which are documented in
+                  section 01c above. Path A and Path B ground the
+                  LLM&apos;s inputs; Path C validates the LLM&apos;s
+                  outputs.
                 </p>
               </div>
             </div>

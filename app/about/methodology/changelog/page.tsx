@@ -117,12 +117,7 @@ export default function MethodologyChangelogPage() {
             external sources of truth, the adjudication rules, or the
             pre-specified thresholds are recorded here so the methodology page
             stays readable and so smaller refinements that would not warrant a
-            roadmap entry remain visible. Newest revision is on top. The
-            current version tag at the top of{" "}
-            <Link href="/about/methodology" style={ENTRY_LINK}>
-              /about/methodology
-            </Link>{" "}
-            tracks the most recent version recorded here.
+            roadmap entry remain visible. Newest revision is on top.
           </p>
         </div>
       </div>
@@ -243,16 +238,6 @@ export default function MethodologyChangelogPage() {
               <strong style={{ color: "var(--ink)" }}>2,166 source rows</strong>{" "}
               across all active signals, audited row by row against
               the canonical external source for each identifier type.
-              The homepage stat strip renders a separate live
-              Supabase count that includes sources attached to
-              deactivated or hidden signals as well (currently
-              showing 2,176; the 10-row delta is the deactivated-signal
-              source rows that are no longer rendered on any{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>/conditions/[slug]</code>{" "}
-              drug card). The audit is intentionally scoped to
-              active-signal sources, because those are the citations
-              currently visible to users; deactivated-signal source
-              rows are out of scope until they are reactivated.
               Result: 170 fully resolved with matching metadata, 1,986
               format-only passes (FAERS dashboard URLs and Reddit
               permalinks that pass the well-formed-URL pattern but

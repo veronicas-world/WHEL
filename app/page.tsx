@@ -81,7 +81,16 @@ export default async function Home() {
       .eq("status", "active")
       .not("total_evidence_score", "is", null)
       .gt("total_evidence_score", 0),
-    supabase.from("sources").select("*", { count: "exact", head: true }),
+    // Count only sources attached to ACTIVE signals so the homepage
+    // stat strip matches the Path C Phase 1 database-sources audit
+    // scope (sources tied to active /conditions/[slug] drug cards).
+    // Without the !inner join + status filter, this counted every row
+    // in the sources table including ones tied to deactivated or
+    // hidden signals that no user sees today.
+    supabase
+      .from("sources")
+      .select("repurposing_signals!inner(status)", { count: "exact", head: true })
+      .eq("repurposing_signals.status", "active"),
   ]);
 
   const conditions = conditionsRaw ?? [];
@@ -131,7 +140,9 @@ export default async function Home() {
     ? new Date(lastUpdated).toLocaleDateString("en-US", { month: "short", year: "numeric" })
     : "–";
 
-  // Format sources count for the stat strip — locale-formatted (e.g. "2,228")
+  // Format sources count for the stat strip — locale-formatted
+  // (e.g. "2,166"). Now counts active-signal sources only; matches the
+  // database-sources audit headline on /about/external-references 01d.
   const citationsLabel =
     typeof sourcesCount === "number" && sourcesCount > 0
       ? sourcesCount.toLocaleString("en-US")
