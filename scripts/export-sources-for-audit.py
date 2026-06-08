@@ -147,6 +147,17 @@ def http_get_json_paginated(
             if e.code in (200, 206):
                 batch = json.loads(e.read())
             else:
+                # Surface PostgREST's error body so column-name typos and
+                # similar query bugs are visible at the terminal.
+                err_body = ""
+                try:
+                    err_body = e.read().decode("utf-8", errors="replace")
+                except Exception:
+                    pass
+                print(
+                    f"\nHTTP {e.code} from PostgREST:\n  URL: {base_url}\n  body: {err_body}",
+                    file=sys.stderr,
+                )
                 raise
         if not isinstance(batch, list):
             break
@@ -161,10 +172,14 @@ def fetch_active_signals(base: str, headers: dict[str, str]) -> list[dict[str, A
     """Return all active repurposing_signals rows (the ones rendered on
     /conditions/[slug] drug cards). We only audit sources attached to
     active signals; inactive/deactivated rows are out of scope because
-    they're not currently rendered to users."""
+    they're not currently rendered to users.
+
+    Column names mirror what scripts/check-matrix-coverage.py uses
+    against the live schema: compound_id, condition_id, signal_type,
+    confidence_tier."""
     url = (
         f"{base}/rest/v1/repurposing_signals"
-        f"?select=id,status,condition_id,compound"
+        f"?select=id,status,compound_id,condition_id,signal_type,confidence_tier"
         f"&status=eq.active"
     )
     rows = http_get_json_paginated(url, headers)
