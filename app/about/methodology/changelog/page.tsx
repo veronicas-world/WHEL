@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.10
+            Revision history · current version v3.11
           </div>
 
           <h1
@@ -137,8 +137,100 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.10 */}
+          {/* v3.11 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.11 &middot; June 7, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              OT-DRUGNAME backfill: the 10 active-signal Open Targets
+              source rows flagged in v3.10 as storing a synthetic{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
+              shorthand in{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources.external_id</code>{" "}
+              have been backfilled to the canonical CHEMBL identifier
+              for each drug. CHEMBL IDs were resolved via the Open
+              Targets GraphQL{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>search(entityNames: [&quot;drug&quot;])</code>{" "}
+              endpoint and independently verified through the same{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>drug(chemblId: $id)</code>{" "}
+              query that the audit verifier calls. The 10 mappings:
+              APREPITANT &rarr; CHEMBL1471, DESVENLAFAXINE &rarr;
+              CHEMBL1118, ENZALUTAMIDE &rarr; CHEMBL1082407,
+              TRIMEBUTINE &rarr; CHEMBL190044, TASIMELTEON &rarr;
+              CHEMBL2103822, TRADIPITANT &rarr; CHEMBL3544984, OLAPARIB
+              &rarr; CHEMBL521686, FOSNETUPITANT &rarr; CHEMBL3989917,
+              MILNACIPRAN &rarr; CHEMBL259209, and TRIIODOTHYRONINE
+              (liothyronine) &rarr; CHEMBL1544. For each drug, the top
+              search hit is the base compound; salt and prodrug forms
+              (e.g. DESVENLAFAXINE SUCCINATE, LIOTHYRONINE SODIUM)
+              appeared as alternates and were rejected so the
+              backfilled IDs match the convention of the 38 existing
+              canonical Open Targets rows in the sources table, which
+              store base CHEMBL IDs rather than salt-form variants.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The backfill ships as Supabase migration{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                supabase/migrations/044_backfill_ot_drugname_to_chembl.sql
+              </code>
+              . Each of the ten UPDATE statements targets one specific
+              source row by its UUID id AND its expected old{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>,
+              so the migration is a no-op on any row that has already
+              been touched and safe to re-run. The migration updates
+              two columns on each row:{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
+              from{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
+              to the canonical CHEMBL ID, and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>url</code>{" "}
+              from a{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org/disease/{`{GO_or_EFO}`}</code>{" "}
+              link to the matching{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org/drug/CHEMBL{`{id}`}</code>{" "}
+              link, matching the URL shape of the 38 existing canonical
+              rows. Title and key-finding columns are unchanged.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              User-visible effect on{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>/conditions/[slug]</code>{" "}
+              drug cards: the source-attribution chip rendered alongside
+              each affected Open Targets signal changes from a synthetic
+              label (e.g. &ldquo;OT-APREPITANT&rdquo;) to the canonical
+              CHEMBL identifier (&ldquo;CHEMBL1471&rdquo;), and the
+              outbound link goes to the drug page rather than the
+              disease page. The disease page showed every drug for the
+              condition; the drug page shows every disease for the
+              drug. Both are valid Open Targets surfaces; the drug page
+              is the more useful destination for a citation that is
+              evidencing a specific drug-condition pair.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Expected audit shift after the migration runs: in the
+              next{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-database-sources.py</code>{" "}
+              report, the opentargets resolved_match count rises from
+              38 to 48, the unresolved count for opentargets drops from
+              10 to 0, and the headline summary on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references &rarr; 01d
+              </Link>{" "}
+              shifts from &ldquo;170 resolved_match / 10 unresolved&rdquo;
+              to &ldquo;180 resolved_match / 0 unresolved.&rdquo; The
+              Roadmap row{" "}
+              <em>Backfill canonical Open Targets identifiers on
+              signals using OT-DRUGNAME shorthand</em>{" "}
+              flips from Planned to Live; the v3.10 architectural-debt
+              finding is closed.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.10 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.10 &middot; June 7, 2026
             </div>

@@ -1375,7 +1375,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                Methodology v3.10 &middot; June 7, 2026
+                Methodology v3.11 &middot; June 7, 2026
               </span>
             </div>
 
@@ -1389,28 +1389,27 @@ export default function MethodologyPage() {
                 margin: 0,
               }}
             >
-              First database-sources audit run. 2,166 source rows
-              across all active signals audited against canonical
-              external sources (the homepage stat strip shows ~2,176,
-              which is the live Supabase count of every row in the
-              sources table including ones attached to deactivated
-              signals that are not currently rendered to users; the
-              audit is scoped to active-signal sources only).
-              Result: 170 fully resolved with matching metadata,
-              1,986 format-only passes (FAERS / Reddit URLs where
-              neither publisher exposes a record-lookup API),
-              10 unresolved. Zero{" "}
-              <em>resolved_mismatch</em>{" "}
-              entries: 113 of 113 PubMed PMIDs clean against NCBI,
-              19 of 19 NCT IDs clean against ClinicalTrials.gov, 38
-              of 38 canonical Open Targets IDs clean. The 10 unresolved
-              are all Open Targets rows storing a synthetic{" "}
+              OT-DRUGNAME backfill. The 10 unresolved Open Targets
+              source rows flagged in v3.10 have been backfilled to
+              canonical CHEMBL identifiers via Supabase migration
+              044, closing the architectural-debt finding from the
+              first database-sources audit run. Each row was updated
+              in two columns:{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
+              from{" "}
               <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
-              shorthand in the identifier column instead of a canonical
-              CHEMBL ID; the URL on those rows still points at a real{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org</code>{" "}
-              page so the user-visible citation is sound. Backfill
-              recorded on the Roadmap. See full v3.10 entry on the{" "}
+              to the canonical CHEMBL ID, and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>url</code>{" "}
+              from a disease-page link to the matching drug-page link
+              (e.g.{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-APREPITANT</code>{" "}
+              &rarr;{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>CHEMBL1471</code>),
+              matching the shape of the 38 existing canonical Open
+              Targets rows. After the migration runs, the next
+              audit&apos;s opentargets resolved_match count rises from
+              38 to 48 and the unresolved count drops from 10 to 0.
+              See full v3.11 entry on the{" "}
               <Link
                 href="/about/methodology/changelog"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
@@ -1447,7 +1446,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                11 dated revisions &middot; v2 through v3.10
+                12 dated revisions &middot; v2 through v3.11
               </span>
               <Link
                 href="/about/methodology/changelog"
