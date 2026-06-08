@@ -14,6 +14,11 @@ import {
   CITATION_AUDIT_SNAPSHOT,
   citationAuditFormattedDate,
 } from "@/lib/citation-audit-snapshot";
+import {
+  DATABASE_SOURCES_AUDIT_SNAPSHOT,
+  isPopulated as databaseSourcesAuditPopulated,
+  formattedDate as databaseSourcesAuditFormattedDate,
+} from "@/lib/database-sources-audit-snapshot";
 
 export const metadata = {
   title: "External references | Whel",
@@ -2299,18 +2304,153 @@ export default function ExternalReferencesPage() {
                     margin: "0 0 18px 0",
                   }}
                 >
-                  First run on June 7, 2026 flagged five real issues: one wrong
-                  title attached to a real DOI (Bate &amp; Evans 2009 — the DOI
-                  resolved but the manifest title was wrong); three epub vs
-                  journal-issue year mismatches (Ma 2023 KGML-xDTD, Pushpakom
-                  2019 Drug repurposing, Ochoa 2023 Open Targets); and one
-                  Crossref-side metadata gap on the Zunzunegui Sanz bioRxiv DOI.
-                  All five were corrected in the manifest and the methods PDF
-                  reference list; the script picked up the wrong title even
-                  though the DOI itself was valid, which is the failure mode
-                  Phase 1 was built to catch. Audit report at{" "}
+                  The expanded manifest on June 7, 2026 (v3.9) added the
+                  eight hand-written featured-page references on{" "}
+                  <Link href="/featured" style={LINK}>/featured</Link>{" "}
+                  and{" "}
+                  <Link href="/featured/anastrozole-endometriosis" style={LINK}>
+                    /featured/anastrozole-endometriosis
+                  </Link>
+                  . The verifier caught a real author misattribution on
+                  the anastrozole featured page (a paper attributed to
+                  &ldquo;Nawathe et al., 2011&rdquo; that resolved at the
+                  cited PMC link to a 2011 paper by Ferrero, Gillott,
+                  Venturini &amp; Remorgida). The featured page and
+                  manifest were corrected before the disclosure
+                  published. The full run log is at{" "}
                   <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/citation-audit-report.json</code>.
                 </p>
+
+                <div
+                  style={{
+                    ...MONO,
+                    fontSize: "10.5px",
+                    fontWeight: 500,
+                    letterSpacing: "0.16em",
+                    textTransform: "uppercase",
+                    color: "var(--green-deep)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Database-sources audit ·{" "}
+                  {databaseSourcesAuditPopulated()
+                    ? `live as of ${databaseSourcesAuditFormattedDate()}`
+                    : "tooling shipped, awaiting first run"}
+                </div>
+                {databaseSourcesAuditPopulated() ? (
+                  <>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        lineHeight: 1.65,
+                        color: "var(--ink-2)",
+                        maxWidth: "72ch",
+                        margin: "0 0 12px 0",
+                      }}
+                    >
+                      The much larger surface is the live{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
+                      table: every PMID from PubMed, every NCT ID from
+                      ClinicalTrials.gov, every Open Targets identifier,
+                      and every FAERS / Reddit URL that the LLM
+                      extraction pipeline attached to an active signal
+                      and rendered on a drug card.
+                    </p>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                        gap: 16,
+                        margin: "0 0 16px 0",
+                        padding: "16px 18px",
+                        border: "1px solid var(--rule)",
+                        background: "var(--surface)",
+                      }}
+                    >
+                      {[
+                        {
+                          label: "Total rows audited",
+                          value: DATABASE_SOURCES_AUDIT_SNAPSHOT.summary.total.toString(),
+                        },
+                        ...Object.entries(
+                          DATABASE_SOURCES_AUDIT_SNAPSHOT.summary.by_status,
+                        ).map(([status, n]) => ({
+                          label: status.replace(/_/g, " "),
+                          value: n.toString(),
+                        })),
+                      ].map(({ label, value }) => (
+                        <div key={label}>
+                          <div
+                            style={{
+                              ...MONO,
+                              fontSize: 10,
+                              letterSpacing: "0.2em",
+                              textTransform: "uppercase",
+                              color: "var(--muted)",
+                              marginBottom: 4,
+                            }}
+                          >
+                            {label}
+                          </div>
+                          <div
+                            className="font-heading"
+                            style={{
+                              fontSize: "1.4rem",
+                              fontWeight: 500,
+                              color: "var(--ink)",
+                              lineHeight: 1.1,
+                            }}
+                          >
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.65,
+                      color: "var(--ink-2)",
+                      maxWidth: "72ch",
+                      margin: "0 0 18px 0",
+                    }}
+                  >
+                    The manifest covered above is the hand-written prose
+                    surface (methodology, external-references, changelog,
+                    methods PDF, featured pages) plus a small set of
+                    foundational journal references. The much larger
+                    surface is the live{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
+                    table on the Whel database: every PMID from PubMed,
+                    every NCT ID from ClinicalTrials.gov, every Open
+                    Targets identifier, and every FAERS / Reddit URL the
+                    LLM extraction pipeline attached to an active signal
+                    and rendered on a drug card. The tooling to audit
+                    those rows shipped on June 7, 2026 as{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/export-sources-for-audit.py</code>{" "}
+                    (Supabase export) and{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-database-sources.py</code>{" "}
+                    (PMID against NCBI E-utilities, NCT against
+                    ClinicalTrials.gov API v2, Open Targets ID against
+                    Open Targets GraphQL, FAERS and Reddit URL format
+                    checks). The first run requires running the export
+                    locally (the script reads{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>NEXT_PUBLIC_SUPABASE_URL</code>{" "}
+                    from{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>.env.local</code>),
+                    committing the resulting{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/sources-audit-snapshot.json</code>,
+                    and running the verifier. This block will switch
+                    to a live numbers grid the moment the verifier
+                    populates{" "}
+                    <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>lib/database-sources-audit-snapshot.json</code>.
+                    Tracked on the{" "}
+                    <Link href="/about/roadmap" style={LINK}>roadmap</Link>{" "}
+                    under Path C Phase 1 (database sources).
+                  </p>
+                )}
 
                 <div
                   style={{

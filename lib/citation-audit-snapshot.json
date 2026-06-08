@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-07T19:13:04+00:00",
+  "generated_at": "2026-06-08T00:08:39+00:00",
   "summary": {
-    "total": 14,
-    "resolved_match": 14,
+    "total": 22,
+    "resolved_match": 22,
     "resolved_mismatch": 0,
     "unresolved": 0
   },
@@ -618,6 +618,358 @@
           "field": "year",
           "claimed": 2015,
           "canonical": 2015,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "jung_2019_climacteric_postmenopausal_uti",
+      "identifier_type": "pmid",
+      "identifier_value": "30624087",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "The etiology and management of recurrent urinary tract infections in postmenopausal women",
+        "first_author_surname": "Jung",
+        "container_title": "Climacteric : the journal of the International Menopause Society",
+        "year": 2019,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "The etiology and management of recurrent urinary tract infections in postmenopausal women",
+          "canonical": "The etiology and management of recurrent urinary tract infections in postmenopausal women",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Jung",
+          "canonical": "Jung",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Climacteric",
+          "canonical": "Climacteric : the journal of the International Menopause Society",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2019,
+          "canonical": 2019,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "lethaby_2016_cochrane_local_oestrogen",
+      "identifier_type": "pmid",
+      "identifier_value": "27577677",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Local oestrogen for vaginal atrophy in postmenopausal women",
+        "first_author_surname": "Lethaby",
+        "container_title": "The Cochrane database of systematic reviews",
+        "year": 2016,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Local oestrogen for vaginal atrophy in postmenopausal women",
+          "canonical": "Local oestrogen for vaginal atrophy in postmenopausal women",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Lethaby",
+          "canonical": "Lethaby",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Cochrane Database of Systematic Reviews",
+          "canonical": "The Cochrane database of systematic reviews",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2016,
+          "canonical": 2016,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "nams_2020_menopause_gsm",
+      "identifier_type": "pmid",
+      "identifier_value": "32852449",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "The 2020 genitourinary syndrome of menopause position statement of The North American Menopause Society",
+        "first_author_surname": "",
+        "container_title": "Menopause (New York, N.Y.)",
+        "year": 2020,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "The 2020 genitourinary syndrome of menopause position statement of The North American Menopause Society",
+          "canonical": "The 2020 genitourinary syndrome of menopause position statement of The North American Menopause Society",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "",
+          "canonical": "",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Menopause",
+          "canonical": "Menopause (New York, N.Y.)",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2020,
+          "canonical": 2020,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "raz_1993_nejm_intravaginal_estriol",
+      "identifier_type": "pmid",
+      "identifier_value": "8350884",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "A controlled trial of intravaginal estriol in postmenopausal women with recurrent urinary tract infections",
+        "first_author_surname": "Raz",
+        "container_title": "The New England journal of medicine",
+        "year": 1993,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "A controlled trial of intravaginal estriol in postmenopausal women with recurrent urinary tract infections",
+          "canonical": "A controlled trial of intravaginal estriol in postmenopausal women with recurrent urinary tract infections",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Raz",
+          "canonical": "Raz",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "The New England Journal of Medicine",
+          "canonical": "The New England journal of medicine",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 1993,
+          "canonical": 1993,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "perrotta_2008_cochrane_oestrogens_uti",
+      "identifier_type": "pmid",
+      "identifier_value": "18425910",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Oestrogens for preventing recurrent urinary tract infection in postmenopausal women",
+        "first_author_surname": "Perrotta",
+        "container_title": "The Cochrane database of systematic reviews",
+        "year": 2008,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Oestrogens for preventing recurrent urinary tract infection in postmenopausal women",
+          "canonical": "Oestrogens for preventing recurrent urinary tract infection in postmenopausal women",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Perrotta",
+          "canonical": "Perrotta",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Cochrane Database of Systematic Reviews",
+          "canonical": "The Cochrane database of systematic reviews",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2008,
+          "canonical": 2008,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "anger_2022_jurol_aua_ruti_guideline",
+      "identifier_type": "pmid",
+      "identifier_value": "35942788",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Updates to Recurrent Uncomplicated Urinary Tract Infections in Women: AUA/CUA/SUFU Guideline",
+        "first_author_surname": "Anger",
+        "container_title": "The Journal of urology",
+        "year": 2022,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Recurrent Uncomplicated Urinary Tract Infections in Women: AUA/CUA/SUFU Guideline (2022)",
+          "canonical": "Updates to Recurrent Uncomplicated Urinary Tract Infections in Women: AUA/CUA/SUFU Guideline",
+          "matches": true,
+          "similarity": 0.91
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Anger",
+          "canonical": "Anger",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "The Journal of Urology",
+          "canonical": "The Journal of urology",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2022,
+          "canonical": 2022,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "ferrero_2011_repbioendocrinol_aromatase_endo",
+      "identifier_type": "pmid",
+      "identifier_value": "21693038",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review",
+        "first_author_surname": "Ferrero",
+        "container_title": "Reproductive biology and endocrinology : RB&E",
+        "year": 2011,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review",
+          "canonical": "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Ferrero",
+          "canonical": "Ferrero",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Reproductive Biology and Endocrinology",
+          "canonical": "Reproductive biology and endocrinology : RB&E",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2011,
+          "canonical": 2011,
+          "matches": true,
+          "similarity": null
+        }
+      ],
+      "error": null
+    },
+    {
+      "key": "peitsidis_2023_ddt_aromatase_endo_sr",
+      "identifier_type": "pmid",
+      "identifier_value": "37168488",
+      "status": "resolved_match",
+      "canonical": {
+        "title": "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date",
+        "first_author_surname": "Peitsidis",
+        "container_title": "Drug design, development and therapy",
+        "year": 2023,
+        "source": "NCBI E-utilities esummary"
+      },
+      "fields": [
+        {
+          "field": "title",
+          "claimed": "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date",
+          "canonical": "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "first_author_surname",
+          "claimed": "Peitsidis",
+          "canonical": "Peitsidis",
+          "matches": true,
+          "similarity": null
+        },
+        {
+          "field": "container_title",
+          "claimed": "Drug Design, Development and Therapy",
+          "canonical": "Drug design, development and therapy",
+          "matches": true,
+          "similarity": 1.0
+        },
+        {
+          "field": "year",
+          "claimed": 2023,
+          "canonical": 2023,
           "matches": true,
           "similarity": null
         }

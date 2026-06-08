@@ -84,16 +84,16 @@ const INDEXED_SOURCES = [
 
 const EXTERNAL_VALIDATION = [
   {
-    label: "Nawathe et al., 2011",
-    meta: "Systematic review \u00b7 Reproductive Biology and Endocrinology",
+    label: "Ferrero S, Gillott DJ, Venturini PL, Remorgida V. 2011",
+    meta: "Systematic review \u00b7 Reproductive Biology and Endocrinology \u00b7 PMID 21693038",
     href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3141646/",
-    note: "Ten publications, 251 women, four randomized trials. Reviewed aromatase inhibitors for endometriosis-associated pain and concluded the inhibitors reduce pain, including a goserelin + anastrozole arm with significant improvement over goserelin alone.",
+    note: "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review. Ten publications, 251 women, four randomized trials. Reviewed aromatase inhibitors for endometriosis-associated pain and concluded the inhibitors reduce pain, including a goserelin + anastrozole arm with significant improvement over goserelin alone.",
   },
   {
-    label: "Drug Design, Development and Therapy, 2023",
-    meta: "Systematic review of systematic reviews",
+    label: "Peitsidis P et al. 2023",
+    meta: "Systematic review of systematic reviews \u00b7 Drug Design, Development and Therapy \u00b7 PMID 37168488",
     href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10166210/",
-    note: "Reviewed the existing systematic-review evidence on aromatase inhibitors in endometriosis and found a consistent reduction in pain scores across the included reviews.",
+    note: "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date. Reviewed the existing systematic-review evidence on aromatase inhibitors in endometriosis and found a consistent reduction in pain scores across the included reviews.",
   },
   {
     label: "ESHRE Endometriosis Guideline, 2022",

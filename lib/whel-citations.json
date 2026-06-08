@@ -262,6 +262,137 @@
         "docs/methods-draft.md (references)",
         "docs/methods-print.html (references)"
       ]
+    },
+    {
+      "key": "jung_2019_climacteric_postmenopausal_uti",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "30624087"
+      },
+      "claimed_metadata": {
+        "title": "The etiology and management of recurrent urinary tract infections in postmenopausal women",
+        "first_author_surname": "Jung",
+        "container_title": "Climacteric",
+        "year": 2019
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · INDEXED_SOURCES)"
+      ]
+    },
+    {
+      "key": "lethaby_2016_cochrane_local_oestrogen",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "27577677"
+      },
+      "claimed_metadata": {
+        "title": "Local oestrogen for vaginal atrophy in postmenopausal women",
+        "first_author_surname": "Lethaby",
+        "container_title": "Cochrane Database of Systematic Reviews",
+        "year": 2016
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · INDEXED_SOURCES)"
+      ]
+    },
+    {
+      "key": "nams_2020_menopause_gsm",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "32852449"
+      },
+      "claimed_metadata": {
+        "title": "The 2020 genitourinary syndrome of menopause position statement of The North American Menopause Society",
+        "first_author_surname": "",
+        "container_title": "Menopause",
+        "year": 2020
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · INDEXED_SOURCES · carries the curated Guideline ID NAMS-2020-GSM-VaginalEstrogen)"
+      ],
+      "audit_note": "Corporate-authored position statement by the NAMS Editorial Panel; PubMed esummary does not return a personal first-author surname for corporate-authored papers. claimed_metadata.first_author_surname is intentionally empty to match the canonical record."
+    },
+    {
+      "key": "raz_1993_nejm_intravaginal_estriol",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "8350884"
+      },
+      "claimed_metadata": {
+        "title": "A controlled trial of intravaginal estriol in postmenopausal women with recurrent urinary tract infections",
+        "first_author_surname": "Raz",
+        "container_title": "The New England Journal of Medicine",
+        "year": 1993
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · EXTERNAL_VALIDATION)"
+      ]
+    },
+    {
+      "key": "perrotta_2008_cochrane_oestrogens_uti",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "18425910"
+      },
+      "claimed_metadata": {
+        "title": "Oestrogens for preventing recurrent urinary tract infection in postmenopausal women",
+        "first_author_surname": "Perrotta",
+        "container_title": "Cochrane Database of Systematic Reviews",
+        "year": 2008
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · EXTERNAL_VALIDATION)"
+      ]
+    },
+    {
+      "key": "anger_2022_jurol_aua_ruti_guideline",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "35942788"
+      },
+      "claimed_metadata": {
+        "title": "Recurrent Uncomplicated Urinary Tract Infections in Women: AUA/CUA/SUFU Guideline (2022)",
+        "first_author_surname": "Anger",
+        "container_title": "The Journal of Urology",
+        "year": 2022
+      },
+      "used_on_surfaces": [
+        "/featured (vaginal estrogen signal · EXTERNAL_VALIDATION)"
+      ]
+    },
+    {
+      "key": "ferrero_2011_repbioendocrinol_aromatase_endo",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "21693038"
+      },
+      "claimed_metadata": {
+        "title": "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review",
+        "first_author_surname": "Ferrero",
+        "container_title": "Reproductive Biology and Endocrinology",
+        "year": 2011
+      },
+      "used_on_surfaces": [
+        "/featured/anastrozole-endometriosis (EXTERNAL_VALIDATION · linked via PMC3141646)"
+      ],
+      "audit_note": "Featured page originally cited this as 'Nawathe et al., 2011' which was a real author-attribution error: PMC3141646 / PMID 21693038 is the Ferrero S, Gillott DJ, Venturini PL, Remorgida V 2011 paper, not a Nawathe paper. Caught by Phase 1 first run on the expanded manifest (2026-06-07); featured page and manifest both corrected. PMC link and journal were correct; only the author attribution was wrong."
+    },
+    {
+      "key": "peitsidis_2023_ddt_aromatase_endo_sr",
+      "type": "journal_article",
+      "identifiers": {
+        "pmid": "37168488"
+      },
+      "claimed_metadata": {
+        "title": "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date",
+        "first_author_surname": "Peitsidis",
+        "container_title": "Drug Design, Development and Therapy",
+        "year": 2023
+      },
+      "used_on_surfaces": [
+        "/featured/anastrozole-endometriosis (EXTERNAL_VALIDATION · linked via PMC10166210)"
+      ],
+      "audit_note": "Featured page originally cited this only by journal and year ('Drug Design, Development and Therapy, 2023') with no author attribution; first verifier run (2026-06-07) returned Peitsidis P as first author and the full canonical title. Featured page updated to read 'Peitsidis P et al. 2023' with the corrected title."
     }
   ]
 }

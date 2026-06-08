@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "generated_at": null,
+  "status": "pending_first_run",
+  "status_note": "Tooling shipped on 2026-06-07 as scripts/export-sources-for-audit.py + scripts/verify-database-sources.py. The export script needs to run locally (it reads NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY from .env.local), and the resulting lib/sources-audit-snapshot.json must be committed before the verifier can run. This placeholder will be overwritten by the verifier on first successful run.",
+  "summary": {
+    "total": 0,
+    "by_status": {},
+    "by_source_type": {}
+  },
+  "results": []
+}

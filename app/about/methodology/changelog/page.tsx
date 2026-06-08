@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.8
+            Revision history · current version v3.9
           </div>
 
           <h1
@@ -137,8 +137,134 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.8 */}
+          {/* v3.9 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.9 &middot; June 7, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Phase 1 audit scope expanded in two directions: the
+              pre-verified citation manifest now covers the
+              featured-page references, and the tooling for auditing
+              the live database{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                sources
+              </code>{" "}
+              table shipped. Together these close the gap between
+              &ldquo;hand-written prose citations are audited&rdquo;
+              (v3.8) and &ldquo;every citation rendered to a user can
+              be audited.&rdquo; The featured-page expansion added
+              eight references to the manifest: six PMIDs from{" "}
+              <Link href="/featured" style={ENTRY_LINK}>/featured</Link>{" "}
+              (Jung &amp; Brubaker 2019, Lethaby et al. 2016, NAMS 2020,
+              Raz &amp; Stamm 1993, Perrotta et al. 2008, Anger et al.
+              2022) and two PMIDs from{" "}
+              <Link href="/featured/anastrozole-endometriosis" style={ENTRY_LINK}>
+                /featured/anastrozole-endometriosis
+              </Link>{" "}
+              (the two PMC-linked systematic reviews). After the
+              expansion, the verifier ran on 22 entries.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              First run flagged a real author misattribution on the
+              live anastrozole-endometriosis featured page. The page
+              cited &ldquo;Nawathe et al., 2011&rdquo; pointing at{" "}
+              <Link
+                href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3141646/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={ENTRY_LINK}
+              >
+                PMC3141646
+              </Link>
+              , which converts to PMID 21693038. PubMed esummary returns
+              that PMID as Ferrero S, Gillott DJ, Venturini PL &amp;
+              Remorgida V 2011, &ldquo;Use of aromatase inhibitors to
+              treat endometriosis-related pain symptoms: a systematic
+              review&rdquo; (Reproductive Biology and Endocrinology) —
+              the journal and year were correct, the description on the
+              featured page matched the Ferrero paper exactly, but the
+              author attribution was simply wrong. The featured page
+              and the manifest were both corrected to attribute Ferrero
+              rather than Nawathe. The second featured-page reference
+              (the 2023 systematic review of systematic reviews in
+              Drug Design, Development and Therapy) was unattributed in
+              the original copy; PubMed esummary returned Peitsidis P
+              as first author, and the featured page was updated to
+              read &ldquo;Peitsidis P et al. 2023&rdquo; with the
+              canonical title. A small verifier patch landed alongside:
+              corporate-authored guideline papers like NAMS 2020 GSM
+              return an empty first-author surname from PubMed (NAMS
+              Editorial Panel is a corporate author, not a personal
+              one), and the surname-equality check now treats two
+              explicitly-empty surnames as a valid match for that case.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Tooling for the live database-sources audit shipped at the
+              same time as two new artifacts. The export script at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/export-sources-for-audit.py
+              </code>{" "}
+              queries the Whel database&apos;s{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                repurposing_signals
+              </code>{" "}
+              and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                sources
+              </code>{" "}
+              tables and dumps every active-signal source row to{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                lib/sources-audit-snapshot.json
+              </code>
+              . The verifier at{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/verify-database-sources.py
+              </code>{" "}
+              audits the snapshot row by row against the canonical
+              source for each identifier type: PMIDs against NCBI
+              E-utilities, NCT IDs against ClinicalTrials.gov API v2,
+              Open Targets identifiers against the Open Targets GraphQL
+              API, and FAERS and Reddit URLs against format checks
+              (URLs are well-formed, point at the correct host,
+              include the expected path segments). Output lands in{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                scripts/audit-output/database-sources-audit-report.json
+              </code>{" "}
+              and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                lib/database-sources-audit-snapshot.json
+              </code>
+              , which the disclosure on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references 01d
+              </Link>{" "}
+              reads from. Until the export runs and the snapshot is
+              committed, the disclosure shows the &ldquo;tooling
+              shipped, awaiting first run&rdquo; block instead of live
+              numbers — the honest state.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              What is not yet audited: the export step requires
+              Supabase credentials, which only run locally, so the
+              database-sources audit cannot complete in this
+              transparency cycle until the export runs. The next
+              methodology entry will record the first run&apos;s
+              numbers and any findings. After that, both the manifest
+              audit and the database-sources audit run on every push;
+              both are gated by the same{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                --strict
+              </code>{" "}
+              convention.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.8 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.8 &middot; June 7, 2026
             </div>

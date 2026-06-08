@@ -1375,7 +1375,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                Methodology v3.8 &middot; June 7, 2026
+                Methodology v3.9 &middot; June 7, 2026
               </span>
             </div>
 
@@ -1389,25 +1389,31 @@ export default function MethodologyPage() {
                 margin: 0,
               }}
             >
-              Path C Phase 1 (citation validation) goes live as code.
-              The manual audit in v3.7 was the prototype; v3.8 ships
-              the engineered version: a structured pre-verified
-              reference list at lib/whel-citations.json, a verifier
-              script at scripts/verify-citations.py that resolves
-              every PMID against NCBI E-utilities, every DOI against
-              Crossref, and every arXiv ID against the arXiv API, and
-              live audit numbers surfaced on{" "}
+              Phase 1 audit scope expanded. Manifest grew from 14 to
+              22 entries with the eight hand-written featured-page
+              references on{" "}
+              <Link href="/featured" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}>/featured</Link>{" "}
+              and{" "}
+              <Link href="/featured/anastrozole-endometriosis" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}>/featured/anastrozole-endometriosis</Link>;
+              run caught a real author misattribution (Nawathe et al.
+              2011 attribution on the anastrozole page actually pointed
+              at a Ferrero et al. 2011 paper) that was corrected on
+              both the featured page and the manifest. Tooling for the
+              live database-sources audit shipped: a Supabase export
+              script and a verifier that handles PMID, NCT,
+              Open Targets, FAERS, and Reddit identifiers. The
+              database-sources audit will run after the export step
+              runs locally and the snapshot is committed; the
+              disclosure surface on{" "}
               <Link
                 href="/about/external-references#output-validation-in-progress"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
               >
                 /about/external-references &rarr; 01d
-              </Link>
-              . First official run cleared 14 entries after catching
-              five real issues the manual audit had missed (wrong
-              title on a real DOI, three epub-vs-journal-issue year
-              mismatches, one bioRxiv container gap), then re-running
-              clean. See the full v3.8 entry on the{" "}
+              </Link>{" "}
+              honestly reads &ldquo;tooling shipped, awaiting first
+              run&rdquo; until the snapshot lands. See the full v3.9
+              entry on the{" "}
               <Link
                 href="/about/methodology/changelog"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
@@ -1437,7 +1443,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                9 dated revisions &middot; v2 through v3.8
+                10 dated revisions &middot; v2 through v3.9
               </span>
               <Link
                 href="/about/methodology/changelog"

@@ -271,6 +271,14 @@ def container_similar(claimed: str, canonical: str) -> float:
 def surnames_equal(claimed: str, canonical: str) -> bool:
     a = (claimed or "").strip().lower()
     b = (canonical or "").strip().lower()
+    # Corporate-authored papers (NAMS Editorial Panel, NIH committee, etc.)
+    # have no personal first author. PubMed esummary returns an empty
+    # surname for these. If the manifest explicitly claims an empty
+    # surname (audit_note documenting why) and the canonical record
+    # also returns empty, that is a valid match: empty == empty for
+    # corporate authorship.
+    if a == "" and b == "":
+        return True
     if not a or not b:
         return False
     # Handle multi-word surnames (e.g. "Zunzunegui Sanz") and accent
