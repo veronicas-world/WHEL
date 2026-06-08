@@ -1,27 +1,25 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-06-08T03:29:27+00:00",
+  "generated_at": "2026-06-08T04:22:30+00:00",
   "status": "ready",
   "summary": {
     "total": 2166,
     "by_status": {
-      "resolved_match": 170,
-      "format_only_pass": 1986,
-      "unresolved": 10
+      "resolved_match": 180,
+      "format_only_pass": 1986
     },
     "by_source_type": {
       "pubmed": {
         "resolved_match": 113
+      },
+      "opentargets": {
+        "resolved_match": 48
       },
       "clinical_trial": {
         "resolved_match": 19
       },
       "faers": {
         "format_only_pass": 1796
-      },
-      "opentargets": {
-        "resolved_match": 38,
-        "unresolved": 10
       },
       "reddit": {
         "format_only_pass": 190
@@ -64,6 +62,114 @@
       "title_similarity_score": 1.0,
       "error": null,
       "note": ""
+    },
+    {
+      "source_id": "d1e12bce-5cb4-42e0-b494-c396a6ea3f06",
+      "signal_id": "c49e06cb-2c5e-443e-8c61-d4fdfa617248",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL1471",
+      "stored_title": "Open Targets: Aprepitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
+      "status": "resolved_match",
+      "canonical_title": "APREPITANT",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "06875d7f-0aa6-4761-8c60-8cc02f997f68",
+      "signal_id": "adaa5f44-e794-4393-ae1b-6f47c7d74af1",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL1082407",
+      "stored_title": "Open Targets: Enzalutamide \u2014 genetic_target_overlap for menopause (target: androgen receptor (AR), OT score: 0.324)",
+      "status": "resolved_match",
+      "canonical_title": "ENZALUTAMIDE",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "06a9db4d-481c-401c-8836-9beebf843f20",
+      "signal_id": "ce49b6ee-7209-4abe-b2c1-7e7c93abee1c",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL190044",
+      "stored_title": "Open Targets: Trimebutine \u2014 pathway_signal for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
+      "status": "resolved_match",
+      "canonical_title": "TRIMEBUTINE",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "a625f838-7322-45f6-b308-2f4822d2ffd5",
+      "signal_id": "70a20e18-a8f6-48c0-8139-51de9f74f084",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL2103822",
+      "stored_title": "Open Targets: Tasimelteon \u2014 mechanism_overlap for menopause (target: melatonin receptor 1A (MTNR1A) / melatonin receptor 1B (MTNR1B), OT score: 0)",
+      "status": "resolved_match",
+      "canonical_title": "TASIMELTEON",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "b7046b9c-e05e-445e-af6e-9484bf65a16b",
+      "signal_id": "05959dc6-da8c-4ade-8e9c-bd28b2993c9f",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL3544984",
+      "stored_title": "Open Targets: Tradipitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
+      "status": "resolved_match",
+      "canonical_title": "TRADIPITANT",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "c95b8378-77ff-4c4c-b929-0efcdd16b331",
+      "signal_id": "6b7d2826-e802-4a4e-bfcb-20ad870cca11",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL521686",
+      "stored_title": "Open Targets: Olaparib \u2014 genetic_target_overlap for menopause (target: minichromosome maintenance 8 homologous recombination repair factor (MCM8), OT score: 0.435)",
+      "status": "resolved_match",
+      "canonical_title": "OLAPARIB",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "d369fe0c-e81f-40ab-8fd6-1ebbd38fa593",
+      "signal_id": "d2b2b13c-680a-4431-b882-831294433f81",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL3989917",
+      "stored_title": "Open Targets: Fosnetupitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
+      "status": "resolved_match",
+      "canonical_title": "FOSNETUPITANT",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "3a8aeef9-f4a5-48df-bf6f-cf841ac621f4",
+      "signal_id": "0d1c23ef-d08d-4e7b-88b1-b8537dc53eaf",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL259209",
+      "stored_title": "Open Targets: Milnacipran \u2014 mechanism_overlap for menopause (target: solute carrier family 6 member 4 (SLC6A4) / solute carrier family 6 member 2 (SLC6A2), OT score: 0.481)",
+      "status": "resolved_match",
+      "canonical_title": "MILNACIPRAN",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
+    },
+    {
+      "source_id": "9d2d4b47-2e48-42e8-9f25-594c239c6c93",
+      "signal_id": "dd529d92-802b-4515-b30a-a752278811c2",
+      "source_type": "opentargets",
+      "external_id": "CHEMBL1544",
+      "stored_title": "Open Targets: Triiodothyronine (liothyronine) \u2014 pathway_signal for menopause (target: acyl-CoA synthetase long chain family member 1 (ACSL1), OT score: 0.32)",
+      "status": "resolved_match",
+      "canonical_title": "LIOTHYRONINE",
+      "title_similarity_score": null,
+      "error": null,
+      "note": "Open Targets returned a drug record"
     },
     {
       "source_id": "b3ceee39-b6ce-4e96-9283-e6060bd48616",
@@ -3678,18 +3784,6 @@
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
     },
     {
-      "source_id": "d1e12bce-5cb4-42e0-b494-c396a6ea3f06",
-      "signal_id": "c49e06cb-2c5e-443e-8c61-d4fdfa617248",
-      "source_type": "opentargets",
-      "external_id": "OT-APREPITANT",
-      "stored_title": "Open Targets: Aprepitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-APREPITANT did not resolve",
-      "note": ""
-    },
-    {
       "source_id": "605e47c8-8dd2-4448-8077-0d2afa424c2c",
       "signal_id": "330d3465-a236-463f-b81e-fd18bbf155b7",
       "source_type": "faers",
@@ -3885,13 +3979,13 @@
       "source_id": "4e043e33-0fe4-4b37-aff1-4c1b94c25d61",
       "signal_id": "65fe3cdd-8dd1-4ee8-bbf2-074bb4f741f1",
       "source_type": "opentargets",
-      "external_id": "OT-DESVENLAFAXINE",
+      "external_id": "CHEMBL1118",
       "stored_title": "Open Targets: Desvenlafaxine \u2014 mechanism_overlap for menopause (target: solute carrier family 6 member 4 (SLC6A4), OT score: 0.481)",
-      "status": "unresolved",
-      "canonical_title": "",
+      "status": "resolved_match",
+      "canonical_title": "DESVENLAFAXINE",
       "title_similarity_score": null,
-      "error": "Open Targets ID OT-DESVENLAFAXINE did not resolve",
-      "note": ""
+      "error": null,
+      "note": "Open Targets returned a drug record"
     },
     {
       "source_id": "7ebe9414-3ffe-4e36-aaa9-28e2cb523d12",
@@ -5214,18 +5308,6 @@
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
     },
     {
-      "source_id": "06875d7f-0aa6-4761-8c60-8cc02f997f68",
-      "signal_id": "adaa5f44-e794-4393-ae1b-6f47c7d74af1",
-      "source_type": "opentargets",
-      "external_id": "OT-ENZALUTAMIDE",
-      "stored_title": "Open Targets: Enzalutamide \u2014 genetic_target_overlap for menopause (target: androgen receptor (AR), OT score: 0.324)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-ENZALUTAMIDE did not resolve",
-      "note": ""
-    },
-    {
       "source_id": "5e33c14c-2f25-42a4-a75a-085e525f2b98",
       "signal_id": "2ae6c558-f2d8-418d-817b-dde579554c04",
       "source_type": "faers",
@@ -5440,18 +5522,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
-    },
-    {
-      "source_id": "06a9db4d-481c-401c-8836-9beebf843f20",
-      "signal_id": "ce49b6ee-7209-4abe-b2c1-7e7c93abee1c",
-      "source_type": "opentargets",
-      "external_id": "OT-TRIMEBUTINE",
-      "stored_title": "Open Targets: Trimebutine \u2014 pathway_signal for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-TRIMEBUTINE did not resolve",
-      "note": ""
     },
     {
       "source_id": "84d1543d-c93c-437e-a02e-49e8fa615ff8",
@@ -5740,18 +5810,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed reddit permalink"
-    },
-    {
-      "source_id": "a625f838-7322-45f6-b308-2f4822d2ffd5",
-      "signal_id": "70a20e18-a8f6-48c0-8139-51de9f74f084",
-      "source_type": "opentargets",
-      "external_id": "OT-TASIMELTEON",
-      "stored_title": "Open Targets: Tasimelteon \u2014 mechanism_overlap for menopause (target: melatonin receptor 1A (MTNR1A) / melatonin receptor 1B (MTNR1B), OT score: 0)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-TASIMELTEON did not resolve",
-      "note": ""
     },
     {
       "source_id": "4e25686c-d29a-402b-bd8e-3c6ed52147c7",
@@ -6148,18 +6206,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
-    },
-    {
-      "source_id": "b7046b9c-e05e-445e-af6e-9484bf65a16b",
-      "signal_id": "05959dc6-da8c-4ade-8e9c-bd28b2993c9f",
-      "source_type": "opentargets",
-      "external_id": "OT-TRADIPITANT",
-      "stored_title": "Open Targets: Tradipitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-TRADIPITANT did not resolve",
-      "note": ""
     },
     {
       "source_id": "6d0ffff3-9c72-4cfb-8860-ceaa77ac71d1",
@@ -6762,18 +6808,6 @@
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
     },
     {
-      "source_id": "c95b8378-77ff-4c4c-b929-0efcdd16b331",
-      "signal_id": "6b7d2826-e802-4a4e-bfcb-20ad870cca11",
-      "source_type": "opentargets",
-      "external_id": "OT-OLAPARIB",
-      "stored_title": "Open Targets: Olaparib \u2014 genetic_target_overlap for menopause (target: minichromosome maintenance 8 homologous recombination repair factor (MCM8), OT score: 0.435)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-OLAPARIB did not resolve",
-      "note": ""
-    },
-    {
       "source_id": "cf1f5cbf-d348-4aa5-9b77-4f2511559a01",
       "signal_id": "8e3bb099-617a-4dba-98c2-839a41333a84",
       "source_type": "faers",
@@ -7204,18 +7238,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
-    },
-    {
-      "source_id": "d369fe0c-e81f-40ab-8fd6-1ebbd38fa593",
-      "signal_id": "d2b2b13c-680a-4431-b882-831294433f81",
-      "source_type": "opentargets",
-      "external_id": "OT-FOSNETUPITANT",
-      "stored_title": "Open Targets: Fosnetupitant \u2014 genetic_target_overlap for menopause (target: tachykinin receptor 1 (TACR1), OT score: 0.482)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-FOSNETUPITANT did not resolve",
-      "note": ""
     },
     {
       "source_id": "afd8e9b7-cd09-4864-afa9-7f0efffe0f0a",
@@ -8992,18 +9014,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
-    },
-    {
-      "source_id": "3a8aeef9-f4a5-48df-bf6f-cf841ac621f4",
-      "signal_id": "0d1c23ef-d08d-4e7b-88b1-b8537dc53eaf",
-      "source_type": "opentargets",
-      "external_id": "OT-MILNACIPRAN",
-      "stored_title": "Open Targets: Milnacipran \u2014 mechanism_overlap for menopause (target: solute carrier family 6 member 4 (SLC6A4) / solute carrier family 6 member 2 (SLC6A2), OT score: 0.481)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-MILNACIPRAN did not resolve",
-      "note": ""
     },
     {
       "source_id": "06ac8541-bba0-4901-8c76-71833087c16a",
@@ -10972,18 +10982,6 @@
       "title_similarity_score": null,
       "error": null,
       "note": "well-formed fda.gov AEMS / FAERS / openFDA URL"
-    },
-    {
-      "source_id": "9d2d4b47-2e48-42e8-9f25-594c239c6c93",
-      "signal_id": "dd529d92-802b-4515-b30a-a752278811c2",
-      "source_type": "opentargets",
-      "external_id": "OT-TRIIODOTHYRONINE-(LIOTHYRONINE)",
-      "stored_title": "Open Targets: Triiodothyronine (liothyronine) \u2014 pathway_signal for menopause (target: acyl-CoA synthetase long chain family member 1 (ACSL1), OT score: 0.32)",
-      "status": "unresolved",
-      "canonical_title": "",
-      "title_similarity_score": null,
-      "error": "Open Targets ID OT-TRIIODOTHYRONINE-(LIOTHYRONINE) did not resolve",
-      "note": ""
     },
     {
       "source_id": "f3336c69-c263-4f27-9830-07dfd0d955cd",
