@@ -1375,7 +1375,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                Methodology v3.9 &middot; June 7, 2026
+                Methodology v3.10 &middot; June 7, 2026
               </span>
             </div>
 
@@ -1389,36 +1389,40 @@ export default function MethodologyPage() {
                 margin: 0,
               }}
             >
-              Phase 1 audit scope expanded. Manifest grew from 14 to
-              22 entries with the eight hand-written featured-page
-              references on{" "}
-              <Link href="/featured" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}>/featured</Link>{" "}
-              and{" "}
-              <Link href="/featured/anastrozole-endometriosis" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}>/featured/anastrozole-endometriosis</Link>;
-              run caught a real author misattribution (Nawathe et al.
-              2011 attribution on the anastrozole page actually pointed
-              at a Ferrero et al. 2011 paper) that was corrected on
-              both the featured page and the manifest. Tooling for the
-              live database-sources audit shipped: a Supabase export
-              script and a verifier that handles PMID, NCT,
-              Open Targets, FAERS, and Reddit identifiers. The
-              database-sources audit will run after the export step
-              runs locally and the snapshot is committed; the
-              disclosure surface on{" "}
-              <Link
-                href="/about/external-references#output-validation-in-progress"
-                style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-              >
-                /about/external-references &rarr; 01d
-              </Link>{" "}
-              honestly reads &ldquo;tooling shipped, awaiting first
-              run&rdquo; until the snapshot lands. See the full v3.9
-              entry on the{" "}
+              First database-sources audit run. 2,166 source rows
+              across all active signals audited against canonical
+              external sources (the homepage stat strip shows ~2,176,
+              which is the live Supabase count of every row in the
+              sources table including ones attached to deactivated
+              signals that are not currently rendered to users; the
+              audit is scoped to active-signal sources only).
+              Result: 170 fully resolved with matching metadata,
+              1,986 format-only passes (FAERS / Reddit URLs where
+              neither publisher exposes a record-lookup API),
+              10 unresolved. Zero{" "}
+              <em>resolved_mismatch</em>{" "}
+              entries: 113 of 113 PubMed PMIDs clean against NCBI,
+              19 of 19 NCT IDs clean against ClinicalTrials.gov, 38
+              of 38 canonical Open Targets IDs clean. The 10 unresolved
+              are all Open Targets rows storing a synthetic{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
+              shorthand in the identifier column instead of a canonical
+              CHEMBL ID; the URL on those rows still points at a real{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org</code>{" "}
+              page so the user-visible citation is sound. Backfill
+              recorded on the Roadmap. See full v3.10 entry on the{" "}
               <Link
                 href="/about/methodology/changelog"
                 style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
               >
                 changelog
+              </Link>{" "}
+              and live audit numbers on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+              >
+                /about/external-references &rarr; 01d
               </Link>
               .
             </p>
@@ -1443,7 +1447,7 @@ export default function MethodologyPage() {
                   color: "var(--muted)",
                 }}
               >
-                10 dated revisions &middot; v2 through v3.9
+                11 dated revisions &middot; v2 through v3.10
               </span>
               <Link
                 href="/about/methodology/changelog"

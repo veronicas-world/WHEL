@@ -2354,7 +2354,15 @@ export default function ExternalReferencesPage() {
                       ClinicalTrials.gov, every Open Targets identifier,
                       and every FAERS / Reddit URL that the LLM
                       extraction pipeline attached to an active signal
-                      and rendered on a drug card.
+                      and rendered on a drug card. The audit is scoped
+                      to sources attached to{" "}
+                      <em>active</em>{" "}
+                      signals; the homepage stat strip shows a slightly
+                      higher number that includes sources tied to
+                      deactivated signals that are not currently
+                      rendered on any{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>/conditions/[slug]</code>{" "}
+                      page.
                     </p>
                     <div
                       style={{
@@ -2406,6 +2414,44 @@ export default function ExternalReferencesPage() {
                         </div>
                       ))}
                     </div>
+                    <p
+                      style={{
+                        ...MONO,
+                        fontSize: 11,
+                        letterSpacing: "0.06em",
+                        lineHeight: 1.6,
+                        color: "var(--muted)",
+                        margin: "0 0 16px 0",
+                      }}
+                    >
+                      Zero{" "}
+                      <em>resolved_mismatch</em>{" "}
+                      entries on the first run: 113 of 113 PubMed PMIDs
+                      clean against NCBI E-utilities, 19 of 19
+                      ClinicalTrials.gov NCT IDs clean against the
+                      ClinicalTrials.gov API v2, and 38 of 38 canonical
+                      Open Targets identifiers clean against the Open
+                      Targets GraphQL search. The 10 unresolved are all
+                      Open Targets rows storing a synthetic{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
+                      shorthand in the{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
+                      column instead of a canonical CHEMBL identifier;
+                      the URL on those rows still points at a real{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org</code>{" "}
+                      page, so what users see on the drug card is a
+                      valid citation. The failure is at the
+                      identifier-storage layer rather than the
+                      user-visible content layer. Backfill recorded on
+                      the{" "}
+                      <Link href="/about/roadmap" style={LINK}>roadmap</Link>{" "}
+                      under{" "}
+                      <em>Backfill canonical Open Targets identifiers
+                      on signals using OT-DRUGNAME shorthand</em>;
+                      methodology v3.10 has the full finding write-up.
+                      Run log at{" "}
+                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/database-sources-audit-report.json</code>.
+                    </p>
                   </>
                 ) : (
                   <p

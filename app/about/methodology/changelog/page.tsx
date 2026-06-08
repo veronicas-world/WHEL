@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.9
+            Revision history · current version v3.10
           </div>
 
           <h1
@@ -137,8 +137,119 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.9 */}
+          {/* v3.10 */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v3.10 &middot; June 7, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              First database-sources audit run. The Path C Phase 1
+              tooling that shipped in v3.9 was executed on the live
+              Whel{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>sources</code>{" "}
+              table:{" "}
+              <strong style={{ color: "var(--ink)" }}>2,166 source rows</strong>{" "}
+              across all active signals, audited row by row against
+              the canonical external source for each identifier type.
+              The homepage stat strip renders a separate live
+              Supabase count that includes sources attached to
+              deactivated or hidden signals as well (currently
+              showing 2,176; the 10-row delta is the deactivated-signal
+              source rows that are no longer rendered on any{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>/conditions/[slug]</code>{" "}
+              drug card). The audit is intentionally scoped to
+              active-signal sources, because those are the citations
+              currently visible to users; deactivated-signal source
+              rows are out of scope until they are reactivated.
+              Result: 170 fully resolved with matching metadata, 1,986
+              format-only passes (FAERS dashboard URLs and Reddit
+              permalinks that pass the well-formed-URL pattern but
+              cannot be resolved further because neither publisher
+              exposes a record-lookup API), and 10 unresolved. There
+              were zero{" "}
+              <em>resolved_mismatch</em>{" "}
+              entries: every PubMed PMID, every ClinicalTrials.gov
+              NCT ID, and every canonical Open Targets identifier that
+              resolved did so with a stored title matching the
+              canonical title within the 0.80 fuzzy threshold. That
+              is a strong positive signal that the LLM extraction
+              pipeline is producing accurate metadata for the
+              identifier types where canonical metadata is checkable:
+              113 of 113 PubMed rows clean, 19 of 19 ClinicalTrials.gov
+              rows clean, 38 of 38 canonical Open Targets rows clean.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The 10 unresolved entries are all Open Targets rows
+              where the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
+              column stores a synthetic shorthand of the form{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
+              rather than a canonical Open Targets identifier (CHEMBL
+              ID, ENSEMBL gene ID, or EFO / MONDO disease ID). The
+              ten drug names are: APREPITANT, DESVENLAFAXINE,
+              ENZALUTAMIDE, TRIMEBUTINE, TASIMELTEON, TRADIPITANT,
+              OLAPARIB, FOSNETUPITANT, MILNACIPRAN, and
+              TRIIODOTHYRONINE (liothyronine). The Open Targets
+              GraphQL search correctly does not resolve these because
+              they are not Open Targets identifiers. However, the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>url</code>{" "}
+              column on these rows points at a real{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org</code>{" "}
+              page (with a real GO / EFO disease ontology ID), and
+              the descriptive title in the{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>title</code>{" "}
+              column carries the actual drug-target-disease finding
+              (e.g. &ldquo;Aprepitant — genetic_target_overlap for
+              menopause (target: TACR1, OT score: 0.482)&rdquo;).
+              So users see a valid citation that links to a real
+              Open Targets page; the failure is at the
+              identifier-storage layer, not the user-visible content
+              layer. Same shape as the Bate finding in v3.8 (real
+              underlying citation, mangled metadata).
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The 10 entries are kept in the audit as{" "}
+              <em>unresolved</em>{" "}
+              rather than patched into{" "}
+              <em>format_only_pass</em>{" "}
+              so the architectural debt stays visible. A new Roadmap
+              row records the fix: backfill the canonical Open
+              Targets identifier (CHEMBL for the drug, plus the
+              specific target ENSEMBL ID and the disease MONDO/EFO ID
+              that the URL already points at) on each of the 10
+              signals. The fix would reduce the unresolved count to
+              zero on the next audit run without changing what is
+              rendered to users. Recorded on the Roadmap under{" "}
+              <em>Backfill canonical Open Targets identifiers on
+              signals using OT-DRUGNAME shorthand</em>.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              Where Path C Phase 1 now stands: the manifest audit
+              covers 22 hand-written prose references and the
+              database-sources audit covers 2,166 live database
+              rows. Both run on demand from{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-citations.py</code>{" "}
+              and{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/verify-database-sources.py</code>,
+              both gated by{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>--strict</code>,
+              and both surface their results on{" "}
+              <Link
+                href="/about/external-references#output-validation-in-progress"
+                style={ENTRY_LINK}
+              >
+                /about/external-references &rarr; 01d
+              </Link>
+              . Phase 1 is now complete for the existing citation
+              surface. Phase 2 (sentence-level summary grounding via
+              Sentence-BERT) and Phase 3 (prompt hardening that
+              forbids LLM citation generation outside the Phase 1
+              manifest) remain Planned.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.9 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.9 &middot; June 7, 2026
             </div>
