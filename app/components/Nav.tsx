@@ -1,210 +1,113 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import SearchBar from "./SearchBar";
+import { usePathname } from "next/navigation";
 
-/** WHEL mark — four overlapping rings, one for each of the four research arms. */
-function WhelMark() {
-  const rings = [
-    { cx: 16, cy: 9.5 },  // top
-    { cx: 22.5, cy: 16 }, // right
-    { cx: 16, cy: 22.5 }, // bottom
-    { cx: 9.5, cy: 16 },  // left
+function WhelMark({ size = 30 }: { size?: number }) {
+  const off = 17, r = 21, sw = 4.6;
+  const centers: [number, number][] = [
+    [50, 50 - off],
+    [50 + off, 50],
+    [50, 50 + off],
+    [50 - off, 50],
   ];
   return (
     <svg
-      viewBox="0 0 32 32"
-      width="26"
-      height="26"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
+      className="mk-glyph"
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      aria-label="Whel"
+      style={{ overflow: "visible" }}
     >
-      {rings.map((r, i) => (
+      {centers.map((c, i) => (
         <circle
           key={i}
-          cx={r.cx}
-          cy={r.cy}
-          r="8.3"
-          stroke="var(--green-deep)"
-          strokeWidth="1.7"
+          cx={c[0]}
+          cy={c[1]}
+          r={r}
+          fill="none"
+          stroke={i === 0 ? "var(--signal)" : "var(--bone)"}
+          strokeWidth={sw}
+          strokeLinecap="round"
         />
       ))}
     </svg>
   );
 }
 
-type NavLink = { label: string; href: string };
-
-const NAV_LINKS: NavLink[] = [
-  { label: "Home", href: "/" },
+const NAV_LINKS = [
+  { label: "Platform",   href: "/platform" },
+  { label: "Candidates", href: "/candidates" },
   { label: "Conditions", href: "/conditions" },
+  { label: "Methods",    href: "/about/technical-architecture", hideSm: true },
+  { label: "About",      href: "/about" },
 ];
-
-const METHODOLOGY_LINKS: NavLink[] = [
-  { label: "Signal Types", href: "/signal-types" },
-  { label: "Technical Architecture", href: "/about/technical-architecture" },
-  { label: "Validation", href: "/about/methodology" },
-  { label: "Changelog", href: "/about/methodology/changelog" },
-];
-
-const ABOUT_LINKS: NavLink[] = [
-  { label: "Mission", href: "/about" },
-  { label: "Roadmap", href: "/about/roadmap" },
-  { label: "External References", href: "/about/external-references" },
-  { label: "Contact", href: "/about/contact" },
-];
-
-/** Hover/click dropdown used for the Methodology and About menus. */
-function NavDropdown({ label, links }: { label: string; links: NavLink[] }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function openMenu() {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    setOpen(true);
-  }
-
-  function scheduleClose() {
-    closeTimer.current = setTimeout(() => setOpen(false), 150);
-  }
-
-  useEffect(() => {
-    if (!open) return;
-    function handleOutsideClick(e: MouseEvent | TouchEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("touchstart", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("touchstart", handleOutsideClick);
-    };
-  }, [open]);
-
-  return (
-    <div
-      ref={ref}
-      className="relative"
-      onMouseEnter={openMenu}
-      onMouseLeave={scheduleClose}
-    >
-      <button
-        className="text-sm font-medium whitespace-nowrap transition-opacity hover:opacity-60"
-        style={{ color: "var(--ink)" }}
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => (open ? setOpen(false) : openMenu())}
-      >
-        {label}
-      </button>
-
-      {open && (
-        <div className="absolute top-full right-0 pt-2" style={{ zIndex: 50, minWidth: "210px" }}>
-          <div
-            style={{
-              backgroundColor: "var(--paper)",
-              border: "1px solid var(--ink)",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-            }}
-            onMouseEnter={openMenu}
-            onMouseLeave={scheduleClose}
-          >
-            {links.map(({ label: itemLabel, href }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className="block px-4 py-2.5 text-sm transition-colors"
-                style={{ color: "var(--ink)" }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--bg-2)")}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
-              >
-                {itemLabel}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   return (
-    <header
-      className="sticky top-0 z-40"
-      style={{
-        backgroundColor: "var(--paper)",
-        borderBottom: "1px solid var(--rule)",
-      }}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 h-14 sm:h-16">
+    <header className="whel-nav">
+      <div className="container whel-nav-inner">
 
-        {/* Logo / wordmark */}
+        {/* Wordmark */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 shrink-0"
-          style={{ textDecoration: "none", color: "var(--ink)" }}
+          className="wordmark"
+          style={{ textDecoration: "none", color: "var(--on-ink)" }}
           onClick={() => setMobileOpen(false)}
         >
-          <WhelMark />
-          <span
-            className="font-serif"
-            style={{
-              fontWeight: 600,
-              fontSize: "1.15rem",
-              letterSpacing: "-0.01em",
-              lineHeight: 1,
-              color: "var(--ink)",
-            }}
-          >
-            Whel
-          </span>
-          <span
-            className="hidden lg:inline font-mono"
-            style={{
-              fontSize: "9px",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              borderLeft: "1px solid var(--rule)",
-              paddingLeft: 12,
-              marginLeft: 2,
-              lineHeight: 1.2,
-            }}
-          >
-            Women&apos;s Health Evidence Lab
+          <WhelMark size={30} />
+          <span style={{ display: "flex", flexDirection: "column" }}>
+            <span className="mk-name" style={{ color: "var(--on-ink)" }}>Whel</span>
+            <span className="mk-sub">Women&apos;s Health Evidence Lab</span>
           </span>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden sm:flex items-center gap-6 flex-1 justify-end">
-          {NAV_LINKS.map(({ label, href }) => (
+        <nav className="hidden sm:flex" style={{ gap: 26, alignItems: "center", marginLeft: "auto" }}>
+          {NAV_LINKS.map(({ label, href, hideSm }) => (
             <Link
               key={href}
               href={href}
-              className="text-sm font-medium whitespace-nowrap transition-opacity hover:opacity-60"
-              style={{ color: "var(--ink)" }}
+              className={`${hideSm ? "hide-sm" : ""} ${isActive(href) ? "active" : ""}`}
+              style={{
+                fontFamily: "var(--font-plex-mono, monospace)",
+                fontSize: "11.5px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                padding: "8px 0",
+                position: "relative",
+                transition: "color 140ms",
+                textDecoration: "none",
+              }}
             >
               {label}
+              {isActive(href) && (
+                <span style={{
+                  position: "absolute", left: 0, right: 0, bottom: 0,
+                  height: "1.5px", background: "var(--signal)",
+                }} />
+              )}
             </Link>
           ))}
-
-          <NavDropdown label="Methodology" links={METHODOLOGY_LINKS} />
-          <NavDropdown label="About" links={ABOUT_LINKS} />
-
-          {/* Search bar */}
-          <div className="w-52 lg:w-64">
-            <SearchBar size="sm" />
-          </div>
-        </div>
+          <Link
+            href="/about/contact"
+            className="nav-cta"
+            style={{ textDecoration: "none" }}
+          >
+            Request access
+          </Link>
+        </nav>
 
         {/* Mobile hamburger */}
         <button
@@ -212,25 +115,23 @@ export default function Nav() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
+          style={{ background: "none", border: "none" }}
         >
-          <span
-            className="block w-5 h-px transition-all duration-200"
-            style={{
-              background: "var(--ink)",
-              transform: mobileOpen ? "translateY(5px) rotate(45deg)" : "none",
-            }}
-          />
-          <span
-            className="block w-5 h-px transition-all duration-200"
-            style={{ background: "var(--ink)", opacity: mobileOpen ? 0 : 1 }}
-          />
-          <span
-            className="block w-5 h-px transition-all duration-200"
-            style={{
-              background: "var(--ink)",
-              transform: mobileOpen ? "translateY(-5px) rotate(-45deg)" : "none",
-            }}
-          />
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="block w-5 h-px transition-all duration-200"
+              style={{
+                background: "var(--on-ink)",
+                transform: mobileOpen
+                  ? i === 0 ? "translateY(5px) rotate(45deg)"
+                  : i === 2 ? "translateY(-5px) rotate(-45deg)"
+                  : "none"
+                  : "none",
+                opacity: mobileOpen && i === 1 ? 0 : 1,
+              }}
+            />
+          ))}
         </button>
       </div>
 
@@ -239,28 +140,34 @@ export default function Nav() {
         <div
           className="sm:hidden"
           style={{
-            backgroundColor: "var(--paper)",
-            borderTop: "1px solid var(--rule)",
+            backgroundColor: "rgba(26,29,20,0.96)",
+            borderTop: "1px solid var(--ink-line-2)",
           }}
         >
-          <div className="px-4 pt-4 pb-3">
-            <SearchBar size="lg" onNavigate={() => setMobileOpen(false)} />
-          </div>
-          <nav className="flex flex-col px-4 pb-4 gap-1">
-            {[...NAV_LINKS, ...METHODOLOGY_LINKS, ...ABOUT_LINKS].map(({ label, href }, i, arr) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 py-3 text-sm font-medium"
-                style={{
-                  color: "var(--ink)",
-                  borderBottom: i < arr.length - 1 ? "1px solid var(--rule)" : "none",
-                }}
-              >
-                {label}
-              </Link>
-            ))}
+          <nav className="flex flex-col px-6 py-4 gap-1">
+            {[...NAV_LINKS, { label: "Request access", href: "/about/contact" }].map(
+              ({ label, href }, i, arr) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "14px 0",
+                    fontFamily: "var(--font-plex-mono, monospace)",
+                    fontSize: "11.5px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                    borderBottom: i < arr.length - 1 ? "1px solid var(--ink-line-2)" : "none",
+                    textDecoration: "none",
+                  }}
+                >
+                  {label}
+                </Link>
+              )
+            )}
           </nav>
         </div>
       )}

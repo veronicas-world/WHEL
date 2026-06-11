@@ -1,169 +1,117 @@
 import Link from "next/link";
-import LinkedInIcon from "./LinkedInIcon";
 
-const LINKEDIN_URL = "https://www.linkedin.com/company/whel2026/";
+function WhelMark({ size = 28 }: { size?: number }) {
+  const off = 17, r = 21, sw = 4.6;
+  const centers: [number, number][] = [
+    [50, 50 - off], [50 + off, 50], [50, 50 + off], [50 - off, 50],
+  ];
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" style={{ overflow: "visible" }}>
+      {centers.map((c, i) => (
+        <circle key={i} cx={c[0]} cy={c[1]} r={r} fill="none"
+          stroke={i === 0 ? "var(--signal)" : "var(--bone)"}
+          strokeWidth={sw} strokeLinecap="round" />
+      ))}
+    </svg>
+  );
+}
 
-const EXPLORE_LINKS = [
-  { label: "Conditions", href: "/conditions" },
-  { label: "Search", href: "/search" },
-  { label: "Signal Types", href: "/signal-types" },
-  { label: "Technical Architecture", href: "/about/technical-architecture" },
-  { label: "Validation", href: "/about/methodology" },
-  { label: "Changelog", href: "/about/methodology/changelog" },
+const PLATFORM_LINKS = [
+  { label: "Platform",   href: "/platform" },
+  { label: "Candidates", href: "/candidates" },
+  { label: "Methods",    href: "/about/technical-architecture" },
+  { label: "About",      href: "/about" },
 ];
 
-const ABOUT_LINKS = [
-  { label: "Mission", href: "/about" },
-  { label: "Roadmap", href: "/about/roadmap" },
-  { label: "External References", href: "/about/external-references" },
-  { label: "Contact", href: "/about/contact" },
+const CONDITION_LINKS = [
+  { label: "PMDD",         href: "/conditions/pmdd" },
+  { label: "Endometriosis",href: "/conditions/endometriosis" },
+  { label: "PCOS",         href: "/conditions/pcos" },
+  { label: "Perimenopause",href: "/conditions/perimenopause-and-menopause" },
+  { label: "All conditions",href: "/conditions" },
 ];
-
-const MONO: React.CSSProperties = {
-  fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
-};
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "var(--bg-2)", borderTop: "1px solid var(--rule)" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 mb-10">
+    <footer className="whel-footer">
+      <div className="container">
+        <div className="grid" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr", gap: 44 }}>
 
           {/* Brand */}
-          <div className="sm:col-span-1">
-            <p
-              className="font-serif"
-              style={{ fontSize: "1.35rem", fontWeight: 600, color: "var(--ink)", marginBottom: 4, letterSpacing: "-0.01em" }}
-            >
-              Whel
-            </p>
-            <p
-              style={{
-                ...MONO,
-                fontSize: "9px",
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "var(--muted)",
-                marginBottom: 14,
-              }}
-            >
-              Women&apos;s Health Evidence Lab
-            </p>
-            <p style={{ fontSize: "12.5px", color: "var(--muted)", lineHeight: 1.6, maxWidth: "28ch" }}>
-              An evidence index for under-studied women&apos;s health conditions.
-            </p>
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Whel on LinkedIn"
-              className="transition-opacity hover:opacity-60"
-              style={{
-                ...MONO,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 7,
-                marginTop: 16,
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink-2)",
-                textDecoration: "none",
-              }}
-            >
-              <LinkedInIcon size={14} />
-              LinkedIn
-            </a>
-          </div>
-
-          {/* Explore */}
           <div>
-            <p
-              style={{
-                ...MONO,
-                fontSize: "10px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--muted)",
-                marginBottom: 16,
-              }}
-            >
-              Explore
+            <span className="wordmark" style={{ color: "var(--on-ink)" }}>
+              <WhelMark size={28} />
+              <span style={{ display: "flex", flexDirection: "column" }}>
+                <span style={{
+                  fontFamily: "var(--font-newsreader, Georgia, serif)", fontWeight: 500,
+                  fontSize: 22, letterSpacing: "-0.015em", lineHeight: 1, color: "var(--on-ink)",
+                }}>Whel</span>
+                <span style={{
+                  fontFamily: "var(--font-plex-mono, monospace)", fontSize: 8,
+                  letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 4,
+                  opacity: 0.6, color: "var(--on-ink)",
+                }}>Women&apos;s Health Evidence Lab</span>
+              </span>
+            </span>
+            <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--on-ink-2)", maxWidth: "38ch", marginTop: 20 }}>
+              The drug repurposing platform for female biology. We surface the approved drugs that
+              already work for women&apos;s health conditions and prove it rigorously enough to act on.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {EXPLORE_LINKS.map(({ label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="text-sm transition-opacity hover:opacity-60"
-                  style={{ color: "var(--ink-2)", textDecoration: "none" }}
-                >
-                  {label}
-                </Link>
-              ))}
+            <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 20 }}>
+              <span className="live">
+                <span className="ldot" />
+                Reviewed quarterly · v0.1
+              </span>
             </div>
           </div>
 
-          {/* About */}
+          {/* Platform */}
           <div>
-            <p
-              style={{
-                ...MONO,
-                fontSize: "10px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "var(--muted)",
-                marginBottom: 16,
-              }}
-            >
-              About
+            <h4>Platform</h4>
+            {PLATFORM_LINKS.map(({ label, href }) => (
+              <Link key={href} href={href} className="fl">{label}</Link>
+            ))}
+          </div>
+
+          {/* Conditions */}
+          <div>
+            <h4>Conditions</h4>
+            {CONDITION_LINKS.map(({ label, href }) => (
+              <Link key={href} href={href} className="fl">{label}</Link>
+            ))}
+          </div>
+
+          {/* Notice */}
+          <div>
+            <h4>Notice</h4>
+            <p style={{
+              fontSize: 13, lineHeight: 1.6, color: "var(--on-ink-mut)",
+              fontFamily: "var(--font-plex-mono, monospace)", letterSpacing: "0.01em",
+            }}>
+              A research-support tool under the 21st Century Cures Act §3060 exemption.
+              Not a clinical recommendation engine. Cite the source; check the date.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {ABOUT_LINKS.map(({ label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="text-sm transition-opacity hover:opacity-60"
-                  style={{ color: "var(--ink-2)", textDecoration: "none" }}
-                >
-                  {label}
-                </Link>
-              ))}
+            <div style={{ marginTop: 16 }}>
+              <a
+                href="mailto:vla2117@columbia.edu"
+                style={{
+                  fontFamily: "var(--font-plex-mono, monospace)", fontSize: 11,
+                  letterSpacing: "0.06em", textTransform: "uppercase",
+                  color: "var(--on-ink-2)", textDecoration: "none",
+                  borderBottom: "1px solid var(--ink-line)",
+                }}
+              >
+                vla2117@columbia.edu
+              </a>
             </div>
           </div>
 
         </div>
 
-        {/* Bottom row */}
-        <div
-          style={{
-            paddingTop: 20,
-            borderTop: "1px solid var(--rule)",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "8px 24px",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ ...MONO, fontSize: 11, color: "var(--muted)", letterSpacing: "0.04em" }}>
-            &copy; {new Date().getFullYear()} Women&apos;s Health Evidence Lab
-          </span>
-          <span style={{ ...MONO, fontSize: 11, color: "var(--muted)", letterSpacing: "0.04em" }}>
-            For research and educational purposes only
-          </span>
-          <span style={{ ...MONO, fontSize: 11, color: "var(--muted)", letterSpacing: "0.04em" }}>
-            Correspondence:{" "}
-            <a
-              href="mailto:vla2117@columbia.edu"
-              style={{ color: "var(--ink-2)", borderBottom: "1px solid var(--rule)" }}
-            >
-              vla2117@columbia.edu
-            </a>
-          </span>
+        <div className="legal">
+          <span>Whel, Inc. — Delaware C-Corporation, founded 2026</span>
+          <span>Women&apos;s Health Evidence Lab · whel.bio</span>
         </div>
-
       </div>
     </footer>
   );
