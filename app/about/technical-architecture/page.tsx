@@ -32,6 +32,33 @@ const ARM_COLORS: Record<string, string> = {
   "Community Forum Reports": "var(--arm-community)",
 };
 
+// The three-layer architecture and its honest current status. The substrate model
+// is the target architecture; this records what is actually built per layer so the
+// public framing (manifesto, platform, home) can be checked against reality.
+const LAYERS: { n: string; name: string; status: string; color: string; body: string }[] = [
+  {
+    n: "Layer 01",
+    name: "The substrate",
+    status: "Foundation live · graph in progress",
+    color: "var(--green-mid)",
+    body: "The corrected, sex-aware knowledge base. Its grounding is live: every condition resolves to a MONDO disease identifier and every drug to canonical ChEMBL and RxNorm identifiers, so entities are matched by identity rather than by name string. The graph itself, the drug-to-target-to-disease edges drawn from Open Targets, is being built and is not yet live behind the six-condition product.",
+  },
+  {
+    n: "Layer 02",
+    name: "Retrieval and validation",
+    status: "Built as a flagship (PMDD, PMS)",
+    color: "var(--tier-emerging)",
+    body: "Provenance-preserving extraction: each atomic claim is tied to a verbatim source span, checked for entailment against that span, and contradictions in the literature are surfaced rather than averaged. This is built and running, but seeded for PMDD and PMS only; it is not yet extended across all six conditions or wired into the main signal index.",
+  },
+  {
+    n: "Layer 03",
+    name: "Hypothesis from signal",
+    status: "Intake live · validation loop flagship",
+    color: "var(--arm-community)",
+    body: "Off-label and patient-community signal as hypothesis generation. The community arm is live across all six conditions, where the Reddit pipeline and off-label patterns feed the index. The formal downstream validation against mechanistic and clinical evidence runs through the same PMDD flagship as Layer 02.",
+  },
+];
+
 /* ──────────────────────────────────────────────────────────────────────────
    Content — every word is preserved from the previous version of this page
    ────────────────────────────────────────────────────────────────────────── */
@@ -458,6 +485,64 @@ export default function TechnicalArchitecturePage() {
           </div>
         </div>
       </div>
+
+      {/* ── The three-layer architecture (honest status) ─────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className={SECTION_INNER}>
+          <FigureHeader
+            label="Architecture · Where each layer stands"
+            title="The three-layer substrate, and what is built today"
+            intro="Whel's public architecture describes three layers: a corrected, sex-aware substrate, a retrieval-and-validation layer, and a hypothesis-from-signal layer. That is the target architecture, and it is partially built. The six-condition database documented on the rest of this page runs on the scored-signals engine the layers are progressively replacing, so this section gives an honest status of each layer."
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {LAYERS.map((l) => (
+              <div
+                key={l.n}
+                style={{
+                  ...CARD,
+                  borderTop: `3px solid ${l.color}`,
+                  padding: "22px 22px 24px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
+              >
+                <div style={{ ...MONO, fontSize: "11px", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--muted)" }}>
+                  {l.n}
+                </div>
+                <p className="font-heading" style={{ fontSize: "17px", color: "var(--ink)", margin: 0 }}>
+                  {l.name}
+                </p>
+                <span
+                  style={{
+                    ...MONO,
+                    alignSelf: "flex-start",
+                    fontSize: "9.5px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: l.color,
+                    border: `1px solid ${l.color}`,
+                    padding: "3px 7px",
+                  }}
+                >
+                  {l.status}
+                </span>
+                <p style={{ fontSize: "13.5px", lineHeight: 1.6, color: "var(--ink-2)", margin: 0 }}>
+                  {l.body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <p style={{ ...MONO, fontSize: "11.5px", lineHeight: 1.6, color: "var(--muted)", marginTop: 18 }}>
+            The candidate index and condition pages live today are produced by the scored-signals
+            engine described below: the five data pipelines, the five-dimension rubric, and the four
+            confidence tiers. The substrate graph and the validation layer are being built on top of
+            it, condition by condition.
+          </p>
+        </div>
+      </section>
 
       {/* ── Figure 1 — Pipeline register ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
