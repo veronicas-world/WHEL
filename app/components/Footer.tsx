@@ -19,11 +19,13 @@ function WhelMark({ size = 28 }: { size?: number }) {
 const PLATFORM_LINKS = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
+  { label: "Conditions", href: "/conditions" },
   { label: "Candidates", href: "/candidates" },
-  { label: "About",      href: "/about" },
 ];
 
 const COMPANY_LINKS = [
+  { label: "About",          href: "/about" },
+  { label: "Roadmap",        href: "/about/roadmap" },
   { label: "News",           href: "/news" },
   { label: "Contact",        href: "/about/contact" },
   { label: "Request access", href: "/access" },

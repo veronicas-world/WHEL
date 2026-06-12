@@ -147,8 +147,12 @@ export default async function ConditionsPage() {
             <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)" }}>
               These six conditions were selected against three criteria: shared
               biology, documented neglect, and a focus on women&apos;s hormonal and
-              reproductive health. The same criteria guide which conditions are
-              added in future versions of the database.
+              reproductive health. They converge on the same handful of systems,
+              including estrogen signaling, chronic inflammation, metabolic
+              regulation, and pain processing, and that overlap is what makes
+              cross-condition reasoning valid, because a signal in one condition
+              can be informative about the others. The same criteria guide which
+              conditions are added next.
             </p>
           </div>
           <Link

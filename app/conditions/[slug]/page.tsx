@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import ResearchSignalsTabs, { type Signal } from "./ResearchSignalsTabs";
 import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
 
 export const dynamic = "force-dynamic";
@@ -21,19 +20,16 @@ export async function generateMetadata({
   return { title: data?.name ? `${data.name} | Whel` : "Condition | Whel" };
 }
 
-function slugToPrefix(slug: string): string {
-  const map: Record<string, string> = {
-    adenomyosis: "ADENO",
-    endometriosis: "ENDO",
-    pcos: "PCOS",
-    "perimenopause-menopause": "PERI",
-    pmdd: "PMDD",
-    vulvodynia: "VULV",
-  };
-  return map[slug] ?? slug.toUpperCase().replace(/-/g, "").slice(0, 4);
-}
-
 type TierKey = "strong" | "moderate" | "emerging" | "exploratory";
+
+/* Aggregate-only shape. Drug/compound and source fields are deliberately not
+   fetched on this public page, so no specific candidate ever reaches the
+   client. The candidates themselves live behind the access wall. */
+type AggregateSignal = {
+  signal_type: string | null;
+  confidence_tier: string | null;
+  created_at: string | null;
+};
 
 const TIERS: { key: TierKey; label: string; token: string }[] = [
   { key: "strong",      label: "Strong",      token: "var(--tier-strong)"      },
@@ -91,55 +87,17 @@ export default async function ConditionDetailPage({
   const code = conditionIndex >= 0
     ? `C-${String(conditionIndex + 1).padStart(2, "0")}`
     : "";
-  const signalPrefix = slugToPrefix(slug);
 
+  // Public page: fetch only the fields needed for the aggregate breakdown.
+  // Compound names, summaries, mechanisms, and sources are not requested, so
+  // no specific surfaced drug is ever sent to the browser.
   const { data: rawSignals } = await supabase
     .from("repurposing_signals")
-    .select(
-      `
-      id,
-      signal_type,
-      evidence_strength,
-      confidence_tier,
-      replication_score,
-      source_quality_score,
-      specificity_score,
-      plausibility_score,
-      direction_score,
-      total_evidence_score,
-      effect_direction,
-      replication_level,
-      plausibility_level,
-      summary,
-      mechanism_hypothesis,
-      status,
-      created_at,
-      compounds (
-        name,
-        generic_name,
-        drug_class,
-        fda_status
-      ),
-      sources (
-        id,
-        source_type,
-        external_id,
-        title,
-        authors,
-        journal,
-        publication_date,
-        url,
-        key_finding_excerpt,
-        guideline_id,
-        guideline_strength,
-        guideline_certainty
-      )
-      `
-    )
+    .select("signal_type, confidence_tier, created_at")
     .eq("condition_id", condition.id)
     .order("created_at");
 
-  const signals = (rawSignals ?? []) as unknown as Signal[];
+  const signals = (rawSignals ?? []) as AggregateSignal[];
   const total = signals.length;
 
   // Tier counts
@@ -176,12 +134,6 @@ export default async function ConditionDetailPage({
     .map((s: Record<string, unknown>) => s.created_at as string)
     .filter(Boolean);
   const lastReview = formatReviewDate(createdAts);
-
-  // Pre-assign stable signal IDs by created_at position
-  const signalIds: Record<string, string> = {};
-  signals.forEach((s, i) => {
-    signalIds[s.id] = `${signalPrefix}-${i + 1}`;
-  });
 
   const keyFacts =
     (condition.key_facts as { label: string; value: string }[] | null) ?? [];
@@ -611,7 +563,7 @@ export default async function ConditionDetailPage({
         </div>
       )}
 
-      {/* ── Signals section ───────────────────────────────────────────────── */}
+      {/* ── Repurposing signals — gated ──────────────────────────────────── */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
         <p className="eyebrow" style={{ marginBottom: 12 }}>REPURPOSING SIGNALS</p>
         <h2
@@ -632,20 +584,99 @@ export default async function ConditionDetailPage({
             fontSize: "0.9375rem",
             lineHeight: 1.65,
             color: "var(--ink-2)",
-            marginBottom: 40,
-            maxWidth: "60ch",
+            marginBottom: 36,
+            maxWidth: "62ch",
           }}
         >
-          Existing drugs and compounds with published evidence, cross-condition
-          signals, or mechanistic overlap for{" "}
-          {condition.name.toLowerCase()}.
+          The breakdown above shows how those {total} signals grade out by
+          confidence tier and where each one originates. The candidates
+          themselves, the specific approved drugs with published evidence,
+          cross-condition signals, or mechanistic overlap for{" "}
+          {condition.name.toLowerCase()}, sit behind access while Whel is in
+          research preview.
         </p>
 
-        <ResearchSignalsTabs
-          signals={signals}
-          signalIds={signalIds}
-          conditionName={condition.name}
-        />
+        {/* Access gate */}
+        <div
+          style={{
+            border: "1px solid var(--rule-strong)",
+            borderLeft: "3px solid var(--green-mid)",
+            background: "var(--paper)",
+            padding: "28px 30px",
+            maxWidth: 720,
+          }}
+        >
+          <div
+            style={{
+              ...MONO,
+              fontSize: "10.5px",
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: 10,
+            }}
+          >
+            Behind access
+          </div>
+          <h3
+            className="font-heading"
+            style={{
+              fontSize: "1.35rem",
+              fontWeight: 500,
+              color: "var(--ink)",
+              letterSpacing: "-0.01em",
+              marginBottom: 12,
+            }}
+          >
+            The candidates are available on request.
+          </h3>
+          <p
+            style={{
+              fontSize: "0.9375rem",
+              lineHeight: 1.7,
+              color: "var(--ink-2)",
+              maxWidth: "58ch",
+              marginBottom: 22,
+            }}
+          >
+            Each candidate carries its full evidence trail: scored across five
+            dimensions, graded from strong to exploratory, with every source and
+            date attached so it can be checked. We share the index with
+            researchers and clinicians during the preview.
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Link
+              href="/access"
+              style={{
+                ...MONO,
+                fontSize: "12px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--paper)",
+                background: "var(--ink)",
+                padding: "11px 18px",
+                textDecoration: "none",
+              }}
+            >
+              Request access &rarr;
+            </Link>
+            <Link
+              href="/candidates"
+              style={{
+                ...MONO,
+                fontSize: "12px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                border: "1px solid var(--rule-strong)",
+                padding: "11px 18px",
+                textDecoration: "none",
+              }}
+            >
+              See a sample candidate
+            </Link>
+          </div>
+        </div>
       </div>
 
     </main>
