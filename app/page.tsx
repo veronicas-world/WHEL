@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
 import type { TierKey } from "@/app/components/TierHeatmap";
 import MoleculeMesh3D, { type Marker } from "@/app/components/MoleculeMesh3D";
+import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import CandidateCard from "@/app/components/CandidateCard";
@@ -154,9 +155,10 @@ export default async function Home() {
       <section className="surface-ink scroll-section" style={{ paddingTop: 64, paddingBottom: 0, overflow: "hidden" }}>
         <div className="container">
           {/* Full-width headline */}
-          <h1 className="display" style={{ color: "var(--on-ink)", maxWidth: "none", fontSize: "clamp(42px, 5.6vw, 84px)" }}>
-            The drug repurposing platform for female biology.
-          </h1>
+          <HeroTitle
+            className="display"
+            style={{ color: "var(--on-ink)", maxWidth: "none", fontSize: "clamp(42px, 5.6vw, 84px)" }}
+          />
           {/* Two-col: description | graph */}
           <div style={{ display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 48, alignItems: "start", marginTop: 28 }} className="hero-grid">
             <div style={{ paddingTop: 8 }}>
