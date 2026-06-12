@@ -204,7 +204,7 @@ export default async function PlatformPage() {
       </section>
 
       {/* Layer 01 in practice — Cyclical PK */}
-      <section className="surface-ink section" style={{ paddingTop: 0 }}>
+      <section className="surface-ink section" style={{ paddingTop: 64 }}>
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
             <div>
