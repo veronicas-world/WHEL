@@ -21,7 +21,7 @@ const TIERS: { key: keyof Omit<MatrixRow, "id" | "name" | "slug" | "flagship" | 
   { key: "exploratory", label: "Exploratory" },
 ];
 
-function shade(tier: string, v: number, max: number) {
+function shade(tier: string, v: number, max: number): { bg: string; fg: string } {
   const base: Record<string, [number, number, number]> = {
     strong:      [0.34, 0.045, 134],
     moderate:    [0.55, 0.05,  128],
@@ -29,10 +29,13 @@ function shade(tier: string, v: number, max: number) {
     exploratory: [0.9,  0.04,  120],
   };
   const b = base[tier];
-  if (!b) return "var(--bone)";
+  if (!b) return { bg: "var(--bone)", fg: "var(--body)" };
   const intensity = max > 0 ? v / max : 0;
   const L = b[0] + (1 - intensity) * (0.96 - b[0]);
-  return `oklch(${L} ${b[1] * (0.4 + intensity * 0.6)} ${b[2]})`;
+  return {
+    bg: `oklch(${L} ${b[1] * (0.4 + intensity * 0.6)} ${b[2]})`,
+    fg: L > 0.62 ? "var(--ink)" : "var(--bone)",
+  };
 }
 
 export default function HomeTierMatrix({ rows }: { rows: MatrixRow[] }) {
@@ -74,28 +77,25 @@ export default function HomeTierMatrix({ rows }: { rows: MatrixRow[] }) {
               cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
               textDecoration: "none", color: "inherit",
             }}>
-              {r.flagship && (
-                <span style={{
-                  width: 6, height: 6, background: "var(--signal)",
-                  border: "1px solid var(--moss)", borderRadius: "50%",
-                }} />
-              )}
               {r.name}
             </Link>
-            {TIERS.map(({ key }) => (
-              <Link key={key} href={`/conditions/${r.slug}`} title={`${r.name} · ${key} — ${r[key]}`} style={{
-                background: shade(key, r[key], max),
-                padding: "14px 12px", cursor: "pointer", minHeight: 54,
-                display: "flex", alignItems: "center", textDecoration: "none",
-              }}>
-                <span style={{
-                  fontFamily: "var(--font-newsreader, Georgia, serif)", fontSize: 20,
-                  color: (key === "strong" || key === "moderate") ? "var(--bone)" : "var(--body)",
+            {TIERS.map(({ key }) => {
+              const { bg, fg } = shade(key, r[key], max);
+              return (
+                <Link key={key} href={`/conditions/${r.slug}`} title={`${r.name} · ${key} — ${r[key]}`} style={{
+                  background: bg,
+                  padding: "14px 12px", cursor: "pointer", minHeight: 54,
+                  display: "flex", alignItems: "center", textDecoration: "none",
                 }}>
-                  {r[key]}
-                </span>
-              </Link>
-            ))}
+                  <span style={{
+                    fontFamily: "var(--font-newsreader, Georgia, serif)", fontSize: 20,
+                    color: fg,
+                  }}>
+                    {r[key]}
+                  </span>
+                </Link>
+              );
+            })}
             <div style={{
               background: "var(--bone-2)", padding: "14px 12px",
               display: "flex", alignItems: "center", justifyContent: "flex-end",

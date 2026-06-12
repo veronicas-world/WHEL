@@ -340,9 +340,9 @@ export default async function Home() {
               <Link
                 key={c.id}
                 href={`/conditions/${c.slug}`}
-                style={{ textDecoration: "none", color: "inherit" }}
+                style={{ textDecoration: "none", color: "inherit", display: "block", height: "100%" }}
               >
-                <article className={`cond-card ${c.slug === "pmdd" ? "flagship" : ""}`}>
+                <article className={`cond-card ${c.slug === "pmdd" ? "flagship" : ""}`} style={{ height: "100%" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span className="num">C-{String(i + 1).padStart(2, "0")}</span>
                     {c.slug === "pmdd"

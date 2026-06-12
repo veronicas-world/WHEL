@@ -28,7 +28,7 @@ function WhelMark({ size = 30 }: { size?: number }) {
           cy={c[1]}
           r={r}
           fill="none"
-          stroke={i === 0 ? "var(--signal)" : "var(--bone)"}
+          stroke="var(--bone)"
           strokeWidth={sw}
           strokeLinecap="round"
         />

@@ -9,7 +9,7 @@ function WhelMark({ size = 28 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" style={{ overflow: "visible" }}>
       {centers.map((c, i) => (
         <circle key={i} cx={c[0]} cy={c[1]} r={r} fill="none"
-          stroke={i === 0 ? "var(--signal)" : "var(--bone)"}
+          stroke="var(--bone)"
           strokeWidth={sw} strokeLinecap="round" />
       ))}
     </svg>
@@ -57,12 +57,6 @@ export default function Footer() {
               The drug repurposing platform for female biology. We surface the approved drugs that
               already work for women&apos;s health conditions and prove it rigorously enough to act on.
             </p>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 20 }}>
-              <span className="live">
-                <span className="ldot" />
-                Reviewed quarterly · v0.1
-              </span>
-            </div>
           </div>
 
           {/* Platform */}
@@ -110,7 +104,6 @@ export default function Footer() {
         </div>
 
         <div className="legal">
-          <span>Whel, Inc., a Delaware C-Corporation founded in 2026</span>
           <span>Women&apos;s Health Evidence Lab · whel.bio</span>
         </div>
       </div>

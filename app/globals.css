@@ -325,7 +325,7 @@ h1, h2, h3, h4 {
 /* ── Stat grid (dark surface) ─────────────────────────────────────────── */
 
 .statgrid { display: grid; grid-template-columns: repeat(4,1fr); }
-.statgrid .s { padding: 26px 26px 26px 0; border-right: 1px solid var(--ink-line-2); }
+.statgrid .s { padding: 26px; border-right: 1px solid var(--ink-line-2); }
 .statgrid .s:last-child { border-right: none; }
 .statgrid .s .v {
   font-family: var(--font-newsreader, Georgia, serif); font-weight: 400;
