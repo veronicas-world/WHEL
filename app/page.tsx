@@ -6,10 +6,8 @@ import MoleculeMesh3D, { type Marker } from "@/app/components/MoleculeMesh3D";
 import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
-import CandidateCard from "@/app/components/CandidateCard";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import ScrollEffects from "@/app/components/ScrollEffects";
-import { getFlagshipCandidate } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -106,7 +104,6 @@ export default async function Home() {
 
   const conditions = conditionsRaw ?? [];
   const signals    = signalsRaw   ?? [];
-  const flagship   = await getFlagshipCandidate();
 
   const totalSignals    = signals.length;
   const totalConditions = conditions.length;
@@ -262,23 +259,6 @@ export default async function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── FEATURED CANDIDATES ── the product ──────────────────────────────── */}
-      <section className="surface-bone section scroll-section">
-        <div className="container">
-          <div className="between" style={{ marginBottom: 32 }}>
-            <h2 className="h2">Our strongest candidate, with the full trail.</h2>
-            <Link href="/candidates" className="btn btn-ghost">
-              All candidates <span className="arr">→</span>
-            </Link>
-          </div>
-          {flagship && (
-            <div className="col" style={{ gap: 16 }}>
-              <CandidateCard c={flagship} defaultOpen={true} />
-            </div>
-          )}
         </div>
       </section>
 
