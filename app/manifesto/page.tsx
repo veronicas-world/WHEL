@@ -364,7 +364,7 @@ export default function ManifestoPage() {
   return (
     <>
       <style>{CSS}</style>
-      <main>
+      <main style={{ background: "var(--bone)" }}>
 
         {/* ── Hero ──────────────────────────────────────────────────────────── */}
         <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
