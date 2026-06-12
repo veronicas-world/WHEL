@@ -353,8 +353,14 @@ export default async function PlatformPage() {
               can weigh a model&rsquo;s prior against the evidence on the ground.
             </p>
             <p style={pBone}>
-              The full scoring method, the five-dimension rubric, the open data sources
-              we build on, and the documented limitations are set out on{" "}
+              The open data sources and tools we build on, the independent MATRIX
+              cross-reference, and the checks we run against model error are documented
+              on{" "}
+              <Link href="/about/external-references" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+                external references
+              </Link>
+              , and the full scoring method, the five-dimension rubric, and the documented
+              limitations are on{" "}
               <Link href="/about/technical-architecture" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
                 technical architecture
               </Link>

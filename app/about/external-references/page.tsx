@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import {
-  BRAND_DICT_ENTRIES,
   BRAND_DICT_META,
   activeBrandCount,
   countByKind,
@@ -1152,7 +1151,7 @@ export default function ExternalReferencesPage() {
                       },
                       {
                         head: "24 compounds matched only via the brand and synonym dictionary.",
-                        tail: "Without the brand-to-generic, INN-variant, salt-form, and formulation-qualifier translations published in section 05, roughly 29% of matched compounds would have been missed. The translation step is explicit and auditable.",
+                        tail: "Without the brand-to-generic, INN-variant, salt-form, and formulation-qualifier translations the crosswalk applies (section 05), roughly 29% of matched compounds would have been missed. The translation step is explicit and auditable.",
                       },
                       {
                         head: "17 class labels and 21 non-drug entries excluded from the denominator.",
@@ -1273,7 +1272,7 @@ export default function ExternalReferencesPage() {
                       },
                       {
                         head: "The brand and synonym dictionary is Whel's contribution back.",
-                        tail: "24 of the 84 matched compounds were recoverable only via Whel's brand-to-generic and INN-variant translations (section 05). The dictionary is published openly on this same audit page and reusable by anyone doing similar cross-referencing.",
+                        tail: "24 of the 84 matched compounds were recoverable only via Whel's brand-to-generic and INN-variant translations (section 05). The crosswalk is versioned and auditable, and its size and composition are reported on this page; the individual entries are shared on request, since they name compounds in the gated index.",
                       },
                     ].map((item) => (
                       <li
@@ -2313,19 +2312,12 @@ export default function ExternalReferencesPage() {
                   }}
                 >
                   The expanded manifest on June 7, 2026 (v3.9) added the
-                  eight hand-written featured-page references on{" "}
-                  <Link href="/featured" style={LINK}>/featured</Link>{" "}
-                  and{" "}
-                  <Link href="/featured/anastrozole-endometriosis" style={LINK}>
-                    /featured/anastrozole-endometriosis
-                  </Link>
-                  . The verifier caught a real author misattribution on
-                  the anastrozole featured page (a paper attributed to
-                  &ldquo;Nawathe et al., 2011&rdquo; that resolved at the
-                  cited PMC link to a 2011 paper by Ferrero, Gillott,
-                  Venturini &amp; Remorgida). The featured page and
-                  manifest were corrected before the disclosure
-                  published. The full run log is at{" "}
+                  eight hand-written featured-page references. The verifier
+                  caught a real author misattribution among them: a paper
+                  attributed to one author group resolved, at the cited PMC
+                  link, to a paper by an entirely different group. The
+                  featured page and the manifest were both corrected before
+                  the disclosure published. The full run log is at{" "}
                   <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/citation-audit-report.json</code>.
                 </p>
 
@@ -3082,7 +3074,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="05 · Crosswalk transparency"
             title="Brand and synonym dictionary"
-            intro="Whel&apos;s compound list sometimes uses brand strings (&ldquo;Wellbutrin&rdquo;), alternate INN spellings (&ldquo;paracetamol&rdquo; vs &ldquo;acetaminophen&rdquo;), salt forms (&ldquo;Clomiphene Citrate&rdquo;), formulation or route qualifiers (&ldquo;Testosterone (transdermal)&rdquo;), or multi-ingredient combo strings, where the MATRIX drug-list keys on a single canonical name. The dictionary below is the only translation step the crosswalk applies; every other match is a direct name or synonym lookup against MATRIX. The `kind` column records why each entry exists. The list stays short enough to audit at a glance."
+            intro="Whel&apos;s compound list sometimes uses brand strings, alternate INN spellings, salt forms, formulation or route qualifiers, or multi-ingredient combination strings, where the MATRIX drug-list keys on a single canonical name. A small brand-to-generic crosswalk is the only translation step the match applies; every other match is a direct name or synonym lookup against MATRIX. The crosswalk is versioned and reviewed, and the counts below record its size and composition by entry kind."
           />
 
           <details className="disclose-block" style={{ marginTop: 4 }}>
@@ -3172,130 +3164,15 @@ export default function ExternalReferencesPage() {
               </span>
             </summary>
 
-            <div style={{ overflowX: "auto", marginTop: 18 }}>
-              <table style={{ width: "100%", minWidth: 720, borderCollapse: "collapse" }}>
-                <thead>
-                  <tr>
-                    {["Source string", "Kind", "Resolves to", "DrugBank ID", "Note"].map((h, i) => (
-                      <th
-                        key={h}
-                        style={{
-                          ...MONO,
-                          fontSize: "10.5px",
-                          fontWeight: 500,
-                          letterSpacing: "0.13em",
-                          textTransform: "uppercase",
-                          color: "var(--muted)",
-                          textAlign: "left",
-                          padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
-                          borderBottom: "1px solid var(--rule-strong)",
-                          width: ["26%", "11%", "17%", "12%", "34%"][i],
-                        }}
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {BRAND_DICT_ENTRIES.map((e) => (
-                    <tr key={e.brand}>
-                      <td
-                        className="font-heading"
-                        style={{
-                          fontSize: "14px",
-                          color: "var(--ink)",
-                          padding: "14px 14px 14px 0",
-                          borderBottom: "1px solid var(--rule)",
-                          verticalAlign: "baseline",
-                        }}
-                      >
-                        {e.brand}
-                      </td>
-                      <td
-                        style={{
-                          ...MONO,
-                          fontSize: "11px",
-                          color: "var(--muted)",
-                          padding: "14px 14px",
-                          borderBottom: "1px solid var(--rule)",
-                          verticalAlign: "baseline",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {e.kind.replace(/_/g, " ")}
-                      </td>
-                      <td
-                        style={{
-                          ...MONO,
-                          fontSize: "12.5px",
-                          color: e.generic ? "var(--ink-2)" : "var(--muted-2)",
-                          padding: "14px 14px",
-                          borderBottom: "1px solid var(--rule)",
-                          verticalAlign: "baseline",
-                        }}
-                      >
-                        {e.generic ?? "—"}
-                      </td>
-                      <td
-                        style={{
-                          ...MONO,
-                          fontSize: "11.5px",
-                          color: e.drugbank_id ? "var(--green-mid)" : "var(--muted-2)",
-                          padding: "14px 14px",
-                          borderBottom: "1px solid var(--rule)",
-                          verticalAlign: "baseline",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {e.drugbank_id ? (
-                          <a
-                            href={`https://go.drugbank.com/drugs/${e.drugbank_id}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={LINK}
-                          >
-                            {e.drugbank_id}
-                          </a>
-                        ) : (
-                          "—"
-                        )}
-                      </td>
-                      <td
-                        style={{
-                          fontSize: "12.5px",
-                          lineHeight: 1.55,
-                          color: "var(--ink-2)",
-                          padding: "14px 14px",
-                          borderBottom: "1px solid var(--rule)",
-                          verticalAlign: "baseline",
-                        }}
-                      >
-                        {e.note}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div style={{ marginTop: 18 }}>
+              <p style={{ fontSize: "13px", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "70ch" }}>
+                The crosswalk maps brand strings, INN spelling variants, salt forms, route and
+                formulation qualifiers, and combination strings onto canonical compound names.
+                Because those names are the candidates in the gated index, the individual entries
+                are shared with researchers and partners on request rather than published here. The
+                counts above record the crosswalk&apos;s size and composition.
+              </p>
             </div>
-
-            <p
-              style={{
-                ...MONO,
-                fontSize: "11.5px",
-                lineHeight: 1.6,
-                color: "var(--muted)",
-                marginTop: 18,
-              }}
-            >
-              Rows with a dash in the &ldquo;Resolves to&rdquo; column exist
-              for documentation purposes (e.g. medical-device combos) and do
-              not contribute to MATRIX matches. Source file:{" "}
-              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
-                lib/brand-name-dictionary.json
-              </code>
-              .
-            </p>
           </details>
         </div>
       </section>

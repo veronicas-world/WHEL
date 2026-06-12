@@ -51,8 +51,7 @@ const ABOUT_MENU: { label: string; href: string }[] = [
   { label: "Roadmap",               href: "/about/roadmap" },
   { label: "Technical architecture", href: "/about/technical-architecture" },
   { label: "Signal types",          href: "/signal-types" },
-  // External references is held back until its brand-dictionary table (which lists
-  // gated candidate compounds) is neutralized; see the scrub follow-up.
+  { label: "External references",   href: "/about/external-references" },
 ];
 
 const LINK_STYLE: React.CSSProperties = {
