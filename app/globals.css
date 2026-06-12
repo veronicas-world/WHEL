@@ -149,7 +149,7 @@ h1, h2, h3, h4 {
 .font-mono    { font-family: var(--font-plex-mono, ui-monospace, Menlo, monospace); }
 
 .display {
-  font-family: var(--font-newsreader, Georgia, serif); font-weight: 400;
+  font-family: var(--font-newsreader, Georgia, serif); font-weight: 300;
   font-size: clamp(44px, 6vw, 86px); line-height: 0.99; letter-spacing: -0.025em;
   margin: 0; text-wrap: balance;
 }
@@ -506,6 +506,14 @@ details.disclose-block[open] > summary .disclose-chev { transform: rotate(180deg
 @media (max-width: 860px){ .arc-grid, .exp-grid { grid-template-columns: 1fr 1fr !important; } .tier-grid { grid-template-columns: 1fr 1fr !important; } }
 @media (max-width: 760px){ .layer { grid-template-columns: 1fr !important; } }
 @media (max-width: 560px){ .arc-grid, .exp-grid, .tier-grid { grid-template-columns: 1fr !important; } }
+
+/* ── Typewriter cursor ───────────────────────────────────────────────── */
+.type-cursor {
+  display: inline-block; width: 2px; height: 0.82em;
+  background: var(--on-ink); margin-left: 4px; vertical-align: middle;
+  animation: cur-blink 0.65s step-end infinite;
+}
+@keyframes cur-blink { 50% { opacity: 0; } }
 
 /* ── Scroll dynamics ─────────────────────────────────────────────────── */
 body.scroll-effects-ready .scroll-section {
