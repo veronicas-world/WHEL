@@ -141,19 +141,14 @@ export default async function Home() {
       {/* ── HERO ── dark ink surface ─────────────────────────────────────────── */}
       <section className="surface-ink" style={{ paddingTop: 64, paddingBottom: 0, overflow: "hidden" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 56, alignItems: "center" }} className="hero-grid">
-
-            {/* Left: headline + CTAs */}
-            <div>
-              <div className="live" style={{ marginBottom: 28 }}>
-                <span className="ldot" />
-                The drug repurposing platform for female biology
-              </div>
-              <h1 className="display" style={{ color: "var(--on-ink)" }}>
-                The drugs already exist.<br />The evidence is<br />
-                <em style={{ fontStyle: "italic", color: "var(--signal)" }}>waiting to be read.</em>
-              </h1>
-              <p className="lede" style={{ marginTop: 28, color: "var(--on-ink-2)" }}>
+          {/* Full-width headline */}
+          <h1 className="display" style={{ color: "var(--on-ink)", maxWidth: "none", fontSize: "clamp(42px, 5.6vw, 84px)" }}>
+            The drug repurposing platform for female biology.
+          </h1>
+          {/* Two-col: description | graph */}
+          <div style={{ display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 48, alignItems: "start", marginTop: 28 }} className="hero-grid">
+            <div style={{ paddingTop: 8 }}>
+              <p className="lede" style={{ color: "var(--on-ink-2)" }}>
                 Whel surfaces approved drugs that already work for women&apos;s health conditions,
                 validates them against mechanistic and clinical evidence, and produces
                 505(b)(2)-ready candidates that pharma women&apos;s health teams can act on.
@@ -167,18 +162,9 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-
-            {/* Right: animated knowledge graph */}
-            <div>
+            <div className="graph-hero" style={{ marginTop: -36 }}>
               <KnowledgeGraph height={460} />
-              <div className="graph-legend" style={{ marginTop: 8, justifyContent: "center" }}>
-                <span className="lg"><span className="sw" style={{ background: "#2E3D2B", border: "1.5px solid #A8E6A3" }} />Condition</span>
-                <span className="lg"><span className="sw" style={{ background: "#F4EFE6", border: "1.5px solid #97955E" }} />Drug</span>
-                <span className="lg"><span className="sw" style={{ background: "transparent", border: "1.5px solid #97955E" }} />Mechanism</span>
-                <span className="lg"><span className="sw" style={{ background: "#7F3D2E" }} />Contradiction</span>
-              </div>
             </div>
-
           </div>
         </div>
 
@@ -186,7 +172,6 @@ export default async function Home() {
         <div className="container" style={{ marginTop: 56, paddingBottom: 60 }}>
           <div className="divider on-ink" style={{ marginBottom: 0 }} />
           <div className="statgrid">
-            {/* Real data */}
             <div className="s">
               <div className="v">{totalSignals > 0 ? totalSignals : "—"}</div>
               <div className="l">signals indexed · {totalConditions} conditions covered</div>
@@ -195,10 +180,9 @@ export default async function Home() {
               <div className="v">{citationsLabel}</div>
               <div className="l">source citations across active signals</div>
             </div>
-            {/* TODO(real-data): placeholder facts from design */}
             {FACTS.slice(0, 2).map((f) => (
               <div className="s" key={f.n}>
-                <div className="v"><span className="mk">{f.n}</span></div>
+                <div className="v">{f.n}</div>
                 <div className="l">{f.l}</div>
               </div>
             ))}
@@ -206,14 +190,12 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── THESIS ── corrected, not filtered ───────────────────────────────── */}
+      {/* ── THESIS ── corrected substrate ───────────────────────────────────── */}
       <section className="surface-bone section">
         <div className="container">
           <div className="between" style={{ marginBottom: 40 }}>
             <div>
-              <div className="eyebrow" style={{ marginBottom: 14 }}>
-                The thesis · <span style={{ color: "var(--moss)", fontStyle: "italic" }}>a corrected substrate</span>
-              </div>
+              <div className="eyebrow" style={{ marginBottom: 14 }}>The thesis</div>
               <h2 className="h2" style={{ maxWidth: "16ch" }}>
                 Drug development was built on male biology.
               </h2>
@@ -221,8 +203,8 @@ export default async function Home() {
             <p className="lede" style={{ color: "var(--body)" }}>
               Every AI drug-discovery platform reasons over a knowledge graph built from
               male-default research, and rather than adding a women&apos;s-health filter to
-              someone else&apos;s substrate, we are building a corrected version from the ground
-              up, grounded in female biology.
+              someone else&apos;s substrate, we are building the corrected version from the
+              ground up, grounded in female biology.
             </p>
           </div>
           <SubstrateCompare />
@@ -232,9 +214,8 @@ export default async function Home() {
       {/* ── DRUG ARCS ── the drugs that already work ─────────────────────────── */}
       <section className="surface-sage section tight">
         <div className="container">
-          <div className="eyebrow" style={{ marginBottom: 14 }}>Worked record · off-label repurposing</div>
-          <h2 className="h2" style={{ marginBottom: 28, maxWidth: "20ch" }}>
-            Most of what works for women&apos;s health was first approved for something else.
+          <h2 className="h2" style={{ marginBottom: 28, maxWidth: "none" }}>
+            The drugs that work for women&apos;s health were never developed for it.
           </h2>
           {/* TODO(real-data): named arc examples from design */}
           <div style={{
@@ -265,10 +246,7 @@ export default async function Home() {
       <section className="surface-bone section">
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
-            <div>
-              <div className="eyebrow" style={{ marginBottom: 14 }}>The product</div>
-              <h2 className="h2">Repurposing candidates, with the trail.</h2>
-            </div>
+            <h2 className="h2">Repurposing candidates, with the trail.</h2>
             <Link href="/candidates" className="btn btn-ghost">
               All candidates <span className="arr">→</span>
             </Link>
@@ -317,8 +295,8 @@ export default async function Home() {
               From off-label signal to a 505(b)(2)-ready trail.
             </h2>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "34ch" }}>
-              Off-label use is the largest uncontrolled clinical trial in women&apos;s health, and
-              the platform is built to read its results.
+              Off-label use is the largest uncontrolled clinical trial in women&apos;s health.
+              We read the results.
             </p>
           </div>
           <Pipeline />
@@ -331,7 +309,7 @@ export default async function Home() {
           <div className="between" style={{ marginBottom: 32 }}>
             <div>
               <div className="eyebrow" style={{ marginBottom: 14 }}>v0 corpus · {totalConditions} conditions</div>
-              <h2 className="h2">The conditions we cover first.</h2>
+              <h2 className="h2">Where we start.</h2>
             </div>
             <Link href="/conditions" className="btn btn-ghost">
               All conditions <span className="arr">→</span>
@@ -370,9 +348,9 @@ export default async function Home() {
       <section className="surface-paper section tight">
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 14 }}>Fig. 1 · Confidence distribution</div>
-          <h2 className="h2" style={{ marginBottom: 8 }}>Where the evidence sits across the conditions.</h2>
+          <h2 className="h2" style={{ marginBottom: 8 }}>Where the evidence sits.</h2>
           <p className="lede" style={{ marginBottom: 32 }}>
-            Evidence sits in tiers, and the strongest and most exploratory signals are never flattened into the same visual weight, so the page shows the shape of the evidence rather than a single averaged number.
+            Evidence sits in tiers, and we never flatten strong and exploratory signals into the same visual weight.
           </p>
           {/* Real data: tier counts from Supabase */}
           {matrixRows.length > 0
@@ -407,14 +385,9 @@ export default async function Home() {
                 background: "var(--moss)", padding: "28px 26px",
                 display: "flex", flexDirection: "column", gap: 12, minHeight: 230,
               }}>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ fontFamily: "var(--font-plex-mono, monospace)", fontSize: 11, color: "var(--signal)", letterSpacing: "0.1em" }}>
-                    {e.phase}
-                  </span>
-                  <span style={{ fontFamily: "var(--font-plex-mono, monospace)", fontSize: 11, color: "var(--on-ink-mut)" }}>
-                    {e.when}
-                  </span>
-                </div>
+                <span style={{ fontFamily: "var(--font-plex-mono, monospace)", fontSize: 11, color: "var(--signal)", letterSpacing: "0.1em" }}>
+                  {e.phase}
+                </span>
                 <div style={{ fontFamily: "var(--font-newsreader, Georgia, serif)", fontSize: 21, color: "var(--on-ink)", lineHeight: 1.15 }}>
                   {e.title}
                 </div>
@@ -422,13 +395,6 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <p style={{
-            fontFamily: "var(--font-newsreader, Georgia, serif)",
-            fontStyle: "italic", fontSize: "clamp(20px,2vw,28px)",
-            color: "var(--on-ink)", maxWidth: "34ch", marginTop: 44, lineHeight: 1.35,
-          }}>
-            What we are building is the operating system for female-biology drug development.
-          </p>
         </div>
       </section>
 
