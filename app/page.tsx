@@ -5,8 +5,9 @@ import type { TierKey } from "@/app/components/TierHeatmap";
 import KnowledgeGraph from "@/app/components/KnowledgeGraph";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
-import CandidateCard, { type Candidate } from "@/app/components/CandidateCard";
+import CandidateCard from "@/app/components/CandidateCard";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
+import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -31,56 +32,6 @@ const ARCS = [
   { drug: "SSRIs",             to: "PMDD",              note: "neurosteroid modulation, not reuptake" },
   { drug: "Letrozole",         to: "PCOS infertility",  note: "from breast cancer; superior to clomiphene" },
   { drug: "GLP-1 agonists",    to: "PCOS · Endometriosis", note: "metabolic + inflammatory, under study" },
-];
-
-/* TODO(real-data): featured candidates — from design; wire to real Supabase signals in a later pass */
-const FEATURED_CANDIDATES: Candidate[] = [
-  {
-    id: "WHEL-C-001", drug: "Metformin", condition: "PCOS", conditionId: "pcos",
-    tier: "strong", score: 9,
-    origin: "Approved · Type 2 diabetes (biguanide)",
-    pathway: "505(b)(2) — same active ingredient, new indication",
-    direction: "supports",
-    rationale: "Decades of off-label prescribing for insulin resistance and anovulation in PCOS, now supported by multiple meta-analyses for ovulation induction and metabolic endpoints. The most established repurposing record in the corpus — surfaced here with its full trail and the points where the literature disagrees.",
-    mechanism: "Reduces hepatic gluconeogenesis and improves peripheral insulin sensitivity; lowers circulating insulin, attenuating ovarian androgen production and restoring ovulatory cycles.",
-    dims: { replication: "High", source: "High", specificity: "High", plausibility: "High", cyclical: "Modeled" },
-    claims: [
-      { type: "extract", text: "Metformin improves ovulation rates versus placebo in women with PCOS.", src: "Cochrane Review · 2020 · PMID 32048270" },
-      { type: "extract", text: "Insulin-sensitizing effect reduces circulating androgens in PCOS cohorts.", src: "J Clin Endocrinol Metab · 2021 · PMID 33729478" },
-      { type: "synth",   text: "Across the metabolic and reproductive literature the direction of effect is consistent, though magnitude varies with BMI strata.", src: "Synthesis of 6 source spans" },
-      { type: "contradict", text: "Two trials find no live-birth advantage over lifestyle intervention alone — a contradiction surfaced, not averaged.", src: "N Engl J Med · 2007 · PMID 17287476" },
-    ],
-  },
-  {
-    id: "WHEL-C-002", drug: "GnRH antagonists", condition: "Endometriosis", conditionId: "endometriosis",
-    tier: "strong", score: 9,
-    origin: "Approved · originally prostate cancer (elagolix, relugolix)",
-    pathway: "505(b)(2) — established active, new mechanism context",
-    direction: "supports",
-    rationale: "A textbook cross-condition repurposing arc: a drug class developed for prostate cancer became standard of care for endometriosis-associated pain. Whel reconstructs the full evidence trail and the add-back-therapy contradiction that gates long-term use.",
-    mechanism: "Competitively blocks pituitary GnRH receptors, suppressing gonadotropin release and ovarian estrogen production — depriving estrogen-dependent lesions of their growth stimulus.",
-    dims: { replication: "High", source: "High", specificity: "High", plausibility: "High", cyclical: "Modeled" },
-    claims: [
-      { type: "extract", text: "Oral GnRH antagonists significantly reduce endometriosis-associated pelvic pain in RCTs.", src: "Obstet Gynecol · 2018 · PMID 29528917" },
-      { type: "extract", text: "Hypoestrogenic side effects require add-back therapy beyond six months.", src: "Fertil Steril · 2019 · PMID 31371049" },
-      { type: "synth", text: "The benefit is robust across trials; the open question is durability under add-back, where the evidence is thinner.", src: "Synthesis of 5 source spans" },
-    ],
-  },
-  {
-    id: "WHEL-C-003", drug: "SSRIs (luteal-phase dosing)", condition: "PMDD", conditionId: "pmdd",
-    tier: "strong", score: 8,
-    origin: "Approved · depression / anxiety",
-    pathway: "505(b)(2) — novel dosing schedule + indication",
-    direction: "supports",
-    rationale: "SSRIs work for PMDD through a mechanism that has nothing to do with serotonin reuptake and everything to do with rapid neurosteroid modulation — which nobody understood when the drugs were first prescribed off-label. Luteal-phase-only dosing is a repurposing hypothesis the substrate makes explicit.",
-    mechanism: "Acute enhancement of allopregnanolone synthesis via 3α-HSD modulation — a non-serotonergic action that explains the rapid (sub-week) symptom relief atypical of SSRI depression response.",
-    dims: { replication: "High", source: "High", specificity: "High", plausibility: "Medium", cyclical: "Modeled" },
-    claims: [
-      { type: "extract", text: "Luteal-phase SSRI dosing reduces PMDD symptom severity comparably to continuous dosing.", src: "Cochrane Review · 2013 · PMID 23744611" },
-      { type: "synth", text: "Onset within days — inconsistent with a reuptake mechanism — points to neurosteroid modulation as the operative pathway.", src: "Synthesis of 4 source spans" },
-      { type: "extract", text: "Allopregnanolone dysregulation is implicated in luteal-phase symptom emergence.", src: "Neuropsychopharmacology · 2022 · PMID 35017671" },
-    ],
-  },
 ];
 
 /* TODO(real-data): three-layer architecture — from design */
@@ -143,6 +94,7 @@ export default async function Home() {
 
   const conditions = conditionsRaw ?? [];
   const signals    = signalsRaw   ?? [];
+  const featured   = await getFeaturedCandidates(3);
 
   const totalSignals    = signals.length;
   const totalConditions = conditions.length;
@@ -322,7 +274,7 @@ export default async function Home() {
           </div>
           {/* TODO(real-data): first 3 candidates from design; wire to Supabase repurposing_signals in next pass */}
           <div className="col" style={{ gap: 16 }}>
-            {FEATURED_CANDIDATES.map((c, i) => (
+            {featured.map((c, i) => (
               <CandidateCard key={c.id} c={c} defaultOpen={i === 0} />
             ))}
           </div>
@@ -491,7 +443,7 @@ export default async function Home() {
             Request access to the v0.1 index, or read how each signal is scored.
           </p>
           <div className="row" style={{ justifyContent: "center", gap: 12 }}>
-            <Link href="/about/contact" className="btn btn-on-ink">
+            <Link href="/access" className="btn btn-on-ink">
               Request access <span className="arr">→</span>
             </Link>
             <Link href="/about/technical-architecture" className="btn btn-ghost-ink">

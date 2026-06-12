@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-06-11T14:28:59+00:00",
+  "counts": {
+    "documents": 4,
+    "source_spans": 60,
+    "claims": 35,
+    "contradictions": 3,
+    "entities": 11,
+    "claims_provenance_verified": 35,
+    "claims_entailment_labeled": 35
+  },
+  "usage": {
+    "calls": 88,
+    "input_tokens": 43935,
+    "output_tokens": 8161,
+    "est_cost_usd": 0.2542
+  },
+  "seed_migration": "supabase/migrations/047_substrate_seed_pmdd.sql"
+}

@@ -2,32 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import KnowledgeGraph from "@/app/components/KnowledgeGraph";
 import CyclicalPK from "@/app/components/CyclicalPK";
-import CandidateCard, { type Candidate } from "@/app/components/CandidateCard";
+import CandidateCard from "@/app/components/CandidateCard";
+import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const metadata: Metadata = {
   title: "Platform",
   description: "The corrected knowledge graph for female biology — sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss.",
 };
 
-/* TODO(real-data): example candidate for platform page — wire to Supabase in next pass */
-const PLATFORM_CANDIDATE: Candidate = {
-  id: "WHEL-C-001", drug: "Metformin", condition: "PCOS", conditionId: "pcos",
-  tier: "strong", score: 9,
-  origin: "Approved · Type 2 diabetes (biguanide)",
-  pathway: "505(b)(2) — same active ingredient, new indication",
-  direction: "supports",
-  rationale: "Decades of off-label prescribing for insulin resistance and anovulation in PCOS, now supported by multiple meta-analyses for ovulation induction and metabolic endpoints.",
-  mechanism: "Reduces hepatic gluconeogenesis and improves peripheral insulin sensitivity; lowers circulating insulin, attenuating ovarian androgen production and restoring ovulatory cycles.",
-  dims: { replication: "High", source: "High", specificity: "High", plausibility: "High", cyclical: "Modeled" },
-  claims: [
-    { type: "extract", text: "Metformin improves ovulation rates versus placebo in women with PCOS.", src: "Cochrane Review · 2020 · PMID 32048270" },
-    { type: "extract", text: "Insulin-sensitizing effect reduces circulating androgens in PCOS cohorts.", src: "J Clin Endocrinol Metab · 2021 · PMID 33729478" },
-    { type: "synth",   text: "Across the metabolic and reproductive literature the direction of effect is consistent, though magnitude varies with BMI strata.", src: "Synthesis of 6 source spans" },
-    { type: "contradict", text: "Two trials find no live-birth advantage over lifestyle intervention alone — a contradiction surfaced, not averaged.", src: "N Engl J Med · 2007 · PMID 17287476" },
-  ],
-};
-
-/* TODO(real-data): layer descriptions from design */
+/* Layer descriptions — narrative copy from the design / Blueprint */
 const LAYERS = [
   {
     n: "Layer 01", name: "The substrate",
@@ -46,7 +29,11 @@ const LAYERS = [
   },
 ];
 
-export default function PlatformPage() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function PlatformPage() {
+  const [candidate] = await getFeaturedCandidates(1);
   return (
     <main>
 
@@ -135,7 +122,7 @@ export default function PlatformPage() {
             </p>
           </div>
           {/* TODO(real-data): example candidate — wire to real Supabase signal */}
-          <CandidateCard c={PLATFORM_CANDIDATE} defaultOpen={true} />
+          {candidate && <CandidateCard c={candidate} defaultOpen={true} />}
         </div>
       </section>
 

@@ -1,0 +1,2345 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whel — PMDD / PMS Evidence Substrate (MVP)</title>
+<style>
+  :root { --magenta:#7A1F3D; --tint:#F4E4EC; }
+  * { box-sizing:border-box; }
+  body { font-family:Georgia, 'Times New Roman', serif; color:#1a1a1a; margin:0;
+         background:#faf8f9; line-height:1.5; }
+  .wrap { max-width:960px; margin:0 auto; padding:32px 22px 80px; }
+  header h1 { font-size:40px; color:var(--magenta); margin:0 0 4px; letter-spacing:.5px; }
+  header .sub { font-family:Arial,Helvetica,sans-serif; font-size:13px; letter-spacing:2px;
+               text-transform:uppercase; color:#666; }
+  .lede { font-size:17px; margin:18px 0 6px; }
+  .stats { display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 8px; font-family:Arial,sans-serif; }
+  .stat { background:#fff; border:1px solid #e7dde2; border-radius:10px; padding:10px 14px; }
+  .stat b { display:block; font-size:22px; color:var(--magenta); }
+  .stat span { font-size:12px; color:#666; }
+  h2 { font-size:24px; color:var(--magenta); margin:38px 0 6px; border-bottom:2px solid var(--tint);
+        padding-bottom:6px; }
+  .note { font-family:Arial,sans-serif; font-size:13px; color:#555; background:var(--tint);
+          border-radius:8px; padding:12px 14px; margin:10px 0; }
+  .badge { font-family:Arial,sans-serif; font-size:11px; font-weight:bold; padding:2px 8px;
+           border-radius:20px; margin-right:6px; white-space:nowrap; }
+  .badge.prov { color:#0b3d63; background:#e3eefc; }
+  .pill { font-family:Arial,sans-serif; font-size:13px; font-weight:bold; background:var(--magenta);
+          color:#fff; padding:2px 10px; border-radius:20px; }
+  .claim { background:#fff; border:1px solid #e7dde2; border-left:4px solid var(--magenta);
+           border-radius:8px; padding:12px 14px; margin:10px 0; }
+  .claim-head { margin-bottom:6px; }
+  .claim-text { font-size:16px; margin:4px 0 8px; }
+  .prov-box { background:#fbf9fa; border:1px dashed #d9c7cf; border-radius:6px; padding:8px 10px; }
+  .quote { font-style:italic; color:#333; }
+  .src { font-family:Arial,sans-serif; font-size:12px; margin-top:5px; }
+  .src a { color:var(--magenta); }
+  .muted { color:#888; }
+  .contra { background:#fff; border:1px solid #efcdd8; border-radius:12px; padding:14px 16px;
+            margin:14px 0; box-shadow:0 1px 4px rgba(122,31,61,.06); }
+  .contra-top { font-family:Arial,sans-serif; margin-bottom:8px; }
+  .contra-tag { background:var(--magenta); color:#fff; font-size:11px; font-weight:bold;
+                padding:2px 8px; border-radius:4px; letter-spacing:1px; margin-right:8px; }
+  .contra-pair { display:grid; grid-template-columns:1fr 30px 1fr; align-items:center; gap:6px; }
+  .vs { text-align:center; font-family:Arial,sans-serif; font-weight:bold; color:var(--magenta); }
+  .rationale { font-family:Arial,sans-serif; font-size:13px; margin-top:8px; color:#444; }
+  details.group { background:#fff; border:1px solid #e7dde2; border-radius:8px; padding:6px 14px; margin:10px 0; }
+  summary { cursor:pointer; padding:6px 0; font-size:15px; }
+  @media (max-width:680px) { .contra-pair { grid-template-columns:1fr; } .vs { padding:4px; } }
+</style></head>
+<body><div class="wrap">
+  <header>
+    <h1>Whel</h1>
+    <div class="sub">Women&rsquo;s Health Evidence Lab &middot; PMDD / PMS substrate &middot; MVP</div>
+  </header>
+  <p class="lede">A working slice of the evidence substrate: real PubMed claims about premenstrual
+  (PMDD/PMS) treatments, each <strong>anchored to a verbatim source span</strong>, each checked for whether
+  its own quote actually supports it, and disagreements in the literature <strong>surfaced, not averaged</strong>.</p>
+  <div class="stats">
+    <div class="stat"><b>17</b><span>PubMed documents</span></div>
+    <div class="stat"><b>237</b><span>source spans</span></div>
+    <div class="stat"><b>115</b><span>atomic claims</span></div>
+    <div class="stat"><b>114</b><span>provenance-verified</span></div>
+    <div class="stat"><b>3</b><span>contradictions surfaced</span></div>
+  </div>
+
+  <h2>Contradictions surfaced</h2>
+  <div class="note">Whel does not collapse disagreement into a consensus. Where two provenance-verified
+  efficacy claims about the same treatment conflict, both are shown side by side with their sources intact.</div>
+  
+      <div class="contra">
+        <div class="contra-top">
+          <span class="contra-tag">CONTRADICTION</span>
+          <strong>essential fatty acids</strong> &middot; PMS
+          <span class="muted">disagreement score 0.80</span>
+        </div>
+        <div class="contra-pair">
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.75</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids (EFAs) are ineffective in reducing stress in women with PMS/premenstrual conditions regardless of hormonal phase.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;EFAs were ineffective in reducing stress or anxiety in four groups of women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2220–2295</span>
+        </div>
+      </div>
+    </div></div>
+          <div class="vs">vs</div>
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids were effective in reducing anxiety in premenstrual women</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;effective in reducing perceived stress and salivary cortisol levels during pregnancy and anxiety in premenstrual women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 1954–2072</span>
+        </div>
+      </div>
+    </div></div>
+        </div>
+        <div class="rationale"><strong>Why surfaced:</strong> One synthesis reports essential fatty acids ineffective for premenstrual stress/anxiety across four groups of women; another reports them effective for premenstrual anxiety. Surfaced as a direct efficacy disagreement, not averaged into a single rating.</div>
+      </div>
+      <div class="contra">
+        <div class="contra-top">
+          <span class="contra-tag">CONTRADICTION</span>
+          <strong>Vitex agnus-castus</strong> &middot; PMDD
+          <span class="muted">disagreement score 0.78</span>
+        </div>
+        <div class="contra-pair">
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is equivalent to fluoxetine in treating PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;one study reported Vitex to be equivalent to fluoxetine&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1272–1327</span>
+        </div>
+      </div>
+    </div></div>
+          <div class="vs">vs</div>
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Fluoxetine outperformed Vitex agnus-castus in treating PMDD in one study</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;in the other, fluoxetine outperformed Vitex&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1335–1378</span>
+        </div>
+      </div>
+    </div></div>
+        </div>
+        <div class="rationale"><strong>Why surfaced:</strong> Within one review, one study found Vitex agnus-castus equivalent to fluoxetine for PMDD while another found fluoxetine outperformed it. The head-to-head conclusion is contested.</div>
+      </div>
+      <div class="contra">
+        <div class="contra-top">
+          <span class="contra-tag">CONTRADICTION</span>
+          <strong>vitamin B6</strong> &middot; PMS
+          <span class="muted">disagreement score 0.66</span>
+        </div>
+        <div class="contra-pair">
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.78</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 used in isolation had no effect on premenstrual anxiety in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;had no effect when used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2380–2416</span>
+        </div>
+      </div>
+    </div></div>
+          <div class="vs">vs</div>
+          <div class="side">
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 alone may effectively reduce anxiety in older women with PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6 alone may reduce anxiety effectively in older women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 3035–3097</span>
+        </div>
+      </div>
+    </div></div>
+        </div>
+        <div class="rationale"><strong>Why surfaced:</strong> Vitamin B6 in isolation showed no overall effect on premenstrual anxiety, yet was reported to reduce anxiety specifically in older women - a subgroup-conditional contradiction the substrate surfaces rather than collapses.</div>
+      </div>
+
+  <h2>Claims by treatment</h2>
+  <div class="note">Every claim links to its exact source: a verbatim quote, character offsets into the
+  stored document, and the PubMed record. <b>Entailment</b> records whether the quote actually supports the
+  claim &mdash; e.g. a vitamin-B6 claim sourced from a &ldquo;B6, calcium, and zinc&rdquo; quote is marked
+  <i>neutral</i> (overreach), and an evening-primrose-oil claim whose quote is about other conditions is
+  excluded entirely. The substrate refuses claims it cannot trace.</div>
+  
+      <details class="group" open>
+        <summary><span class="pill">SSRIs</span> <span class="muted">26 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Treatment with selective serotonin reuptake inhibitors (SSRIs) represents an evidence-based approach for PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;treatment with selective serotonin reuptake inhibitors (SSRI) represent an evidence-based approach&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38393358/" target="_blank">[Premenstrual syndrome and premenstrual dysphoric disorder-Overview on pathophysiology, diagnostics and treatment].</a>
+          <span class="muted"> &middot; Der Nervenarzt 2024
+          &middot; PMID 38393358 &middot; chars 1458–1556</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs probably reduce overall self-rated premenstrual symptoms in women with PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRIs probably reduce overall self-rated premenstrual symptoms in women with PMS and PMDD&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2316–2405</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Continuous SSRI administration was probably more effective than luteal phase administration for PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRI treatment was probably more effective when administered continuously than when administered only in the luteal phase&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2512–2633</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs administered in the luteal phase were effective for PMS symptoms compared to placebo.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;luteal phase group: SMD -0.39, 95% CI -0.58 to -0.21; 6 studies, 687 participants; moderate-certainty evidence&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2669–2779</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs administered continuously were effective for PMS symptoms compared to placebo.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;continuous group: SMD -0.69, 95% CI -0.88 to -0.51; 7 studies, 1055 participants; moderate-certainty evidence&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2781–2890</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs probably reduce premenstrual symptoms in women with PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRIs probably reduce premenstrual symptoms in women with PMS and PMDD&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 4651–4721</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are used as pharmacologic therapy for severe PMS and PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;selective serotonin reuptake inhibitors (SSRIs)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1420–1467</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Selective serotonin reuptake inhibitors are effective treatments for PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;calcium carbonate (1200 mg/d) and selective serotonin reuptake inhibitors are effective treatments for PMS&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 548–654</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Selective serotonin reuptake inhibitors can be considered as first-line therapy for women with severe affective symptoms of PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Selective serotonin reuptake inhibitors can be considered as first-line therapy for women with severe affective symptoms&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 1372–1492</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs probably reduce overall self-rated premenstrual symptoms in women with PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRIs probably reduce overall self-rated premenstrual symptoms in women with PMS and PMDD&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2316–2405</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs probably reduce premenstrual symptoms in women with PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRIs probably reduce premenstrual symptoms in women with PMS and PMDD&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 4651–4721</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are probably more effective when taken continuously compared to luteal phase administration in women with PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;probably more effective when taken continuously compared to luteal phase administration&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 4730–4817</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are used as pharmacologic therapy for PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;selective serotonin reuptake inhibitors (SSRIs)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1420–1467</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRI treatment increases the risk of adverse events in the context of PMDD/PMS treatment, with the most common being nausea, asthenia and somnolence.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;SSRI treatment probably increases the risk of adverse events, with the most common being nausea, asthenia and somnolence.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 4819–4940</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with nausea as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;The adverse effects associated with SSRIs were nausea (OR 3.30, 95% CI 2.58 to 4.21; I2 = 0%; 18 studies, 3664 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 2893–3010</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with insomnia as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insomnia (OR 1.99, 95% CI 1.51 to 2.63; I2 = 0%; 18 studies, 3722 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3012–3084</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with sexual dysfunction or decreased libido as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;sexual dysfunction or decreased libido (OR 2.32, 95% CI 1.57 to 3.42; I2 = 0%; 14 studies, 2781 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3086–3188</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with fatigue or sedation as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;fatigue or sedation (OR 1.52, 95% CI 1.05 to 2.20; I2 = 0%; 10 studies, 1230 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3190–3273</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with dizziness or vertigo as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;dizziness or vertigo (OR 1.96, 95% CI 1.36 to 2.83; I2 = 0%; 13 studies, 2633 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3275–3359</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with tremor as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;tremor (OR 5.38, 95% CI 2.20 to 13.16; I2 = 0%; 4 studies, 1352 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3361–3431</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with somnolence and decreased concentration as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;somnolence and decreased concentration (OR 3.26, 95% CI 2.01 to 5.30; I2 = 0%; 8 studies, 2050 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3433–3534</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with sweating as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;sweating (OR 2.17, 95% CI 1.36 to 3.47; I2 = 0%; 10 studies, 2304 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3536–3608</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with dry mouth as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;dry mouth (OR 2.70, 95% CI 1.75 to 4.17; I2 = 0%; 11 studies, 1753 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3610–3683</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with asthenia or decreased energy as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;asthenia or decreased energy (OR 3.28, 95% CI 2.16 to 4.98; I2 = 0%; 7 studies, 1704 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3685–3776</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with diarrhoea as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;diarrhoea (OR 2.06, 95% CI 1.37 to 3.08; I2 = 0%; 12 studies, 2681 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3778–3851</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">SSRIs are associated with constipation as an adverse effect in women with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;constipation (OR 2.39, 95% CI 1.09 to 5.26; I2 = 0%; 7 studies, 1022 women)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/39140320/" target="_blank">Selective serotonin reuptake inhibitors for premenstrual syndrome and premenstrual dysphoric disorder.</a>
+          <span class="muted"> &middot; The Cochrane database of systematic reviews 2024
+          &middot; PMID 39140320 &middot; chars 3857–3932</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" open>
+        <summary><span class="pill">Vitex agnus-castus</span> <span class="muted">19 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#8a1c1c;background:#fbe9e9">negative · harmful / worse</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Fluoxetine outperformed Vitex agnus-castus in treating PMDD in one study</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;in the other, fluoxetine outperformed Vitex&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1335–1378</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is effective in the treatment of PMS or PMDD, with all eight studies showing positive results.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;all eight studies were positive for VAC in the treatment of PMS or PMDD&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1100–1171</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus extract is efficacious for the treatment of PMS/PMDD symptoms</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;the VAC extract is a safe and efficacious alternative to be considered for the treatment of PMS/PMDD symptoms&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1494–1603</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex extracts are superior to placebo for premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;seven of eight trials found Vitex extracts to be superior to placebo (5 of 6 studies)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1108–1193</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex extracts are superior to pyridoxine for premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;seven of eight trials found Vitex extracts to be superior to placebo (5 of 6 studies), pyridoxine (1)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1108–1209</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex extracts are superior to magnesium oxide for premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;seven of eight trials found Vitex extracts to be superior to placebo (5 of 6 studies), pyridoxine (1), and magnesium oxide (1)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1108–1234</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is superior to placebo for reducing TRH-stimulated prolactin secretion in latent hyperprolactinaemia</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;superior to placebo for reducing TRH-stimulated prolactin secretion&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1439–1506</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is superior to placebo for normalising a shortened luteal phase in latent hyperprolactinaemia</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;normalising a shortened luteal phase&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1508–1544</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is superior to placebo for increasing mid-luteal progesterone levels in latent hyperprolactinaemia</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;increasing mid-luteal progesterone and 17β-oestradiol levels&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1546–1606</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is comparable to bromocriptine for reducing serum prolactin levels in latent hyperprolactinaemia</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Vitex comparable to bromocriptine for reducing serum prolactin levels&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1630–1699</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is comparable to bromocriptine for ameliorating cyclic mastalgia in latent hyperprolactinaemia</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;ameliorating cyclic mastalgia&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1704–1733</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex extracts have benefits in the treatment of premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;suggest benefits for Vitex extracts in the treatment of premenstrual syndrome&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 2123–2200</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus extract is efficacious for the treatment of PMDD symptoms</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;the VAC extract is a safe and efficacious alternative to be considered for the treatment of PMS/PMDD symptoms&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1494–1603</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex extracts have benefits in the treatment of premenstrual dysphoric disorder</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;suggest benefits for Vitex extracts in the treatment of premenstrual syndrome, premenstrual dysphoric disorder&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 2123–2233</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is equivalent to fluoxetine in treating PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;one study reported Vitex to be equivalent to fluoxetine&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1272–1327</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus is well tolerated in the treatment of PMS or PMDD.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;VAC was overall well tolerated&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1176–1206</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus extract is safe for the treatment of PMS/PMDD symptoms</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;the VAC extract is a safe and efficacious alternative to be considered for the treatment of PMS/PMDD symptoms&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1494–1603</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus has mild and generally infrequent adverse events in the context of PMS/PMDD treatment.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Adverse events with Vitex were mild and generally infrequent.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1735–1796</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitex agnus-castus extract is safe for the treatment of PMDD symptoms</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;the VAC extract is a safe and efficacious alternative to be considered for the treatment of PMS/PMDD symptoms&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/29063202/" target="_blank">Vitex agnus castus for premenstrual syndrome and premenstrual dysphoric disorder: a systematic review.</a>
+          <span class="muted"> &middot; Archives of women&#x27;s mental health 2017
+          &middot; PMID 29063202 &middot; chars 1494–1603</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" open>
+        <summary><span class="pill">vitamin B6</span> <span class="muted">7 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.78</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 used in isolation had no effect on premenstrual anxiety in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;had no effect when used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2380–2416</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 used in isolation did not affect stress in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;did not affect stress in women suffering from dysmenorrhea when combined or used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2421–2514</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">entailment: neutral 0.45</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Treatment with vitamin B6 consistently had significant positive effects on the psychological symptoms of PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Treatment with vitamin B6, calcium, and zinc consistently had significant positive effects on the psychological symptoms of PMS.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1600–1728</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 reduces anxiety in older women with PMS/premenstrual symptoms.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Older women experienced anxiety reduction using vitamin B6&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2516–2574</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 alone may effectively reduce anxiety in older women with PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6 alone may reduce anxiety effectively in older women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 3035–3097</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 may reduce anxiety in older women with PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6 may reduce anxiety in older women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 3481–3525</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B6 therapy for PMS is based on inconclusive evidence.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6, evening primrose oil, and oral contraceptives) are based on inconclusive evidence&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 700–793</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" open>
+        <summary><span class="pill">essential fatty acids</span> <span class="muted">6 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids were ineffective for premenstrual women when depression was disregarded</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;were ineffective when depression was disregarded&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2137–2185</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.75</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids (EFAs) are ineffective in reducing stress in women with PMS/premenstrual conditions regardless of hormonal phase.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;EFAs were ineffective in reducing stress or anxiety in four groups of women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2220–2295</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids (EFAs) are ineffective in reducing anxiety in women with PMS/premenstrual conditions regardless of hormonal phase.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;EFAs were ineffective in reducing stress or anxiety in four groups of women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2220–2295</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids were effective in reducing anxiety in premenstrual women</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;effective in reducing perceived stress and salivary cortisol levels during pregnancy and anxiety in premenstrual women&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 1954–2072</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids (EFAs) may reduce anxiety during premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;may reduce anxiety during premenstrual syndrome&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2842–2889</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.70</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Essential fatty acids may be effective in reducing premenstrual anxiety in the absence of depression</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;premenstrual or menopausal anxiety in the absence of depression&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 3345–3408</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" open>
+        <summary><span class="pill">magnesium</span> <span class="muted">4 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Magnesium used in isolation had no effect on premenstrual anxiety in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;had no effect when used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2380–2416</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Magnesium used in isolation did not affect stress in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;did not affect stress in women suffering from dysmenorrhea when combined or used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2421–2514</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Magnesium has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;magnesium&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 932–941</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of magnesium on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates, soy isoflavones, dietary fatty acids, magnesium&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1884</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">evening primrose oil</span> <span class="muted">3 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">entailment: neutral 0.15</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Evening primrose oil did not demonstrate effectiveness in premenstrual syndrome</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;it did not demonstrate effectiveness in chronic hand dermatitis, tardive dyskinesia, psoriatic arthritis, cystic fibrosis, hepatitis B, premenstrual syndrome&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38360611/" target="_blank">The effect of Oenothera biennis (Evening primrose) oil on inflammatory diseases: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; BMC complementary medicine and therapies 2024
+          &middot; PMID 38360611 &middot; chars 1019–1176</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Evening primrose oil has confirmed efficacy in women&#x27;s health, but requires regular use up to 4 or 6 months before response is expected.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;confirmed the evening primrose oil&#x27;s efficacy in women health, but the immediate response should not be expected from it, therefore, it should be regularly used up to 4 or 6 months&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/31497576/" target="_blank">Evening Primrose (Oenothera biennis) Oil in Management of Female Ailments.</a>
+          <span class="muted"> &middot; Journal of menopausal medicine 2019
+          &middot; PMID 31497576 &middot; chars 1083–1263</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.80</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Evening primrose oil therapy for PMS is based on inconclusive evidence.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6, evening primrose oil, and oral contraceptives) are based on inconclusive evidence&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 700–793</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">magnesium + vitamin B6</span> <span class="muted">3 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.85</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Combined magnesium and vitamin B6 supplementation did not affect stress in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;did not affect stress in women suffering from dysmenorrhea when combined or used in isolation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2421–2514</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Combined magnesium and vitamin B6 supplementation reduced premenstrual anxiety in women suffering from dysmenorrhea.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Combined magnesium and vitamin B6 supplementation reduced premenstrual anxiety&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2297–2375</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">entailment: entailed 0.90</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Combining magnesium and vitamin B6 reduces premenstrual anxiety in PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Combining magnesium and vitamin B6 may reduce premenstrual anxiety&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 3410–3476</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">GnRH agonists</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">GnRH agonists are used as pharmacologic therapy for severe PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;gonadotropin-releasing hormone (GnRH) agonists&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1502–1548</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">GnRH agonists are used as pharmacologic therapy for PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;gonadotropin-releasing hormone (GnRH) agonists&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1502–1548</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">acupuncture</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Acupuncture may be effective for some individuals with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Non-pharmacologic treatment with diet, exercise, cognitive behavioral therapy (CBT), certain vitamin and herbal supplements, and acupuncture may additionally be effective for some individuals.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1595–1787</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There is insufficient evidence to recommend acupuncture for treatment of PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to recommend treatment with vitamin D, herbal remedies, or acupuncture&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27479626/" target="_blank">Premenstrual Syndrome and Premenstrual Dysphoric Disorder.</a>
+          <span class="muted"> &middot; American family physician 2016
+          &middot; PMID 27479626 &middot; chars 1043–1135</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">calcium carbonate</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Calcium carbonate (1200 mg/d) is an effective treatment for PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;calcium carbonate (1200 mg/d) and selective serotonin reuptake inhibitors are effective treatments for PMS&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 548–654</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Calcium carbonate should be recommended as first-line therapy for women with mild-to-moderate PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Calcium carbonate should be recommended as first-line therapy for women with mild-to-moderate PMS.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 1273–1371</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">estrogen</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Non-contraceptive estrogen formulations are used as pharmacologic therapy for severe PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;non-contraceptive estrogen formulations&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1554–1593</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Non-contraceptive estrogen formulations are used as pharmacologic therapy for PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;non-contraceptive estrogen formulations&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1554–1593</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">oral contraceptive pills</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Oral contraceptive pills are used as pharmacologic therapy for severe PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;oral contraceptive pills (OCPs)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1469–1500</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Oral contraceptive pills are used as pharmacologic therapy for PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;oral contraceptive pills (OCPs)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1469–1500</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">progesterone</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">The effectiveness of progesterone for PMS/PMDD treatment has not yet been proven in randomized controlled studies and meta-analyses.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;their effectiveness has not yet been proven in randomized controlled studies and meta-analyses&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38393358/" target="_blank">[Premenstrual syndrome and premenstrual dysphoric disorder-Overview on pathophysiology, diagnostics and treatment].</a>
+          <span class="muted"> &middot; Der Nervenarzt 2024
+          &middot; PMID 38393358 &middot; chars 1281–1375</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Progesterone is ineffective for PMS/PMDD.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Progesterone and bromocriptine, which are still widely used, are ineffective.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 1183–1260</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">vitamin D</span> <span class="muted">2 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There is insufficient evidence to recommend vitamin D for treatment of PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to recommend treatment with vitamin D&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27479626/" target="_blank">Premenstrual Syndrome and Premenstrual Dysphoric Disorder.</a>
+          <span class="muted"> &middot; American family physician 2016
+          &middot; PMID 27479626 &middot; chars 1043–1102</span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of vitamin D on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1808</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">NSAIDs</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Nonsteroidal anti-inflammatory drugs have inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;nonsteroidal anti-inflammatory drugs&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 943–979</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">PMS-specific diets</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of PMS-specific diets on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates, soy isoflavones, dietary fatty acids, magnesium, multivitamin supplementation, or PMS-specific diets&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1937</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">St. John&#x27;s Wort</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">St. John&#x27;s Wort showed a trend for being superior to placebo for PMS/PMDD symptoms.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;there was a trend for SJW to be superior to placebo&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/15673985/" target="_blank">The significance of &quot;nonsignificance&quot; in randomized controlled studies: a discussion inspired by a double-blinded study on St. John&#x27;s wort (Hypericum perforatum L.) for premenstrual symptoms.</a>
+          <span class="muted"> &middot; Journal of alternative and complementary medicine (New York, N.Y.) 2004
+          &middot; PMID 15673985 &middot; chars 1338–1389</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">aerobic exercise</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Aerobic exercise has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;aerobic exercise&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 861–877</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">bromocriptine</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Bromocriptine is ineffective for PMS/PMDD.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Progesterone and bromocriptine, which are still widely used, are ineffective.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 1183–1260</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">calcium</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Treatment with calcium consistently had significant positive effects on the psychological symptoms of PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Treatment with vitamin B6, calcium, and zinc consistently had significant positive effects on the psychological symptoms of PMS.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1600–1728</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">cognitive behavior therapy</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Cognitive behavior therapy has data to suggest benefit for PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;there are data to suggest benefit from cognitive behavior therapy&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27479626/" target="_blank">Premenstrual Syndrome and Premenstrual Dysphoric Disorder.</a>
+          <span class="muted"> &middot; American family physician 2016
+          &middot; PMID 27479626 &middot; chars 1141–1206</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">cognitive behavioral therapy</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Cognitive behavioral therapy may be effective for some individuals with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Non-pharmacologic treatment with diet, exercise, cognitive behavioral therapy (CBT), certain vitamin and herbal supplements, and acupuncture may additionally be effective for some individuals.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1595–1787</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">cognitive therapy</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Cognitive therapy has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;cognitive therapy&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 897–914</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">complex carbohydrate-rich diet</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">A complex carbohydrate-rich diet has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;a complex carbohydrate-rich diet&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 1012–1044</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">diet</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Diet may be effective for some individuals with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Non-pharmacologic treatment with diet, exercise, cognitive behavioral therapy (CBT), certain vitamin and herbal supplements, and acupuncture may additionally be effective for some individuals.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1595–1787</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">dietary fatty acids</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of dietary fatty acids on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates, soy isoflavones, dietary fatty acids&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1873</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">exercise</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Exercise may be effective for some individuals with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Non-pharmacologic treatment with diet, exercise, cognitive behavioral therapy (CBT), certain vitamin and herbal supplements, and acupuncture may additionally be effective for some individuals.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1595–1787</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">fluoxetine</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Fluoxetine outperformed Vitex agnus-castus in treating PMDD in one study</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;in the other, fluoxetine outperformed Vitex&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/23136064/" target="_blank">Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.</a>
+          <span class="muted"> &middot; Planta medica 2013
+          &middot; PMID 23136064 &middot; chars 1335–1378</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">folate</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Folate does not reduce anxiety in older women with PMS/premenstrual symptoms.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;but not folate or vitamin B12&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2576–2605</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">herbal remedies</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There is insufficient evidence to recommend herbal remedies for treatment of PMS/PMDD</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to recommend treatment with vitamin D, herbal remedies&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/27479626/" target="_blank">Premenstrual Syndrome and Premenstrual Dysphoric Disorder.</a>
+          <span class="muted"> &middot; American family physician 2016
+          &middot; PMID 27479626 &middot; chars 1043–1119</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">hormonal regimens</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Various hormonal regimens have inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;various hormonal regimens&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 981–1006</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">magnesium and vitamin B6</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Magnesium and vitamin B6 in combination may be effective in reducing premenstrual stress.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Magnesium and vitamin B6 may be effective in combination in reducing premenstrual stress&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2941–3029</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">multivitamin supplementation</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of multivitamin supplementation on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates, soy isoflavones, dietary fatty acids, magnesium, multivitamin supplementation&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1914</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">nutritional interventions</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Nutritional interventions improve psychological symptoms of PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;some evidence to support the use of nutritional interventions for improving psychological symptoms of PMS&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1961–2066</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">oral contraceptives</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Oral contraceptives therapy for PMS is based on inconclusive evidence.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;vitamin B6, evening primrose oil, and oral contraceptives) are based on inconclusive evidence&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 700–793</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">pyridoxine</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Pyridoxine has a significant beneficial effect on emotional type symptoms (depression, irritability and tiredness) in women with PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;significant beneficial effect (P less than 0.05) of pyridoxine was observed on emotional type symptoms (depression, irritability and tiredness)&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/2558186/" target="_blank">Pyridoxine (vitamin B6) and the premenstrual syndrome: a randomized crossover trial.</a>
+          <span class="muted"> &middot; The Journal of the Royal College of General Practitioners 1989
+          &middot; PMID 2558186 &middot; chars 910–1053</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">soy isoflavones</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of soy isoflavones on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates, soy isoflavones&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1852</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">spironolactone</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Spironolactone has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;spironolactone&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 916–930</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">stress reduction</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Stress reduction has inconclusive evidence as a treatment for PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;stress reduction&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/12489244/" target="_blank">Premenstrual syndrome. Evidence-based treatment in family practice.</a>
+          <span class="muted"> &middot; Canadian family physician Medecin de famille canadien 2002
+          &middot; PMID 12489244 &middot; chars 879–895</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">synthetic progestins</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">The effectiveness of synthetic progestins for PMS/PMDD treatment has not yet been proven in randomized controlled studies and meta-analyses.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;their effectiveness has not yet been proven in randomized controlled studies and meta-analyses&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38393358/" target="_blank">[Premenstrual syndrome and premenstrual dysphoric disorder-Overview on pathophysiology, diagnostics and treatment].</a>
+          <span class="muted"> &middot; Der Nervenarzt 2024
+          &middot; PMID 38393358 &middot; chars 1281–1375</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">unknown</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">No significant effect was observed on premenstrual symptoms of any other type.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;No significant effect was observed on premenstrual symptoms of any other type.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/2558186/" target="_blank">Pyridoxine (vitamin B6) and the premenstrual syndrome: a randomized crossover trial.</a>
+          <span class="muted"> &middot; The Journal of the Royal College of General Practitioners 1989
+          &middot; PMID 2558186 &middot; chars 1055–1133</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">vitamin B1</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of vitamin B1 on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1797</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">vitamin B12</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#7a4f01;background:#fdf3e0">null · no benefit</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Vitamin B12 does not reduce anxiety in older women with PMS/premenstrual symptoms.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;but not folate or vitamin B12&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/28178022/" target="_blank">The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.</a>
+          <span class="muted"> &middot; JBI database of systematic reviews and implementation reports 2017
+          &middot; PMID 28178022 &middot; chars 2576–2605</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">vitamin and herbal supplements</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Certain vitamin and herbal supplements may be effective for some individuals with PMDD/PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Non-pharmacologic treatment with diet, exercise, cognitive behavioral therapy (CBT), certain vitamin and herbal supplements, and acupuncture may additionally be effective for some individuals.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/35534402/" target="_blank">Premenstrual syndrome and premenstrual dysphoric disorder in adolescents.</a>
+          <span class="muted"> &middot; Current problems in pediatric and adolescent health care 2022
+          &middot; PMID 35534402 &middot; chars 1595–1787</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">whole-grain carbohydrates</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#444;background:#eee">unclear · unclear</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">There was insufficient evidence to support the effects of whole-grain carbohydrates on PMS</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;insufficient evidence to support the effects of vitamin B1, vitamin D, whole-grain carbohydrates&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1739–1835</span>
+        </div>
+      </div>
+    </div>
+      </details>
+      <details class="group" >
+        <summary><span class="pill">zinc</span> <span class="muted">1 verified claims</span></summary>
+        
+    <div class="claim">
+      <div class="claim-head">
+        
+        <span class="badge" style="color:#1b5e20;background:#e6f4ea">positive · supports</span>
+        <span class="badge" style="color:#777;background:#eee">entailment: pending</span>
+        <span class="badge prov">provenance: verified</span>
+      </div>
+      <div class="claim-text">Treatment with zinc consistently had significant positive effects on the psychological symptoms of PMS.</div>
+      <div class="prov-box">
+        <div class="quote">&ldquo;Treatment with vitamin B6, calcium, and zinc consistently had significant positive effects on the psychological symptoms of PMS.&rdquo;</div>
+        <div class="src">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/38684926/" target="_blank">Effect of nutritional interventions on the psychological symptoms of premenstrual syndrome in women of reproductive age: a systematic review of randomized controlled trials.</a>
+          <span class="muted"> &middot; Nutrition reviews 2025
+          &middot; PMID 38684926 &middot; chars 1600–1728</span>
+        </div>
+      </div>
+    </div>
+      </details>
+
+  <p class="muted" style="margin-top:40px; font-family:Arial,sans-serif; font-size:12px;">
+  Generated by the Whel MVP pipeline (PubMed &rarr; spans &rarr; atomic claims with verified provenance
+  &rarr; entailment &rarr; contradiction surfacing). Extraction model: claude-sonnet-4-6. Provenance is
+  verified by exact string-matching, not by trusting the model.</p>
+</div></body></html>

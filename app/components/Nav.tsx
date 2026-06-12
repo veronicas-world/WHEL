@@ -101,7 +101,7 @@ export default function Nav() {
             </Link>
           ))}
           <Link
-            href="/about/contact"
+            href="/access"
             className="nav-cta"
             style={{ textDecoration: "none" }}
           >
@@ -145,7 +145,7 @@ export default function Nav() {
           }}
         >
           <nav className="flex flex-col px-6 py-4 gap-1">
-            {[...NAV_LINKS, { label: "Request access", href: "/about/contact" }].map(
+            {[...NAV_LINKS, { label: "Request access", href: "/access" }].map(
               ({ label, href }, i, arr) => (
                 <Link
                   key={href}
