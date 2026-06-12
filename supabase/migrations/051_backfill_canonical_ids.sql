@@ -31,7 +31,7 @@ update compounds set resolution_status = 'ambiguous' where id = 'd19f6b6f-5852-4
 update compounds set chembl_id = 'CHEMBL2108570', rxcui = '860168', resolution_status = 'resolved' where id = 'ca572573-2ace-423f-a2a7-1e4a2a2bb7e4' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'e637b3a2-990a-4c85-8aeb-26f8c34fc0ac' and resolution_status is null;
 update compounds set rxcui = '1712', resolution_status = 'resolved' where id = 'be6743e7-15e6-4707-a3a0-6bb615ae8c86' and resolution_status is null;
-update compounds set resolution_status = 'ambiguous' where id = 'd570b4ff-52b5-4d19-921c-f880cef2e9c2' and resolution_status is null;
+update compounds set chembl_id = 'CHEMBL601', rxcui = '683', atc_code = 'L01XD04', resolution_status = 'resolved' where id = 'd570b4ff-52b5-4d19-921c-f880cef2e9c2' and resolution_status is null;
 update compounds set chembl_id = 'CHEMBL79', rxcui = '6387', atc_code = 'R02AD02', resolution_status = 'resolved' where id = '9aa866d5-a516-43c1-9789-eb11c5ab8d3c' and resolution_status is null;
 update compounds set chembl_id = 'CHEMBL386630', rxcui = '10379', atc_code = 'G03BA03', resolution_status = 'resolved' where id = '17594e66-7cfc-414b-b882-a9ed87a5b2c6' and resolution_status is null;
 update compounds set chembl_id = 'CHEMBL1508', rxcui = '321988', atc_code = 'N06AB10', resolution_status = 'resolved' where id = '59c30953-5cb4-455c-af43-9f8c04b18f2e' and resolution_status is null;
@@ -132,12 +132,12 @@ update compounds set chembl_id = 'CHEMBL90593', rxcui = '3143', atc_code = 'A14A
 update compounds set rxcui = '90176', resolution_status = 'resolved' where id = '1f5debbb-ad50-4801-9d3a-c0eb8b6a9eb8' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'ab35e123-4731-4f03-b2e3-daab006b0c7e' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'a137111d-b4de-4485-a8f9-980a88df415e' and resolution_status is null;
-update compounds set resolution_status = 'ambiguous' where id = '8bebd635-a458-4f91-a791-307e510e07a3' and resolution_status is null;
+update compounds set chembl_id = 'CHEMBL190461', rxcui = '2045371', atc_code = 'N03AX24', resolution_status = 'resolved' where id = '8bebd635-a458-4f91-a791-307e510e07a3' and resolution_status is null;
 update compounds set chembl_id = 'CHEMBL629', rxcui = '704', atc_code = 'N06AA09', resolution_status = 'resolved' where id = '789eedf6-1882-46f5-ab6e-be73d0f4a430' and resolution_status is null;
-update compounds set resolution_status = 'ambiguous' where id = '154c2bcf-01f0-4833-b3d7-16f76c91f8d2' and resolution_status is null;
+update compounds set chembl_id = 'CHEMBL12', rxcui = '3322', atc_code = 'N05BA01', resolution_status = 'resolved' where id = '154c2bcf-01f0-4833-b3d7-16f76c91f8d2' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'c0086e6a-13dd-46d6-ba6f-76d33d50e260' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'fae2f468-7fd1-4225-aeb0-1688e9200cc4' and resolution_status is null;
-update compounds set resolution_status = 'ambiguous' where id = 'b82e0d8a-dc74-4b21-8e61-b7fc759a1122' and resolution_status is null;
+update compounds set chembl_id = 'CHEMBL19019', rxcui = '7243', atc_code = 'N07BB04', resolution_status = 'resolved' where id = 'b82e0d8a-dc74-4b21-8e61-b7fc759a1122' and resolution_status is null;
 update compounds set chembl_id = 'CHEMBL1175', rxcui = '72625', atc_code = 'N06AX21', resolution_status = 'resolved' where id = 'ee0076fc-4291-4b2f-afaf-9fb098d7f951' and resolution_status is null;
 update compounds set resolution_status = 'ambiguous' where id = 'd4ef9fac-e10d-43c8-9b8b-7caa3527bbe9' and resolution_status is null;
 update compounds set rxcui = '2045371', resolution_status = 'resolved' where id = 'a988804c-e2d3-4608-8ecb-c41ea5413fef' and resolution_status is null;
