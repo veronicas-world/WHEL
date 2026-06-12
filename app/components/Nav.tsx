@@ -37,13 +37,12 @@ function WhelMark({ size = 30 }: { size?: number }) {
   );
 }
 
-const NAV_LINKS = [
+const NAV_LINKS: { label: string; href: string; hideSm?: boolean }[] = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Conditions", href: "/conditions" },
   { label: "Candidates", href: "/candidates" },
   { label: "About",      href: "/about" },
-  { label: "News",       href: "/news", hideSm: true },
 ];
 
 export default function Nav() {

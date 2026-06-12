@@ -9,6 +9,8 @@
  */
 import { supabase } from "@/lib/supabase";
 import type { Candidate, Claim } from "@/app/components/CandidateCard";
+import { getLGradeForPair } from "@/lib/evidence-grading-snapshot";
+import { getMatrixScoreForPair, formatMatrixPercentile } from "@/lib/matrix-pair-scores-snapshot";
 
 type Row = Record<string, unknown>;
 
@@ -88,12 +90,21 @@ function toCandidate(sig: Row, n: number): Candidate {
   const drug = comp?.name ? String(comp.name) : "Unknown compound";
   const condition = cond?.name ? String(cond.name) : "—";
 
+  // Independent evidence markers, shown beside (never folded into) our own grade:
+  // the L0–L3 external-validation grade and the Every Cure MATRIX cross-reference.
+  const lGrade = getLGradeForPair(drug, condition) ?? undefined;
+  const matrix = getMatrixScoreForPair(drug, condition);
+  const matrixPercentile =
+    matrix && matrix.quantile_rank != null ? formatMatrixPercentile(matrix.quantile_rank) : undefined;
+
   return {
     id: `WHEL-C-${String(n).padStart(3, "0")}`,
     drug,
     condition,
     conditionId: cond?.slug ? String(cond.slug) : undefined,
     tier,
+    lGrade,
+    matrixPercentile,
     score: Math.round(Number(sig.total_evidence_score) || 0),
     origin: buildOrigin(comp),
     pathway: tier === "exploratory"

@@ -256,7 +256,7 @@ export default async function Home() {
                 <div style={{ fontFamily: "var(--font-newsreader, Georgia, serif)", fontSize: 22, fontWeight: 500, lineHeight: 1.1 }}>
                   {a.drug}{" "}
                   <span style={{ color: "var(--moss)" }}>→</span>{" "}
-                  <span style={{ fontStyle: "italic", fontWeight: 400 }}>{a.to}</span>
+                  <span style={{ fontWeight: 400 }}>{a.to}</span>
                 </div>
                 <div style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.5 }}>{a.note}</div>
               </div>

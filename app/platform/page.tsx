@@ -110,7 +110,7 @@ export default async function PlatformPage() {
               <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>The platform</div>
               <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(40px,5vw,72px)" }}>
                 The corrected knowledge graph for{" "}
-                <em style={{ fontStyle: "italic", color: "var(--signal)" }}>female biology.</em>
+                <span style={{ color: "var(--signal)" }}>female biology.</span>
               </h1>
               <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
                 Whel is built in three layers: a substrate that holds female biology as
@@ -313,6 +313,50 @@ export default async function PlatformPage() {
               observation that survives this becomes a hypothesis worth a researcher&apos;s time;
               one that does not is set aside with its reasons recorded.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Reading the evidence markers */}
+      <section id="evidence-markers" className="surface-bone section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>Reading the evidence markers</div>
+            <h2 className="h2" style={{ marginBottom: 24, maxWidth: "24ch" }}>
+              Three readings on every candidate, shown side by side.
+            </h2>
+            <p style={pBone}>
+              Each candidate carries three independent readings, and we keep them separate rather
+              than blending them into one number, because a reader should be able to see where
+              confidence comes from. <strong>The confidence tier</strong> is our own score: every
+              signal is graded on five dimensions, including replication, source quality, specificity,
+              biological plausibility, and consistency of direction, which sum to a score out of ten
+              and place the candidate in one of four tiers from exploratory to strong.
+            </p>
+            <p style={pBone}>
+              <strong>The literature grade, L0 to L3,</strong> records how far the published record
+              independently backs the pair, and it always traces to a specific source. L0 means no
+              external record yet, L1 means the pair appears in peer-reviewed literature, L2 means a
+              randomized trial or systematic review reports a result, and L3 means the pair is named
+              in an active clinical guideline from a body such as ESHRE, ACOG, or Cochrane. The grade
+              rises only as far as the attached sources can support, so it can be checked back to a
+              named paper, trial, or guideline section.
+            </p>
+            <p style={pBone}>
+              <strong>The MATRIX marker</strong> appears where Every Cure&rsquo;s MATRIX model has a
+              score for the same pair. MATRIX is a machine-learned treatment-probability estimate
+              drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000 diseases,
+              and it predicts how plausible a drug and disease link looks given the structure of
+              biomedical knowledge. We read the actual clinical evidence for a narrow set of
+              women&rsquo;s health conditions, so the two are doing different things, and we show the
+              MATRIX percentile beside our own grade rather than folding them together, so a reader
+              can weigh a model&rsquo;s prior against the evidence on the ground.
+            </p>
+            <div style={{ marginTop: 28 }}>
+              <Link href="/candidates" className="btn btn-primary">
+                See the candidates <span className="arr">&rarr;</span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
