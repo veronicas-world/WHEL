@@ -48,6 +48,15 @@ export default function SignalTypesPage() {
             Whel organizes evidence into four research arms. Select a signal type
             to read how it works, what its sources are, and what to look for.
           </p>
+          <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "62ch", marginTop: 14 }}>
+            These four arms feed Whel&apos;s three-layer architecture: they supply the
+            hypothesis-from-signal layer, and once validated they populate the substrate. For an
+            honest status of where each layer is actually built today, see the{" "}
+            <Link href="/about/technical-architecture" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+              technical architecture
+            </Link>
+            .
+          </p>
         </div>
       </div>
 

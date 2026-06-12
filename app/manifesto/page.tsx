@@ -327,20 +327,7 @@ const CSS = `
 .mf-btn-ghost-ink:hover { border-color: #CBD0BE; }
 .mf-cta-row { display: flex; gap: 14px; margin-top: 44px; flex-wrap: wrap; }
 
-/* scroll reveal */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .mf-rise {
-      animation: mf-rise-anim linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 50%;
-    }
-  }
-}
-@keyframes mf-rise-anim {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: none; }
-}
+/* scroll reveal — no-op; class kept on elements for future use */
 
 /* responsive */
 @media (max-width: 1100px) {
@@ -364,7 +351,7 @@ export default function ManifestoPage() {
   return (
     <>
       <style>{CSS}</style>
-      <main>
+      <main style={{ background: "var(--bone)" }}>
 
         {/* ── Hero ──────────────────────────────────────────────────────────── */}
         <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>

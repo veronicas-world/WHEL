@@ -425,6 +425,18 @@ export default async function PlatformPage() {
               of biology medicine left understudied. The work that earns a clinician&apos;s trust
               is not a cleaner score; it is a visible source.
             </p>
+            <p style={pBone}>
+              The three layers are also at different stages, and we are explicit about that. The
+              retrieval-and-validation layer runs today as a flagship on PMDD and PMS rather than
+              across every condition; the substrate&rsquo;s grounding is live while its graph is
+              still being built; and the six-condition index you can browse now is produced by the
+              scored-signals engine these layers are progressively replacing. Where each layer
+              actually stands is set out on{" "}
+              <Link href="/about/technical-architecture" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+                technical architecture
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>
