@@ -28,11 +28,11 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Women's Health Evidence Lab",
-    template: "%s | Women's Health Evidence Lab",
+    default: "Whel — Drug Repurposing for Female Biology",
+    template: "%s | Whel",
   },
   description:
-    "An evidence index for under-researched women's health conditions.",
+    "The drug repurposing platform for female biology. Whel surfaces approved drugs that already work for women's health conditions and validates them against mechanistic and clinical evidence.",
 };
 
 export default function RootLayout({
@@ -45,7 +45,7 @@ export default function RootLayout({
       lang="en"
       className={`${newsreader.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col" style={{ backgroundColor: "#F2EEE5" }}>
+      <body className="min-h-full flex flex-col" style={{ backgroundColor: "var(--ink)" }}>
         <Nav />
         <div className="flex-1 flex flex-col">{children}</div>
         <Footer />

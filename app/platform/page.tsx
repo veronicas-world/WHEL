@@ -1,0 +1,393 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import KnowledgeGraph from "@/app/components/KnowledgeGraph";
+import CyclicalPK from "@/app/components/CyclicalPK";
+import CandidateCard from "@/app/components/CandidateCard";
+import { getFeaturedCandidates } from "@/lib/candidates";
+
+export const metadata: Metadata = {
+  title: "Platform",
+  description:
+    "How Whel is built: a corrected, sex-aware knowledge substrate, a retrieval layer that ties every claim to its source and surfaces contradictions, and a signal layer that turns off-label practice into validated hypotheses.",
+};
+
+/* ── Citation links ─────────────────────────────────────────────────────── */
+const A = ({
+  href,
+  children,
+  ink,
+}: {
+  href: string;
+  children: React.ReactNode;
+  ink?: boolean;
+}) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      color: ink ? "var(--signal)" : "var(--moss)",
+      textDecoration: "underline",
+      textUnderlineOffset: 2,
+    }}
+  >
+    {children}
+  </a>
+);
+
+const HET = "https://het.io/repurpose/";
+const PRIMEKG = "https://www.nature.com/articles/s41597-023-01960-3";
+const MONDO = "https://mondo.monarchinitiative.org/";
+const HPO = "https://hpo.jax.org/";
+const RXNORM = "https://www.nlm.nih.gov/research/umls/rxnorm/index.html";
+const CHEMBL = "https://www.ebi.ac.uk/chembl/";
+const BIAS = "https://pmc.ncbi.nlm.nih.gov/articles/PMC6877896/";
+const PK = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7275616/";
+const PKREVIEW = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3644551/";
+const NEJM = "https://www.nejm.org/doi/full/10.1056/NEJMp1307972";
+const RAG = "https://arxiv.org/abs/2505.01146";
+const SCINLI = "https://arxiv.org/abs/2203.06728";
+const GRADE = "https://www.bmj.com/content/336/7650/924";
+const OFFLABEL =
+  "https://www.frontiersin.org/journals/public-health/articles/10.3389/fpubh.2022.829339/full";
+const RWE = "https://pmc.ncbi.nlm.nih.gov/articles/PMC9815890/";
+const CDS =
+  "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/clinical-decision-support-software";
+
+/* ── Layer overview copy ────────────────────────────────────────────────── */
+const LAYERS = [
+  {
+    n: "Layer 01",
+    name: "The substrate",
+    tags: ["Postgres-native", "Ontology-grounded", "Sex-specific PK"],
+    desc: "A corrected knowledge graph that captures sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded in MONDO, HPO, RxNorm, and ChEMBL, then extended with female-specific concepts no existing ontology covers adequately.",
+  },
+  {
+    n: "Layer 02",
+    name: "Retrieval & validation",
+    tags: ["Per-claim provenance", "Marked synthesis", "Contradiction surfacing"],
+    desc: "Provenance-preserving extraction tuned for biomedical literature. Every claim ties to a verbatim source span, every synthesis is marked as a synthesis, and every contradiction in the underlying literature is surfaced explicitly rather than averaged away.",
+  },
+  {
+    n: "Layer 03",
+    name: "Hypothesis from signal",
+    tags: ["Off-label patterns", "Advocacy registries", "Validated downstream"],
+    desc: "Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured reports, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, never equated with the result of a controlled trial.",
+  },
+];
+
+/* ── Reading-column styles ──────────────────────────────────────────────── */
+const wrap: React.CSSProperties = { maxWidth: 768, margin: "0 auto" };
+const pBone: React.CSSProperties = {
+  fontSize: "1.05rem",
+  lineHeight: 1.72,
+  color: "var(--body)",
+  margin: "0 0 20px",
+  maxWidth: "72ch",
+};
+const pInk: React.CSSProperties = { ...pBone, color: "var(--on-ink-2)" };
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function PlatformPage() {
+  const [candidate] = await getFeaturedCandidates(1);
+  return (
+    <main>
+      {/* Hero */}
+      <section className="surface-ink" style={{ paddingTop: 40, paddingBottom: 72 }}>
+        <div className="container">
+          <div className="crumbs on-ink">
+            <Link href="/">Home</Link>
+            <span className="sep">/</span>
+            <span className="here">Platform</span>
+          </div>
+          <div
+            style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 56, alignItems: "center" }}
+            className="hero-grid"
+          >
+            <div>
+              <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>The platform</div>
+              <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(40px,5vw,72px)" }}>
+                The corrected knowledge graph for{" "}
+                <em style={{ fontStyle: "italic", color: "var(--signal)" }}>female biology.</em>
+              </h1>
+              <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
+                Whel is built in three layers: a substrate that holds female biology as
+                first-class structure, a retrieval layer that ties every claim to its source
+                and surfaces disagreement, and a signal layer that turns off-label practice
+                into hypotheses worth testing.
+              </p>
+            </div>
+            <div>
+              <KnowledgeGraph height={420} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Layers overview */}
+      <section className="surface-ink section" style={{ paddingTop: 0 }}>
+        <div className="container">
+          <div className="layers">
+            {LAYERS.map((l) => (
+              <div className="layer" key={l.n}>
+                <div>
+                  <div className="lnum">{l.n}</div>
+                  <div className="lname">{l.name}</div>
+                </div>
+                <div>
+                  <p className="ldesc">{l.desc}</p>
+                  <div className="ltags">
+                    {l.tags.map((t) => (
+                      <span key={t} className="pill on-ink">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Layer 01 — The substrate ─────────────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>Layer 01 · The substrate</div>
+            <h2 className="h2" style={{ marginBottom: 24, maxWidth: "20ch" }}>
+              A map built for the body the data left out.
+            </h2>
+            <p style={pBone}>
+              A drug-repurposing engine is only as good as the map it reasons over. That map is
+              a biomedical knowledge graph: a network in which the nodes are entities such as
+              diseases, drugs, genes, pathways, and phenotypes, and the edges are the
+              relationships between them, such as a compound binding a target or a gene
+              participating in a pathway. Graphs of this kind already exist and work.{" "}
+              <A href={HET}>Hetionet</A> integrates dozens of public resources into roughly
+              47,000 nodes and 2.25 million relationships, and newer graphs such as{" "}
+              <A href={PRIMEKG}>PrimeKG</A> extend the same idea across millions more.
+            </p>
+            <p style={pBone}>
+              What those graphs share is that the meaning of every node is fixed to a standard
+              vocabulary, a discipline called ontology grounding. We ground entities in the
+              standard biomedical ontologies: <A href={MONDO}>MONDO</A> for diseases,{" "}
+              <A href={HPO}>HPO</A> for phenotypes, <A href={RXNORM}>RxNorm</A> for drugs, and{" "}
+              <A href={CHEMBL}>ChEMBL</A> for compound bioactivity. Grounding is what lets the
+              platform know that &ldquo;metformin&rdquo; and &ldquo;metformin hydrochloride&rdquo;
+              are the same drug and that a study of one disease subtype belongs under its parent.
+              Without it, the same fact written two ways counts as two facts, or as none.
+            </p>
+            <p style={pBone}>
+              A general-purpose graph is not enough, because the data underneath it was built
+              largely on the male body. In pharmacology research male animals still outnumber
+              female ones by roughly five to one, and only about{" "}
+              <A href={BIAS}>15 percent of studies include both sexes</A>, so the basic
+              pharmacology of many drugs was characterized in male tissue. A substrate that
+              inherits that record uncritically inherits its blind spots. Ours is built to
+              correct for them, which means it carries sex-specific pharmacokinetics and
+              cyclical hormonal state as first-class structure rather than as an afterthought.
+            </p>
+            <p style={pBone}>
+              The differences are real and measurable. In one analysis of 86 approved drugs,{" "}
+              <A href={PK}>76 reached higher concentrations or cleared more slowly in women</A>,
+              who also experience adverse drug reactions nearly twice as often as men. CYP3A4,
+              the enzyme that processes a large share of prescription drugs, is{" "}
+              <A href={PKREVIEW}>more active in women</A>. The clearest case is zolpidem: women
+              metabolize it so much more slowly that blood levels run about 50 percent higher,
+              and in 2013 the <A href={NEJM}>FDA halved the recommended dose for women</A>, a
+              rare instance of a unisex dose being openly corrected. A model that treats a drug
+              as one number across all bodies cannot represent any of this.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Layer 01 in practice — Cyclical PK */}
+      <section className="surface-ink section" style={{ paddingTop: 64 }}>
+        <div className="container">
+          <div className="between" style={{ marginBottom: 32 }}>
+            <div>
+              <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>Layer 01 · in practice</div>
+              <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "16ch" }}>
+                Cyclical biology, modeled as it moves.
+              </h2>
+            </div>
+            <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "36ch" }}>
+              Drug response shifts across the menstrual cycle, so we hold hormonal state as
+              structured pharmacokinetic data, which means a luteal-phase signal is read in its
+              phase instead of being averaged into a flat number.
+            </p>
+          </div>
+          <CyclicalPK height={300} />
+        </div>
+      </section>
+
+      {/* ── Layer 02 — Retrieval & validation ────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>Layer 02 · Retrieval &amp; validation</div>
+            <h2 className="h2" style={{ marginBottom: 24, maxWidth: "22ch" }}>
+              Every claim carries the sentence it came from.
+            </h2>
+            <p style={pBone}>
+              A repurposing hypothesis is only useful if its evidence can be checked, so the
+              second layer is built so that every assertion carries its source. We retrieve over
+              the biomedical literature and extract claims with provenance, which means each
+              claim is tied to the verbatim span of text that supports it. The point is
+              auditability: a statement that a drug reduced a symptom is shown together with the
+              exact sentence, study, year, and design it came from, so a reader can see at a
+              glance whether it rests on a small observational report or a large randomized
+              trial. This is the discipline that makes <A href={RAG}>retrieval-grounded systems</A>{" "}
+              trustworthy rather than merely fluent.
+            </p>
+            <p style={pBone}>
+              When the platform combines several sources into one statement, that synthesis is
+              marked as a synthesis rather than presented as if it were a single finding. The
+              line between what a study said and what the system inferred stays visible at all
+              times.
+            </p>
+            <p style={pBone}>
+              The literature disagrees with itself constantly, and the easy thing to do is
+              average the disagreement away into one confident-looking score. We do the
+              opposite. Using <A href={SCINLI}>natural-language inference</A>, the system detects
+              when one study&apos;s finding contradicts another&apos;s and surfaces the
+              disagreement with both sources and their populations attached, because the fact
+              that the evidence conflicts is itself information a researcher needs. A result that
+              holds in healthy adults but not in renal impairment is not noise to be smoothed
+              over; it is the finding.
+            </p>
+            <p style={pBone}>
+              Evidence is graded rather than collapsed into a single weight. The discipline is
+              the one clinical guidelines already use under frameworks such as{" "}
+              <A href={GRADE}>GRADE</A>: strong and weak evidence are kept distinct, with the
+              basis for each grade visible, so a case report and a randomized trial never carry
+              the same authority simply because they point the same way.
+            </p>
+          </div>
+
+          {/* Provenance in practice */}
+          <div style={{ maxWidth: 980, margin: "44px auto 0" }}>
+            <div className="eyebrow" style={{ marginBottom: 16, textAlign: "center" }}>
+              Provenance, in practice
+            </div>
+            {candidate && <CandidateCard c={candidate} defaultOpen={true} />}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Layer 03 — Hypothesis from signal ────────────────────────────── */}
+      <section className="surface-ink section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>Layer 03 · Hypothesis from signal</div>
+            <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 24, maxWidth: "22ch" }}>
+              Off-label practice is an experiment worth recovering.
+            </h2>
+            <p style={pInk}>
+              The conditions Whel works on are managed off label as a matter of routine, which
+              means the real-world record of what helps is large and largely unread.{" "}
+              <A href={OFFLABEL} ink>
+                Off-label prescribing is standard practice across women&apos;s health
+              </A>
+              , and that practice is a signal: when clinicians and patients converge on a drug
+              approved for something else, they are running an informal experiment whose result
+              is worth recovering.
+            </p>
+            <p style={pInk}>
+              We treat that signal the way the field treats{" "}
+              <A href={RWE} ink>real-world evidence</A> generally, as hypothesis-generating
+              rather than confirmatory. Off-label patterns, advocacy-organization registries,
+              and structured patient reports can tell you where to look; they cannot, on their
+              own, tell you that a drug works, because observational signal carries confounding,
+              selection effects, and placebo response that only a controlled comparison can
+              separate out.
+            </p>
+            <p style={pInk}>
+              So every signal is validated downstream against mechanistic and clinical evidence.
+              The platform asks whether the drug&apos;s known mechanism plausibly explains the
+              effect, then whether clinical data supports it, and because the signal usually
+              originates with women, the validation is run in women or reported sex-stratified
+              rather than assumed to transfer from a male-dominant sample. A community
+              observation that survives this becomes a hypothesis worth a researcher&apos;s time;
+              one that does not is set aside with its reasons recorded.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* §3060 posture */}
+      <section className="surface-sage section tight">
+        <div className="container">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }} className="two-col">
+            <div>
+              <div className="eyebrow" style={{ marginBottom: 14 }}>Regulatory posture</div>
+              <h2 className="h2" style={{ marginBottom: 18 }}>A research-support tool, by design.</h2>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--body)", maxWidth: "54ch" }}>
+                Whel sits under the 21st Century Cures Act §3060 research-support exemption and
+                stays there. Because every claim is tied to a source a clinician can{" "}
+                <A href={CDS}>independently review</A>, the platform meets the exemption&apos;s
+                transparency bar by architecture rather than by accident, which is the same
+                property that makes the output worth trusting in the first place.
+              </p>
+            </div>
+            <div>
+              <div className="disclaimer" style={{ height: "100%" }}>
+                WHAT WE NEVER DO<br /><br />
+                · Display &ldquo;treat patient X with drug Y&rdquo; without surfaceable provenance.<br />
+                · Auto-generate treatment plans without clinician review of each citation.<br />
+                · Make claims about specific identified patients.<br />
+                · Ship a patient mode that returns recommendations without a clinician in the loop.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What it is, and is not */}
+      <section className="surface-bone section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>The honest version</div>
+            <h2 className="h2" style={{ marginBottom: 24, maxWidth: "22ch" }}>
+              What the platform is, and what it is not.
+            </h2>
+            <p style={pBone}>
+              Whel generates evidenced repurposing hypotheses. It does not diagnose, it does not
+              replace a clinical trial, and it does not return a recommendation that a clinician
+              cannot trace back to its basis. The methods underneath it are real but imperfect:
+              claim extraction misses nuance, contradiction detection is sensitive to how things
+              are phrased, and provenance is best-effort rather than absolute.
+            </p>
+            <p style={pBone}>
+              That is exactly why the platform leaves every claim checkable instead of presenting
+              it as settled. We are integrating mature pieces, including knowledge graphs,
+              ontology grounding, retrieval, and evidence grading, and pointing them at the part
+              of biology medicine left understudied. The work that earns a clinician&apos;s trust
+              is not a cleaner score; it is a visible source.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="surface-ink section">
+        <div className="container-tight" style={{ textAlign: "center" }}>
+          <div className="eyebrow on-ink" style={{ marginBottom: 20 }}>Whel · Women&apos;s Health Evidence Lab</div>
+          <h2 className="framedevice" style={{ color: "var(--on-ink)", margin: "0 auto 28px" }}>
+            Finding what already works for women.
+          </h2>
+          <div className="row" style={{ justifyContent: "center", gap: 12 }}>
+            <Link href="/candidates" className="btn btn-on-ink">
+              See the candidates <span className="arr">→</span>
+            </Link>
+            <Link href="/manifesto" className="btn btn-ghost-ink">
+              Read the manifesto
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}

@@ -1,0 +1,138 @@
+{
+  "generated_at": "2026-06-11T20:58:58+00:00",
+  "source_validation": [
+    {
+      "id": "89232a08-3733-41d5-bb81-7d80dd14d4d6",
+      "pmid": "28178022",
+      "status": "resolved_match",
+      "title_similarity": 1.0,
+      "canonical_title": "The impact of essential fatty acid, B vitamins, vitamin C, magnesium and zinc supplementation on stress levels in women: a systematic review.",
+      "checked_at": "2026-06-11T20:56:36+00:00"
+    },
+    {
+      "id": "6e79669d-8252-4742-93f2-4496a8ae52c8",
+      "pmid": "23136064",
+      "status": "resolved_match",
+      "title_similarity": 1.0,
+      "canonical_title": "Vitex agnus-castus extracts for female reproductive disorders: a systematic review of clinical trials.",
+      "checked_at": "2026-06-11T20:56:37+00:00"
+    },
+    {
+      "id": "a4c6bdad-8758-4c37-9e9d-35ebf559653f",
+      "pmid": "19454075",
+      "status": "resolved_match",
+      "title_similarity": 1.0,
+      "canonical_title": "Premenstrual syndrome.",
+      "checked_at": "2026-06-11T20:56:38+00:00"
+    },
+    {
+      "id": "e02a6ae1-d777-49c6-afa2-305aab5b7f63",
+      "pmid": "10334745",
+      "status": "resolved_match",
+      "title_similarity": 1.0,
+      "canonical_title": "Efficacy of vitamin B-6 in the treatment of premenstrual syndrome: systematic review.",
+      "checked_at": "2026-06-11T20:56:38+00:00"
+    }
+  ],
+  "entity_grounding": [
+    {
+      "id": "37006837-7164-403c-aaa9-c22dccd914ec",
+      "type": "condition",
+      "label": "PMDD",
+      "ontology_id": "MONDO:1010182",
+      "ontology_source": "MONDO",
+      "canonical_label": "premenstrual dysphoric disorder",
+      "status": "resolved"
+    },
+    {
+      "id": "1a8845c9-b8e8-4d23-95d6-1baef05ae6ad",
+      "type": "condition",
+      "label": "PMS",
+      "ontology_id": "MONDO:0004169",
+      "ontology_source": "MONDO",
+      "canonical_label": "premenstrual tension",
+      "status": "resolved"
+    },
+    {
+      "id": "282ccba1-e355-40f5-a235-e52da7415ca2",
+      "type": "intervention",
+      "label": "essential fatty acids",
+      "ontology_id": null,
+      "ontology_source": null,
+      "canonical_label": null,
+      "status": "unresolved"
+    },
+    {
+      "id": "4d47ac5e-e989-4168-b10c-0b942105c56a",
+      "type": "intervention",
+      "label": "fluoxetine",
+      "ontology_id": "RxNorm:4493",
+      "ontology_source": "RxNorm",
+      "canonical_label": "fluoxetine",
+      "status": "resolved"
+    },
+    {
+      "id": "757c3a0a-28c4-4dca-908f-87d2a845e2b6",
+      "type": "intervention",
+      "label": "folate",
+      "ontology_id": "RxNorm:62356",
+      "ontology_source": "RxNorm",
+      "canonical_label": "folate",
+      "status": "resolved"
+    },
+    {
+      "id": "cf7382f6-9553-4be9-a864-6207c7d071a2",
+      "type": "intervention",
+      "label": "magnesium and vitamin B6",
+      "ontology_id": null,
+      "ontology_source": null,
+      "canonical_label": null,
+      "status": "unresolved"
+    },
+    {
+      "id": "ff12494c-0000-47c9-8423-1a1f9cb58556",
+      "type": "intervention",
+      "label": "SSRIs",
+      "ontology_id": null,
+      "ontology_source": null,
+      "canonical_label": null,
+      "status": "unresolved"
+    },
+    {
+      "id": "943f9923-3498-4b41-a861-1d60c213031f",
+      "type": "intervention",
+      "label": "unknown intervention",
+      "ontology_id": null,
+      "ontology_source": null,
+      "canonical_label": null,
+      "status": "unresolved"
+    },
+    {
+      "id": "3b6d2ff7-767b-4ef7-83d7-c39c04e60a2d",
+      "type": "intervention",
+      "label": "vitamin B12",
+      "ontology_id": "RxNorm:11248",
+      "ontology_source": "RxNorm",
+      "canonical_label": "vitamin B12",
+      "status": "resolved"
+    },
+    {
+      "id": "c0c40a17-959d-4c16-a499-20e8a08f36b3",
+      "type": "intervention",
+      "label": "vitamin B6",
+      "ontology_id": "RxNorm:42954",
+      "ontology_source": "RxNorm",
+      "canonical_label": "vitamin B6",
+      "status": "resolved"
+    },
+    {
+      "id": "8e7ab93e-47b3-4067-9429-6f1abddf1cae",
+      "type": "intervention",
+      "label": "Vitex agnus-castus",
+      "ontology_id": null,
+      "ontology_source": null,
+      "canonical_label": null,
+      "status": "unresolved"
+    }
+  ]
+}

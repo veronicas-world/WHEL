@@ -79,8 +79,8 @@ export default function ContactPage() {
             Get in touch.
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "52ch" }}>
-            Whel is a small project and an open one. Questions, corrections, and
-            collaboration are all welcome.
+            We welcome questions, corrections, and collaboration from researchers,
+            clinicians, and the people these conditions affect.
           </p>
         </div>
       </div>
@@ -133,22 +133,21 @@ export default function ContactPage() {
           {/* 02 — Who we are */}
           <section>
             <div style={EYEBROW}>02 · Who we are</div>
-            <h2 className="font-heading" style={H2}>The people behind Whel</h2>
+            <h2 className="font-heading" style={H2}>About Whel</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel was built by two people. Veronica Agudelo is an undergraduate
-                student at Columbia University who came to this work through a personal
-                experience with a hormonal
-                condition, a brain surgery, and a long stretch of late-night PubMed
-                reading. The project&apos;s clinical grounding comes from her mother, a
-                practicing psychiatrist who has spent much of her career thinking about
-                women&apos;s hormonal conditions and who brought what she calls a
-                &ldquo;two-arm data strategy&rdquo; to how the evidence here is organized.
+                Whel is a drug-repurposing platform for female biology. We find the
+                approved drugs that already work for women&apos;s health conditions and
+                build the evidence trail rigorously enough for a researcher or a clinician
+                to act on. The fuller account of what we are building, and why now, is on
+                the <Link href="/about" style={LINK}>About page</Link> and in the{" "}
+                <Link href="/manifesto" style={LINK}>manifesto</Link>.
               </p>
               <p style={BODY}>
-                Neither of us is selling anything. Whel is free, open, and not a
-                monetization project. The fuller story is on the{" "}
-                <Link href="/about" style={LINK}>About page</Link>.
+                Accuracy matters more to us than reach. Every result on the platform links
+                to its source and its date so that anyone can check it, and we treat
+                corrections from people who know these conditions as some of the most
+                valuable input we receive.
               </p>
             </div>
           </section>
@@ -199,7 +198,7 @@ export default function ContactPage() {
               ← About Whel
             </Link>
             <Link
-              href="/conditions"
+              href="/platform"
               style={{
                 ...MONO,
                 fontSize: "12px",
@@ -208,7 +207,7 @@ export default function ContactPage() {
                 color: "var(--green-mid)",
               }}
             >
-              Browse conditions →
+              See the platform →
             </Link>
           </div>
 

@@ -74,12 +74,10 @@ export default function AboutPage() {
             About Whel.
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
-            Whel is an open evidence index for drug repurposing signals across
-            six under-researched women&apos;s hormonal and reproductive
-            conditions. This page explains why the project exists, who built
-            it, the specific gap in the women&apos;s health evidence base it
-            is built to address, the audiences it is designed to serve, and
-            what it is and is not intended to do.
+            Whel is a drug-repurposing platform for female biology. This page explains
+            the gap in the women&apos;s health evidence base that Whel addresses, why drug
+            repurposing is the right method for these conditions, how the platform works,
+            and who it is built to serve.
           </p>
         </div>
       </div>
@@ -88,22 +86,23 @@ export default function AboutPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
 
-          {/* 01 — Origin */}
+          {/* 01 — What Whel is */}
           <section>
-            <div style={EYEBROW}>01 · Origin</div>
-            <h2 className="font-heading" style={H2}>How this started</h2>
+            <div style={EYEBROW}>01 · The thesis</div>
+            <h2 className="font-heading" style={H2}>What Whel is</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel began with a personal experience. A few years ago, I was diagnosed with a prolactinoma, a noncancerous tumor of the pituitary gland that disrupts hormonal regulation, and eventually underwent brain surgery to remove it. The standard treatment before surgery, and for many people instead of surgery, is dopamine agonists like cabergoline or bromocriptine, which are effective but, for many patients including myself, quite rough. Common side effects include extreme nausea, psychiatric symptoms, and impulse control disorders. The drugs work, but &ldquo;working&rdquo; is not the same as &ldquo;working well,&rdquo; and for many people who take them over years, the calculation is not clean.
+                Whel finds the approved drugs that already work for women&apos;s health conditions and
+                proves it rigorously enough for a researcher or a clinician to act on. The conditions
+                we focus on, including endometriosis, PMDD, PCOS, adenomyosis, perimenopause, and
+                vulvodynia, are rarely cured and are instead managed over years, which is a different
+                medical problem with a different evidence base, and it is the problem the general
+                drug-discovery platforms were never built to solve.
               </p>
               <p style={BODY}>
-                I got through it. And I am aware, acutely, that I had it relatively easy. A prolactinoma is not endometriosis, or PMDD, or eight years of being told your pain is normal, to come back in six months, to try exercise. I had a diagnosis, a treatment, a surgery, and a recovery. Many women with reproductive and hormonal conditions do not get that clean of an arc.
-              </p>
-              <p style={BODY}>
-                That realization, along with a lot of late night PubMed rabbit holes and conversations with my mother, a psychiatry resident at a Harvard-affiliated hospital with a decade of NIMH- and PCORI-funded research experience in women&apos;s mental health, eventually turned into this project. We built it together.
-              </p>
-              <p style={BODY}>
-                The specific idea, drug repurposing, came out of those conversations. Her framing of it was the one that stuck: the useful signals often already exist. They sit, scattered, across PubMed, clinical trial registries, adverse event databases, genetic target platforms, and patient communities. No one had pulled them into a single scored, condition-specific, accessible index for this cluster of conditions. That became the project.
+                A fuller account of why these conditions are overlooked, why their treatments already
+                exist inside the existing drug supply, and why this is the moment to build, is in the{" "}
+                <Link href="/manifesto" style={LINK}>manifesto</Link>.
               </p>
             </div>
           </section>
@@ -114,17 +113,31 @@ export default function AboutPage() {
             <h2 className="font-heading" style={H2}>Why women&apos;s hormonal health</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Medical knowledge has structural blind spots. The NIH did not require inclusion of women in clinical research until 1993{" "}
-                <a href="https://www.congress.gov/bill/103rd-congress/senate-bill/1" target="_blank" rel="noopener noreferrer" style={LINK}>[NIH Revitalization Act of 1993]</a>,{" "}
-                which means the past thirty years have been spent catching up from a standing start. Conditions that affect women most severely have historically been underfunded, and where a research base exists at all, it is thin.
+                Medical knowledge carries structural blind spots that begin with who was studied. The
+                United States did not require the inclusion of women in federally funded clinical
+                research until 1993{" "}
+                <a href="https://orwh.od.nih.gov/toolkit/recruitment/history" target="_blank" rel="noopener noreferrer" style={LINK}>(NIH Revitalization Act of 1993)</a>,{" "}
+                so the past three decades have been spent catching up from a standing start, and the
+                conditions that affect women most severely have been underfunded for as long as anyone
+                has measured.
               </p>
               <p style={BODY}>
-                The consequences are not abstract. Endometriosis affects up to 10% of women of reproductive age, yet the average diagnostic delay is still 7 to 10 years{" "}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/21718982/" target="_blank" rel="noopener noreferrer" style={LINK}>[Nnoaham et al., 2011]</a>,{" "}
-                and in 2026 there is no pharmaceutical treatment that addresses the underlying condition rather than suppressing symptoms. PMDD is clinically severe and cyclical, yet is still treated primarily with SSRIs prescribed imprecisely. Adenomyosis, vulvodynia, and PCOS are chronically underrepresented in the research literature. Menopause, a biological transition affecting every woman who lives long enough, is widely acknowledged to be poorly managed.
+                The consequences are concrete rather than abstract. Endometriosis affects up to ten
+                percent of women of reproductive age while the average diagnostic delay remains seven
+                to ten years{" "}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/21718982/" target="_blank" rel="noopener noreferrer" style={LINK}>(Nnoaham et al., 2011)</a>,{" "}
+                and there is still no pharmaceutical treatment that addresses the underlying condition
+                instead of suppressing its symptoms. PMDD is clinically severe and cyclical yet is
+                treated primarily with SSRIs prescribed imprecisely, adenomyosis and vulvodynia and
+                PCOS remain underrepresented in the research literature, and menopause, a transition
+                that every woman who lives long enough will reach, is widely acknowledged to be poorly
+                managed.
               </p>
               <p style={BODY}>
-                The problem is not that researchers do not care. It is structural: poorly characterized mechanisms make conditions harder to study, which makes them less fundable, which means the mechanisms remain poorly characterized. It is a feedback loop. Whel is an attempt to interrupt it.
+                The cause is structural rather than a failure of intent, because poorly characterized
+                mechanisms make a condition harder to study, which makes it less fundable, which leaves
+                the mechanism poorly characterized, and the loop closes on itself. Whel exists to
+                interrupt that loop by surfacing the evidence that already exists.
               </p>
             </div>
           </section>
@@ -135,13 +148,27 @@ export default function AboutPage() {
             <h2 className="font-heading" style={H2}>Why drug repurposing</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Drug repurposing asks a different question than traditional drug discovery. Instead of designing a new drug from scratch, you look at what is already on the market, where the safety profile is at least partially known, and search for unexpected benefits or patterns in existing data that suggest a new use case. If a drug already has a known safety profile, the path to clinical investigation is shorter. You do not have to start from scratch. You just have to find the signals.
+                Drug repurposing asks a different question from traditional drug discovery, because
+                instead of designing a new molecule it examines the drugs already on the market, where
+                the safety profile is at least partly established, and searches for unexpected benefits
+                or patterns in existing data that point to a new use. A drug with a known safety record
+                reaches clinical investigation faster and at lower cost, so the work becomes a matter of
+                finding the signal rather than inventing the molecule.
               </p>
               <p style={BODY}>
-                The surprising thing is that the signals are often already there. Somewhere in a published trial, an adverse event database, or a Reddit thread from two years ago, someone noticed that women on statins were reporting reduced period pain. Someone noticed that a drug developed for one condition was doing something unexpected for another. The data exists. It is just scattered across PubMed, clinical trial registries, adverse event databases, and patient community forums, and no one has built a clean, accessible tool that pulls it together specifically for women&apos;s hormonal health.
+                The signal is more often present than people assume. Somewhere in a published trial, an
+                adverse-event database, or a patient forum from two years ago, a pattern was recorded
+                that no one connected to a new indication, and that data sits scattered across PubMed,
+                the trial registries, the adverse-event databases, and the patient communities, without
+                a tool that pulls it together specifically for women&apos;s hormonal and reproductive
+                health.
               </p>
               <p style={BODY}>
-                My mother, who brought what she called a &ldquo;two-arm data strategy&rdquo; to this project, framed it clearly: the absence of direct evidence is not the same as the absence of evidence. Sparseness in the research literature is itself information. And signals from unexpected places are hypotheses. They are different kinds of data, and they deserve to be presented differently.
+                The method rests on a simple principle about evidence, which is that the absence of
+                direct evidence is not the same as the absence of evidence. Sparseness in the
+                literature is itself information, signals from unexpected places are hypotheses rather
+                than findings, and the two are different kinds of data that deserve to be presented
+                differently.
               </p>
             </div>
           </section>
@@ -152,39 +179,68 @@ export default function AboutPage() {
             <h2 className="font-heading" style={H2}>What Whel does</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel currently covers six conditions (endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, and menopause) and organizes evidence into four research arms. Direct Research pulls published studies and active clinical trials specifically targeting each condition. Cross-Condition Signals identifies drugs developed for other purposes where women incidentally reported benefit, drawing on the FDA adverse event database and secondary endpoints buried in unrelated trials. Pathway Insights surfaces drugs that worsen conditions, because understanding what makes something worse is often a legitimate path to understanding what drives it. Community Forum Reports mines consistent treatment patterns across condition specific subreddits, clearly labeled as community signal rather than clinical evidence.
+                Whel currently covers six conditions, endometriosis, PMDD, PCOS, adenomyosis,
+                vulvodynia, and menopause, and organizes the evidence into research arms that each read
+                a different kind of source. Direct research pulls published studies and active clinical
+                trials that target each condition. Cross-condition signals identify drugs developed for
+                other purposes where women have incidentally reported benefit, drawing on the FDA
+                adverse-event database and the secondary endpoints buried in unrelated trials. Pathway
+                insights surface drugs that worsen a condition, since understanding what makes something
+                worse is often a legitimate route to understanding what drives it. Community reports read
+                consistent treatment patterns across condition-specific forums, labeled clearly as
+                community signal that is held to a different standard than clinical evidence.
               </p>
               <p style={BODY}>
-                Each signal is classified by evidence strength (Strong, Moderate, Emerging, or Exploratory), and every result links to its source. The goal is not to tell anyone what to take. It is to make visible the hypotheses that exist in the data but have not yet been formally investigated.
+                Each signal is graded for evidence strength, as Strong, Moderate, Emerging, or
+                Exploratory, and every result links to its source, so that the platform makes visible
+                the hypotheses that already exist in the data and have not yet been formally
+                investigated, and leaves the clinical judgment to the clinician.
               </p>
               <p style={BODY}>
-                Whel is built alongside, not in place of, other work in this field. The most direct counterpart is{" "}
-                <a href="https://www.everycure.org/" target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure</a>, a nonprofit founded in 2022 by physicians David Fajgenbaum and Grant Mitchell to systematically search for new uses for already-approved drugs. Every Cure publishes{" "}
-                <a href="https://huggingface.co/datasets/everycure/matrix" target="_blank" rel="noopener noreferrer" style={LINK}>MATRIX</a>, a public dataset of machine-learned plausibility predictions across roughly sixty million drug-disease pairs, generated from a biomedical knowledge graph. The work has been funded at scale by{" "}
+                Whel sits alongside other work in this field rather than in place of it. The most direct
+                counterpart is{" "}
+                <a href="https://www.everycure.org/" target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure</a>, a nonprofit founded in 2022 by the physicians David Fajgenbaum and Grant Mitchell to search
+                systematically for new uses of approved drugs, which publishes{" "}
+                <a href="https://huggingface.co/datasets/everycure/matrix" target="_blank" rel="noopener noreferrer" style={LINK}>MATRIX</a>, a public dataset of machine-learned plausibility predictions across roughly sixty million
+                drug-disease pairs, funded at scale by{" "}
                 <a href="https://arpa-h.gov/news-and-events/arpa-h-launches-matrix-program" target="_blank" rel="noopener noreferrer" style={LINK}>ARPA-H</a>{" "}
                 and the{" "}
-                <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>.
+                <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>. Every Cure works across the whole of disease, where the prize is a cure, while Whel works
+                inside female biology, where the work is management, so the two answer genuinely
+                different questions.
               </p>
               <p style={BODY}>
-                Whel and MATRIX answer different questions. MATRIX scores how biologically plausible a drug-disease link looks across the whole of biomedicine. Whel grades the strength of the evidence currently available for a specific compound-condition pair in a specific clinical literature. Where MATRIX has coverage, Whel will surface those scores as an independent biological-plausibility layer beside its own. A fuller account of the external resources Whel draws on, and the ones it deliberately does not, is on the{" "}
+                MATRIX scores how biologically plausible a drug-disease link appears across the whole of
+                biomedicine, and Whel grades the strength of the evidence currently available for a
+                specific drug-condition pair in a specific clinical literature, so where MATRIX has
+                coverage Whel surfaces those scores as an independent plausibility layer beside its own.
+                A fuller account of the external resources Whel draws on, and the ones it deliberately
+                leaves out, is on the{" "}
                 <Link href="/about/external-references" style={LINK}>external references</Link> page.
-              </p>
-              <p style={BODY}>
-                This is a starting point. The plan is to expand the condition set, improve the pipelines, and incorporate feedback from researchers, clinicians, and patients about which gaps matter most.
               </p>
             </div>
           </section>
 
-          {/* 05 — The goal */}
+          {/* 05 — Who it serves */}
           <section>
-            <div style={EYEBROW}>05 · The goal</div>
-            <h2 className="font-heading" style={H2}>Our goal</h2>
+            <div style={EYEBROW}>05 · Who it serves</div>
+            <h2 className="font-heading" style={H2}>The audiences and the limits</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel is free, open, and not a monetization project. Nothing here is medical advice. It is a research signal aggregator, built by a philosophy student and her psychiatrist mother, for anyone who wants to understand what the evidence does and does not say about conditions that have not received the research attention they deserve.
+                Whel is a research-support tool built for clinician-researchers and for the pharma and
+                biotech teams working in women&apos;s health, and during the current research preview the
+                full index and the substrate are open by invitation through{" "}
+                <Link href="/access" style={LINK}>request access</Link>. Nothing on the platform is
+                medical advice, and every result is a research signal to be investigated rather than a
+                recommendation to be followed.
               </p>
               <p style={BODY}>
-                The idea that a drug developed for cholesterol might contain, embedded in its trial data, a signal about period pain is a claim about the structure of knowledge itself. Useful truths can be present in data before anyone knows to look for them. We wanted to build something that went looking.
+                The premise underneath the work is a claim about the structure of knowledge, which is
+                that a drug developed for one purpose can carry, embedded in its trial data and its
+                prescribing record, a useful signal about an entirely different condition, and that such
+                truths can sit in the data for years before anyone thinks to look for them. Whel is built
+                to go looking, beginning with the conditions where the need is greatest and the looking
+                has been done least.
               </p>
             </div>
           </section>
@@ -199,6 +255,20 @@ export default function AboutPage() {
               gap: "12px 32px",
             }}
           >
+            <Link
+              href="/manifesto"
+              style={{
+                ...MONO,
+                fontSize: "12px",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--ink)",
+                borderBottom: "1px solid var(--ink)",
+                paddingBottom: 2,
+              }}
+            >
+              Read the manifesto →
+            </Link>
             <Link
               href="/about/technical-architecture"
               style={{
@@ -220,24 +290,10 @@ export default function AboutPage() {
                 fontSize: "12px",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                color: "var(--ink)",
-                borderBottom: "1px solid var(--ink)",
-                paddingBottom: 2,
-              }}
-            >
-              External references →
-            </Link>
-            <Link
-              href="/signal-types"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
                 color: "var(--green-mid)",
               }}
             >
-              The four signal types →
+              External references →
             </Link>
           </div>
 

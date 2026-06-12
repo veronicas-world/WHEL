@@ -15,12 +15,24 @@ sources.key_finding_excerpt is 0% populated across all 2,166 active-
 signal source rows. The column exists per migration 041 but no script
 ever wrote to it. This script fills the gap: for every free-text
 source (source_type in {'pubmed', 'clinical_trial', 'reddit'}), it
-fetches the canonical source text from the publisher (NCBI E-utilities
-efetch for PubMed abstracts; ClinicalTrials.gov API v2 briefSummary +
-detailedDescription for trial records; Reddit's public JSON endpoint
-for post body + top 5 comments), then calls Claude Opus 4.6 to extract
-a 2-4 sentence key finding focused on the drug-condition relationship
-for that signal.
+sources canonical text and calls Claude Opus 4.6 to extract a 2-4
+sentence key finding focused on the drug-condition relationship for
+that signal.
+
+CANONICAL TEXT SOURCING
+-----------------------
+  pubmed          NCBI E-utilities efetch (full abstract)
+  clinical_trial  ClinicalTrials.gov API v2 briefSummary +
+                  detailedDescription
+  reddit          Stored title from the sources table. Reddit's
+                  public JSON endpoint returns HTTP 403 for
+                  unauthenticated programmatic clients, and the
+                  OAuth developer-portal flow has been broken for
+                  individual researchers since 2023. Patient-community
+                  thread titles are typically the full exposure-outcome
+                  claim, which is sufficient for grounding. Full-body
+                  backfill via authenticated Reddit OAuth is queued
+                  as a Blocked roadmap row.
 
 The extraction prompt is tight on purpose: each output is constrained
 to claims directly supported by the canonical text, must be specific
@@ -58,12 +70,16 @@ export-sources-for-audit.py run.
 
 RUNTIME AND COST
 ----------------
-~30-40 minutes against ~322 free-text sources. Dominated by Reddit's
-2-second polite-use sleep on 190 posts. Claude API calls themselves
-are ~3-5 seconds each on Opus, ~1-2 seconds on Haiku.
+~20-30 minutes against ~322 free-text sources, dominated by Claude
+latency (~3-5 seconds per call on Opus, ~1-2 seconds on Haiku). PubMed
+and ClinicalTrials.gov fetches are sub-second; reddit uses stored
+titles (no network call). Polite-use sleeps on NCBI/CT.gov are short.
 
 Cost at default Opus 4.6: roughly 322 calls × ~3 KB input × ~150 tokens
-output = ~$20-30 total. At Haiku 4.5: ~$2-3.
+output = ~$5-15 total. At Haiku 4.5: ~$1-3, but Haiku is over-aggressive
+on the NO_RELEVANT_FINDING refusal path (smoke-tested 2026-06-08:
+Haiku refused 5/10 vs Opus 1/10), so Opus is the recommended default
+despite the cost gap.
 
 DEPENDENCIES
 ------------
@@ -466,8 +482,16 @@ def extract_one(
         time.sleep(CTGOV_SLEEP_S)
         canonical = fetch_ctgov_description(eid)
     elif stype == "reddit":
-        time.sleep(REDDIT_SLEEP_S)
-        canonical = fetch_reddit_post(row.get("url") or "")
+        # Reddit's public JSON endpoint returns HTTP 403 for unauthenticated
+        # programmatic clients (their anti-bot tightened in 2023), and the
+        # OAuth developer-app creation flow has been broken for individual
+        # researchers since the same policy change. Until reliable
+        # authenticated access exists, we use the stored post title as
+        # canonical text. Patient-community thread titles are typically
+        # explicit exposure-outcome claims (e.g. "Magnesium glycinate gave
+        # me my PMDD life back"), which is sufficient for the grounding
+        # task. Full-body backfill is queued as a roadmap row.
+        canonical = (row.get("title") or "").strip() or None
     else:
         base.error = f"source_type {stype!r} is not a free-text source"
         return base
