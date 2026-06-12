@@ -282,21 +282,14 @@ const CSS = `
   text-transform: uppercase;
 }
 
-/* what whel is — ink surface */
-.mf-whel { background: var(--ink); color: var(--on-ink); }
-.mf-whel .mf-sec-head { border-top-color: var(--on-ink); }
-.mf-whel .mf-sec-head h2 { color: var(--on-ink); }
-.mf-whel .mf-prose { color: #CBD0BE; }
-.mf-whel .mf-prose a { color: var(--signal); text-decoration-color: rgba(168,230,163,0.4); }
-
-/* layer cards */
-.mf-layers { display: flex; flex-direction: column; margin: 40px 0 44px; border: 1px solid rgba(244,239,230,0.15); }
-.mf-layer { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 28px; padding: 30px 32px; border-bottom: 1px solid rgba(244,239,230,0.15); }
+/* layer cards (bone surface) */
+.mf-layers { display: flex; flex-direction: column; margin: 40px 0 44px; border: 1px solid rgba(26,29,20,0.14); }
+.mf-layer { display: grid; grid-template-columns: 120px minmax(0,1fr); gap: 28px; padding: 30px 32px; border-bottom: 1px solid rgba(26,29,20,0.14); }
 .mf-layer:last-child { border-bottom: none; }
-.mf-ln { font-family: var(--font-plex-mono, monospace); font-size: 11px; letter-spacing: 0.18em; color: #8C9180; padding-top: 6px; text-transform: uppercase; }
-.mf-ln b { display: block; font-weight: 400; color: var(--signal); font-size: 22px; font-family: var(--font-newsreader, Georgia, serif); letter-spacing: 0; margin-top: 8px; }
-.mf-layer h3 { font-family: var(--font-newsreader, Georgia, serif); font-size: 23px; font-weight: 600; margin: 0 0 10px; color: var(--on-ink); }
-.mf-layer p { margin: 0; font-size: 18px; line-height: 1.62; color: #CBD0BE; }
+.mf-ln { font-family: var(--font-plex-mono, monospace); font-size: 11px; letter-spacing: 0.18em; color: var(--muted); padding-top: 6px; text-transform: uppercase; }
+.mf-ln b { display: block; font-weight: 400; color: var(--moss); font-size: 22px; font-family: var(--font-newsreader, Georgia, serif); letter-spacing: 0; margin-top: 8px; }
+.mf-layer h3 { font-family: var(--font-newsreader, Georgia, serif); font-size: 23px; font-weight: 600; margin: 0 0 10px; color: var(--ink); }
+.mf-layer p { margin: 0; font-size: 18px; line-height: 1.62; color: var(--body); }
 
 /* buttons on ink surface */
 .mf-btn-ink {
@@ -374,26 +367,21 @@ export default function ManifestoPage() {
       <main>
 
         {/* ── Hero ──────────────────────────────────────────────────────────── */}
-        <header className="mf-hero">
-          <svg className="mf-hero-motif" width="760" height="760" viewBox="0 0 200 200" fill="none">
-            <circle cx="100" cy="64"  r="44" stroke="#F4EFE6" strokeOpacity="0.14" strokeWidth="0.45" />
-            <circle cx="136" cy="100" r="44" stroke="#F4EFE6" strokeOpacity="0.14" strokeWidth="0.45" />
-            <circle cx="100" cy="136" r="44" stroke="#F4EFE6" strokeOpacity="0.14" strokeWidth="0.45" />
-            <circle cx="64"  cy="100" r="44" stroke="#F4EFE6" strokeOpacity="0.14" strokeWidth="0.45" />
-            <circle cx="100" cy="100" r="86" stroke="#A8E6A3" strokeOpacity="0.25"  strokeWidth="0.45" />
-          </svg>
-          <div className="container mf-hero-inner">
-            <div className="mf-crumbs">
-              <Link href="/">Home</Link>{" "}/{" "}<span className="mf-here">Manifesto</span>
-            </div>
-            <div className="mf-eyebrow">Manifesto</div>
-            <h1>Medicine was built on the <em>male body.</em></h1>
-            <div className="mf-hero-foot">
-              <span>WHEL — WOMEN&apos;S HEALTH EVIDENCE LAB</span>
-              <span className="mf-read">READING TIME ~6 MIN&nbsp;&nbsp;·&nbsp;&nbsp;↓</span>
+        <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
+          <div className="container">
+            <div style={{ maxWidth: 760, margin: "0 auto" }}>
+              <div className="crumbs on-ink">
+                <Link href="/">Home</Link>
+                <span className="sep">/</span>
+                <span className="here">Manifesto</span>
+              </div>
+              <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>Manifesto</div>
+              <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(2.2rem, 4.4vw, 3.4rem)", lineHeight: 1.08, maxWidth: "16ch" }}>
+                Medicine was built on the male body.
+              </h1>
             </div>
           </div>
-        </header>
+        </section>
 
         {/* ── Essay: TOC + Sections 00 – 02 ────────────────────────────────── */}
         <div className="container mf-essay-wrap">
@@ -574,8 +562,8 @@ export default function ManifestoPage() {
           </div>
         </div>
 
-        {/* ── Section 04: What Whel Is (ink surface) ───────────────────────── */}
-        <section className="mf-whel" id="s4">
+        {/* ── Section 04: What Whel Is ─────────────────────────────────────── */}
+        <section id="s4">
           <div className="container mf-essay-wrap" style={{ paddingTop: 0 }}>
             <aside />
             <div>
@@ -612,11 +600,11 @@ export default function ManifestoPage() {
                     </div>
                   </div>
                   <p>
-                    The result is a set of repurposing candidates with full evidence trails that a researcher can act on. We start where need is greatest and signal is densest, then expand across the biology medicine left understudied. <AI href={ENDO}>Endometriosis alone affects about 190 million women</AI> and still sees diagnosis delayed by seven to nine years on average, while <AI href={PCOS}>PCOS is the most common endocrine disorder</AI> in women of reproductive age and up to 70 percent of affected women remain undiagnosed. The biology is real, the drugs are already on pharmacy shelves, and the evidence is waiting to be read; the record was written for the wrong body, and we are correcting it.
+                    The result is a set of repurposing candidates with full evidence trails that a researcher can act on. We start where need is greatest and signal is densest, then expand across the biology medicine left understudied. <A href={ENDO}>Endometriosis alone affects about 190 million women</A> and still sees diagnosis delayed by seven to nine years on average, while <A href={PCOS}>PCOS is the most common endocrine disorder</A> in women of reproductive age and up to 70 percent of affected women remain undiagnosed. The biology is real, the drugs are already on pharmacy shelves, and the evidence is waiting to be read; the record was written for the wrong body, and we are correcting it.
                   </p>
-                  <div className="mf-cta-row">
-                    <Link href="/candidates" className="mf-btn-ink">SEE THE CANDIDATES <span style={{ fontFamily: "var(--font-newsreader, Georgia, serif)" }}>&rarr;</span></Link>
-                    <Link href="/access" className="mf-btn-ghost-ink">REQUEST ACCESS</Link>
+                  <div style={{ marginTop: 40, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                    <Link href="/candidates" className="btn btn-primary">See the candidates <span className="arr">&rarr;</span></Link>
+                    <Link href="/access" className="btn btn-ghost">Request access</Link>
                   </div>
                 </div>
               </section>
