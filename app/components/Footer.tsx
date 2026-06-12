@@ -20,16 +20,13 @@ const PLATFORM_LINKS = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Candidates", href: "/candidates" },
-  { label: "Methods",    href: "/about/technical-architecture" },
   { label: "About",      href: "/about" },
 ];
 
-const CONDITION_LINKS = [
-  { label: "PMDD",         href: "/conditions/pmdd" },
-  { label: "Endometriosis",href: "/conditions/endometriosis" },
-  { label: "PCOS",         href: "/conditions/pcos" },
-  { label: "Perimenopause",href: "/conditions/perimenopause-and-menopause" },
-  { label: "All conditions",href: "/conditions" },
+const COMPANY_LINKS = [
+  { label: "News",           href: "/news" },
+  { label: "Contact",        href: "/about/contact" },
+  { label: "Request access", href: "/access" },
 ];
 
 export default function Footer() {
@@ -74,10 +71,10 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Conditions */}
+          {/* Company */}
           <div>
-            <h4>Conditions</h4>
-            {CONDITION_LINKS.map(({ label, href }) => (
+            <h4>Company</h4>
+            {COMPANY_LINKS.map(({ label, href }) => (
               <Link key={href} href={href} className="fl">{label}</Link>
             ))}
           </div>

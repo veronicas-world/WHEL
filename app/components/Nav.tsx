@@ -41,9 +41,8 @@ const NAV_LINKS = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Candidates", href: "/candidates" },
-  { label: "Conditions", href: "/conditions" },
-  { label: "Methods",    href: "/about/technical-architecture", hideSm: true },
   { label: "About",      href: "/about" },
+  { label: "News",       href: "/news", hideSm: true },
 ];
 
 export default function Nav() {
