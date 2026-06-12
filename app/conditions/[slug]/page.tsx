@@ -141,107 +141,62 @@ export default async function ConditionDetailPage({
   const hasContext = condition.biology_summary || condition.underfunding_notes;
 
   return (
-    <main className="flex-1" style={{ background: "var(--bg)" }}>
+    <main>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <div style={{ background: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-12 md:gap-16 items-start">
+      <section className="surface-ink" style={{ paddingTop: 40, paddingBottom: 56 }}>
+        <div className="container">
+          <div className="crumbs on-ink" style={{ marginBottom: 22 }}>
+            <Link href="/">Home</Link>
+            <span className="sep">/</span>
+            <Link href="/conditions">Conditions</Link>
+            <span className="sep">/</span>
+            <span className="here">{condition.name}</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_300px] gap-12 md:gap-16 items-start hero-grid">
 
             {/* Left: condition hero */}
             <div>
-              {/* Breadcrumb */}
-              <nav
-                style={{
-                  ...MONO,
-                  fontSize: 11,
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
-                  color: "var(--muted)",
-                  marginBottom: 20,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <Link href="/" style={{ color: "var(--muted)", textDecoration: "none" }}>
-                  Home
-                </Link>
-                <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-                <Link href="/conditions" style={{ color: "var(--muted)", textDecoration: "none" }}>
-                  Conditions
-                </Link>
-                <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-                <span style={{ color: "var(--ink)" }}>{condition.name}</span>
-              </nav>
-
-              {/* Eyebrow */}
-              <p
-                className="eyebrow"
-                style={{ marginBottom: 10 }}
-              >
+              <div className="eyebrow on-ink" style={{ marginBottom: 12 }}>
                 CONDITION · {code}
-              </p>
+              </div>
 
-              {/* H1 */}
               <h1
-                className="font-heading"
+                className="display"
                 style={{
                   fontSize: "clamp(2rem, 4.2vw, 3.25rem)",
-                  fontWeight: 500,
                   lineHeight: 1.08,
-                  letterSpacing: "-0.02em",
-                  color: "var(--ink)",
+                  color: "var(--on-ink)",
                   marginBottom: 20,
                 }}
               >
                 {condition.name}.
               </h1>
 
-              {/* Description */}
               {condition.description && (
-                <p
-                  style={{
-                    fontSize: "1rem",
-                    lineHeight: 1.65,
-                    color: "var(--ink-2)",
-                    maxWidth: "62ch",
-                    marginBottom: 28,
-                  }}
-                >
+                <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "60ch", marginBottom: 28 }}>
                   {condition.description}
                 </p>
               )}
 
-              {/* Fact pills from key_facts */}
               {keyFacts.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {keyFacts.map((fact, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        borderLeft: "1px solid var(--rule-strong)",
-                        paddingLeft: 12,
-                      }}
-                    >
+                    <div key={i} style={{ borderLeft: "1px solid rgba(244,239,230,0.22)", paddingLeft: 12 }}>
                       <p
                         style={{
                           ...MONO,
                           fontSize: 10,
                           letterSpacing: "0.16em",
                           textTransform: "uppercase",
-                          color: "var(--muted)",
+                          color: "var(--on-ink-2)",
                           marginBottom: 4,
                         }}
                       >
                         {fact.label}
                       </p>
-                      <p
-                        style={{
-                          fontSize: "0.875rem",
-                          lineHeight: 1.5,
-                          color: "var(--ink)",
-                        }}
-                      >
+                      <p style={{ fontSize: "0.875rem", lineHeight: 1.5, color: "var(--on-ink)" }}>
                         {fact.value}
                       </p>
                     </div>
@@ -250,14 +205,9 @@ export default async function ConditionDetailPage({
               )}
             </div>
 
-            {/* Right: AT A GLANCE sidebar */}
+            {/* Right: At a glance */}
             <div className="md:pt-12">
-              <p
-                className="eyebrow"
-                style={{ marginBottom: 20 }}
-              >
-                AT A GLANCE
-              </p>
+              <div className="eyebrow on-ink" style={{ marginBottom: 20 }}>At a glance</div>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <tbody>
                   {(
@@ -270,29 +220,11 @@ export default async function ConditionDetailPage({
                       { label: "Last reviewed",     value: lastReview },
                     ] as const
                   ).map(({ label, value }, i) => (
-                    <tr
-                      key={i}
-                      style={{ borderBottom: "1px solid var(--rule)" }}
-                    >
-                      <td
-                        style={{
-                          padding: "10px 0",
-                          fontSize: "0.875rem",
-                          color: "var(--ink-2)",
-                          lineHeight: 1.4,
-                        }}
-                      >
+                    <tr key={i} style={{ borderBottom: "1px solid rgba(244,239,230,0.14)" }}>
+                      <td style={{ padding: "10px 0", fontSize: "0.875rem", color: "var(--on-ink-2)", lineHeight: 1.4 }}>
                         {label}
                       </td>
-                      <td
-                        style={{
-                          padding: "10px 0",
-                          fontSize: "0.875rem",
-                          color: "var(--ink)",
-                          textAlign: "right",
-                          ...MONO,
-                        }}
-                      >
+                      <td style={{ padding: "10px 0", fontSize: "0.875rem", color: "var(--on-ink)", textAlign: "right", ...MONO }}>
                         {value}
                       </td>
                     </tr>
@@ -303,28 +235,18 @@ export default async function ConditionDetailPage({
 
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── Figures ──────────────────────────────────────────────────────── */}
-      <div style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
+      {/* ── Signal breakdown — figures ───────────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
+          <div className="eyebrow" style={{ marginBottom: 26 }}>Signal breakdown</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
 
             {/* Figure A: Tier distribution */}
             <div>
-              <p className="eyebrow" style={{ marginBottom: 12 }}>
-                FIGURE A · TIER DISTRIBUTION
-              </p>
-              <h3
-                className="font-heading"
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 28,
-                  letterSpacing: "-0.01em",
-                }}
-              >
+              <p className="eyebrow" style={{ marginBottom: 12 }}>FIGURE A · TIER DISTRIBUTION</p>
+              <h3 className="font-heading" style={{ fontSize: "1.5rem", fontWeight: 500, color: "var(--ink)", marginBottom: 28, letterSpacing: "-0.01em" }}>
                 Signals per confidence tier
               </h3>
 
@@ -334,48 +256,15 @@ export default async function ConditionDetailPage({
                   const pct = total > 0 ? (count / total) * 100 : 0;
                   return (
                     <div key={tier.key} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span
-                        style={{
-                          ...MONO,
-                          fontSize: 10,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase" as const,
-                          color: "var(--muted)",
-                          width: 90,
-                          flexShrink: 0,
-                        }}
-                      >
+                      <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: "var(--muted)", width: 90, flexShrink: 0 }}>
                         {tier.label}
                       </span>
-                      <div
-                        style={{
-                          flex: 1,
-                          height: 18,
-                          background: "var(--rule)",
-                          position: "relative" as const,
-                        }}
-                      >
+                      <div style={{ flex: 1, height: 18, background: "var(--rule)", position: "relative" as const }}>
                         {pct > 0 && (
-                          <div
-                            style={{
-                              position: "absolute" as const,
-                              left: 0, top: 0, bottom: 0,
-                              width: `${pct}%`,
-                              background: tier.token,
-                            }}
-                          />
+                          <div style={{ position: "absolute" as const, left: 0, top: 0, bottom: 0, width: `${pct}%`, background: tier.token }} />
                         )}
                       </div>
-                      <span
-                        style={{
-                          ...MONO,
-                          fontSize: 12,
-                          color: "var(--ink)",
-                          width: 24,
-                          textAlign: "right" as const,
-                          flexShrink: 0,
-                        }}
-                      >
+                      <span style={{ ...MONO, fontSize: 12, color: "var(--ink)", width: 24, textAlign: "right" as const, flexShrink: 0 }}>
                         {count}
                       </span>
                     </div>
@@ -383,16 +272,7 @@ export default async function ConditionDetailPage({
                 })}
               </div>
 
-              <p
-                className="font-heading"
-                style={{
-                  fontSize: "0.875rem",
-                  fontStyle: "italic",
-                  color: "var(--ink-2)",
-                  marginTop: 20,
-                  lineHeight: 1.6,
-                }}
-              >
+              <p className="font-heading" style={{ fontSize: "0.875rem", fontStyle: "italic", color: "var(--body)", marginTop: 20, lineHeight: 1.6 }}>
                 {total > 0 ? (
                   <>
                     The largest single group is the {topTier.label} tier (
@@ -401,29 +281,15 @@ export default async function ConditionDetailPage({
                     robust, replicated evidence.
                   </>
                 ) : (
-                  <>
-                    No repurposing signals have been indexed for{" "}
-                    {condition.name.toLowerCase()} yet.
-                  </>
+                  <>No repurposing signals have been indexed for {condition.name.toLowerCase()} yet.</>
                 )}
               </p>
             </div>
 
             {/* Figure B: Arm composition */}
             <div>
-              <p className="eyebrow" style={{ marginBottom: 12 }}>
-                FIGURE B · ARM COMPOSITION
-              </p>
-              <h3
-                className="font-heading"
-                style={{
-                  fontSize: "1.5rem",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  marginBottom: 28,
-                  letterSpacing: "-0.01em",
-                }}
-              >
+              <p className="eyebrow" style={{ marginBottom: 12 }}>FIGURE B · ARM COMPOSITION</p>
+              <h3 className="font-heading" style={{ fontSize: "1.5rem", fontWeight: 500, color: "var(--ink)", marginBottom: 28, letterSpacing: "-0.01em" }}>
                 Where each signal originates
               </h3>
 
@@ -462,40 +328,15 @@ export default async function ConditionDetailPage({
                   const count = armCounts[arm.key];
                   if (count === 0) return null;
                   return (
-                    <span
-                      key={arm.key}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 6,
-                        fontSize: "0.8125rem",
-                        color: "var(--ink-2)",
-                      }}
-                    >
-                      <span
-                        style={{
-                          width: 10,
-                          height: 10,
-                          background: arm.token,
-                          display: "inline-block",
-                          flexShrink: 0,
-                        }}
-                      />
+                    <span key={arm.key} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.8125rem", color: "var(--body)" }}>
+                      <span style={{ width: 10, height: 10, background: arm.token, display: "inline-block", flexShrink: 0 }} />
                       {arm.label} · {count}
                     </span>
                   );
                 })}
               </div>
 
-              <p
-                className="font-heading"
-                style={{
-                  fontSize: "0.875rem",
-                  fontStyle: "italic",
-                  color: "var(--ink-2)",
-                  lineHeight: 1.6,
-                }}
-              >
+              <p className="font-heading" style={{ fontSize: "0.875rem", fontStyle: "italic", color: "var(--body)", lineHeight: 1.6 }}>
                 {total > 0 ? (
                   <>
                     {topArm.label} contributes the most signals (
@@ -511,29 +352,20 @@ export default async function ConditionDetailPage({
 
           </div>
         </div>
-      </div>
+      </section>
 
       {/* ── Biology / Research & Funding context ─────────────────────────── */}
       {hasContext && (
-        <div style={{ borderBottom: "1px solid var(--rule)" }}>
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <section className="surface-paper section">
+          <div className="container">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16">
               {condition.biology_summary && (
                 <div>
                   <p className="eyebrow" style={{ marginBottom: 12 }}>BIOLOGY</p>
-                  <h3
-                    className="font-heading"
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 500,
-                      color: "var(--ink)",
-                      marginBottom: 12,
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
+                  <h3 className="font-heading" style={{ fontSize: "1.25rem", fontWeight: 500, color: "var(--ink)", marginBottom: 12, letterSpacing: "-0.01em" }}>
                     Biological context
                   </h3>
-                  <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
+                  <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--body)" }}>
                     {condition.biology_summary}
                   </p>
                 </div>
@@ -541,143 +373,84 @@ export default async function ConditionDetailPage({
               {condition.underfunding_notes && (
                 <div>
                   <p className="eyebrow" style={{ marginBottom: 12 }}>RESEARCH &amp; FUNDING</p>
-                  <h3
-                    className="font-heading"
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: 500,
-                      color: "var(--ink)",
-                      marginBottom: 12,
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
+                  <h3 className="font-heading" style={{ fontSize: "1.25rem", fontWeight: 500, color: "var(--ink)", marginBottom: 12, letterSpacing: "-0.01em" }}>
                     Research landscape
                   </h3>
-                  <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
+                  <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--body)" }}>
                     {condition.underfunding_notes}
                   </p>
                 </div>
               )}
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* ── Repurposing signals — gated ──────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14">
-        <p className="eyebrow" style={{ marginBottom: 12 }}>REPURPOSING SIGNALS</p>
-        <h2
-          className="font-heading"
-          style={{
-            fontSize: "clamp(1.5rem, 2.5vw, 2rem)",
-            fontWeight: 500,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: "var(--ink)",
-            marginBottom: 12,
-          }}
-        >
-          {total} signals indexed.
-        </h2>
-        <p
-          style={{
-            fontSize: "0.9375rem",
-            lineHeight: 1.65,
-            color: "var(--ink-2)",
-            marginBottom: 36,
-            maxWidth: "62ch",
-          }}
-        >
-          The breakdown above shows how those {total} signals grade out by
-          confidence tier and where each one originates. The candidates
-          themselves, the specific approved drugs with published evidence,
-          cross-condition signals, or mechanistic overlap for{" "}
-          {condition.name.toLowerCase()}, sit behind access while Whel is in
-          research preview.
-        </p>
-
-        {/* Access gate */}
-        <div
-          style={{
-            border: "1px solid var(--rule-strong)",
-            borderLeft: "3px solid var(--green-mid)",
-            background: "var(--paper)",
-            padding: "28px 30px",
-            maxWidth: 720,
-          }}
-        >
-          <div
-            style={{
-              ...MONO,
-              fontSize: "10.5px",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginBottom: 10,
-            }}
-          >
-            Behind access
-          </div>
-          <h3
+      <section className="surface-bone section">
+        <div className="container">
+          <p className="eyebrow" style={{ marginBottom: 12 }}>REPURPOSING SIGNALS</p>
+          <h2
             className="font-heading"
             style={{
-              fontSize: "1.35rem",
+              fontSize: "clamp(1.5rem, 2.5vw, 2rem)",
               fontWeight: 500,
+              lineHeight: 1.1,
+              letterSpacing: "-0.02em",
               color: "var(--ink)",
-              letterSpacing: "-0.01em",
               marginBottom: 12,
             }}
           >
-            The candidates are available on request.
-          </h3>
-          <p
+            {total} signals indexed.
+          </h2>
+          <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--body)", marginBottom: 36, maxWidth: "62ch" }}>
+            The breakdown above shows how those {total} signals grade out by
+            confidence tier and where each one originates. The candidates
+            themselves, the specific approved drugs with published evidence,
+            cross-condition signals, or mechanistic overlap for{" "}
+            {condition.name.toLowerCase()}, sit behind access while Whel is in
+            research preview.
+          </p>
+
+          {/* Access gate */}
+          <div
             style={{
-              fontSize: "0.9375rem",
-              lineHeight: 1.7,
-              color: "var(--ink-2)",
-              maxWidth: "58ch",
-              marginBottom: 22,
+              border: "1px solid var(--rule-strong)",
+              borderLeft: "3px solid var(--moss)",
+              background: "var(--paper)",
+              padding: "28px 30px",
+              maxWidth: 720,
             }}
           >
-            Each candidate carries its full evidence trail: scored across five
-            dimensions, graded from strong to exploratory, with every source and
-            date attached so it can be checked. We share the index with
-            researchers and clinicians during the preview.
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-            <Link
-              href="/access"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--paper)",
-                background: "var(--ink)",
-                padding: "11px 18px",
-                textDecoration: "none",
-              }}
-            >
-              Request access &rarr;
-            </Link>
-            <Link
-              href="/candidates"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--ink)",
-                border: "1px solid var(--rule-strong)",
-                padding: "11px 18px",
-                textDecoration: "none",
-              }}
-            >
-              See a sample candidate
-            </Link>
+            <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>
+              Behind access
+            </div>
+            <h3 className="font-heading" style={{ fontSize: "1.35rem", fontWeight: 500, color: "var(--ink)", letterSpacing: "-0.01em", marginBottom: 12 }}>
+              The candidates are available on request.
+            </h3>
+            <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--body)", maxWidth: "58ch", marginBottom: 22 }}>
+              Each candidate carries its full evidence trail: scored across five
+              dimensions, graded from strong to exploratory, with every source and
+              date attached so it can be checked. We share the index with
+              researchers and clinicians during the preview.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <Link
+                href="/access"
+                style={{ ...MONO, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--paper)", background: "var(--ink)", padding: "11px 18px", textDecoration: "none" }}
+              >
+                Request access &rarr;
+              </Link>
+              <Link
+                href="/candidates"
+                style={{ ...MONO, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", border: "1px solid var(--rule-strong)", padding: "11px 18px", textDecoration: "none" }}
+              >
+                See a sample candidate
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
     </main>
   );

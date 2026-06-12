@@ -61,117 +61,82 @@ export default async function ConditionsPage() {
   };
 
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <main>
 
-      {/* ── Page header ─────────────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-
-          {/* Breadcrumb */}
-          <nav
-            style={{
-              ...MONO,
-              fontSize: "11px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase" as const,
-              color: "var(--muted)",
-              marginBottom: 20,
-            }}
-          >
-            <Link href="/" style={{ color: "var(--muted)" }}>
-              Home
-            </Link>
-            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-            <span style={{ color: "var(--ink)" }}>Conditions</span>
-          </nav>
-
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
+        <div className="container">
+          <div className="crumbs on-ink">
+            <Link href="/">Home</Link>
+            <span className="sep">/</span>
+            <span className="here">Conditions</span>
+          </div>
+          <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>Conditions</div>
           <h1
-            className="font-heading"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 500,
-              lineHeight: 1.08,
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: 16,
-            }}
+            className="display"
+            style={{ color: "var(--on-ink)", fontSize: "clamp(2.2rem, 4.4vw, 3.4rem)", lineHeight: 1.08, maxWidth: "18ch" }}
           >
-            Conditions index.
+            The conditions we cover.
           </h1>
-          <p
-            style={{
-              fontSize: "1rem",
-              lineHeight: 1.65,
-              color: "var(--ink-2)",
-              maxWidth: "48ch",
-            }}
-          >
+          <p className="lede" style={{ marginTop: 24, color: "var(--on-ink-2)", maxWidth: "54ch" }}>
             {conditionsWithStats.length} condition
             {conditionsWithStats.length !== 1 ? "s" : ""} with active
-            drug-repurposing signals in the database.
+            drug-repurposing signals in the database, each shown with its evidence
+            breakdown.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* ── Conditions grid ─────────────────────────────────────────────────── */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      {/* ── Scope + grid ─────────────────────────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
 
-        {/* Why these six — pointer to the Roadmap */}
-        <div
-          style={{
-            background: "var(--paper)",
-            border: "1px solid var(--rule)",
-            borderLeft: "3px solid var(--green-mid)",
-            padding: "20px 24px",
-            marginBottom: 36,
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: "10px 28px",
-          }}
-        >
-          <div style={{ maxWidth: "62ch" }}>
-            <div
-              style={{
-                ...MONO,
-                fontSize: "10.5px",
-                letterSpacing: "0.18em",
-                textTransform: "uppercase" as const,
-                color: "var(--muted)",
-                marginBottom: 8,
-              }}
-            >
-              Scope
-            </div>
-            <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)" }}>
-              These six conditions were selected against three criteria: shared
-              biology, documented neglect, and a focus on women&apos;s hormonal and
-              reproductive health. They converge on the same handful of systems,
-              including estrogen signaling, chronic inflammation, metabolic
-              regulation, and pain processing, and that overlap is what makes
-              cross-condition reasoning valid, because a signal in one condition
-              can be informative about the others. The same criteria guide which
-              conditions are added next.
-            </p>
-          </div>
-          <Link
-            href="/about/roadmap"
+          {/* Why these six — pointer to the Roadmap */}
+          <div
             style={{
-              ...MONO,
-              fontSize: "12px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
-              color: "var(--green-mid)",
-              whiteSpace: "nowrap",
+              background: "var(--paper)",
+              border: "1px solid var(--rule)",
+              borderLeft: "3px solid var(--moss)",
+              padding: "22px 26px",
+              marginBottom: 36,
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+              gap: "10px 28px",
             }}
           >
-            Why these six, and what&apos;s next &rarr;
-          </Link>
-        </div>
+            <div style={{ maxWidth: "64ch" }}>
+              <div className="eyebrow" style={{ marginBottom: 10 }}>Scope</div>
+              <p style={{ fontSize: 14.5, lineHeight: 1.66, color: "var(--body)" }}>
+                These six conditions were selected against three criteria: shared
+                biology, documented neglect, and a focus on women&apos;s hormonal and
+                reproductive health. They converge on the same handful of systems,
+                including estrogen signaling, chronic inflammation, metabolic
+                regulation, and pain processing, and that overlap is what makes
+                cross-condition reasoning valid, because a signal in one condition
+                can be informative about the others. The same criteria guide which
+                conditions are added next.
+              </p>
+            </div>
+            <Link
+              href="/about/roadmap"
+              style={{
+                ...MONO,
+                fontSize: "12px",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase" as const,
+                color: "var(--moss)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Why these six, and what&apos;s next &rarr;
+            </Link>
+          </div>
 
-        <ConditionsList conditions={conditionsWithStats} />
-      </div>
+          <ConditionsList conditions={conditionsWithStats} />
+        </div>
+      </section>
 
     </main>
   );
