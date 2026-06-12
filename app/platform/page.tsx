@@ -352,6 +352,14 @@ export default async function PlatformPage() {
               MATRIX percentile beside our own grade rather than folding them together, so a reader
               can weigh a model&rsquo;s prior against the evidence on the ground.
             </p>
+            <p style={pBone}>
+              The full scoring method, the five-dimension rubric, the open data sources
+              we build on, and the documented limitations are set out on{" "}
+              <Link href="/about/technical-architecture" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+                technical architecture
+              </Link>
+              .
+            </p>
             <div style={{ marginTop: 28 }}>
               <Link href="/candidates" className="btn btn-primary">
                 See the candidates <span className="arr">&rarr;</span>
