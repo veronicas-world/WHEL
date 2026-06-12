@@ -52,6 +52,19 @@ function sourceLabel(s: Row): string {
   return [s.journal && clip(String(s.journal), 40), year, pmid].filter(Boolean).join(" · ") || "Source on file";
 }
 
+/** A clickable link to the source: the stored url, else a constructed registry URL. */
+function sourceHref(s: Row): string | undefined {
+  const url = s.url ? String(s.url).trim() : "";
+  if (url) return url;
+  const type = String(s.source_type ?? "").toLowerCase();
+  const ext = s.external_id ? String(s.external_id).trim() : "";
+  if (!ext) return undefined;
+  if (type === "pubmed") return `https://pubmed.ncbi.nlm.nih.gov/${ext}/`;
+  if (type === "clinical_trial" || type === "clinical_trial_finding")
+    return `https://clinicaltrials.gov/study/${ext}`;
+  return undefined;
+}
+
 function buildClaims(sources: Row[]): Claim[] {
   const withExcerpt = sources.filter((s) => s.key_finding_excerpt);
   const chosen = (withExcerpt.length ? withExcerpt : sources).slice(0, 4);
@@ -59,6 +72,7 @@ function buildClaims(sources: Row[]): Claim[] {
     type: "extract",
     text: String(s.key_finding_excerpt || s.title || "Source on file."),
     src: sourceLabel(s),
+    href: sourceHref(s),
   }));
 }
 
@@ -126,7 +140,7 @@ const SELECT = `
   replication_level, plausibility_level, signal_type, effect_direction, status,
   compounds ( name, drug_class, fda_status, original_indication ),
   conditions ( name, slug ),
-  sources ( external_id, source_type, journal, publication_date, key_finding_excerpt, title )
+  sources ( external_id, source_type, journal, publication_date, key_finding_excerpt, title, url )
 `;
 
 /** All real candidates, highest evidence score first, with stable WHEL-C ids. */
@@ -166,6 +180,12 @@ export async function getSampleCandidates(): Promise<Candidate[]> {
     sample.push(c);
   }
   return sample;
+}
+
+/** The single strongest candidate from the PMDD flagship (falls back to the top overall). */
+export async function getFlagshipCandidate(): Promise<Candidate | null> {
+  const all = await getCandidates();
+  return all.find((c) => c.conditionId === "pmdd") ?? all[0] ?? null;
 }
 
 /** Real corpus counts for dynamic scope copy ("N signals across M conditions"). */
