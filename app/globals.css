@@ -506,3 +506,44 @@ details.disclose-block[open] > summary .disclose-chev { transform: rotate(180deg
 @media (max-width: 860px){ .arc-grid, .exp-grid { grid-template-columns: 1fr 1fr !important; } .tier-grid { grid-template-columns: 1fr 1fr !important; } }
 @media (max-width: 760px){ .layer { grid-template-columns: 1fr !important; } }
 @media (max-width: 560px){ .arc-grid, .exp-grid, .tier-grid { grid-template-columns: 1fr !important; } }
+
+/* ── Scroll dynamics ─────────────────────────────────────────────────── */
+body.scroll-effects-ready .scroll-section {
+  position: relative;
+  transition: opacity 0.70s ease, transform 0.70s ease;
+}
+/* Below fold: hidden + shifted up, waiting to enter */
+body.scroll-effects-ready .scroll-section:not(.s-in) {
+  opacity: 0;
+  transform: translateY(26px);
+}
+/* Entered + visible */
+body.scroll-effects-ready .scroll-section.s-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Veil overlay: dims non-active sections */
+body.scroll-effects-ready .scroll-section.s-in::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  transition: opacity 0.55s ease;
+}
+/* Dark-surface sections (ink, moss): lighten veil so dimming is visible */
+body.scroll-effects-ready .scroll-section.s-in[data-scroll-dark="1"]::after {
+  background: rgba(255, 255, 255, 0.22);
+}
+/* Light-surface sections: darken veil */
+body.scroll-effects-ready .scroll-section.s-in[data-scroll-dark="0"]::after {
+  background: rgba(0, 0, 0, 0.30);
+}
+/* Active section — veil is gone */
+body.scroll-effects-ready .scroll-section.s-focus::after {
+  opacity: 0 !important;
+}
+/* Non-active sections — veil is on */
+body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
+  opacity: 1;
+}

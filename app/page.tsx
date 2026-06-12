@@ -7,6 +7,7 @@ import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import CandidateCard from "@/app/components/CandidateCard";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
+import ScrollEffects from "@/app/components/ScrollEffects";
 import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
@@ -147,9 +148,10 @@ export default async function Home() {
 
   return (
     <main>
+      <ScrollEffects />
 
       {/* ── HERO ── dark ink surface ─────────────────────────────────────────── */}
-      <section className="surface-ink" style={{ paddingTop: 64, paddingBottom: 0, overflow: "hidden" }}>
+      <section className="surface-ink scroll-section" style={{ paddingTop: 64, paddingBottom: 0, overflow: "hidden" }}>
         <div className="container">
           {/* Full-width headline */}
           <h1 className="display" style={{ color: "var(--on-ink)", maxWidth: "none", fontSize: "clamp(42px, 5.6vw, 84px)" }}>
@@ -210,7 +212,7 @@ export default async function Home() {
       </section>
 
       {/* ── THESIS ── corrected substrate ───────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section className="surface-bone section scroll-section">
         <div className="container">
           <div className="between" style={{ marginBottom: 40 }}>
             <div>
@@ -231,7 +233,7 @@ export default async function Home() {
       </section>
 
       {/* ── DRUG ARCS ── the drugs that already work ─────────────────────────── */}
-      <section className="surface-sage section tight">
+      <section className="surface-sage section tight scroll-section">
         <div className="container">
           <h2 className="h2" style={{ marginBottom: 28, maxWidth: "none" }}>
             The drugs that work for women&apos;s health were never developed for it.
@@ -262,7 +264,7 @@ export default async function Home() {
       </section>
 
       {/* ── FEATURED CANDIDATES ── the product ──────────────────────────────── */}
-      <section className="surface-bone section">
+      <section className="surface-bone section scroll-section">
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
             <h2 className="h2">Repurposing candidates, with the trail.</h2>
@@ -280,7 +282,7 @@ export default async function Home() {
       </section>
 
       {/* ── THREE LAYERS ── how it works ─────────────────────────────────────── */}
-      <section className="surface-ink section">
+      <section className="surface-ink section scroll-section">
         <div className="container">
           <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>How it works</div>
           <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 40, maxWidth: "18ch" }}>
@@ -307,7 +309,7 @@ export default async function Home() {
       </section>
 
       {/* ── PIPELINE ── off-label → 505(b)(2) ───────────────────────────────── */}
-      <section className="surface-ink section" style={{ paddingTop: 0 }}>
+      <section className="surface-ink section scroll-section" style={{ paddingTop: 64, paddingBottom: 56 }}>
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
             <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "20ch" }}>
@@ -323,7 +325,7 @@ export default async function Home() {
       </section>
 
       {/* ── CONDITIONS ── where we start ─────────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section className="surface-bone section scroll-section">
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
             <div>
@@ -364,7 +366,7 @@ export default async function Home() {
       </section>
 
       {/* ── TIER MATRIX ── confidence distribution ───────────────────────────── */}
-      <section className="surface-paper section tight">
+      <section className="surface-paper section tight scroll-section">
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 14 }}>Fig. 1 · Confidence distribution</div>
           <h2 className="h2" style={{ marginBottom: 8 }}>Where the evidence sits.</h2>
@@ -388,7 +390,7 @@ export default async function Home() {
       </section>
 
       {/* ── EXPANSION ── the roadmap ─────────────────────────────────────────── */}
-      <section className="surface-moss section">
+      <section className="surface-moss section scroll-section">
         <div className="container">
           <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>The expansion path</div>
           <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 40, maxWidth: "22ch" }}>
@@ -418,7 +420,7 @@ export default async function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────────── */}
-      <section className="surface-ink section" style={{ position: "relative", overflow: "hidden" }}>
+      <section className="surface-ink section scroll-section" style={{ position: "relative", overflow: "hidden" }}>
         {/* Ambient 3D backdrop — aria-hidden, non-interactive */}
         <div aria-hidden style={{ position: "absolute", inset: 0, opacity: 0.5, pointerEvents: "none", display: "flex", alignItems: "center" }}>
           <MoleculeMesh3D
