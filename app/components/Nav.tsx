@@ -37,23 +37,43 @@ function WhelMark({ size = 30 }: { size?: number }) {
   );
 }
 
-const NAV_LINKS = [
+const NAV_LINKS: { label: string; href: string; hideSm?: boolean }[] = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Conditions", href: "/conditions" },
   { label: "Candidates", href: "/candidates" },
-  { label: "About",      href: "/about" },
-  { label: "News",       href: "/news", hideSm: true },
 ];
+
+// Grouped under the About dropdown: the company story plus the deeper
+// methodology / references pages, so a reader vetting Whel finds them in one place.
+const ABOUT_MENU: { label: string; href: string }[] = [
+  { label: "About",                 href: "/about" },
+  { label: "Roadmap",               href: "/about/roadmap" },
+  { label: "Technical architecture", href: "/about/technical-architecture" },
+  { label: "Signal types",          href: "/signal-types" },
+  { label: "External references",   href: "/about/external-references" },
+];
+
+const LINK_STYLE: React.CSSProperties = {
+  fontFamily: "var(--font-plex-mono, monospace)",
+  fontSize: "11.5px",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase",
+  padding: "8px 0",
+  textDecoration: "none",
+  transition: "color 140ms",
+};
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const pathname = usePathname();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };
+  const aboutActive = pathname.startsWith("/about") || pathname === "/signal-types";
 
   return (
     <header className="whel-nav">
@@ -75,21 +95,15 @@ export default function Nav() {
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex" style={{ gap: 26, alignItems: "center", marginLeft: "auto" }}>
-          {NAV_LINKS.map(({ label, href, hideSm }) => (
+          {NAV_LINKS.map(({ label, href }) => (
             <Link
               key={href}
               href={href}
-              className={`${hideSm ? "hide-sm" : ""} ${isActive(href) ? "active" : ""}`}
+              className={isActive(href) ? "active" : ""}
               style={{
-                fontFamily: "var(--font-plex-mono, monospace)",
-                fontSize: "11.5px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
+                ...LINK_STYLE,
                 color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
-                padding: "8px 0",
                 position: "relative",
-                transition: "color 140ms",
-                textDecoration: "none",
               }}
             >
               {label}
@@ -101,6 +115,76 @@ export default function Nav() {
               )}
             </Link>
           ))}
+
+          {/* About dropdown */}
+          <div
+            style={{ position: "relative" }}
+            onMouseEnter={() => setAboutOpen(true)}
+            onMouseLeave={() => setAboutOpen(false)}
+          >
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={aboutOpen}
+              onClick={() => setAboutOpen((v) => !v)}
+              style={{
+                ...LINK_STYLE,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                color: aboutActive ? "var(--on-ink)" : "var(--on-ink-2)",
+                position: "relative",
+              }}
+            >
+              About
+              <span aria-hidden="true" style={{ fontSize: 8, transform: aboutOpen ? "rotate(180deg)" : "none", transition: "transform 140ms" }}>▼</span>
+              {aboutActive && (
+                <span style={{ position: "absolute", left: 0, right: 14, bottom: 0, height: "1.5px", background: "var(--signal)" }} />
+              )}
+            </button>
+
+            {aboutOpen && (
+              <div
+                role="menu"
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  right: 0,
+                  minWidth: 232,
+                  backgroundColor: "rgba(26,29,20,0.98)",
+                  border: "1px solid var(--ink-line-2)",
+                  padding: "6px 0",
+                  zIndex: 60,
+                }}
+              >
+                {ABOUT_MENU.map(({ label, href }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    role="menuitem"
+                    onClick={() => setAboutOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "10px 18px",
+                      fontFamily: "var(--font-plex-mono, monospace)",
+                      fontSize: "11px",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                      textDecoration: "none",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           <Link
             href="/access"
             className="nav-cta"
@@ -145,30 +229,73 @@ export default function Nav() {
             borderTop: "1px solid var(--ink-line-2)",
           }}
         >
-          <nav className="flex flex-col px-6 py-4 gap-1">
-            {[...NAV_LINKS, { label: "Request access", href: "/access" }].map(
-              ({ label, href }, i, arr) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMobileOpen(false)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "14px 0",
-                    fontFamily: "var(--font-plex-mono, monospace)",
-                    fontSize: "11.5px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
-                    borderBottom: i < arr.length - 1 ? "1px solid var(--ink-line-2)" : "none",
-                    textDecoration: "none",
-                  }}
-                >
-                  {label}
-                </Link>
-              )
-            )}
+          <nav className="flex flex-col px-6 py-4">
+            {NAV_LINKS.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  padding: "14px 0",
+                  fontFamily: "var(--font-plex-mono, monospace)",
+                  fontSize: "11.5px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                  borderBottom: "1px solid var(--ink-line-2)",
+                  textDecoration: "none",
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+
+            {/* About group */}
+            <span style={{
+              padding: "16px 0 8px",
+              fontFamily: "var(--font-plex-mono, monospace)",
+              fontSize: "10px",
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: "var(--on-ink-mut, rgba(244,239,230,0.5))",
+            }}>
+              About
+            </span>
+            {ABOUT_MENU.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  padding: "12px 0 12px 14px",
+                  fontFamily: "var(--font-plex-mono, monospace)",
+                  fontSize: "11.5px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                  borderBottom: "1px solid var(--ink-line-2)",
+                  textDecoration: "none",
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+
+            <Link
+              href="/access"
+              onClick={() => setMobileOpen(false)}
+              style={{
+                padding: "14px 0",
+                fontFamily: "var(--font-plex-mono, monospace)",
+                fontSize: "11.5px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "var(--on-ink)",
+                textDecoration: "none",
+              }}
+            >
+              Request access
+            </Link>
           </nav>
         </div>
       )}

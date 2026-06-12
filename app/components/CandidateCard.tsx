@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export interface Claim {
   type: "extract" | "synth" | "contradict";
@@ -22,6 +23,42 @@ export interface Candidate {
   mechanism: string;
   dims: Record<string, string>;
   claims: Claim[];
+  /** External-validation grade for the drug-condition pair (L0–L3), when present. */
+  lGrade?: "L0" | "L1" | "L2" | "L3";
+  /** Every Cure MATRIX cross-reference percentile, e.g. "Top 12%", when MATRIX covers the pair. */
+  matrixPercentile?: string;
+}
+
+const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
+  L0: "var(--lgrade-l0)",
+  L1: "var(--lgrade-l1)",
+  L2: "var(--lgrade-l2)",
+  L3: "var(--lgrade-l3)",
+};
+
+function MarkerChip({ dot, label }: { dot: string; label: string }) {
+  return (
+    <Link
+      href="/platform#evidence-markers"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
+        fontSize: 10.5,
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+        color: "var(--ink)",
+        textDecoration: "none",
+        border: "1px solid var(--rule, rgba(26,29,20,0.18))",
+        padding: "3px 8px",
+        whiteSpace: "nowrap",
+      }}
+    >
+      <span style={{ width: 6, height: 6, background: dot, display: "inline-block", flexShrink: 0 }} />
+      {label}
+    </Link>
+  );
 }
 
 function TierBadge({ tier }: { tier: Candidate["tier"] }) {
@@ -63,7 +100,9 @@ export default function CandidateCard({
       <div className="c-top">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
           <span className="eyebrow">{c.id}</span>
-          <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+            {c.lGrade && <MarkerChip dot={L_FILL[c.lGrade]} label={`Lit · ${c.lGrade}`} />}
+            {c.matrixPercentile && <MarkerChip dot="var(--green-deep)" label={`Matrix · ${c.matrixPercentile}`} />}
             <RelBadge rel={c.direction} />
             <TierBadge tier={c.tier} />
           </div>
