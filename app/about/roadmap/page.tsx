@@ -7,35 +7,15 @@ export const metadata = {
 
 // Mirror the homepage's runtime-fetching posture so the "Now / Live today"
 // signal count tracks the live database rather than freezing to a build-time
-// value. Without these, Next prerenders the page statically and the count
-// drifts as the DB grows.
+// value.
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-
-/* ──────────────────────────────────────────────────────────────────────────
-   Shared style tokens — matched to the Mission and Technical Architecture pages
-   ────────────────────────────────────────────────────────────────────────── */
 
 const MONO: React.CSSProperties = {
   fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
 };
 
-const EYEBROW: React.CSSProperties = {
-  ...MONO,
-  fontSize: "11px",
-  letterSpacing: "0.18em",
-  textTransform: "uppercase",
-  color: "var(--muted)",
-};
-
-const CARD: React.CSSProperties = {
-  background: "var(--paper)",
-  border: "1px solid var(--rule)",
-};
-
-const SECTION_INNER = "max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20";
-
-/* Pathway tag colours — drawn from the existing arm / tier palette */
+/* Pathway tag colours, reused from the arm / tier palette */
 const PATHWAY_COLORS: Record<string, string> = {
   Estrogen: "var(--arm-community)",
   Inflammation: "var(--tier-emerging)",
@@ -48,12 +28,7 @@ const PATHWAY_COLORS: Record<string, string> = {
    Content
    ────────────────────────────────────────────────────────────────────────── */
 
-// PHASES is built inside the async component so the "Now" signal count can
-// read from the live database. See buildPhases() below the page component.
 function buildPhases(totalSignals: number): { tag: string; sub: string; color: string; items: string[] }[] {
-  // Phrase the signal count exactly as the homepage CTA does: render the live
-  // number when the DB is reachable, fall back to a generic phrase otherwise
-  // so the page never shows "0 signals" if Supabase hiccups at request time.
   const signalsLine =
     totalSignals > 0
       ? `${totalSignals} signals, each scored against a published five-dimension rubric`
@@ -63,13 +38,13 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
     {
       tag: "Now",
       sub: "Live today",
-      color: "var(--green-deep)",
+      color: "var(--moss)",
       items: [
-        "Six conditions: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, menopause",
+        "Six conditions in scope: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, and menopause",
         "Five evidence pipelines running across four research arms",
         signalsLine,
-        "Every Cure MATRIX cross-reference published as an independent biological-plausibility layer, with per-condition coverage on the external references page",
-        "L0\u2013L3 external-validation grade per compound\u2013condition pair, with L3 unlocked by a human-curated layer of clinical-guideline strength and certainty",
+        "An independent biological-plausibility cross-reference from Every Cure's MATRIX model, shown beside our own grades rather than blended into them",
+        "An external-validation grade on every drug and condition pair, with the highest grade reserved for signals backed by named clinical-guideline strength and certainty",
       ],
     },
     {
@@ -78,20 +53,18 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
       color: "var(--green-mid)",
       items: [
         "Run the two-rater validation study and publish the agreement score",
-        "Add disproportionality statistics (PRR / ROR) to the adverse-event arm",
-        "Surface a cross-arm concordance flag where two or more arms (Whel + MATRIX) support the same compound-condition pair",
-        "Extend the human-curation worklist pattern to attach landmark primary trials to high-evidence signals where the automated PubMed pipeline surfaced syntheses but not the original RCTs",
-        "Add ontology-grounded entity resolution: resolve every LLM-extracted compound and condition against canonical biomedical registries (ChEMBL or DrugBank, MONDO), canonicalize the identifier, and enrich with structured metadata before write",
-        "Stand up knowledge-graph grounding via BioCypher: a domain-restricted KG that both informs the LLM at prompt time (knowledge-guided prompting) and surfaces beside each signal as a 'graph supports' or 'graph silent' disclosure layer in the same shape as the MATRIX cross-reference",
-        "Add a three-part LLM output validation pipeline (Path C): citation validation against NCBI E-utilities and Crossref, sentence-level summary grounding via Sentence-BERT, and prompt hardening for published prose to forbid citation generation outside a pre-verified list",
-        "Make every citation reproduce the count it claims; finish source de-duplication",
-        "Publish an open CSV / JSON data export with a citable DOI",
+        "Add disproportionality statistics to the adverse-event arm so a real safety signal separates from reporting noise",
+        "Flag where two or more arms support the same drug and condition pair",
+        "Resolve every extracted drug and condition against canonical biomedical registries before it enters the database",
+        "Add a knowledge-graph layer that informs scoring and shows, beside each signal, whether the graph supports it or stays silent",
+        "Validate every generated citation and ground every summary sentence against its source",
+        "Publish an open, citable data export",
       ],
     },
     {
       tag: "Later",
       sub: "Beyond the next release",
-      color: "var(--muted-2)",
+      color: "var(--muted)",
       items: [
         "Extend to further under-researched women's health conditions",
         "Add complementary pipelines once the existing ones are solid",
@@ -102,8 +75,8 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
 }
 
 const ORIENTATION_COPY: string[] = [
-  "Whel is a research instrument: an evidence database rather than a consumer health tool or a drug-discovery algorithm. It does not tell anyone what to take, and it does not invent new compounds or predict new drug targets. What it does is build something the field currently lacks: a structured, scored, searchable evidence base for drug-repurposing signals across under-researched women's health conditions.",
-  "It gathers evidence that already exists, scattered across published literature, clinical-trial registries, adverse-event databases, genetic-target platforms, and patient communities, then grades each signal against a published rubric and makes it citable. It is closer to a small evidence lab than a website. That makes Whel useful across the research community, where different readers use it differently.",
+  "Whel is a research instrument: a structured, scored, searchable evidence base for the drug-repurposing signals that already exist across under-researched women's health conditions. We build the thing the field currently lacks, which is a single place where that evidence is gathered, graded, and made citable.",
+  "The signal is scattered today across published literature, clinical-trial registries, adverse-event databases, genetic-target platforms, and patient communities. We bring it together, grade each piece against a published rubric, and attach its source so it can be checked. The result is closer to a small evidence lab than a website, and it serves the research community in several different ways.",
 ];
 
 const AUDIENCES: { label: string; body: string }[] = [
@@ -121,7 +94,7 @@ const AUDIENCES: { label: string; body: string }[] = [
   },
   {
     label: "Journalists & advocates",
-    body: "Traceable, scored evidence to ground reporting and advocacy, not anecdote.",
+    body: "Traceable, scored evidence to ground reporting and advocacy in more than anecdote.",
   },
   {
     label: "Institutions & funders",
@@ -133,17 +106,17 @@ const CRITERIA: { n: string; title: string; body: string }[] = [
   {
     n: "01",
     title: "Shared biology",
-    body: "The six conditions converge on the same handful of systems: estrogen signaling, chronic inflammation, metabolic regulation, and pain processing. That biological overlap is what makes cross-condition reasoning valid: a signal in one condition can be informative about the others.",
+    body: "The six conditions converge on the same handful of systems: estrogen signaling, chronic inflammation, metabolic regulation, and pain processing. That biological overlap is what makes cross-condition reasoning valid, because a signal in one condition can be informative about the others.",
   },
   {
     n: "02",
     title: "Documented neglect",
-    body: "Each condition carries a measurable evidence gap: long diagnostic delays, few or no treatments that address the underlying disease rather than the symptoms, and thin research funding. Whel is most useful exactly where the published literature is thinnest.",
+    body: "Each condition carries a measurable evidence gap: long diagnostic delays, few treatments that address the underlying disease rather than the symptoms, and thin research funding. Whel is most useful exactly where the published literature is thinnest.",
   },
   {
     n: "03",
     title: "A focus on women",
-    body: "Whel exists to address the structural under-study of women's hormonal and reproductive health, a field that, until the NIH Revitalization Act of 1993, did not even require women in clinical research. That focus is deliberate and permanent. Every condition Whel adds will be a women's health condition.",
+    body: "Whel exists to address the structural under-study of women's hormonal and reproductive health, a field that, until the NIH Revitalization Act of 1993, did not even require women in clinical research. That focus is deliberate and permanent, and every condition we add will be a women's health condition.",
   },
 ];
 
@@ -151,32 +124,32 @@ const CONDITIONS: { name: string; pathways: string[]; gap: string }[] = [
   {
     name: "Endometriosis",
     pathways: ["Estrogen", "Inflammation", "Pain"],
-    gap: "Affects up to 10% of women of reproductive age; 7 to 10 year average diagnostic delay; no disease-modifying drug.",
+    gap: "Affects up to 10% of women of reproductive age, with a 7 to 10 year average diagnostic delay and no disease-modifying drug.",
   },
   {
     name: "PMDD",
     pathways: ["Estrogen", "Mood", "Pain"],
-    gap: "Clinically severe and cyclical; still treated mainly with imprecisely prescribed SSRIs.",
+    gap: "Clinically severe and cyclical, still treated mainly with imprecisely prescribed SSRIs.",
   },
   {
     name: "PCOS",
     pathways: ["Metabolic", "Estrogen", "Inflammation"],
-    gap: "The most common endocrine disorder in women of reproductive age; chronically under-represented in research.",
+    gap: "The most common endocrine disorder in women of reproductive age, and chronically under-represented in research.",
   },
   {
     name: "Adenomyosis",
     pathways: ["Estrogen", "Inflammation", "Pain"],
-    gap: "Long under-recognized; historically confirmable only after hysterectomy.",
+    gap: "Long under-recognized, and historically confirmable only after hysterectomy.",
   },
   {
     name: "Vulvodynia",
     pathways: ["Pain", "Inflammation"],
-    gap: "A chronic pain condition; among the least-studied of the six.",
+    gap: "A chronic pain condition, and among the least-studied of the six.",
   },
   {
     name: "Menopause",
     pathways: ["Estrogen", "Metabolic"],
-    gap: "A transition every woman who lives long enough experiences; widely acknowledged to be poorly managed.",
+    gap: "A transition every woman who lives long enough experiences, and widely acknowledged to be poorly managed.",
   },
 ];
 
@@ -189,12 +162,12 @@ const CANDIDATES: { name: string; pathways: string[]; body: string }[] = [
   {
     name: "Uterine fibroids",
     pathways: ["Estrogen", "Inflammation"],
-    body: "Extremely common and estrogen-driven, yet undertreated relative to prevalence; shares hormonal biology directly with adenomyosis and endometriosis.",
+    body: "Extremely common and estrogen-driven, yet undertreated relative to prevalence, and sharing hormonal biology directly with adenomyosis and endometriosis.",
   },
   {
     name: "Primary ovarian insufficiency",
     pathways: ["Estrogen", "Metabolic"],
-    body: "Hormonal and metabolic; extends the existing menopause arm to women who reach that transition far earlier than expected.",
+    body: "Hormonal and metabolic, extending the existing menopause arm to women who reach that transition far earlier than expected.",
   },
   {
     name: "Perinatal mood conditions",
@@ -204,66 +177,100 @@ const CANDIDATES: { name: string; pathways: string[]; body: string }[] = [
   {
     name: "Lipedema",
     pathways: ["Metabolic", "Inflammation"],
-    body: "A metabolic and inflammatory condition that affects women almost exclusively and is routinely misdiagnosed; among the most neglected in the field.",
+    body: "A metabolic and inflammatory condition that affects women almost exclusively and is routinely misdiagnosed, and among the most neglected in the field.",
   },
 ];
 
-const REGISTER: { name: string; role: string; status: "Live" | "Under review" | "Planned" }[] = [
+type Status = "Live" | "Under review" | "Planned";
+
+const SOURCES: { name: string; role: string; status: Status }[] = [
   { name: "PubMed", role: "Published literature", status: "Live" },
   { name: "ClinicalTrials.gov", role: "Trial registry", status: "Live" },
-  { name: "FDA AEMS (openFDA)", role: "Adverse-event data", status: "Live" },
-  { name: "Open Targets", role: "Genetic-target & pathway data", status: "Live" },
+  { name: "FDA openFDA", role: "Adverse-event data", status: "Live" },
+  { name: "Open Targets", role: "Genetic-target and pathway data", status: "Live" },
   { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
-  { name: "EudraVigilance", role: "European adverse-event data; populate or formally retire", status: "Under review" },
-  { name: "SIDER", role: "Drug side-effect reference; populate or formally retire", status: "Under review" },
-  { name: "Every Cure MATRIX cross-reference", role: "Independent treatment-probability prediction layer from Every Cure's graph-ML model trained on a biomedical knowledge graph, built on the KGML-xDTD framework (Ma, Zhou, Liu & Koslicki, GigaScience 2023, doi:10.1093/gigascience/giad057). Per-pair scores displayed beside each signal's L-grade chip on condition pages as 'MATRIX \u00b7 Top N%'; aggregate audit numbers, per-condition coverage, dataset SHAs, and a 'How to read these numbers' explainer published on /about/external-references. Surfaced beside Whel's grades rather than blended into them.", status: "Live" },
-  { name: "Human guideline curation", role: "Strength \u00d7 certainty layer drawn from named society guidelines (ESHRE 2022, ISSWSH 2021, NAMS 2020) and normalized into L3 source attribution; covers 12 validation-dossier conditions to date, expansion ongoing", status: "Live" },
-  { name: "Manual primary-source curation pass", role: "Extend the guideline-curation worklist pattern (scripts/curate-guidelines.py + migration 043) to also attach landmark primary RCTs to high-evidence signals where the automated PubMed pipeline surfaced syntheses (reviews, position statements) but not the original trials cited inside them. Same human-in-the-loop CSV worklist workflow as the L3 curation pipeline.", status: "Planned" },
-  { name: "Ontology-grounded entity resolution (Path A)", role: "Resolve every LLM-extracted compound (ChEMBL or DrugBank) and condition (MONDO) against canonical ontologies, rewrite with the registry's standard identifier, and attach the structured metadata that resolution returns (drug class, ATC code, known targets; ontology lineage) before writing to the database. Entities that fail to resolve are flagged for human review rather than silently stored. Canonicalizes, enriches, and gates in one step. Closes the structured-output hallucination class of error documented in the medical LLM literature (Bhattacharyya et al. 2023, Cureus, doi:10.7759/cureus.39238; Gravel, D'Amours-Gravel & Osmanlliu 2023, Mayo Clin Proc Digit Health, doi:10.1016/j.mcpdig.2023.05.004). Recorded in methodology v3.4.", status: "Planned" },
-  { name: "Knowledge-graph grounding via BioCypher (Path B)", role: "Build a domain-restricted biomedical knowledge graph covering Whel's six conditions and active-signal compounds using the BioCypher framework (Lobentanzer et al., Nature Biotechnology 2023). The KG both informs the LLM at prompt time (mechanistic paths included as structured context during scoring, following the knowledge-augmented prompting pattern documented in the biomedical NLP literature) and surfaces beside each signal as a 'graph supports' or 'graph silent' disclosure layer in the same shape as the existing MATRIX cross-reference. Adds a structured-grounding layer on top of LLM extraction without replacing it. Recorded in methodology v3.4.", status: "Planned" },
-  { name: "Citation validation and summary grounding (Path C)", role: "Three-part output validation pipeline addressing LLM failure modes documented in the medical-LLM literature (Bhattacharyya et al. 2023, Cureus, doi:10.7759/cureus.39238 — 47 percent of ChatGPT-generated medical references fully fabricated, 46 percent authentic but inaccurate; Gravel et al. 2023, Mayo Clin Proc Digit Health, doi:10.1016/j.mcpdig.2023.05.004). Phase 1 (live as of June 7, 2026): pre-verified reference list at lib/whel-citations.json with scripts/verify-citations.py resolving every PMID against NCBI E-utilities, every DOI against the Crossref REST API, and every arXiv ID against the arXiv API. Also live: scripts/verify-database-sources.py auditing the 2,166-row live sources table (PMIDs against NCBI, NCT IDs against ClinicalTrials.gov, Open Targets IDs against Open Targets GraphQL, AEMS and Reddit URLs against format checks). Phase 2 tooling shipped on June 8, 2026 in two scripts. Phase 2a (free-text grounding): scripts/verify-summary-grounding.py splits the LLM-generated finding text on sources.key_finding_excerpt into sentences, fetches the canonical source text (PubMed abstract via NCBI efetch, ClinicalTrials.gov briefSummary via API v2, Reddit post body via the public JSON endpoint), embeds both sides with all-MiniLM-L6-v2 from sentence-transformers, and computes max cosine similarity per LLM-summary sentence; sentences scoring below 0.40 are flagged as 'not directly supported by the source'. Phase 2b (structured verification): scripts/verify-structured-sources.py re-runs each AEMS row's openFDA query and compares the returned count to the LLM-extracted count within a max(5, 10 percent) tolerance, and verifies Open Targets target attributions against the canonical linkedTargets list returned by the OT GraphQL drug(chemblId) query. --strict mode exits non-zero on any unresolved or mismatched entry for pre-publish CI use; live audit numbers surfaced on /about/external-references 01d for both phases. Phase 3 (planned): prompt hardening for published prose that forbids citation generation outside the Phase 1 manifest. Distinct from Path A and Path B (which ground LLM inputs); Path C validates LLM outputs. Recorded in methodology v3.6 (definition), v3.7 (manual audit prototype), v3.8 (Phase 1 manifest live), v3.9 (Phase 1 db tooling), v3.10 (Phase 1 first db run), v3.11 (OT-DRUGNAME backfill closing v3.10 finding), and v3.12 (Phase 2a + 2b tooling shipped + AEMS naming sweep).", status: "Live" },
-  { name: "Path C Phase 2 threshold calibration", role: "Phase 2a (sentence-level summary grounding via Sentence-BERT) ships with a default flag threshold of 0.40 cosine similarity — a defensible v0.1 baseline but expected to move with calibration against a human-labeled validation set. The calibration step: hand-label ~30 (sentence, abstract) pairs as 'directly supported' or 'not supported', then pick the threshold that maximizes accuracy on the labeled set. Run after the first Phase 2a audit so the labeling can be informed by the score distribution actually produced.", status: "Planned" },
-  { name: "Source-level LLM extraction pipeline (sources.key_finding_excerpt)", role: "Phase 2a smoke test on 2026-06-08 surfaced that sources.key_finding_excerpt was 0% populated across all 2,166 active-signal source rows: the column existed per migration 041 but no script wrote to it. Pipeline shipped same day as scripts/extract-key-findings.py: for each free-text source (PubMed/CT.gov/Reddit), fetches canonical source text from the publisher and calls Claude Opus 4.6 to extract a 2-4 sentence key finding focused on the drug-condition pair. Strict refusal path returns 'NO_RELEVANT_FINDING' when the source does not discuss the pair (itself a useful audit signal). Output: scripts/audit-output/key-finding-extractions.json run log + supabase/migrations/045_backfill_key_finding_excerpts.sql with idempotent UPDATE statements guarded by 'key_finding_excerpt IS NULL'. After the script runs and migration 045 ships, Phase 2a runs against real data for the first time. Recorded in methodology v3.13.", status: "Live" },
-  { name: "Signal-level summary grounding (Phase 2a extension)", role: "repurposing_signals.summary and repurposing_signals.mechanism_hypothesis are hand-written prose in seed migrations 002 through 007 (referencing real PMIDs and clinical findings in narrative form). They are the user-visible summary text on each drug card and would benefit from grounding against the cited source corpus, complementary to Phase 2a's per-source grounding. Mechanism: for each signal, embed each summary sentence and compute max cosine similarity against the union of cited free-text sources' canonical texts. Sentences below threshold are flagged. Different iteration unit than Phase 2a (per-signal × union-of-sources rather than per-source × own-canonical) so it ships as a separate script. Recorded in methodology v3.13.", status: "Planned" },
-  { name: "Backfill canonical Open Targets identifiers on signals using OT-DRUGNAME shorthand", role: "Phase 1 first database-sources audit run (v3.10) caught 10 active signals where the sources.external_id column stores a synthetic OT-{DRUGNAME} string instead of a canonical Open Targets identifier. Shipped as supabase/migrations/044_backfill_ot_drugname_to_chembl.sql (v3.11). CHEMBL IDs resolved via Open Targets GraphQL search and independently verified through the drug(chemblId: $id) query that the audit verifier uses. 10 backfills: APREPITANT->CHEMBL1471, DESVENLAFAXINE->CHEMBL1118, ENZALUTAMIDE->CHEMBL1082407, TRIMEBUTINE->CHEMBL190044, TASIMELTEON->CHEMBL2103822, TRADIPITANT->CHEMBL3544984, OLAPARIB->CHEMBL521686, FOSNETUPITANT->CHEMBL3989917, MILNACIPRAN->CHEMBL259209, TRIIODOTHYRONINE/LIOTHYRONINE->CHEMBL1544. Migration updates both external_id and url so backfilled rows match the shape of the 38 existing canonical Open Targets rows (CHEMBL ID + platform.opentargets.org/drug/CHEMBL URL). After the migration runs against the live database, the audit's opentargets resolved_match count rises from 38 to 48 and the unresolved count drops from 10 to 0.", status: "Live" },
-  { name: "Disproportionality statistics (PRR / ROR)", role: "Method upgrade to the adverse-event arm", status: "Planned" },
-  { name: "Two-rater validation study", role: "Reliability measurement (Cohen's kappa)", status: "Planned" },
-  { name: "Cross-arm concordance flag", role: "Display flag where two or more arms (Whel + MATRIX) support the same compound-condition pair", status: "Planned" },
-  { name: "Compound-level synthesis score", role: "Derived rollup across all signals for a compound-condition pair", status: "Under review" },
-  { name: "Dedicated audit log", role: "Per-signal change history in plain English, with links to underlying migrations", status: "Planned" },
-  { name: "Open data export", role: "CSV / JSON under CC BY 4.0, with a Zenodo DOI", status: "Planned" },
-  { name: "DrugBank", role: "Drug-target & indication data", status: "Planned" },
+  {
+    name: "Every Cure MATRIX",
+    role: "An independent treatment-probability cross-reference from Every Cure's graph-ML model, shown beside our grades rather than blended into them.",
+    status: "Live",
+  },
+  {
+    name: "Clinical-guideline curation",
+    role: "Strength and certainty drawn from named society guidelines and normalized into the highest validation grade.",
+    status: "Live",
+  },
+  { name: "EudraVigilance", role: "European adverse-event data", status: "Under review" },
+  { name: "SIDER", role: "Drug side-effect reference", status: "Under review" },
+  { name: "DrugBank", role: "Drug-target and indication data", status: "Planned" },
 ];
 
-const STATUS_COLOR: Record<string, string> = {
+const UPGRADES: { name: string; role: string; status: Status }[] = [
+  {
+    name: "Two-rater validation study",
+    role: "A stratified sample of signals re-scored blind by two independent raters, with agreement reported as a measured score.",
+    status: "Planned",
+  },
+  {
+    name: "Disproportionality statistics",
+    role: "Separating a real adverse-event signal from background reporting noise, using data we already hold.",
+    status: "Planned",
+  },
+  {
+    name: "Ontology-grounded entity resolution",
+    role: "Resolving every extracted drug and condition against canonical registries before it enters the database, and flagging anything that fails to resolve for human review.",
+    status: "Planned",
+  },
+  {
+    name: "Knowledge-graph grounding",
+    role: "A domain-restricted graph that informs scoring and surfaces a 'graph supports' or 'graph silent' layer beside each signal.",
+    status: "Planned",
+  },
+  {
+    name: "Citation validation and summary grounding",
+    role: "Verifying every generated citation against its registry and grounding every summary sentence against its source text.",
+    status: "Live",
+  },
+  {
+    name: "Cross-arm concordance flag",
+    role: "Marking where two or more arms support the same drug and condition pair.",
+    status: "Planned",
+  },
+  {
+    name: "Open data export",
+    role: "A citable CSV and JSON export under an open license, deposited with a DOI.",
+    status: "Planned",
+  },
+];
+
+const STATUS_COLOR: Record<Status, string> = {
   Live: "var(--green-mid)",
   "Under review": "var(--tier-emerging)",
-  Planned: "var(--muted-2)",
+  Planned: "var(--muted)",
 };
 
 const PRIORITIES: { title: string; body: string }[] = [
   {
     title: "Disproportionality statistics",
-    body: "Pharmacovigilance has a standard way of separating a real adverse-event signal from background reporting noise: the proportional reporting ratio and reporting odds ratio. Adding even a basic PRR / ROR calculation to the adverse-event arm, using data Whel already holds, is the single biggest credibility upgrade available to the project.",
+    body: "Pharmacovigilance has a standard way of separating a real adverse-event signal from background reporting noise, the proportional reporting ratio and the reporting odds ratio. Adding that calculation to the adverse-event arm, using data we already hold, is the single most valuable near-term upgrade to the evidence.",
   },
   {
     title: "The validation study",
-    body: "Whel's central claim is that it can grade evidence. The methods document already designs the test: a stratified sample of signals, re-scored blind by two independent human raters, with agreement reported as Cohen's kappa. Running it, and publishing the result whatever it turns out to be, converts every confidence tier from model output into a measured claim.",
+    body: "Our central claim is that we can grade evidence, and the methods document already designs the test: a stratified sample of signals, re-scored blind by two independent raters, with agreement reported as a measured score. Running it, and publishing the result whatever it turns out to be, converts every confidence tier from model output into a measured claim.",
   },
   {
     title: "Open data",
-    body: "A CSV / JSON export under a CC BY 4.0 license, deposited with a DOI, makes Whel citable. A tool other researchers can cite enters the research record; one they cannot remains only a website.",
+    body: "A CSV and JSON export under an open license, deposited with a DOI, makes Whel citable, and a tool that other researchers can cite enters the research record rather than staying a website they happen to read.",
   },
 ];
 
 const CONTINUE: { label: string; href: string; accent: boolean }[] = [
-  { label: "Read the mission →", href: "/about", accent: false },
-  { label: "Browse the six conditions →", href: "/conditions", accent: true },
-  { label: "Contact the project →", href: "/about/contact", accent: false },
+  { label: "Read the manifesto →", href: "/manifesto", accent: false },
+  { label: "Browse the conditions →", href: "/conditions", accent: true },
+  { label: "Contact us →", href: "/about/contact", accent: false },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   Small presentational helpers
+   Presentational helpers
    ────────────────────────────────────────────────────────────────────────── */
 
 function PathwayTag({ name }: { name: string }) {
@@ -283,54 +290,93 @@ function PathwayTag({ name }: { name: string }) {
         whiteSpace: "nowrap",
       }}
     >
-      <span
-        aria-hidden="true"
-        style={{ display: "inline-block", width: 6, height: 6, backgroundColor: color }}
-      />
+      <span aria-hidden="true" style={{ display: "inline-block", width: 6, height: 6, backgroundColor: color }} />
       {name}
     </span>
   );
 }
 
-function SectionHeader({
-  label,
-  title,
-  intro,
-}: {
-  label: string;
-  title: string;
-  intro?: string;
-}) {
+function SectionHeader({ label, title, intro }: { label: string; title: string; intro?: string }) {
   return (
-    <div style={{ marginBottom: 30 }}>
-      <div style={{ borderTop: "1px solid var(--ink)", marginBottom: 26 }} />
-      <div style={{ ...EYEBROW, marginBottom: 13 }}>{label}</div>
-      <h2
-        className="font-heading"
-        style={{
-          fontSize: "clamp(1.6rem, 3vw, 2.15rem)",
-          fontWeight: 500,
-          lineHeight: 1.1,
-          letterSpacing: "-0.012em",
-          color: "var(--ink)",
-          margin: 0,
-        }}
-      >
-        {title}
-      </h2>
+    <div style={{ marginBottom: 32, maxWidth: 760 }}>
+      <div className="eyebrow" style={{ marginBottom: 14 }}>{label}</div>
+      <h2 className="h2" style={{ margin: 0, maxWidth: "20ch" }}>{title}</h2>
       {intro && (
-        <p
-          style={{
-            fontSize: 15,
-            lineHeight: 1.68,
-            color: "var(--ink-2)",
-            maxWidth: "68ch",
-            marginTop: 16,
-          }}
-        >
+        <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--body)", maxWidth: "70ch", marginTop: 18 }}>
           {intro}
         </p>
       )}
+    </div>
+  );
+}
+
+const StatusDot = ({ status }: { status: Status }) => (
+  <span style={{ ...MONO, fontSize: 12, color: STATUS_COLOR[status], whiteSpace: "nowrap" }}>
+    ● {status}
+  </span>
+);
+
+function RegisterTable({ rows }: { rows: { name: string; role: string; status: Status }[] }) {
+  return (
+    <div style={{ overflowX: "auto" }}>
+      <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse" }}>
+        <thead>
+          <tr>
+            {["Source", "Role", "Status"].map((h, i) => (
+              <th
+                key={h}
+                style={{
+                  ...MONO,
+                  fontSize: "10.5px",
+                  fontWeight: 500,
+                  letterSpacing: "0.13em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  textAlign: "left",
+                  padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
+                  borderBottom: "1px solid var(--ink)",
+                  width: ["28%", "50%", "22%"][i],
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.name}>
+              <td
+                className="font-heading"
+                style={{
+                  fontSize: 15,
+                  color: "var(--ink)",
+                  padding: "14px 14px 14px 0",
+                  borderBottom: "1px solid var(--rule)",
+                  verticalAlign: "baseline",
+                }}
+              >
+                {r.name}
+              </td>
+              <td
+                style={{
+                  fontSize: 13.5,
+                  lineHeight: 1.55,
+                  color: "var(--body)",
+                  padding: "14px 14px",
+                  borderBottom: "1px solid var(--rule)",
+                  verticalAlign: "baseline",
+                }}
+              >
+                {r.role}
+              </td>
+              <td style={{ padding: "14px 14px", borderBottom: "1px solid var(--rule)", verticalAlign: "baseline" }}>
+                <StatusDot status={r.status} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -340,9 +386,6 @@ function SectionHeader({
    ────────────────────────────────────────────────────────────────────────── */
 
 export default async function RoadmapPage() {
-  // Count active, scored signals the same way the homepage does, so the
-  // "Now / Live today" bullet stays in sync with the public CTA. A
-  // count-only query (head:true) is cheaper than fetching rows.
   const { count: totalSignalsRaw } = await supabase
     .from("repurposing_signals")
     .select("*", { count: "exact", head: true })
@@ -354,61 +397,46 @@ export default async function RoadmapPage() {
   const PHASES = buildPhases(totalSignals);
 
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <main>
 
-      {/* ── Header ───────────────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <nav
-            style={{
-              ...MONO,
-              fontSize: "11px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginBottom: 20,
-            }}
-          >
-            <Link href="/" style={{ color: "var(--muted)" }}>Home</Link>
-            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-            <Link href="/about" style={{ color: "var(--muted)" }}>About</Link>
-            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-            <span style={{ color: "var(--ink)" }}>Roadmap</span>
-          </nav>
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
+        <div className="container">
+          <div className="crumbs on-ink">
+            <Link href="/">Home</Link>
+            <span className="sep">/</span>
+            <Link href="/about">About</Link>
+            <span className="sep">/</span>
+            <span className="here">Roadmap</span>
+          </div>
+          <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>Roadmap</div>
           <h1
-            className="font-heading"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 500,
-              lineHeight: 1.08,
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: 16,
-            }}
+            className="display"
+            style={{ color: "var(--on-ink)", fontSize: "clamp(2.2rem, 4.4vw, 3.4rem)", lineHeight: 1.08, maxWidth: "20ch" }}
           >
-            Roadmap.
+            Where the database goes next.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "58ch" }}>
-            Current coverage of the database, and the conditions, methods, and
-            data releases planned for future versions.
+          <p className="lede" style={{ marginTop: 24, color: "var(--on-ink-2)", maxWidth: "60ch" }}>
+            What the database covers today, and the conditions, methods, and data releases
+            planned for the versions to come.
           </p>
         </div>
-      </div>
+      </section>
 
       {/* ── At a glance — Now / Next / Later ─────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <div style={{ ...EYEBROW, marginBottom: 20 }}>At a glance</div>
+      <section className="surface-bone section">
+        <div className="container">
+          <div className="eyebrow" style={{ marginBottom: 22 }}>At a glance</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {PHASES.map((p) => (
               <div
                 key={p.tag}
-                style={{ ...CARD, borderTop: `3px solid ${p.color}`, padding: "22px 22px 24px" }}
+                style={{ background: "var(--paper)", border: "1px solid var(--rule)", borderTop: `3px solid ${p.color}`, padding: "22px 22px 24px" }}
               >
                 <div
                   style={{
                     ...MONO,
-                    fontSize: "12px",
+                    fontSize: 12,
                     fontWeight: 500,
                     letterSpacing: "0.16em",
                     textTransform: "uppercase",
@@ -418,35 +446,13 @@ export default async function RoadmapPage() {
                 >
                   {p.tag}
                 </div>
-                <div
-                  className="font-heading"
-                  style={{ fontSize: "15px", color: "var(--ink)", marginBottom: 16 }}
-                >
+                <div className="font-heading" style={{ fontSize: 15, color: "var(--ink)", marginBottom: 16 }}>
                   {p.sub}
                 </div>
                 <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none", margin: 0, padding: 0 }}>
                   {p.items.map((it) => (
-                    <li
-                      key={it}
-                      style={{
-                        fontSize: "13px",
-                        lineHeight: 1.55,
-                        color: "var(--ink-2)",
-                        paddingLeft: 14,
-                        position: "relative",
-                      }}
-                    >
-                      <span
-                        aria-hidden="true"
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 7,
-                          width: 5,
-                          height: 5,
-                          backgroundColor: p.color,
-                        }}
-                      />
+                    <li key={it} style={{ fontSize: 13, lineHeight: 1.55, color: "var(--body)", paddingLeft: 14, position: "relative" }}>
+                      <span aria-hidden="true" style={{ position: "absolute", left: 0, top: 7, width: 5, height: 5, backgroundColor: p.color }} />
                       {it}
                     </li>
                   ))}
@@ -458,30 +464,25 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 01 · Orientation ─────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className={SECTION_INNER}>
+      <section className="surface-paper section">
+        <div className="container">
           <SectionHeader label="01 · Orientation" title="What Whel is, and who it is for" />
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: "68ch" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: "70ch" }}>
             {ORIENTATION_COPY.map((para) => (
-              <p key={para.slice(0, 24)} style={{ fontSize: 15, lineHeight: 1.72, color: "var(--ink-2)" }}>
+              <p key={para.slice(0, 24)} style={{ fontSize: 16, lineHeight: 1.72, color: "var(--body)" }}>
                 {para}
               </p>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" style={{ marginTop: 28 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" style={{ marginTop: 30 }}>
             {AUDIENCES.map((a) => (
-              <div key={a.label} style={{ ...CARD, padding: "18px 18px 20px" }}>
-                <p
-                  className="font-heading"
-                  style={{ fontSize: "15px", color: "var(--ink)", marginBottom: 7, lineHeight: 1.2 }}
-                >
+              <div key={a.label} style={{ background: "var(--paper)", border: "1px solid var(--rule)", padding: "18px 18px 20px" }}>
+                <p className="font-heading" style={{ fontSize: 15, color: "var(--ink)", marginBottom: 7, lineHeight: 1.2 }}>
                   {a.label}
                 </p>
-                <p style={{ fontSize: "12.5px", lineHeight: 1.55, color: "var(--ink-2)" }}>
-                  {a.body}
-                </p>
+                <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--body)" }}>{a.body}</p>
               </div>
             ))}
           </div>
@@ -489,55 +490,33 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 02 · Selection ───────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className={SECTION_INNER}>
+      <section className="surface-bone section">
+        <div className="container">
           <SectionHeader
             label="02 · Selection"
             title="Why these six conditions"
-            intro="The six conditions Whel covers were not chosen at random, and they are not the whole picture. They were selected against three explicit criteria, and those same criteria determine how the project grows."
+            intro="We chose these six conditions deliberately, against three explicit criteria, and those same criteria determine how the database grows. They are a starting point in a much larger field."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {CRITERIA.map((c) => (
-              <div
-                key={c.n}
-                style={{ ...CARD, borderTop: "3px solid var(--green-mid)", padding: "22px 22px 24px" }}
-              >
-                <div
-                  style={{
-                    ...MONO,
-                    fontSize: "12px",
-                    fontWeight: 500,
-                    letterSpacing: "0.1em",
-                    color: "var(--muted)",
-                    marginBottom: 10,
-                  }}
-                >
+              <div key={c.n} style={{ background: "var(--paper)", border: "1px solid var(--rule)", borderTop: "3px solid var(--moss)", padding: "22px 22px 24px" }}>
+                <div style={{ ...MONO, fontSize: 12, fontWeight: 500, letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>
                   {c.n}
                 </div>
-                <p
-                  className="font-heading"
-                  style={{ fontSize: "18px", color: "var(--ink)", marginBottom: 8 }}
-                >
-                  {c.title}
-                </p>
-                <p style={{ fontSize: "13.5px", lineHeight: 1.62, color: "var(--ink-2)" }}>
-                  {c.body}
-                </p>
+                <p className="font-heading" style={{ fontSize: 18, color: "var(--ink)", marginBottom: 8 }}>{c.title}</p>
+                <p style={{ fontSize: 13.5, lineHeight: 1.62, color: "var(--body)" }}>{c.body}</p>
               </div>
             ))}
           </div>
 
           {/* The six conditions, mapped */}
-          <p
-            className="font-heading"
-            style={{ fontSize: "18px", fontWeight: 500, color: "var(--ink)", marginTop: 40, marginBottom: 4 }}
-          >
+          <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginTop: 44, marginBottom: 4 }}>
             The six conditions, mapped
           </p>
-          <p style={{ fontSize: "13.5px", lineHeight: 1.6, color: "var(--ink-2)", maxWidth: "62ch", marginBottom: 20 }}>
-            Each condition is tagged with the biological systems it shares with the others, the overlap that makes
-            cross-condition reasoning valid.
+          <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)", maxWidth: "62ch", marginBottom: 22 }}>
+            Each condition is tagged with the biological systems it shares with the others, the
+            overlap that makes cross-condition reasoning valid.
           </p>
 
           <div style={{ overflowX: "auto" }}>
@@ -556,7 +535,7 @@ export default async function RoadmapPage() {
                         color: "var(--muted)",
                         textAlign: "left",
                         padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
-                        borderBottom: "1px solid var(--rule-strong)",
+                        borderBottom: "1px solid var(--ink)",
                         width: ["22%", "26%", "52%"][i],
                       }}
                     >
@@ -568,41 +547,17 @@ export default async function RoadmapPage() {
               <tbody>
                 {CONDITIONS.map((c) => (
                   <tr key={c.name}>
-                    <td
-                      className="font-heading"
-                      style={{
-                        fontSize: "16px",
-                        color: "var(--ink)",
-                        padding: "15px 14px 15px 0",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "top",
-                      }}
-                    >
+                    <td className="font-heading" style={{ fontSize: 16, color: "var(--ink)", padding: "15px 14px 15px 0", borderBottom: "1px solid var(--rule)", verticalAlign: "top" }}>
                       {c.name}
                     </td>
-                    <td
-                      style={{
-                        padding: "15px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "top",
-                      }}
-                    >
+                    <td style={{ padding: "15px 14px", borderBottom: "1px solid var(--rule)", verticalAlign: "top" }}>
                       <span style={{ display: "flex", flexWrap: "wrap", gap: "7px 12px" }}>
                         {c.pathways.map((p) => (
                           <PathwayTag key={p} name={p} />
                         ))}
                       </span>
                     </td>
-                    <td
-                      style={{
-                        fontSize: "13px",
-                        lineHeight: 1.55,
-                        color: "var(--ink-2)",
-                        padding: "15px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "top",
-                      }}
-                    >
+                    <td style={{ fontSize: 13, lineHeight: 1.55, color: "var(--body)", padding: "15px 14px", borderBottom: "1px solid var(--rule)", verticalAlign: "top" }}>
                       {c.gap}
                     </td>
                   </tr>
@@ -613,66 +568,33 @@ export default async function RoadmapPage() {
         </div>
       </section>
 
-      {/* ── Banner — the bridge ──────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <div style={{ backgroundColor: "var(--green-deep)", padding: "clamp(32px, 5vw, 48px)" }}>
-            <div
-              style={{
-                ...MONO,
-                fontSize: "11px",
-                fontWeight: 500,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "var(--green-soft)",
-                marginBottom: 16,
-              }}
-            >
-              The direction
-            </div>
-            <p
-              className="font-heading"
-              style={{
-                fontSize: "clamp(1.5rem, 3vw, 2rem)",
-                fontWeight: 500,
-                lineHeight: 1.2,
-                letterSpacing: "-0.01em",
-                color: "var(--paper)",
-                marginBottom: 14,
-              }}
-            >
-              The database is designed to grow beyond its current six conditions.
-            </p>
-            <p style={{ fontSize: "14.5px", lineHeight: 1.62, color: "rgba(251,248,241,0.78)", maxWidth: "74ch" }}>
-              The selection criteria are explicit and repeatable, so the condition set can expand as the
-              project&apos;s capacity grows. The section below outlines the conditions that meet those criteria
-              and are under consideration for future versions.
-            </p>
-          </div>
+      {/* ── Banner — the direction ───────────────────────────────────────── */}
+      <section className="surface-moss section tight">
+        <div className="container">
+          <div className="eyebrow on-ink" style={{ marginBottom: 16, color: "var(--signal)" }}>The direction</div>
+          <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "26ch", marginBottom: 14 }}>
+            The database is built to grow beyond its first six conditions.
+          </h2>
+          <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "74ch" }}>
+            Because the selection rule is explicit and repeatable, the set expands as our capacity
+            grows. The conditions below meet the same criteria and are under consideration for
+            future versions.
+          </p>
         </div>
       </section>
 
       {/* ── 03 · Expansion ───────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className={SECTION_INNER}>
+      <section className="surface-paper section">
+        <div className="container">
           <SectionHeader
             label="03 · Expansion"
             title="Where the framework goes next"
-            intro="Because the selection rule is explicit, extending it is straightforward. Any women's health condition that shares biology with the existing six, carries a documented research gap, and has enough of an evidence base to surface signals is a candidate. The conditions below illustrate where the framework points. They are not yet covered, and the final list remains a research and editorial decision. The scope itself will not change: Whel stays within women's hormonal and reproductive health."
+            intro="Because the selection rule is explicit, extending it is straightforward. Any women's health condition that shares biology with the existing six, carries a documented research gap, and has enough of an evidence base to surface signals is a candidate. The conditions below illustrate where the framework points, and the final list remains a research and editorial decision. The scope itself stays fixed within women's hormonal and reproductive health."
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {CANDIDATES.map((c) => (
-              <div
-                key={c.name}
-                style={{
-                  background: "var(--bg-2)",
-                  border: "1px dashed var(--rule-strong)",
-                  padding: "20px 20px 22px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
+              <div key={c.name} style={{ background: "var(--bone)", border: "1px dashed var(--ink)", padding: "20px 20px 22px", display: "flex", flexDirection: "column" }}>
                 <span
                   style={{
                     ...MONO,
@@ -682,22 +604,17 @@ export default async function RoadmapPage() {
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
                     color: "var(--muted)",
-                    border: "1px solid var(--rule-strong)",
+                    border: "1px solid var(--ink)",
                     padding: "3px 7px",
                     marginBottom: 14,
                   }}
                 >
                   Candidate
                 </span>
-                <p
-                  className="font-heading"
-                  style={{ fontSize: "16px", color: "var(--ink)", marginBottom: 8, lineHeight: 1.25 }}
-                >
+                <p className="font-heading" style={{ fontSize: 16, color: "var(--ink)", marginBottom: 8, lineHeight: 1.25 }}>
                   {c.name}
                 </p>
-                <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--ink-2)", marginBottom: 14, flex: 1 }}>
-                  {c.body}
-                </p>
+                <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--body)", marginBottom: 14, flex: 1 }}>{c.body}</p>
                 <span style={{ display: "flex", flexWrap: "wrap", gap: "7px 12px" }}>
                   {c.pathways.map((p) => (
                     <PathwayTag key={p} name={p} />
@@ -707,112 +624,36 @@ export default async function RoadmapPage() {
             ))}
           </div>
 
-          <p
-            style={{
-              ...MONO,
-              fontSize: "11.5px",
-              lineHeight: 1.6,
-              color: "var(--muted)",
-              marginTop: 18,
-            }}
-          >
+          <p style={{ ...MONO, fontSize: "11.5px", lineHeight: 1.6, color: "var(--muted)", marginTop: 18 }}>
             Illustrative only; these conditions are not yet in the database.
           </p>
         </div>
       </section>
 
       {/* ── 04 · Method ──────────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
-        <div className={SECTION_INNER}>
+      <section className="surface-bone section">
+        <div className="container">
           <SectionHeader
             label="04 · Method"
             title="Strengthening the evidence engine"
-            intro="The most valuable near-term work is to make the existing engine more rigorous before adding new data sources. The priorities below come directly from Whel's own methods document and from the project's first independent review. New conditions are worth little if the evidence behind each signal is not as solid as it can be."
+            intro="The most valuable near-term work is to make the existing engine more rigorous before adding new data sources, because a new condition is worth little if the evidence behind each signal is not as solid as it can be. The priorities come directly from our own methods document and from the project's first independent review."
           />
 
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", minWidth: 620, borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  {["Source / method", "Role", "Status"].map((h, i) => (
-                    <th
-                      key={h}
-                      style={{
-                        ...MONO,
-                        fontSize: "10.5px",
-                        fontWeight: 500,
-                        letterSpacing: "0.13em",
-                        textTransform: "uppercase",
-                        color: "var(--muted)",
-                        textAlign: "left",
-                        padding: i === 0 ? "0 14px 11px 0" : "0 14px 11px 14px",
-                        borderBottom: "1px solid var(--rule-strong)",
-                        width: ["32%", "44%", "24%"][i],
-                      }}
-                    >
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {REGISTER.map((r) => (
-                  <tr key={r.name}>
-                    <td
-                      className="font-heading"
-                      style={{
-                        fontSize: "15px",
-                        color: "var(--ink)",
-                        padding: "14px 14px 14px 0",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                      }}
-                    >
-                      {r.name}
-                    </td>
-                    <td
-                      style={{
-                        fontSize: "13px",
-                        lineHeight: 1.5,
-                        color: "var(--ink-2)",
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                      }}
-                    >
-                      {r.role}
-                    </td>
-                    <td
-                      style={{
-                        ...MONO,
-                        fontSize: "12px",
-                        color: STATUS_COLOR[r.status],
-                        padding: "14px 14px",
-                        borderBottom: "1px solid var(--rule)",
-                        verticalAlign: "baseline",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      ● {r.status}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginBottom: 18 }}>
+            The sources
+          </p>
+          <RegisterTable rows={SOURCES} />
 
-          <div className="space-y-3" style={{ marginTop: 28 }}>
+          <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginTop: 44, marginBottom: 18 }}>
+            Method upgrades in progress
+          </p>
+          <RegisterTable rows={UPGRADES} />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 32 }}>
             {PRIORITIES.map((p) => (
-              <div key={p.title} style={{ ...CARD, borderLeft: "3px solid var(--green-mid)", padding: "22px 24px" }}>
-                <p
-                  className="font-heading"
-                  style={{ fontSize: "17px", color: "var(--ink)", marginBottom: 7 }}
-                >
-                  {p.title}
-                </p>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--ink-2)" }}>
-                  {p.body}
-                </p>
+              <div key={p.title} style={{ background: "var(--paper)", border: "1px solid var(--rule)", borderLeft: "3px solid var(--moss)", padding: "22px 24px" }}>
+                <p className="font-heading" style={{ fontSize: 17, color: "var(--ink)", marginBottom: 7 }}>{p.title}</p>
+                <p style={{ fontSize: 14, lineHeight: 1.65, color: "var(--body)" }}>{p.body}</p>
               </div>
             ))}
           </div>
@@ -820,50 +661,32 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 05 · A living page ───────────────────────────────────────────── */}
-      <section>
-        <div className={SECTION_INNER}>
+      <section className="surface-paper section">
+        <div className="container">
           <SectionHeader label="05 · This page" title="A living page" />
 
-          <p style={{ fontSize: 15, lineHeight: 1.72, color: "var(--ink-2)", maxWidth: "68ch" }}>
-            This roadmap is a dated document, and it will change. Whel is released as dated snapshots rather than a
-            live feed, and its priorities are shaped by feedback from researchers, clinicians, and the patient
-            communities whose reported experience the database draws on, about which gaps matter most. If you work
-            in one of these fields, that feedback is welcome.
+          <p style={{ fontSize: 16, lineHeight: 1.72, color: "var(--body)", maxWidth: "70ch" }}>
+            This roadmap is a dated document, and it will change. We release Whel as dated snapshots
+            rather than a live feed, and the priorities here are shaped by feedback from researchers,
+            clinicians, and the patient communities whose reported experience the database draws on,
+            about which gaps matter most. If you work in one of these fields, that feedback is welcome.
           </p>
 
-          <div
-            style={{
-              ...MONO,
-              fontSize: "11px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginTop: 28,
-            }}
-          >
+          <div style={{ ...MONO, fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--muted)", marginTop: 28 }}>
             Roadmap revised June 2026
           </div>
 
-          <div
-            style={{
-              borderTop: "1px solid var(--rule)",
-              marginTop: 20,
-              paddingTop: 28,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "12px 32px",
-            }}
-          >
+          <div style={{ borderTop: "1px solid var(--rule)", marginTop: 20, paddingTop: 28, display: "flex", flexWrap: "wrap", gap: "12px 32px" }}>
             {CONTINUE.map((c) => (
               <Link
                 key={c.href}
                 href={c.href}
                 style={{
                   ...MONO,
-                  fontSize: "12px",
+                  fontSize: 12,
                   letterSpacing: "0.14em",
                   textTransform: "uppercase",
-                  color: c.accent ? "var(--green-mid)" : "var(--ink)",
+                  color: c.accent ? "var(--moss)" : "var(--ink)",
                   borderBottom: c.accent ? "none" : "1px solid var(--ink)",
                   paddingBottom: 2,
                 }}
