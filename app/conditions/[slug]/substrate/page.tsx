@@ -225,13 +225,13 @@ export default async function SubstratePage({ params }: { params: Promise<{ slug
           <p className="eyebrow" style={{ marginBottom: 10 }}>EVIDENCE SUBSTRATE · v0</p>
           <h1 className="font-heading" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", fontWeight: 500,
             lineHeight: 1.08, letterSpacing: "-0.02em", color: "var(--ink)", marginBottom: 18 }}>
-            {condition.name} — what we actually know.
+            {condition.name}: what we actually know.
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch", marginBottom: 26 }}>
             Atomic claims from the published literature, each <strong>anchored to a verbatim source span</strong>,
             each checked for whether its own quote actually supports it, and disagreements in the evidence
-            <strong> surfaced rather than averaged</strong>. This is the substrate layer beneath the signal index — the
-            same discipline that lets a clinician-researcher trace every statement to its source.
+            <strong> surfaced rather than averaged</strong>. This is the substrate layer beneath the signal index,
+            built on the same discipline that lets a clinician-researcher trace every statement to its source.
           </p>
 
           {!empty && (
@@ -261,7 +261,7 @@ export default async function SubstratePage({ params }: { params: Promise<{ slug
             <p className="eyebrow" style={{ marginBottom: 10 }}>NO SUBSTRATE YET</p>
             <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
               {tablesMissing
-                ? "The substrate tables aren’t live yet. Apply migrations 046 (schema) and 047 (PMDD/PMS seed) in Supabase Studio, then reload — this page reads them directly."
+                ? "The substrate tables aren’t live yet. Apply migrations 046 (schema) and 047 (PMDD/PMS seed) in Supabase Studio, then reload, and this page reads them directly."
                 : `No substrate claims have been indexed for ${condition.name.toLowerCase()} yet. The PMDD/PMS substrate is seeded first; other conditions follow.`}
             </p>
           </div>
@@ -333,8 +333,8 @@ export default async function SubstratePage({ params }: { params: Promise<{ slug
           </h2>
           <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "62ch", marginBottom: 8 }}>
             Each claim links to its exact source: a verbatim quote, character offsets into the stored document, and
-            the PubMed record. <strong>Entailment</strong> records whether the quote actually supports the claim — a claim
-            that overreaches its own quote is marked <em>neutral</em> and never used to build a contradiction.
+            the PubMed record. <strong>Entailment</strong> records whether the quote actually supports the claim, so that
+            a claim that overreaches its own quote is marked <em>neutral</em> and never used to build a contradiction.
           </p>
           <div style={{ marginTop: 22 }}>
             {groups.map((g) => (

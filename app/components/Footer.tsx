@@ -17,6 +17,7 @@ function WhelMark({ size = 28 }: { size?: number }) {
 }
 
 const PLATFORM_LINKS = [
+  { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Candidates", href: "/candidates" },
   { label: "Methods",    href: "/about/technical-architecture" },
@@ -88,8 +89,9 @@ export default function Footer() {
               fontSize: 13, lineHeight: 1.6, color: "var(--on-ink-mut)",
               fontFamily: "var(--font-plex-mono, monospace)", letterSpacing: "0.01em",
             }}>
-              A research-support tool under the 21st Century Cures Act §3060 exemption.
-              Not a clinical recommendation engine. Cite the source; check the date.
+              A research-support tool under the 21st Century Cures Act §3060 exemption, rather
+              than a clinical recommendation engine. Every result links to its source and its
+              date so that it can be checked.
             </p>
             <div style={{ marginTop: 16 }}>
               <a
@@ -109,7 +111,7 @@ export default function Footer() {
         </div>
 
         <div className="legal">
-          <span>Whel, Inc. — Delaware C-Corporation, founded 2026</span>
+          <span>Whel, Inc., a Delaware C-Corporation founded in 2026</span>
           <span>Women&apos;s Health Evidence Lab · whel.bio</span>
         </div>
       </div>

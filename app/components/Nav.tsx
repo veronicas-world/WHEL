@@ -38,6 +38,7 @@ function WhelMark({ size = 30 }: { size?: number }) {
 }
 
 const NAV_LINKS = [
+  { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Candidates", href: "/candidates" },
   { label: "Conditions", href: "/conditions" },

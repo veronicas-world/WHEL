@@ -10,7 +10,7 @@ export const revalidate = 0;
 // surface during the research preview; real auth (Supabase Auth) replaces the soft
 // gate in Step 2.
 export const metadata: Metadata = {
-  title: "Full candidate index — preview",
+  title: "Full candidate index, preview",
   robots: { index: false, follow: false },
 };
 

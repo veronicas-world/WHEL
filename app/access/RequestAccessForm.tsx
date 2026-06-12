@@ -48,7 +48,7 @@ export default function RequestAccessForm() {
       <div style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 4, padding: "28px 26px" }}>
         <div className="eyebrow" style={{ marginBottom: 10, color: "var(--moss)" }}>You&rsquo;re on the list</div>
         <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--body)", margin: 0 }}>
-          Thanks &mdash; your request is in. Access to the full candidate index and substrate is granted by
+          Thanks, your request is in. Access to the full candidate index and substrate is granted by
           invitation during the research preview; we&rsquo;ll be in touch.
         </p>
       </div>
@@ -78,7 +78,7 @@ export default function RequestAccessForm() {
       <div>
         <label style={labelStyle}>What would you use it for?</label>
         <textarea style={{ ...field, minHeight: 90, resize: "vertical" }} value={form.intended_use}
-          onChange={set("intended_use")} placeholder="Optional — a sentence helps us prioritize." />
+          onChange={set("intended_use")} placeholder="Optional, a sentence helps us prioritize." />
       </div>
       <div className="row" style={{ gap: 14, alignItems: "center" }}>
         <button type="submit" className="btn btn-primary" disabled={status === "submitting"}>
@@ -86,7 +86,7 @@ export default function RequestAccessForm() {
         </button>
         {status === "error" && (
           <span style={{ color: "var(--brick)", fontSize: 13 }}>
-            Something went wrong — please email vla2117@columbia.edu.
+            Something went wrong, please email vla2117@columbia.edu.
           </span>
         )}
       </div>

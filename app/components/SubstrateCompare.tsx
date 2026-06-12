@@ -114,7 +114,7 @@ export default function SubstrateCompare() {
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="two-col">
       <AnimatedPanel tone="light" count={24} edgeCount={11} dense={false}
         label="Inherited"
-        sub="Male-default knowledge graph — sparse for female biology." />
+        sub="Male-default knowledge graph, sparse for female biology." />
       <AnimatedPanel tone="dark" count={66} edgeCount={42} dense={true}
         label="Corrected"
         sub="Sex-specific drugs, mechanisms, and the relations between them." />

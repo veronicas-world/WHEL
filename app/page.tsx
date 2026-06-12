@@ -49,7 +49,7 @@ const LAYERS = [
   {
     n: "Layer 03", name: "Hypothesis from signal",
     tags: ["Off-label patterns", "Advocacy registries", "Validated downstream"],
-    desc: "Patient-community signal — off-label prescribing patterns, advocacy-organization registries, structured reports — enters as hypothesis generation, validated downstream against mechanistic and clinical evidence. Patient signal is never equated with RCT evidence. It is the input that surfaces hypotheses worth checking.",
+    desc: "Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured reports, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence. It is never equated with the results of a controlled trial, and it is the input that surfaces the hypotheses worth checking.",
   },
 ];
 
@@ -63,12 +63,12 @@ const EXPANSION = [
   {
     phase: "Phase 2", when: "Months 18–36",
     title: "Expand to sex-divergent conditions",
-    detail: "Autoimmune disease (80% female), pain conditions (1.5–4× female prevalence), neuropsychiatric conditions. The knowledge graph and sex-specific PK modeling transfer directly — same platform, bigger markets.",
+    detail: "Autoimmune disease (80% female), pain conditions (1.5–4× female prevalence), neuropsychiatric conditions. The knowledge graph and sex-specific PK modeling transfer directly, the same platform serving bigger markets.",
   },
   {
     phase: "Phase 3", when: "Months 36+",
     title: "Beyond repurposing",
-    detail: "Novel target identification, combination-therapy prediction, and sex-stratified clinical-trial design — capabilities latent in the substrate built for repurposing. The operating system for female-biology drug development.",
+    detail: "Novel target identification, combination-therapy prediction, and sex-stratified clinical-trial design, all capabilities latent in the substrate built for repurposing. The operating system for female-biology drug development.",
   },
 ];
 
@@ -151,7 +151,7 @@ export default async function Home() {
               </div>
               <h1 className="display" style={{ color: "var(--on-ink)" }}>
                 The drugs already exist.<br />The evidence is<br />
-                <em style={{ fontStyle: "italic", color: "var(--signal)" }}>hiding in plain sight.</em>
+                <em style={{ fontStyle: "italic", color: "var(--signal)" }}>waiting to be read.</em>
               </h1>
               <p className="lede" style={{ marginTop: 28, color: "var(--on-ink-2)" }}>
                 Whel surfaces approved drugs that already work for women&apos;s health conditions,
@@ -162,7 +162,7 @@ export default async function Home() {
                 <Link href="/candidates" className="btn btn-on-ink">
                   See a worked example <span className="arr">→</span>
                 </Link>
-                <Link href="/about" className="btn btn-ghost-ink">
+                <Link href="/manifesto" className="btn btn-ghost-ink">
                   Read the manifesto
                 </Link>
               </div>
@@ -212,7 +212,7 @@ export default async function Home() {
           <div className="between" style={{ marginBottom: 40 }}>
             <div>
               <div className="eyebrow" style={{ marginBottom: 14 }}>
-                The thesis · <span style={{ color: "var(--moss)", fontStyle: "italic" }}>Corrected, not filtered</span>
+                The thesis · <span style={{ color: "var(--moss)", fontStyle: "italic" }}>a corrected substrate</span>
               </div>
               <h2 className="h2" style={{ maxWidth: "16ch" }}>
                 Drug development was built on male biology.
@@ -220,8 +220,9 @@ export default async function Home() {
             </div>
             <p className="lede" style={{ color: "var(--body)" }}>
               Every AI drug-discovery platform reasons over a knowledge graph built from
-              male-default research. We are not adding a women&apos;s-health filter to someone
-              else&apos;s substrate. We are building the corrected version.
+              male-default research, and rather than adding a women&apos;s-health filter to
+              someone else&apos;s substrate, we are building a corrected version from the ground
+              up, grounded in female biology.
             </p>
           </div>
           <SubstrateCompare />
@@ -233,7 +234,7 @@ export default async function Home() {
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 14 }}>Worked record · off-label repurposing</div>
           <h2 className="h2" style={{ marginBottom: 28, maxWidth: "20ch" }}>
-            The drugs that work for women&apos;s health were never developed for it.
+            Most of what works for women&apos;s health was first approved for something else.
           </h2>
           {/* TODO(real-data): named arc examples from design */}
           <div style={{
@@ -316,8 +317,8 @@ export default async function Home() {
               From off-label signal to a 505(b)(2)-ready trail.
             </h2>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "34ch" }}>
-              Off-label use is the largest uncontrolled clinical trial in women&apos;s health.
-              We read the results.
+              Off-label use is the largest uncontrolled clinical trial in women&apos;s health, and
+              the platform is built to read its results.
             </p>
           </div>
           <Pipeline />
@@ -330,7 +331,7 @@ export default async function Home() {
           <div className="between" style={{ marginBottom: 32 }}>
             <div>
               <div className="eyebrow" style={{ marginBottom: 14 }}>v0 corpus · {totalConditions} conditions</div>
-              <h2 className="h2">Where we start.</h2>
+              <h2 className="h2">The conditions we cover first.</h2>
             </div>
             <Link href="/conditions" className="btn btn-ghost">
               All conditions <span className="arr">→</span>
@@ -369,9 +370,9 @@ export default async function Home() {
       <section className="surface-paper section tight">
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 14 }}>Fig. 1 · Confidence distribution</div>
-          <h2 className="h2" style={{ marginBottom: 8 }}>Where the evidence sits.</h2>
+          <h2 className="h2" style={{ marginBottom: 8 }}>Where the evidence sits across the conditions.</h2>
           <p className="lede" style={{ marginBottom: 32 }}>
-            Evidence sits in tiers. We never flatten strong and exploratory into the same visual weight.
+            Evidence sits in tiers, and the strongest and most exploratory signals are never flattened into the same visual weight, so the page shows the shape of the evidence rather than a single averaged number.
           </p>
           {/* Real data: tier counts from Supabase */}
           {matrixRows.length > 0

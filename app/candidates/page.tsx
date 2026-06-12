@@ -8,7 +8,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Candidates",
-  description: "A sample of Whel's drug-repurposing candidates — scored, tiered, and 505(b)(2)-ready. The full index is available on request.",
+  description: "A sample of Whel's drug-repurposing candidates, scored, tiered, and 505(b)(2)-ready. The full index is available on request.",
 };
 
 export default async function CandidatesPage() {
@@ -35,7 +35,7 @@ export default async function CandidatesPage() {
             Every candidate surfaces a drug already approved for one indication with
             evidence it works for a women&apos;s health condition. Each card shows the
             mechanism, the claims, and the points where the literature disagrees. Below is the
-            top candidate in each condition &mdash; a sample of the full index.
+            top candidate in each condition, a sample of the full index.
           </p>
         </div>
       </section>

@@ -7,7 +7,7 @@ import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const metadata: Metadata = {
   title: "Platform",
-  description: "The corrected knowledge graph for female biology — sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss.",
+  description: "The corrected knowledge graph for female biology, capturing sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss.",
 };
 
 /* Layer descriptions — narrative copy from the design / Blueprint */
@@ -25,7 +25,7 @@ const LAYERS = [
   {
     n: "Layer 03", name: "Hypothesis from signal",
     tags: ["Off-label patterns", "Advocacy registries", "Validated downstream"],
-    desc: "Patient-community signal — off-label prescribing patterns, advocacy-organization registries, structured reports — enters as hypothesis generation, validated downstream against mechanistic and clinical evidence. Patient signal is never equated with RCT evidence.",
+    desc: "Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured reports, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, and it is never equated with the results of a controlled trial.",
   },
 ];
 
@@ -54,7 +54,7 @@ export default async function PlatformPage() {
               </h1>
               <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
                 A substrate that captures sex-specific pharmacokinetics, cyclical hormonal state,
-                and the cross-condition mechanisms general platforms miss — because they were
+                and the cross-condition mechanisms general platforms miss because they were
                 trained on male-default data.
               </p>
             </div>
@@ -92,13 +92,13 @@ export default async function PlatformPage() {
             <div>
               <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>Layer 01 · in practice</div>
               <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "16ch" }}>
-                Cyclical biology, not static targets.
+                Cyclical biology, modeled as it moves.
               </h2>
             </div>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "36ch" }}>
-              Drug response shifts across the cycle. We model hormonal state as structured
-              pharmacokinetic data — so a luteal-phase signal is read in its phase,
-              not averaged into a flat number.
+              Drug response shifts across the menstrual cycle, so we model hormonal state as
+              structured pharmacokinetic data, which means a luteal-phase signal is read in its
+              phase instead of being averaged into a flat number.
             </p>
           </div>
           <CyclicalPK height={300} />
@@ -112,13 +112,13 @@ export default async function PlatformPage() {
             <div>
               <div className="eyebrow" style={{ marginBottom: 14 }}>Layer 02 · in practice</div>
               <h2 className="h2" style={{ maxWidth: "18ch" }}>
-                Per-claim provenance. Contradictions surfaced.
+                Per-claim provenance, with contradictions surfaced.
               </h2>
             </div>
             <p className="lede" style={{ color: "var(--body)", maxWidth: "34ch" }}>
-              Every claim ties to a verbatim source span. Synthesis is marked as synthesis.
-              Disagreement is shown, not averaged. This is what the §3060 exemption
-              requires — and what makes the output trustworthy.
+              Every claim ties to a verbatim source span, every synthesis is marked as a
+              synthesis, and disagreement in the literature is shown rather than averaged away,
+              which is what the §3060 exemption requires and what makes the output trustworthy.
             </p>
           </div>
           {/* TODO(real-data): example candidate — wire to real Supabase signal */}
@@ -132,12 +132,12 @@ export default async function PlatformPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }} className="two-col">
             <div>
               <div className="eyebrow" style={{ marginBottom: 14 }}>Regulatory posture</div>
-              <h2 className="h2" style={{ marginBottom: 18 }}>A research-support tool. By design.</h2>
+              <h2 className="h2" style={{ marginBottom: 18 }}>A research-support tool, by design.</h2>
               <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--body)", maxWidth: "54ch" }}>
                 Whel sits under the 21st Century Cures Act §3060 research-support exemption
                 and stays there. Because every claim is tied to a source a clinician can
-                independently review, the platform meets the exemption&apos;s bar —
-                by architecture, not by accident.
+                independently review, the platform meets the exemption&apos;s bar by architecture
+                rather than by accident.
               </p>
             </div>
             <div>
