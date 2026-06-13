@@ -7,6 +7,8 @@ export interface Claim {
   type: "extract" | "synth" | "contradict";
   text: string;
   src: string;
+  /** Direct link to the source (PubMed, ClinicalTrials.gov, Reddit, etc.), when available. */
+  href?: string;
 }
 
 export interface Candidate {
@@ -157,7 +159,19 @@ export default function CandidateCard({
                     </span>
                   )}
                   {" "}{cl.text}
-                  <span className="src">{cl.src}</span>
+                  {cl.href ? (
+                    <a
+                      className="src"
+                      href={cl.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ textDecoration: "underline", textUnderlineOffset: 2 }}
+                    >
+                      {cl.src} ↗
+                    </a>
+                  ) : (
+                    <span className="src">{cl.src}</span>
+                  )}
                 </span>
               </div>
             ))}
