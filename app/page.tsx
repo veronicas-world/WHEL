@@ -2,7 +2,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
 import type { TierKey } from "@/app/components/TierHeatmap";
-import MoleculeMesh3D, { type Marker } from "@/app/components/MoleculeMesh3D";
+import KnowledgeGraph3D from "@/app/components/KnowledgeGraph3D";
 import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
@@ -15,16 +15,6 @@ export const revalidate = 0;
 // ── Hardcoded design data ────────────────────────────────────────────────────
 // These are the canonical named examples and architecture data from the
 // Claude Design redesign. They do not come from Supabase.
-
-/* Drug→condition markers pinned to the 3D surface arm tips */
-const HERO_MARKERS: Marker[] = [
-  { abbr: "MET",  cond: "PCOS", id: "WHEL-C-001" },
-  { abbr: "GNRH", cond: "ENDO", id: "WHEL-C-002" },
-  { abbr: "SSRI", cond: "PMDD", id: "WHEL-C-003" },
-  { abbr: "LTZ",  cond: "PCOS", id: "WHEL-C-004" },
-  { abbr: "GLP1", cond: "PCOS", id: "WHEL-C-005" },
-  { abbr: "LDN",  cond: "ENDO", id: "WHEL-C-006", contradiction: true },
-];
 
 /* TODO(real-data): placeholder stats from design — headline facts */
 const FACTS = [
@@ -174,16 +164,7 @@ export default async function Home() {
               </div>
             </div>
             <div className="graph-hero" style={{ marginTop: -36 }}>
-              <MoleculeMesh3D
-                height={460}
-                markers={HERO_MARKERS}
-                arms={7}
-                amp={3.1}
-                exp={9}
-                baseR={0.34}
-                fill={0.118}
-                cyf={0.34}
-              />
+              <KnowledgeGraph3D height={460} dense showLabels={false} scaleFactor={0.19} />
             </div>
           </div>
         </div>
@@ -443,17 +424,7 @@ export default async function Home() {
       <section className="surface-ink section scroll-section" style={{ position: "relative", overflow: "hidden" }}>
         {/* Ambient 3D backdrop — aria-hidden, non-interactive */}
         <div aria-hidden style={{ position: "absolute", inset: 0, opacity: 0.5, pointerEvents: "none", display: "flex", alignItems: "center" }}>
-          <MoleculeMesh3D
-            height={560}
-            markers={[]}
-            arms={8}
-            amp={3.1}
-            exp={9}
-            baseR={0.32}
-            fill={0.058}
-            spin={0.0014}
-            interactive={false}
-          />
+          <KnowledgeGraph3D height={380} autoSpin={0.0014} interactive={false} />
         </div>
         <div className="container-tight" style={{ textAlign: "center", position: "relative" }}>
           <div className="eyebrow on-ink" style={{ marginBottom: 20 }}>Whel · Women&apos;s Health Evidence Lab</div>
