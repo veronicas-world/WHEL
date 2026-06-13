@@ -51,6 +51,11 @@ const OFFLABEL =
 const RWE = "https://pmc.ncbi.nlm.nih.gov/articles/PMC9815890/";
 const CDS =
   "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/clinical-decision-support-software";
+const CAUSALY = "https://www.causaly.com/life-science-ai/knowledge-graph";
+const ORPHAN =
+  "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2025.1670845/full";
+const LDN_MECH = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3962576/";
+const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330";
 
 /* ── Layer overview copy ────────────────────────────────────────────────── */
 const LAYERS = [
@@ -301,6 +306,43 @@ export default async function PlatformPage() {
               rather than assumed to transfer from a male-dominant sample. A community
               observation that survives this becomes a hypothesis worth a researcher&apos;s time;
               one that does not is set aside with its reasons recorded.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* What a general platform misses */}
+      <section className="surface-moss section">
+        <div className="container">
+          <div style={wrap}>
+            <div className="eyebrow on-ink" style={{ marginBottom: 14, color: "var(--signal)" }}>The differentiation</div>
+            <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 24, maxWidth: "22ch" }}>
+              What a general platform misses.
+            </h2>
+            <p style={pInk}>
+              A fair question: could a general-purpose biomedical platform simply query these
+              conditions in the graph it already has? On three counts it would look in the wrong
+              places. <strong style={{ color: "var(--on-ink)" }}>The sources:</strong> platforms like{" "}
+              <A href={CAUSALY} ink>Causaly read PubMed, the trial registries, and patent filings</A>,
+              not the patient communities where the earliest signal for off-label-managed conditions
+              lives. <strong style={{ color: "var(--on-ink)" }}>The variables:</strong> a general graph
+              holds a drug and disease as a fixed link, while female pharmacology moves across the
+              hormonal cycle, so a candidate whose insight is its timing reads as noise.{" "}
+              <strong style={{ color: "var(--on-ink)" }}>The candidates:</strong> a platform serving
+              oncology and immunology budgets ranks for ownable molecules, and the cheap generics that
+              manage women&rsquo;s conditions are <A href={ORPHAN} ink>financial orphans</A> it has no
+              reason to surface.
+            </p>
+            <p style={pInk}>
+              Low-dose naltrexone for endometriosis sits at the intersection of all three. At low doses
+              it appears to <A href={LDN_MECH} ink>quiet the glial inflammation</A> behind chronic pain,
+              by a route unrelated to the addiction treatment it was approved for, and women have tracked
+              its effects in endometriosis communities for years. The institutional record is thin: the
+              one randomized endometriosis trial was{" "}
+              <A href={LDN_TRIAL} ink>terminated with nine patients enrolled</A>, and it is a generic no
+              sponsor will fund to confirmation. A general platform ranks it near the bottom, or never
+              reads the signal. We surface it, contradictions and uncertainty attached, because the
+              signal and the mechanism are both real.
             </p>
           </div>
         </div>

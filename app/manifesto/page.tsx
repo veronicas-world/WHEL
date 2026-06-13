@@ -32,6 +32,11 @@ const FIVEOHFIVE = "https://www.sciencedirect.com/science/article/abs/pii/S00223
 const FUNDING   = "https://intuitionlabs.ai/articles/ai-biotech-funding-trends";
 const HEALX     = "https://www.pharmaceutical-technology.com/features/healx-ai-drug-repurposing-rare-disease/";
 const RECURSION = "https://www.utahbusiness.com/entrepreneurship/2023/07/20/how-chris-gibson-founded-recursion-pharmaceuticals/";
+const CAUSALY   = "https://www.causaly.com/life-science-ai/knowledge-graph";
+const LDN_MECH  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3962576/";
+const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330";
+const GABA      = "https://pubmed.ncbi.nlm.nih.gov/15228033/";
+const LYRICA    = "https://www.drugs.com/history/lyrica.html";
 
 const CSS = `
 /* ── manifesto page ─────────────────────────────────────────────────────── */
@@ -486,6 +491,9 @@ export default function ManifestoPage() {
                 <p>
                   A platform tuned to find cures reads all of this as noise, but we read it as the data, because an engine built to find oncology blockbusters will reliably find oncology blockbusters, while the drug that manages endometriosis for millions of women is the kind of result it is not built to see, and that result is the one we are built to find.
                 </p>
+                <p>
+                  History shows the pattern plainly. Gabapentin was approved for epilepsy in 1993, and within a few years most of its prescriptions were off label, for nerve pain, fibromyalgia, migraine, and mood, because clinicians and patients had found uses the drug was never developed for. Its maker did not run the trials to formalize those uses; it promoted them illegally instead, and paid a <A href={GABA}>430 million dollar settlement</A> in 2004. The management value had been real the entire time. What the blockbuster model could not find in gabapentin was something to own, and so it looked past the drug until an ownable version existed: Pfizer developed a patented successor, pregabalin, and won approval to sell it as <A href={LYRICA}>Lyrica</A> for the same pain and fibromyalgia indications gabapentin was already treating off label.
+                </p>
               </div>
               <div className="mf-marg mf-rise">
                 <div className="mf-stat">
@@ -594,6 +602,12 @@ export default function ManifestoPage() {
                   </div>
                   <p>
                     The result is a set of repurposing candidates with full evidence trails that a researcher can act on. We start where need is greatest and signal is densest, then expand across the biology medicine left understudied. <A href={ENDO}>Endometriosis alone affects about 190 million women</A> and still sees diagnosis delayed by seven to nine years on average, while <A href={PCOS}>PCOS is the most common endocrine disorder</A> in women of reproductive age and up to 70 percent of affected women remain undiagnosed. The biology is real, the drugs are already on pharmacy shelves, and the evidence is waiting to be read; the record was written for the wrong body, and we are correcting it.
+                  </p>
+                  <p>
+                    This is also why a general-purpose platform, pointed at the same conditions, would not return what we do. The large biomedical AI platforms, <A href={CAUSALY}>Causaly</A> among them, read the institutional record: the published literature, the trial registries, the patent filings. They do not read the patient communities where the earliest signal for these conditions lives, they hold a drug and a disease as a fixed relationship rather than one that moves across the hormonal cycle, and they rank candidates for buyers whose value lies in molecules they can own. For most of biology that is the right design. For the conditions medicine left to off-label practice, it points away from exactly the drugs that help.
+                  </p>
+                  <p>
+                    Low-dose naltrexone for endometriosis is the case in miniature. At low doses naltrexone appears to <A href={LDN_MECH}>calm the glial inflammation</A> that drives chronic pain, through a mechanism separate from the addiction treatment it was approved for, and women have logged its effects in endometriosis and pain communities for years, often noting how the response tracks the menstrual cycle. The institutional evidence is thin and unresolved: the one randomized endometriosis trial was <A href={LDN_TRIAL}>terminated with nine patients enrolled</A>, and it is a cheap generic no company can profit from confirming. A platform built on institutional sources and ownable candidates ranks it near the bottom, if it surfaces it at all. We surface it, with its contradictions and its uncertainty attached, because the signal and the mechanism are both real and the missing piece has only ever been someone reading them together.
                   </p>
                   <div style={{ marginTop: 40, display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <Link href="/candidates" className="btn btn-primary">See the candidates <span className="arr">&rarr;</span></Link>

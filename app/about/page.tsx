@@ -36,6 +36,11 @@ const VIAGRA  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/"; // sildenaf
 const HEALX   = "https://www.pharmaceutical-technology.com/features/healx-ai-drug-repurposing-rare-disease/"; // Healx patient-foundation model
 const RECURSION = "https://www.utahbusiness.com/entrepreneurship/2023/07/20/how-chris-gibson-founded-recursion-pharmaceuticals/"; // Recursion founding / repurposing
 const WHOENDO = "https://www.who.int/news-room/fact-sheets/detail/endometriosis"; // endometriosis diagnostic delay
+const CAUSALY = "https://www.causaly.com/life-science-ai/knowledge-graph"; // general-platform data sources
+const LDN_MECH = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3962576/"; // low-dose naltrexone mechanism
+const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330"; // LDN endometriosis trial (terminated)
+const GABA = "https://pubmed.ncbi.nlm.nih.gov/15228033/"; // gabapentin off-label settlement
+const LYRICA = "https://www.drugs.com/history/lyrica.html"; // pregabalin / Lyrica
 
 const CSS = `
 /* ── about page ─────────────────────────────────────────────────────────── */
@@ -226,6 +231,7 @@ export default function AboutPage() {
             <a href="#flagship"><span className="ab-n">03</span><span className="ab-t">Why PMDD is the flagship</span></a>
             <a href="#management"><span className="ab-n">04</span><span className="ab-t">Built for management</span></a>
             <a href="#graph"><span className="ab-n">05</span><span className="ab-t">A graph of its own</span></a>
+            <a href="#competitors"><span className="ab-n">06</span><span className="ab-t">What general platforms miss</span></a>
           </aside>
 
           <div>
@@ -537,6 +543,17 @@ export default function AboutPage() {
                   own, so a blockbuster-tuned engine has no reason to surface them.
                 </p>
                 <p>
+                  History makes the point from the losing side too. Gabapentin was approved for epilepsy
+                  in 1993, and within a few years most of its prescriptions were off-label, for nerve
+                  pain, fibromyalgia, and mood, uses found in practice rather than in trials. Its maker
+                  chose to <A href={GABA}>promote those uses illegally</A> rather than formally develop
+                  them, and paid a 430 million dollar settlement in 2004. The clinical value had been
+                  real all along. What the model needed was an ownable version, and once Pfizer had one
+                  it acted: pregabalin, sold as <A href={LYRICA}>Lyrica</A> and approved for the same
+                  pain and fibromyalgia indications gabapentin was already treating. The drugs that
+                  manage women&rsquo;s conditions are mostly generics with no such successor waiting.
+                </p>
+                <p>
                   That is the consequence of the model difference. A platform scoring drug-disease pairs
                   by their potential to cure, and by their potential to be owned, will rank a drug that
                   manages endometriosis for millions of women as a near-miss. We rank it as the result.
@@ -596,6 +613,58 @@ export default function AboutPage() {
                   graded, and the external resources we build on is on the{" "}
                   <Link href="/about/technical-architecture" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 3 }}>technical architecture</Link>{" "}and{" "}
                   <Link href="/about/external-references" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 3 }}>external references</Link>{" "}pages.
+                </p>
+              </div>
+            </section>
+
+            {/* 06 - What general platforms miss */}
+            <section className="ab-sec" id="competitors">
+              <div className="ab-sec-head">
+                <span className="ab-sn">06</span>
+                <h2>What general platforms miss</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  A fair question from anyone who knows the field: could a general-purpose biomedical
+                  platform just query endometriosis in the graph it already has? On three counts, it
+                  would be looking in the wrong places.
+                </p>
+                <p>
+                  <strong>The sources.</strong> The large biomedical AI platforms read the institutional
+                  record. Causaly, for one, ingests{" "}
+                  <A href={CAUSALY}>PubMed, MEDLINE, the trial registries, and patent filings</A>, which
+                  is the right diet for most of biology. It is the wrong diet for conditions medicine
+                  left to off-label practice, because there the earliest and densest signal lives in
+                  patient communities no general platform reads.
+                </p>
+                <p>
+                  <strong>The variables.</strong> A general knowledge graph holds a drug and a disease
+                  as a fixed relationship. Female pharmacology moves: drug metabolism and immune
+                  signaling shift across the menstrual cycle, and a condition like PMDD is defined by
+                  that timing. A platform that asks whether a drug affects a pathway, without asking how
+                  that changes across the cycle, passes over the candidates where the timing is the
+                  whole insight.
+                </p>
+                <p>
+                  <strong>The candidates.</strong> General platforms serve pharma R&amp;D teams whose
+                  budgets run on oncology, neuroscience, and immunology, and whose candidates have to be
+                  ownable. A cheap generic that manages a women&rsquo;s condition is a{" "}
+                  <A href={ORPHAN}>financial orphan</A>, clinically valuable and commercially
+                  uninteresting. Our buyers are different, women&rsquo;s health teams, emerging biotechs,
+                  advocacy organizations, and public funders, and our ranking follows their priorities.
+                </p>
+                <p>
+                  Low-dose naltrexone for endometriosis sits at the intersection of all three. At low
+                  doses naltrexone appears to <A href={LDN_MECH}>quiet the glial inflammation</A> behind
+                  chronic pain, by a mechanism unrelated to the addiction treatment it was approved for,
+                  and women have documented its effects in endometriosis communities for years, often
+                  noting how the response tracks their cycle. The institutional evidence is thin and
+                  unresolved: the one randomized endometriosis trial was{" "}
+                  <A href={LDN_TRIAL}>terminated with nine patients enrolled</A>, and it is a generic no
+                  company can profit from confirming. A general platform ranks it near the bottom, or
+                  never reads the signal at all. We surface it, with its contradictions and uncertainty
+                  shown rather than smoothed away, because the signal and the mechanism are both real and
+                  no one else is reading them together.
                 </p>
               </div>
             </section>
