@@ -39,7 +39,7 @@ const LAYERS = [
   {
     n: "Layer 01", name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "PrimeKG · CTKG seed"],
-    desc: "A corrected knowledge graph that captures sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded in MONDO, HPO, RxNorm, and ChEMBL, then enriched with female-specific ontology extensions no existing ontology adequately covers.",
+    desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL, and being extended with the female-specific structure no existing ontology adequately covers.",
   },
   {
     n: "Layer 02", name: "Retrieval & validation",
