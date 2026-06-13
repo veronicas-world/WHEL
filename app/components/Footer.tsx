@@ -24,10 +24,13 @@ const PLATFORM_LINKS = [
 ];
 
 const COMPANY_LINKS = [
-  { label: "About",          href: "/about" },
-  { label: "Roadmap",        href: "/about/roadmap" },
-  { label: "Contact",        href: "/about/contact" },
-  { label: "Request access", href: "/access" },
+  { label: "About",                  href: "/about" },
+  { label: "Roadmap",                href: "/about/roadmap" },
+  { label: "Technical architecture", href: "/about/technical-architecture" },
+  { label: "Signal types",           href: "/signal-types" },
+  { label: "External references",    href: "/about/external-references" },
+  { label: "Contact",                href: "/about/contact" },
+  { label: "Request access",         href: "/access" },
 ];
 
 export default function Footer() {
