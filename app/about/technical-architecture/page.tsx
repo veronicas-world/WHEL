@@ -348,7 +348,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
       },
       {
         label: "Conflict of interest and funding",
-        body: "Whel is an independent research project. The authors declare no funding from the pharmaceutical industry, no compensation for any specific drug-condition pair surfaced by the database, and no commercial product associated with the project. Hosting infrastructure (Vercel and Supabase free tiers) is at the personal expense of the authors. A formal funding statement will accompany any peer-reviewed publication.",
+        body: "Whel takes no funding from the pharmaceutical industry and no compensation for any specific drug-condition pair it surfaces, so no commercial interest can shape what the database reports. A formal funding statement will accompany any peer-reviewed publication.",
       },
     ],
   },
