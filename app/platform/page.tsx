@@ -221,7 +221,7 @@ export default async function PlatformPage() {
               phase instead of being averaged into a flat number.
             </p>
           </div>
-          <CyclicalPK height={300} />
+          <CyclicalPK height={340} />
         </div>
       </section>
 
