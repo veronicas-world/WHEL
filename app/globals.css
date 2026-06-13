@@ -439,7 +439,7 @@ h1, h2, h3, h4 {
 /* ── Footer ───────────────────────────────────────────────────────────── */
 
 .whel-footer { background: var(--ink); color: var(--on-ink); padding: 80px 0 36px; }
-.whel-footer .grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 44px; }
+.whel-footer .grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1.3fr; gap: 40px; }
 .whel-footer h4 { font-family: var(--font-plex-mono, monospace); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-ink-mut); margin: 0 0 14px; font-weight: 400; }
 .whel-footer a.fl { display: block; padding: 5px 0; font-size: 14.5px; color: var(--on-ink-2); }
 .whel-footer a.fl:hover { color: var(--on-ink); }

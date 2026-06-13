@@ -44,14 +44,26 @@ const NAV_LINKS: { label: string; href: string; hideSm?: boolean }[] = [
   { label: "Candidates", href: "/candidates" },
 ];
 
-// Grouped under the About dropdown: the company story plus the deeper
-// methodology / references pages, so a reader vetting Whel finds them in one place.
-const ABOUT_MENU: { label: string; href: string }[] = [
-  { label: "About",                 href: "/about" },
-  { label: "Roadmap",               href: "/about/roadmap" },
-  { label: "Technical architecture", href: "/about/technical-architecture" },
-  { label: "Signal types",          href: "/signal-types" },
-  { label: "External references",   href: "/about/external-references" },
+// The About dropdown is split into two labelled groups: the company story,
+// and the deeper "how it works" methodology / references pages, so a reader
+// vetting Whel sees the cluster as a cluster.
+const ABOUT_GROUPS: { label: string; items: { label: string; href: string }[] }[] = [
+  {
+    label: "Company",
+    items: [
+      { label: "About",   href: "/about" },
+      { label: "Roadmap", href: "/about/roadmap" },
+      { label: "Contact", href: "/about/contact" },
+    ],
+  },
+  {
+    label: "How it works",
+    items: [
+      { label: "Technical architecture", href: "/about/technical-architecture" },
+      { label: "Signal types",           href: "/signal-types" },
+      { label: "External references",    href: "/about/external-references" },
+    ],
+  },
 ];
 
 const LINK_STYLE: React.CSSProperties = {
@@ -153,33 +165,55 @@ export default function Nav() {
                   position: "absolute",
                   top: "100%",
                   right: 0,
-                  minWidth: 232,
+                  minWidth: 244,
                   backgroundColor: "rgba(26,29,20,0.98)",
                   border: "1px solid var(--ink-line-2)",
-                  padding: "6px 0",
+                  padding: "4px 0",
                   zIndex: 60,
                 }}
               >
-                {ABOUT_MENU.map(({ label, href }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    role="menuitem"
-                    onClick={() => setAboutOpen(false)}
+                {ABOUT_GROUPS.map((group, gi) => (
+                  <div
+                    key={group.label}
                     style={{
-                      display: "block",
-                      padding: "10px 18px",
-                      fontFamily: "var(--font-plex-mono, monospace)",
-                      fontSize: "11px",
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
-                      textDecoration: "none",
-                      whiteSpace: "nowrap",
+                      padding: "8px 0",
+                      borderTop: gi > 0 ? "1px solid var(--ink-line-2)" : "none",
                     }}
                   >
-                    {label}
-                  </Link>
+                    <div
+                      style={{
+                        padding: "2px 18px 6px",
+                        fontFamily: "var(--font-plex-mono, monospace)",
+                        fontSize: "9.5px",
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        color: "var(--on-ink-mut)",
+                      }}
+                    >
+                      {group.label}
+                    </div>
+                    {group.items.map(({ label, href }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        role="menuitem"
+                        onClick={() => setAboutOpen(false)}
+                        style={{
+                          display: "block",
+                          padding: "9px 18px",
+                          fontFamily: "var(--font-plex-mono, monospace)",
+                          fontSize: "11px",
+                          letterSpacing: "0.08em",
+                          textTransform: "uppercase",
+                          color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                          textDecoration: "none",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}
@@ -250,35 +284,41 @@ export default function Nav() {
               </Link>
             ))}
 
-            {/* About group */}
-            <span style={{
-              padding: "16px 0 8px",
-              fontFamily: "var(--font-plex-mono, monospace)",
-              fontSize: "10px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--on-ink-mut, rgba(244,239,230,0.5))",
-            }}>
-              About
-            </span>
-            {ABOUT_MENU.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                style={{
-                  padding: "12px 0 12px 14px",
+            {/* About groups */}
+            {ABOUT_GROUPS.map((group) => (
+              <div key={group.label}>
+                <span style={{
+                  display: "block",
+                  padding: "16px 0 8px",
                   fontFamily: "var(--font-plex-mono, monospace)",
-                  fontSize: "11.5px",
-                  letterSpacing: "0.1em",
+                  fontSize: "10px",
+                  letterSpacing: "0.16em",
                   textTransform: "uppercase",
-                  color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
-                  borderBottom: "1px solid var(--ink-line-2)",
-                  textDecoration: "none",
-                }}
-              >
-                {label}
-              </Link>
+                  color: "var(--on-ink-mut, rgba(244,239,230,0.5))",
+                }}>
+                  {group.label}
+                </span>
+                {group.items.map(({ label, href }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileOpen(false)}
+                    style={{
+                      display: "block",
+                      padding: "12px 0 12px 14px",
+                      fontFamily: "var(--font-plex-mono, monospace)",
+                      fontSize: "11.5px",
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: isActive(href) ? "var(--on-ink)" : "var(--on-ink-2)",
+                      borderBottom: "1px solid var(--ink-line-2)",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
             ))}
 
             <Link

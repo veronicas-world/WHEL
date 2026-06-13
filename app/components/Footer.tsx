@@ -23,14 +23,17 @@ const PLATFORM_LINKS = [
   { label: "Candidates", href: "/candidates" },
 ];
 
-const COMPANY_LINKS = [
-  { label: "About",                  href: "/about" },
-  { label: "Roadmap",                href: "/about/roadmap" },
+const HOWITWORKS_LINKS = [
   { label: "Technical architecture", href: "/about/technical-architecture" },
   { label: "Signal types",           href: "/signal-types" },
   { label: "External references",    href: "/about/external-references" },
-  { label: "Contact",                href: "/about/contact" },
-  { label: "Request access",         href: "/access" },
+];
+
+const COMPANY_LINKS = [
+  { label: "About",          href: "/about" },
+  { label: "Roadmap",        href: "/about/roadmap" },
+  { label: "Contact",        href: "/about/contact" },
+  { label: "Request access", href: "/access" },
 ];
 
 export default function Footer() {
@@ -65,6 +68,14 @@ export default function Footer() {
           <div>
             <h4>Platform</h4>
             {PLATFORM_LINKS.map(({ label, href }) => (
+              <Link key={href} href={href} className="fl">{label}</Link>
+            ))}
+          </div>
+
+          {/* How it works */}
+          <div>
+            <h4>How it works</h4>
+            {HOWITWORKS_LINKS.map(({ label, href }) => (
               <Link key={href} href={href} className="fl">{label}</Link>
             ))}
           </div>
