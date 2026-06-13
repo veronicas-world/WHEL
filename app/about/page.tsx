@@ -1,304 +1,597 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "About | Whel",
+  description:
+    "Women's medicine is borrowed medicine. Whel is a drug-repurposing platform for female biology. This is the evidence-led account of why it has to exist, why we start with repurposing, why PMDD is the flagship, and why female biology needs a knowledge graph of its own.",
 };
 
-const MONO: React.CSSProperties = {
-  fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
-};
+/* External-source link (moss). Every factual claim on this page resolves to a source. */
+const A = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: "var(--moss)", textDecoration: "underline", textDecorationColor: "rgba(46,61,43,0.4)", textUnderlineOffset: 3 }}>
+    {children}
+  </a>
+);
 
-const EYEBROW: React.CSSProperties = {
-  ...MONO,
-  fontSize: "11px",
-  letterSpacing: "0.18em",
-  textTransform: "uppercase",
-  color: "var(--muted)",
-  marginBottom: 12,
-};
+/* ── Sources ─────────────────────────────────────────────────────────────────
+   Authoritative, linkable references for each factual claim, inline below. */
+const EXCL77  = "https://www.ncbi.nlm.nih.gov/books/NBK236532/"; // 1977 FDA exclusion policy
+const NIH93   = "https://orwh.od.nih.gov/toolkit/recruitment/history"; // NIH Revitalization Act 1993
+const GAO     = "https://www.gao.gov/products/gao-01-286r"; // 8 of 10 withdrawn drugs worse for women
+const ZOLP    = "https://www.fda.gov/drugs/drug-safety-and-availability/questions-and-answers-risk-next-morning-impairment-after-use-insomnia-drugs-fda-requires-lower"; // zolpidem 2013
+const MET     = "https://atm.amegroups.org/article/view/3899/html"; // metformin in PCOS review
+const SPIRO   = "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7318446/"; // spironolactone off-label acne
+const LEUP    = "https://www.ncbi.nlm.nih.gov/books/NBK551662/"; // leuprolide StatPearls
+const ELAG    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC6244606/"; // elagolix first global approval
+const SSRI    = "https://www.pharmaceuticalonline.com/doc/fda-approves-sarafem-fluoxetine-hcl-for-preme-0001"; // Sarafem 2000
+const LTZ     = "https://www.nejm.org/doi/full/10.1056/NEJMoa1313517"; // Legro NEJM 2014 letrozole
+const GLP     = "https://academic.oup.com/ejendo/article/194/3/S25/8488941"; // GLP-1 in PCOS review
+const PMDD    = "https://www.frontiersin.org/journals/global-womens-health/articles/10.3389/fgwh.2023.1181583/full"; // PMDD DSM-5 / prevalence
+const ECON    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12766319/"; // repurposing economics review
+const FIVE    = "https://www.fda.gov/media/156350/download"; // FDA 505(b)(2) overview
+const VIAGRA  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/"; // sildenafil history
 
-const H2: React.CSSProperties = {
-  fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)",
-  fontWeight: 500,
-  lineHeight: 1.15,
-  letterSpacing: "-0.01em",
-  color: "var(--ink)",
-  marginBottom: 16,
-};
+const CSS = `
+/* ── about page ─────────────────────────────────────────────────────────── */
 
-const BODY: React.CSSProperties = {
-  fontSize: "0.975rem",
-  lineHeight: 1.72,
-  color: "var(--ink-2)",
-};
+/* essay layout: sticky TOC + column */
+.ab-wrap {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 72px;
+  align-items: start;
+  padding-top: 88px;
+}
+.ab-toc { position: sticky; top: 108px; }
+.ab-toc-eyebrow {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #8F8F72; margin-bottom: 18px;
+}
+.ab-toc a {
+  display: flex; gap: 14px; align-items: baseline; padding: 9px 0;
+  text-decoration: none; border-top: 1px solid rgba(26,29,20,0.08);
+}
+.ab-toc a:last-child { border-bottom: 1px solid rgba(26,29,20,0.08); }
+.ab-toc .ab-n {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 10px; letter-spacing: 0.1em; color: #8F8F72; width: 22px; flex: none;
+}
+.ab-toc .ab-t {
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-size: 14.5px; line-height: 1.3; color: #6A6A4E;
+}
+.ab-toc a:hover .ab-t { color: var(--ink); }
 
-const LINK: React.CSSProperties = {
-  color: "var(--green-mid)",
-  textDecoration: "underline",
-  textUnderlineOffset: "2px",
-};
+/* section */
+.ab-sec { padding-bottom: 88px; }
+.ab-sec-head {
+  display: flex; align-items: baseline; gap: 20px;
+  border-top: 2px solid var(--ink); padding-top: 18px; margin-bottom: 26px;
+}
+.ab-sec-head .ab-sn {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 12px; letter-spacing: 0.18em; color: #97955E;
+}
+.ab-sec-head h2 {
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-weight: 500; font-size: clamp(28px, 3vw, 42px);
+  letter-spacing: -0.012em; margin: 0; line-height: 1.1;
+}
+
+/* prose */
+.ab-prose { font-size: 19px; line-height: 1.66; color: var(--body); max-width: 680px; }
+.ab-prose p { margin: 0 0 1.25em; }
+.ab-prose p:last-child { margin-bottom: 0; }
+.ab-prose a { text-decoration-thickness: 1px; }
+.ab-lead { font-size: 21px; color: var(--ink); }
+.ab-kicker {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--moss); margin: 38px 0 14px;
+}
+
+/* repurposing case ledger - the distinguishing device of this page */
+.ab-ledger { border: 1px solid rgba(26,29,20,0.16); margin: 8px 0 28px; max-width: 760px; }
+.ab-row {
+  display: grid; grid-template-columns: 40px minmax(0,1fr) 132px;
+  gap: 22px; padding: 22px 26px;
+  border-bottom: 1px solid rgba(26,29,20,0.12); align-items: start;
+}
+.ab-row:last-child { border-bottom: none; }
+.ab-row .ab-rn {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 12px; color: #97955E; padding-top: 5px;
+}
+.ab-rt {
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-size: 21px; font-weight: 500; line-height: 1.15; margin: 0 0 7px;
+}
+.ab-rt .ab-arr { color: var(--moss); font-style: normal; }
+.ab-rt .ab-to { font-weight: 400; }
+.ab-rd { font-size: 15.5px; line-height: 1.55; color: var(--body); margin: 0; }
+.ab-rmeta { text-align: right; padding-top: 4px; }
+.ab-ryear {
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-size: 26px; color: var(--moss); line-height: 1; letter-spacing: -0.02em;
+}
+.ab-rstat {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #6A6A4E; margin-top: 9px; line-height: 1.5;
+}
+
+/* stat strip under the exclusion section */
+.ab-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(26,29,20,0.12); border: 1px solid rgba(26,29,20,0.12); margin: 6px 0 30px; max-width: 760px; }
+.ab-stat { background: var(--bone); padding: 22px 20px; }
+.ab-sfig {
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-size: 34px; font-weight: 500; color: var(--moss); line-height: 1; letter-spacing: -0.02em;
+}
+.ab-sflag .ab-sfig { color: #7F3D2E; }
+.ab-scap {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 10px; line-height: 1.55; letter-spacing: 0.03em;
+  color: #6A6A4E; margin-top: 12px; text-transform: uppercase;
+}
+
+/* contrast device for management-vs-cure */
+.ab-split {
+  display: grid; grid-template-columns: 1fr 1.3fr;
+  border: 1px solid rgba(26,29,20,0.16); margin: 24px 0 8px; background: #FBF8F1; max-width: 760px;
+}
+.ab-split > div { padding: 26px 28px; }
+.ab-cure { border-right: 1px solid rgba(26,29,20,0.16); }
+.ab-sk {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px;
+}
+.ab-cure .ab-sk { color: #8F8F72; }
+.ab-whel .ab-sk { color: var(--moss); }
+.ab-sq { font-family: var(--font-newsreader, Georgia, serif); font-size: 19px; line-height: 1.4; }
+.ab-cure .ab-sq { color: #6A6A4E; }
+
+/* additive-layer band */
+.ab-band { background: var(--moss); color: var(--on-ink); }
+.ab-band-inner { padding: 72px 0; }
+.ab-band blockquote {
+  margin: 0; max-width: 30ch;
+  font-family: var(--font-newsreader, Georgia, serif);
+  font-size: clamp(24px, 2.4vw, 34px); line-height: 1.34; font-weight: 400;
+}
+.ab-band .ab-src {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 11px; letter-spacing: 0.18em; color: #CBD0BE; margin-top: 24px; text-transform: uppercase;
+}
+
+/* responsive */
+@media (max-width: 1100px) {
+  .ab-wrap { grid-template-columns: 1fr; gap: 0; }
+  .ab-toc { display: none; }
+}
+@media (max-width: 720px) {
+  .ab-stats { grid-template-columns: repeat(2, 1fr); }
+  .ab-row { grid-template-columns: 32px 1fr; }
+  .ab-rmeta { grid-column: 2; text-align: left; }
+  .ab-rmeta { display: flex; gap: 14px; align-items: baseline; }
+  .ab-rstat { margin-top: 0; }
+  .ab-split { grid-template-columns: 1fr; }
+  .ab-cure { border-right: none; border-bottom: 1px solid rgba(26,29,20,0.16); }
+}
+`;
 
 export default function AboutPage() {
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <>
+      <style>{CSS}</style>
+      <main style={{ background: "var(--bone)" }}>
 
-      {/* ── Page header ─────────────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <nav
-            style={{
-              ...MONO,
-              fontSize: "11px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginBottom: 20,
-            }}
-          >
-            <Link href="/" style={{ color: "var(--muted)" }}>Home</Link>
-            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-            <span style={{ color: "var(--ink)" }}>About</span>
-          </nav>
-
-          <h1
-            className="font-heading"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 500,
-              lineHeight: 1.08,
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: 16,
-            }}
-          >
-            About Whel.
-          </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
-            Whel is a drug-repurposing platform for female biology. This page explains
-            the gap in the women&apos;s health evidence base that Whel addresses, why drug
-            repurposing is the right method for these conditions, how the platform works,
-            and who it is built to serve.
-          </p>
-        </div>
-      </div>
-
-      {/* ── Body ────────────────────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
-
-          {/* 01 — What Whel is */}
-          <section>
-            <div style={EYEBROW}>01 · The thesis</div>
-            <h2 className="font-heading" style={H2}>What Whel is</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Whel finds the approved drugs that already work for women&apos;s health conditions and
-                proves it rigorously enough for a researcher or a clinician to act on. The conditions
-                we focus on, including endometriosis, PMDD, PCOS, adenomyosis, perimenopause, and
-                vulvodynia, are rarely cured and are instead managed over years, which is a different
-                medical problem with a different evidence base, and it is the problem the general
-                drug-discovery platforms were never built to solve.
-              </p>
-              <p style={BODY}>
-                A fuller account of why these conditions are overlooked, why their treatments already
-                exist inside the existing drug supply, and why this is the moment to build, is in the{" "}
-                <Link href="/manifesto" style={LINK}>manifesto</Link>.
+        {/* ── Hero ──────────────────────────────────────────────────────────── */}
+        <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 64 }}>
+          <div className="container">
+            <div style={{ maxWidth: 780 }}>
+              <div className="crumbs on-ink">
+                <Link href="/">Home</Link>
+                <span className="sep">/</span>
+                <span className="here">About</span>
+              </div>
+              <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>About Whel</div>
+              <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(2.1rem, 4.4vw, 3.4rem)", lineHeight: 1.07, maxWidth: "18ch" }}>
+                Women&rsquo;s medicine is borrowed medicine.
+              </h1>
+              <p className="lede" style={{ color: "var(--on-ink-2)", marginTop: 24, maxWidth: "60ch" }}>
+                Because drugs were almost never designed for women&rsquo;s conditions, the treatments that
+                actually work are mostly borrowed from somewhere else, approved for one thing and
+                prescribed off-label for another. That is not a scandal to expose; it is a resource to
+                read. This page is the evidence-led account of why Whel exists, why we start with
+                repurposing, why PMDD is the flagship, and why female biology needs a knowledge graph of
+                its own.
               </p>
             </div>
-          </section>
-
-          {/* 02 — The gap */}
-          <section>
-            <div style={EYEBROW}>02 · The gap</div>
-            <h2 className="font-heading" style={H2}>Why women&apos;s hormonal health</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Medical knowledge carries structural blind spots that begin with who was studied. The
-                United States did not require the inclusion of women in federally funded clinical
-                research until 1993{" "}
-                <a href="https://orwh.od.nih.gov/toolkit/recruitment/history" target="_blank" rel="noopener noreferrer" style={LINK}>(NIH Revitalization Act of 1993)</a>,{" "}
-                so the past three decades have been spent catching up from a standing start, and the
-                conditions that affect women most severely have been underfunded for as long as anyone
-                has measured.
-              </p>
-              <p style={BODY}>
-                The consequences are concrete rather than abstract. Endometriosis affects up to ten
-                percent of women of reproductive age while the average diagnostic delay remains seven
-                to ten years{" "}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/21718982/" target="_blank" rel="noopener noreferrer" style={LINK}>(Nnoaham et al., 2011)</a>,{" "}
-                and there is still no pharmaceutical treatment that addresses the underlying condition
-                instead of suppressing its symptoms. PMDD is clinically severe and cyclical yet is
-                treated primarily with SSRIs prescribed imprecisely, adenomyosis and vulvodynia and
-                PCOS remain underrepresented in the research literature, and menopause, a transition
-                that every woman who lives long enough will reach, is widely acknowledged to be poorly
-                managed.
-              </p>
-              <p style={BODY}>
-                The cause is structural rather than a failure of intent, because poorly characterized
-                mechanisms make a condition harder to study, which makes it less fundable, which leaves
-                the mechanism poorly characterized, and the loop closes on itself. Whel exists to
-                interrupt that loop by surfacing the evidence that already exists.
-              </p>
-            </div>
-          </section>
-
-          {/* 03 — The method */}
-          <section>
-            <div style={EYEBROW}>03 · The method</div>
-            <h2 className="font-heading" style={H2}>Why drug repurposing</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Drug repurposing asks a different question from traditional drug discovery, because
-                instead of designing a new molecule it examines the drugs already on the market, where
-                the safety profile is at least partly established, and searches for unexpected benefits
-                or patterns in existing data that point to a new use. A drug with a known safety record
-                reaches clinical investigation faster and at lower cost, so the work becomes a matter of
-                finding the signal rather than inventing the molecule.
-              </p>
-              <p style={BODY}>
-                The signal is more often present than people assume. Somewhere in a published trial, an
-                adverse-event database, or a patient forum from two years ago, a pattern was recorded
-                that no one connected to a new indication, and that data sits scattered across PubMed,
-                the trial registries, the adverse-event databases, and the patient communities, without
-                a tool that pulls it together specifically for women&apos;s hormonal and reproductive
-                health.
-              </p>
-              <p style={BODY}>
-                The method rests on a simple principle about evidence, which is that the absence of
-                direct evidence is not the same as the absence of evidence. Sparseness in the
-                literature is itself information, signals from unexpected places are hypotheses rather
-                than findings, and the two are different kinds of data that deserve to be presented
-                differently.
-              </p>
-            </div>
-          </section>
-
-          {/* 04 — The tool */}
-          <section>
-            <div style={EYEBROW}>04 · The tool</div>
-            <h2 className="font-heading" style={H2}>What Whel does</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Whel currently covers six conditions, endometriosis, PMDD, PCOS, adenomyosis,
-                vulvodynia, and menopause, and organizes the evidence into research arms that each read
-                a different kind of source. Direct research pulls published studies and active clinical
-                trials that target each condition. Cross-condition signals identify drugs developed for
-                other purposes where women have incidentally reported benefit, drawing on the FDA
-                adverse-event database and the secondary endpoints buried in unrelated trials. Pathway
-                insights surface drugs that worsen a condition, since understanding what makes something
-                worse is often a legitimate route to understanding what drives it. Community reports read
-                consistent treatment patterns across condition-specific forums, labeled clearly as
-                community signal that is held to a different standard than clinical evidence.
-              </p>
-              <p style={BODY}>
-                Each signal is graded for evidence strength, as Strong, Moderate, Emerging, or
-                Exploratory, and every result links to its source, so that the platform makes visible
-                the hypotheses that already exist in the data and have not yet been formally
-                investigated, and leaves the clinical judgment to the clinician.
-              </p>
-              <p style={BODY}>
-                Whel sits alongside other work in this field rather than in place of it. The most direct
-                counterpart is{" "}
-                <a href="https://www.everycure.org/" target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure</a>, a nonprofit founded in 2022 by the physicians David Fajgenbaum and Grant Mitchell to search
-                systematically for new uses of approved drugs, which publishes{" "}
-                <a href="https://huggingface.co/datasets/everycure/matrix" target="_blank" rel="noopener noreferrer" style={LINK}>MATRIX</a>, a public dataset of machine-learned plausibility predictions across roughly sixty million
-                drug-disease pairs, funded at scale by{" "}
-                <a href="https://arpa-h.gov/news-and-events/arpa-h-launches-matrix-program" target="_blank" rel="noopener noreferrer" style={LINK}>ARPA-H</a>{" "}
-                and the{" "}
-                <a href="https://www.audaciousproject.org/grantees/every-cure" target="_blank" rel="noopener noreferrer" style={LINK}>TED Audacious Project</a>. Every Cure works across the whole of disease, where the prize is a cure, while Whel works
-                inside female biology, where the work is management, so the two answer genuinely
-                different questions.
-              </p>
-              <p style={BODY}>
-                MATRIX scores how biologically plausible a drug-disease link appears across the whole of
-                biomedicine, and Whel grades the strength of the evidence currently available for a
-                specific drug-condition pair in a specific clinical literature, so where MATRIX has
-                coverage Whel surfaces those scores as an independent plausibility layer beside its own.
-                A fuller account of the external resources Whel draws on, and the ones it deliberately
-                leaves out, is on the{" "}
-                <Link href="/about/external-references" style={LINK}>external references</Link> page.
-              </p>
-            </div>
-          </section>
-
-          {/* 05 — Who it serves */}
-          <section>
-            <div style={EYEBROW}>05 · Who it serves</div>
-            <h2 className="font-heading" style={H2}>The audiences and the limits</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                Whel is a research-support tool built for clinician-researchers and for the pharma and
-                biotech teams working in women&apos;s health, and during the current research preview the
-                full index and the substrate are open by invitation through{" "}
-                <Link href="/access" style={LINK}>request access</Link>. Nothing on the platform is
-                medical advice, and every result is a research signal to be investigated rather than a
-                recommendation to be followed.
-              </p>
-              <p style={BODY}>
-                The premise underneath the work is a claim about the structure of knowledge, which is
-                that a drug developed for one purpose can carry, embedded in its trial data and its
-                prescribing record, a useful signal about an entirely different condition, and that such
-                truths can sit in the data for years before anyone thinks to look for them. Whel is built
-                to go looking, beginning with the conditions where the need is greatest and the looking
-                has been done least.
-              </p>
-            </div>
-          </section>
-
-          {/* Continue */}
-          <div
-            style={{
-              borderTop: "1px solid var(--rule)",
-              paddingTop: 28,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "12px 32px",
-            }}
-          >
-            <Link
-              href="/manifesto"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--ink)",
-                borderBottom: "1px solid var(--ink)",
-                paddingBottom: 2,
-              }}
-            >
-              Read the manifesto →
-            </Link>
-            <Link
-              href="/about/technical-architecture"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--ink)",
-                borderBottom: "1px solid var(--ink)",
-                paddingBottom: 2,
-              }}
-            >
-              How we score evidence →
-            </Link>
-            <Link
-              href="/about/external-references"
-              style={{
-                ...MONO,
-                fontSize: "12px",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "var(--green-mid)",
-              }}
-            >
-              External references →
-            </Link>
           </div>
+        </section>
 
+        {/* ── Essay ─────────────────────────────────────────────────────────── */}
+        <div className="container ab-wrap">
+
+          <aside className="ab-toc" aria-label="Sections">
+            <div className="ab-toc-eyebrow">Contents</div>
+            <a href="#exclusion"><span className="ab-n">01</span><span className="ab-t">The exclusion</span></a>
+            <a href="#repurposing"><span className="ab-n">02</span><span className="ab-t">Why we start with repurposing</span></a>
+            <a href="#flagship"><span className="ab-n">03</span><span className="ab-t">Why PMDD is the flagship</span></a>
+            <a href="#management"><span className="ab-n">04</span><span className="ab-t">Management, not cure</span></a>
+            <a href="#graph"><span className="ab-n">05</span><span className="ab-t">A graph of its own</span></a>
+          </aside>
+
+          <div>
+
+            {/* 01 - The exclusion */}
+            <section className="ab-sec" id="exclusion">
+              <div className="ab-sec-head">
+                <span className="ab-sn">01</span>
+                <h2>The exclusion</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  The reason women&rsquo;s medicine runs on borrowed drugs is that, for most of the modern
+                  era of drug development, women were written out of the part where drugs get designed.
+                </p>
+                <p>
+                  In 1977 the U.S. Food and Drug Administration issued guidance recommending that{" "}
+                  <A href={EXCL77}>women of childbearing potential be excluded</A> from early-phase drug
+                  trials, a precaution born of the thalidomide era that hardened into a default.
+                  For roughly the next two decades, the basic safety and dosing of new drugs was
+                  established largely in men, and the conclusions were then prescribed to everyone. The
+                  United States did not require the inclusion of women in federally funded clinical
+                  research until the{" "}
+                  <A href={NIH93}>NIH Revitalization Act of 1993</A>. The same year, the FDA reversed its
+                  1977 stance, which means the modern era of actually studying drugs in women is barely
+                  three decades old.
+                </p>
+                <p>
+                  This was never only a fairness problem; it was a data problem with measurable
+                  consequences. When the Government Accountability Office reviewed the prescription drugs
+                  withdrawn from the U.S. market between 1997 and 2000, it found that{" "}
+                  <A href={GAO}>eight of the ten posed greater health risks to women</A> than to men. The
+                  mechanism is mundane and well documented: women often metabolize drugs differently. In
+                  2013 the FDA cut the recommended dose of the sleep drug zolpidem in half for women
+                  after data showed they{" "}
+                  <A href={ZOLP}>clear it from the body more slowly</A>, leaving morning blood levels high
+                  enough to impair driving, two decades after the drug first reached the market.
+                </p>
+                <div className="ab-stats">
+                  <div className="ab-stat">
+                    <div className="ab-sfig">1977</div>
+                    <div className="ab-scap">FDA guidance excludes women of childbearing potential from early trials</div>
+                  </div>
+                  <div className="ab-stat">
+                    <div className="ab-sfig">1993</div>
+                    <div className="ab-scap">First U.S. law requiring women in federally funded research</div>
+                  </div>
+                  <div className="ab-stat ab-sflag">
+                    <div className="ab-sfig">8 / 10</div>
+                    <div className="ab-scap">Drugs withdrawn 1997&ndash;2000 carried greater risk for women</div>
+                  </div>
+                  <div className="ab-stat ab-sflag">
+                    <div className="ab-sfig">2013</div>
+                    <div className="ab-scap">FDA halves zolpidem dose for women, on a drug sold since the 1990s</div>
+                  </div>
+                </div>
+                <p>
+                  Carry that forward and the picture for women&rsquo;s hormonal and reproductive conditions
+                  is worse still, because those conditions were not merely under-dosed; they were
+                  under-developed. Few drugs were ever designed from the ground up for endometriosis,
+                  PCOS, PMDD, adenomyosis, or perimenopause. So the question for women&rsquo;s health is
+                  rarely &ldquo;which new molecule cures this?&rdquo; It is &ldquo;which drug that already
+                  exists, designed for something else, happens to help, and can we prove it?&rdquo;
+                </p>
+              </div>
+            </section>
+
+            {/* 02 - Why we start with repurposing */}
+            <section className="ab-sec" id="repurposing">
+              <div className="ab-sec-head">
+                <span className="ab-sn">02</span>
+                <h2>Why we start with repurposing</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  Women&rsquo;s health is already the largest unstructured drug-repurposing experiment in
+                  medicine. Almost everything that works for these conditions was borrowed.
+                </p>
+                <p>
+                  The drugs on the homepage are not Whel&rsquo;s discoveries; they are the public,
+                  decades-deep record of what borrowing looks like in practice. Each began life for
+                  another organ, another disease, sometimes another sex, and arrived at women&rsquo;s
+                  health late, off-label, or by accident. Read as a set, they make the case that
+                  repurposing is not a workaround for women&rsquo;s medicine. It is women&rsquo;s medicine.
+                </p>
+              </div>
+
+              <div className="ab-ledger">
+                <div className="ab-row">
+                  <div className="ab-rn">01</div>
+                  <div>
+                    <p className="ab-rt">Metformin <span className="ab-arr">&rarr;</span> <span className="ab-to">PCOS</span></p>
+                    <p className="ab-rd">
+                      A type-2 diabetes drug in clinical use since the late 1950s. Because PCOS is driven
+                      by insulin resistance, metformin lowers insulin and androgen levels and can restore
+                      ovulation, yet it is still{" "}
+                      <A href={MET}>used off-label, with no PCOS license</A>.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">1957</div>
+                    <div className="ab-rstat">Diabetes &middot; off-label</div>
+                  </div>
+                </div>
+
+                <div className="ab-row">
+                  <div className="ab-rn">02</div>
+                  <div>
+                    <p className="ab-rt">Spironolactone <span className="ab-arr">&rarr;</span> <span className="ab-to">Hormonal acne</span></p>
+                    <p className="ab-rd">
+                      Approved around 1960 for heart failure and high blood pressure. Its incidental
+                      anti-androgen effect made it a dermatology staple for hormonal acne and hirsutism{" "}
+                      <A href={SPIRO}>since the 1980s, still with no FDA approval for skin</A>.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">1960</div>
+                    <div className="ab-rstat">Cardiac &middot; off-label</div>
+                  </div>
+                </div>
+
+                <div className="ab-row">
+                  <div className="ab-rn">03</div>
+                  <div>
+                    <p className="ab-rt">GnRH analogues <span className="ab-arr">&rarr;</span> <span className="ab-to">Endometriosis</span></p>
+                    <p className="ab-rd">
+                      Leuprolide was developed as a{" "}
+                      <A href={LEUP}>prostate-cancer therapy</A> and became a mainstay of endometriosis
+                      care by shutting down estrogen. Tellingly, elagolix in 2018 was the{" "}
+                      <A href={ELAG}>first oral drug developed for endometriosis in over a decade</A>,
+                      proof of how starved the field has been of dedicated development.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">1985</div>
+                    <div className="ab-rstat">Oncology &middot; repurposed</div>
+                  </div>
+                </div>
+
+                <div className="ab-row">
+                  <div className="ab-rn">04</div>
+                  <div>
+                    <p className="ab-rt">SSRIs <span className="ab-arr">&rarr;</span> <span className="ab-to">PMDD</span></p>
+                    <p className="ab-rd">
+                      Fluoxetine was an antidepressant first. In 2000 the identical molecule was{" "}
+                      <A href={SSRI}>re-approved as Sarafem for PMDD</A> (same drug, new indication, new
+                      pill), and in PMDD it appears to work through rapid neurosteroid modulation, not the
+                      slow serotonin reuptake mechanism it was designed around.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">2000</div>
+                    <div className="ab-rstat">Psychiatry &middot; repurposed</div>
+                  </div>
+                </div>
+
+                <div className="ab-row">
+                  <div className="ab-rn">05</div>
+                  <div>
+                    <p className="ab-rt">Letrozole <span className="ab-arr">&rarr;</span> <span className="ab-to">PCOS infertility</span></p>
+                    <p className="ab-rd">
+                      A breast-cancer aromatase inhibitor. A{" "}
+                      <A href={LTZ}>landmark 2014 NEJM trial</A> showed it produced more live births than
+                      clomiphene, the old standard, for women with PCOS, and it is now first-line for
+                      ovulation induction, still off-label.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">2014</div>
+                    <div className="ab-rstat">Oncology &middot; off-label</div>
+                  </div>
+                </div>
+
+                <div className="ab-row">
+                  <div className="ab-rn">06</div>
+                  <div>
+                    <p className="ab-rt">GLP-1 agonists <span className="ab-arr">&rarr;</span> <span className="ab-to">PCOS</span></p>
+                    <p className="ab-rd">
+                      Diabetes and obesity drugs now under active study for PCOS, where{" "}
+                      <A href={GLP}>reviews report improved insulin resistance and weight</A>. The newest
+                      case in the same pattern: a drug built for one metabolic problem being pulled toward
+                      a women&rsquo;s condition it was never designed for.
+                    </p>
+                  </div>
+                  <div className="ab-rmeta">
+                    <div className="ab-ryear">2020s</div>
+                    <div className="ab-rstat">Metabolic &middot; emerging</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="ab-prose">
+                <div className="ab-kicker">Why repurposing is the next frontier</div>
+                <p>
+                  Starting here is not only the honest description of women&rsquo;s medicine; it is the
+                  efficient one. Developing a brand-new drug typically costs well over a billion dollars,
+                  takes ten to seventeen years, and fails roughly nine times out of ten. A repurposed
+                  drug starts from an established human safety record, so it{" "}
+                  <A href={ECON}>reaches patients faster, at a fraction of the cost, and is approved at
+                  far higher rates</A>. Regulators built a lane for exactly this: the FDA&rsquo;s{" "}
+                  <A href={FIVE}>505(b)(2) pathway</A> lets a sponsor rely on existing safety data for an
+                  approved ingredient and begin clinical work for a new indication much closer to the
+                  finish line.
+                </p>
+                <p>
+                  For women&rsquo;s health the logic compounds. The borrowing has already happened, in the
+                  open, for decades, in off-label prescribing, in trial registries, in adverse-event
+                  databases, and in the communities where patients log what helps. The signal exists.
+                  What has been missing is a system that reads it specifically for female biology and
+                  proves it rigorously enough to act on. That is where we start.
+                </p>
+              </div>
+            </section>
+
+            {/* 03 - Why PMDD is the flagship */}
+            <section className="ab-sec" id="flagship">
+              <div className="ab-sec-head">
+                <span className="ab-sn">03</span>
+                <h2>Why PMDD is the flagship</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  We chose premenstrual dysphoric disorder as the first condition to build in depth
+                  because it is where the method is hardest to fake and easiest to prove.
+                </p>
+                <p>
+                  PMDD is severe, common, and recent. It affects an estimated{" "}
+                  <A href={PMDD}>1.8 to 5.8 percent of menstruating women</A> and was only added as a
+                  formal diagnosis to the DSM-5 in 2013, after decades in the manual&rsquo;s appendix.
+                  That lateness is the point: a condition recognized this recently has a thin, scattered
+                  evidence base, which is exactly the terrain where a system that reads evidence carefully
+                  earns its keep.
+                </p>
+                <p>
+                  It is also the cleanest possible test of the substrate, because PMDD is cyclical by
+                  definition. Symptoms track the luteal phase and lift with menstruation, which means the
+                  right question is never just &ldquo;does this drug help?&rdquo; but &ldquo;does it help
+                  at the right point in the cycle, at the right dose, for the right person?&rdquo; A
+                  platform that cannot represent cyclical hormonal state cannot reason about PMDD at all.
+                  Building it here forces the substrate to handle the thing male-default graphs ignore.
+                </p>
+                <p>
+                  And the signal is dense. PMDD has large, articulate patient communities that record, in
+                  fine detail and in real time, what they take and when it works, the off-label reality
+                  the formal literature has not yet caught up to. If the method works anywhere, it works
+                  here first, and what we learn building PMDD transfers to the conditions next in line.
+                </p>
+              </div>
+            </section>
+
+            {/* 04 - Management, not cure */}
+            <section className="ab-sec" id="management">
+              <div className="ab-sec-head">
+                <span className="ab-sn">04</span>
+                <h2>Management, not cure</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  This is the part that separates Whel from the other drug-repurposing companies, and it
+                  is a difference in the medical model, not the technology.
+                </p>
+                <p>
+                  Most drug discovery, including the AI-native repurposing companies, is built to chase
+                  cures. The engines are tuned to find the single molecule that eliminates a disease,
+                  because for cancer and rare genetic disorders a cure for a fatal condition is the
+                  blockbuster. That model is sound for what it targets. It simply does not fit most of
+                  women&rsquo;s health.
+                </p>
+                <p>
+                  Endometriosis, PCOS, PMDD, adenomyosis, perimenopause, and vulvodynia are rarely cured.
+                  They are lived with and managed over years. They are seldom fatal but routinely
+                  life-debilitating, reshaping careers, relationships, and decades of daily function
+                  without ever appearing on a mortality table. Managing a chronic, non-fatal condition is
+                  a genuinely different question, and it needs a different evidence base.
+                </p>
+                <div className="ab-split">
+                  <div className="ab-cure">
+                    <div className="ab-sk">Cure model</div>
+                    <div className="ab-sq">&ldquo;Which molecule erases the disease?&rdquo;</div>
+                  </div>
+                  <div className="ab-whel">
+                    <div className="ab-sk">Whel&rsquo;s model</div>
+                    <div className="ab-sq">&ldquo;Which existing drug makes this condition livable, at what dose, in which phase of the cycle, for which person?&rdquo;</div>
+                  </div>
+                </div>
+                <p>
+                  The proof that management is a real and enormous market is sitting in plain sight.
+                  Sildenafil was developed for angina, underperformed at the heart, and was{" "}
+                  <A href={VIAGRA}>brought to market in 1998 as Viagra</A>. It cures nothing (erectile
+                  dysfunction is managed, not eliminated), yet by making a non-fatal condition livable it
+                  became one of the largest drug franchises in history. The equivalent drugs for
+                  women&rsquo;s conditions are the ones a cure-hunting engine is built not to see.
+                </p>
+                <p>
+                  That is the concrete consequence of the model difference: a platform scoring drug-disease
+                  pairs by their potential to cure will rank a drug that merely manages endometriosis for
+                  millions of women as a near-miss. We rank it as the result. The same logic explains why
+                  we treat patient-community reports as signal rather than noise, because managed
+                  conditions are precisely the ones where people document, month after month, what helps
+                  them get through the week. We read that record, structure it, and test it against
+                  mechanistic and clinical evidence. We never mistake it for proof, and we never discard
+                  it.
+                </p>
+              </div>
+            </section>
+
+            {/* 05 - A graph of its own */}
+            <section className="ab-sec" id="graph">
+              <div className="ab-sec-head">
+                <span className="ab-sn">05</span>
+                <h2>A graph of its own</h2>
+              </div>
+              <div className="ab-prose">
+                <p className="ab-lead">
+                  All of this is why female biology deserves a knowledge graph entirely separate from the
+                  male-default graphs the rest of the field reasons over.
+                </p>
+                <p>
+                  Every AI drug-discovery platform reasons over a knowledge graph, a structured map of how
+                  drugs, targets, pathways, and diseases connect. Those graphs were assembled from the
+                  same literature that under-studied women, so they inherit its priors: doses set in male
+                  tissue, mechanisms worked out without cyclical hormonal state, conditions that are
+                  thinly represented because they were thinly funded. Adding a &ldquo;women&rsquo;s
+                  health filter&rdquo; on top of that substrate does not fix the substrate. The errors are
+                  underneath the filter.
+                </p>
+                <p>
+                  So we are building the corrected version from the ground up, grounded in the same
+                  standard biomedical ontologies the field trusts (MONDO, HPO, RxNorm, ChEMBL) and then
+                  extended with the female-specific concepts no existing ontology captures adequately:
+                  sex-divergent pharmacokinetics, cyclical hormonal state, and the cross-condition
+                  mechanisms that only become visible once you stop treating the male body as the default.
+                </p>
+                <p>
+                  This is meant as an additive layer to pharma, not a competitor to it. The rest of the
+                  field is mapping the biology it was built to see; we are correcting and completing the
+                  half of it that was left out. A fuller account of the architecture, how each signal is
+                  graded, and the external resources we build on is on the{" "}
+                  <Link href="/about/technical-architecture" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 3 }}>technical architecture</Link>{" "}and{" "}
+                  <Link href="/about/external-references" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 3 }}>external references</Link>{" "}pages.
+                </p>
+              </div>
+            </section>
+
+          </div>
         </div>
-      </div>
-    </main>
+
+        {/* ── Additive-layer band ───────────────────────────────────────────── */}
+        <section className="ab-band">
+          <div className="container ab-band-inner">
+            <blockquote>
+              The record was written for the wrong body. We are not arguing with it; we are correcting and
+              completing it.
+            </blockquote>
+            <div className="ab-src">Whel &middot; an additive layer to pharma</div>
+          </div>
+        </section>
+
+        {/* ── Continue ──────────────────────────────────────────────────────── */}
+        <section className="surface-bone" style={{ paddingTop: 56, paddingBottom: 72 }}>
+          <div className="container">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+              <Link href="/manifesto" className="btn btn-primary">Read the manifesto <span className="arr">&rarr;</span></Link>
+              <Link href="/about/technical-architecture" className="btn btn-ghost">How we score evidence</Link>
+              <Link href="/access" className="btn btn-ghost">Request access</Link>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </>
   );
 }

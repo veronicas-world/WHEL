@@ -228,6 +228,19 @@ export default async function Home() {
             </p>
           </div>
           <SubstrateCompare />
+          <div style={{ marginTop: 28 }}>
+            <Link
+              href="/about#exclusion"
+              style={{
+                fontFamily: "var(--font-plex-mono, monospace)",
+                fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "var(--moss)", textDecoration: "none",
+                borderBottom: "1px solid var(--moss)", paddingBottom: 3,
+              }}
+            >
+              How female biology was written out of drug development <span className="arr">&rarr;</span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -258,6 +271,19 @@ export default async function Home() {
                 <div style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.5 }}>{a.note}</div>
               </div>
             ))}
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <Link
+              href="/about#repurposing"
+              style={{
+                fontFamily: "var(--font-plex-mono, monospace)",
+                fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "var(--moss)", textDecoration: "none",
+                borderBottom: "1px solid var(--moss)", paddingBottom: 3,
+              }}
+            >
+              Why we start with drug repurposing <span className="arr">&rarr;</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -396,6 +422,19 @@ export default async function Home() {
                 <div style={{ fontSize: 14, color: "var(--on-ink-2)", lineHeight: 1.55 }}>{e.detail}</div>
               </div>
             ))}
+          </div>
+          <div style={{ marginTop: 28 }}>
+            <Link
+              href="/about/roadmap"
+              style={{
+                fontFamily: "var(--font-plex-mono, monospace)",
+                fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "var(--signal)", textDecoration: "none",
+                borderBottom: "1px solid var(--signal)", paddingBottom: 3,
+              }}
+            >
+              See the full roadmap <span className="arr">&rarr;</span>
+            </Link>
           </div>
         </div>
       </section>
