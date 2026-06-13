@@ -30,6 +30,8 @@ const GLP     = "https://academic.oup.com/ejendo/article/194/3/S25/8488941"; // 
 const PMDD    = "https://www.frontiersin.org/journals/global-womens-health/articles/10.3389/fgwh.2023.1181583/full"; // PMDD DSM-5 / prevalence
 const ECON    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12766319/"; // repurposing economics review
 const FIVE    = "https://www.fda.gov/media/156350/download"; // FDA 505(b)(2) overview
+const MARKET  = "https://www.precedenceresearch.com/drug-repurposing-market"; // repurposing market size
+const ORPHAN  = "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2025.1670845/full"; // financial orphans / off-patent barriers
 const VIAGRA  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/"; // sildenafil history
 
 const CSS = `
@@ -203,10 +205,9 @@ export default function AboutPage() {
               <p className="lede" style={{ color: "var(--on-ink-2)", marginTop: 24, maxWidth: "60ch" }}>
                 Because drugs were almost never designed for women&rsquo;s conditions, the treatments that
                 actually work are mostly borrowed from somewhere else, approved for one thing and
-                prescribed off-label for another. That is not a scandal to expose; it is a resource to
-                read. This page is the evidence-led account of why Whel exists, why we start with
-                repurposing, why PMDD is the flagship, and why female biology needs a knowledge graph of
-                its own.
+                prescribed off-label for another. This page is the evidence-led account of why Whel
+                exists, why we start with repurposing, why PMDD is the flagship, and why female biology
+                needs a knowledge graph of its own.
               </p>
             </div>
           </div>
@@ -220,7 +221,7 @@ export default function AboutPage() {
             <a href="#exclusion"><span className="ab-n">01</span><span className="ab-t">The exclusion</span></a>
             <a href="#repurposing"><span className="ab-n">02</span><span className="ab-t">Why we start with repurposing</span></a>
             <a href="#flagship"><span className="ab-n">03</span><span className="ab-t">Why PMDD is the flagship</span></a>
-            <a href="#management"><span className="ab-n">04</span><span className="ab-t">Management, not cure</span></a>
+            <a href="#management"><span className="ab-n">04</span><span className="ab-t">Built for management</span></a>
             <a href="#graph"><span className="ab-n">05</span><span className="ab-t">A graph of its own</span></a>
           </aside>
 
@@ -304,8 +305,9 @@ export default function AboutPage() {
                   The drugs on the homepage are not Whel&rsquo;s discoveries; they are the public,
                   decades-deep record of what borrowing looks like in practice. Each began life for
                   another organ, another disease, sometimes another sex, and arrived at women&rsquo;s
-                  health late, off-label, or by accident. Read as a set, they make the case that
-                  repurposing is not a workaround for women&rsquo;s medicine. It is women&rsquo;s medicine.
+                  health late, off-label, or by accident. Read as a set, they tell a single story:
+                  women&rsquo;s medicine has run on repurposing for decades, and we are the first to treat
+                  that as something worth building on.
                 </p>
               </div>
 
@@ -416,22 +418,25 @@ export default function AboutPage() {
               <div className="ab-prose">
                 <div className="ab-kicker">Why repurposing is the next frontier</div>
                 <p>
-                  Starting here is not only the honest description of women&rsquo;s medicine; it is the
-                  efficient one. Developing a brand-new drug typically costs well over a billion dollars,
-                  takes ten to seventeen years, and fails roughly nine times out of ten. A repurposed
-                  drug starts from an established human safety record, so it{" "}
+                  Starting here also tracks where drug development itself is heading. Developing a
+                  brand-new drug typically costs well over a billion dollars, takes ten to seventeen
+                  years, and fails roughly nine times out of ten. A repurposed drug starts from an
+                  established human safety record, so it{" "}
                   <A href={ECON}>reaches patients faster, at a fraction of the cost, and is approved at
                   far higher rates</A>. Regulators built a lane for exactly this: the FDA&rsquo;s{" "}
-                  <A href={FIVE}>505(b)(2) pathway</A> lets a sponsor rely on existing safety data for an
+                  <A href={FIVE}>505(b)(2) pathway</A> lets a sponsor lean on existing safety data for an
                   approved ingredient and begin clinical work for a new indication much closer to the
                   finish line.
                 </p>
                 <p>
-                  For women&rsquo;s health the logic compounds. The borrowing has already happened, in the
-                  open, for decades, in off-label prescribing, in trial registries, in adverse-event
-                  databases, and in the communities where patients log what helps. The signal exists.
-                  What has been missing is a system that reads it specifically for female biology and
-                  proves it rigorously enough to act on. That is where we start.
+                  The market reflects the same logic. Drug repurposing was worth roughly{" "}
+                  <A href={MARKET}>36 billion dollars in 2025 and is forecast to keep climbing through the
+                  next decade</A>. Almost all of that effort, though, points back at the conditions the
+                  wider industry already prioritizes. The borrowing that built women&rsquo;s health
+                  happened in the open, over decades, in off-label prescribing, in trial registries, in
+                  adverse-event databases, and in the communities where patients log what helps. The
+                  signal is sitting there. What has been missing is a system that reads it for female
+                  biology and proves it rigorously enough to act on. That is where we start.
                 </p>
               </div>
             </section>
@@ -472,30 +477,30 @@ export default function AboutPage() {
               </div>
             </section>
 
-            {/* 04 - Management, not cure */}
+            {/* 04 - Built for management */}
             <section className="ab-sec" id="management">
               <div className="ab-sec-head">
                 <span className="ab-sn">04</span>
-                <h2>Management, not cure</h2>
+                <h2>Built for management</h2>
               </div>
               <div className="ab-prose">
                 <p className="ab-lead">
-                  This is the part that separates Whel from the other drug-repurposing companies, and it
-                  is a difference in the medical model, not the technology.
+                  Whel and the other AI-native drug-repurposing companies run on similar machinery. What
+                  sets us apart is the medical model that machinery is built to serve.
                 </p>
                 <p>
-                  Most drug discovery, including the AI-native repurposing companies, is built to chase
-                  cures. The engines are tuned to find the single molecule that eliminates a disease,
-                  because for cancer and rare genetic disorders a cure for a fatal condition is the
-                  blockbuster. That model is sound for what it targets. It simply does not fit most of
-                  women&rsquo;s health.
+                  Most drug discovery is built to chase cures. Its engines are tuned to find the single
+                  molecule that can eliminate a disease, because for cancer and rare genetic disorders a
+                  cure for a fatal condition is the blockbuster. That model is sound for what it targets,
+                  and it is where the AI drug-discovery companies point their engines. It simply does not
+                  fit most of women&rsquo;s health.
                 </p>
                 <p>
                   Endometriosis, PCOS, PMDD, adenomyosis, perimenopause, and vulvodynia are rarely cured.
-                  They are lived with and managed over years. They are seldom fatal but routinely
+                  They are lived with and managed over years. They are rarely fatal but routinely
                   life-debilitating, reshaping careers, relationships, and decades of daily function
-                  without ever appearing on a mortality table. Managing a chronic, non-fatal condition is
-                  a genuinely different question, and it needs a different evidence base.
+                  without ever showing up on a mortality table. Managing a chronic, non-fatal condition
+                  is a different kind of problem, and it needs a different evidence base.
                 </p>
                 <div className="ab-split">
                   <div className="ab-cure">
@@ -508,22 +513,35 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <p>
-                  The proof that management is a real and enormous market is sitting in plain sight.
-                  Sildenafil was developed for angina, underperformed at the heart, and was{" "}
-                  <A href={VIAGRA}>brought to market in 1998 as Viagra</A>. It cures nothing (erectile
-                  dysfunction is managed, not eliminated), yet by making a non-fatal condition livable it
-                  became one of the largest drug franchises in history. The equivalent drugs for
-                  women&rsquo;s conditions are the ones a cure-hunting engine is built not to see.
+                  There is a structural reason a blockbuster engine looks past these drugs, and it is
+                  financial before it is clinical. Pharma recoups its enormous development bills through
+                  patent-protected exclusivity, so the candidates worth a company&rsquo;s attention are
+                  the ones it can own. Most of the drugs that already manage women&rsquo;s conditions are
+                  cheap, off-patent generics. The repurposing literature has a name for them:{" "}
+                  <A href={ORPHAN}>financial orphans</A>, clinically valuable and commercially
+                  unattractive, left unstudied because no one can profit from confirming what they do.
+                  Public money funds early research but rarely the confirmatory trials, which is part of
+                  why the odds of a repurposed generic reaching a new approved use sit{" "}
+                  <A href={ORPHAN}>below 30 percent</A> even when the science holds up.
                 </p>
                 <p>
-                  That is the concrete consequence of the model difference: a platform scoring drug-disease
-                  pairs by their potential to cure will rank a drug that merely manages endometriosis for
-                  millions of women as a near-miss. We rank it as the result. The same logic explains why
-                  we treat patient-community reports as signal rather than noise, because managed
-                  conditions are precisely the ones where people document, month after month, what helps
-                  them get through the week. We read that record, structure it, and test it against
-                  mechanistic and clinical evidence. We never mistake it for proof, and we never discard
-                  it.
+                  Sildenafil shows the same rule from the other side. It was developed for angina,
+                  underperformed at the heart, and was{" "}
+                  <A href={VIAGRA}>brought to market in 1998 as Viagra</A>. It cures nothing, yet by
+                  making a non-fatal condition livable it became one of the largest drug franchises in
+                  history, and it got developed precisely because it was a new, ownable molecule. The
+                  drugs that could do the same for endometriosis or PMDD are mostly generics no one can
+                  own, so a blockbuster-tuned engine has no reason to surface them.
+                </p>
+                <p>
+                  That is the consequence of the model difference. A platform scoring drug-disease pairs
+                  by their potential to cure, and by their potential to be owned, will rank a drug that
+                  manages endometriosis for millions of women as a near-miss. We rank it as the result.
+                  The same logic is why we read patient-community reports as evidence: managed conditions
+                  are the ones where people record, month after month, what helps them get through the
+                  week, and these communities accumulate practical knowledge years ahead of the
+                  literature. We structure that record and test it against mechanistic and clinical
+                  evidence, never mistaking it for proof and never discarding it as noise.
                 </p>
               </div>
             </section>
@@ -573,7 +591,7 @@ export default function AboutPage() {
         <section className="ab-band">
           <div className="container ab-band-inner">
             <blockquote>
-              The record was written for the wrong body. We are not arguing with it; we are correcting and
+              The record was written for the wrong body. We are reading it back, correcting it, and
               completing it.
             </blockquote>
             <div className="ab-src">Whel &middot; an additive layer to pharma</div>
