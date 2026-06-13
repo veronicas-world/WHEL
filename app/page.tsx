@@ -6,10 +6,8 @@ import MoleculeMesh3D, { type Marker } from "@/app/components/MoleculeMesh3D";
 import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
-import CandidateCard from "@/app/components/CandidateCard";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import ScrollEffects from "@/app/components/ScrollEffects";
-import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -106,7 +104,6 @@ export default async function Home() {
 
   const conditions = conditionsRaw ?? [];
   const signals    = signalsRaw   ?? [];
-  const featured   = await getFeaturedCandidates(3);
 
   const totalSignals    = signals.length;
   const totalConditions = conditions.length;
@@ -260,24 +257,6 @@ export default async function Home() {
                 </div>
                 <div style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.5 }}>{a.note}</div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FEATURED CANDIDATES ── the product ──────────────────────────────── */}
-      <section className="surface-bone section scroll-section">
-        <div className="container">
-          <div className="between" style={{ marginBottom: 32 }}>
-            <h2 className="h2">Repurposing candidates, with the trail.</h2>
-            <Link href="/candidates" className="btn btn-ghost">
-              All candidates <span className="arr">→</span>
-            </Link>
-          </div>
-          {/* TODO(real-data): first 3 candidates from design; wire to Supabase repurposing_signals in next pass */}
-          <div className="col" style={{ gap: 16 }}>
-            {featured.map((c, i) => (
-              <CandidateCard key={c.id} c={c} defaultOpen={i === 0} />
             ))}
           </div>
         </div>

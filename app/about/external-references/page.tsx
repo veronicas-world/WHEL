@@ -1709,9 +1709,7 @@ export default function ExternalReferencesPage() {
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   Recorded in the methodology revision history at v3.4 (see{" "}
-                  <Link href="/about/methodology/changelog" style={LINK}>
-                    /about/methodology/changelog
-                  </Link>
+                  the methodology changelog
                   ). Listed as a Planned register row on the Roadmap as
                   &ldquo;Ontology-grounded entity resolution (Path A).&rdquo;
                   This disclosure block will switch from Pending to Live, and
@@ -1978,9 +1976,7 @@ export default function ExternalReferencesPage() {
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   Recorded in the methodology revision history at v3.4 (see{" "}
-                  <Link href="/about/methodology/changelog" style={LINK}>
-                    /about/methodology/changelog
-                  </Link>
+                  the methodology changelog
                   ). Listed as a Planned register row on the Roadmap as
                   &ldquo;Knowledge-graph grounding via BioCypher (Path
                   B).&rdquo; This disclosure block will switch from Pending
@@ -2830,9 +2826,7 @@ export default function ExternalReferencesPage() {
                   1 first database-sources run), and v3.11 (OT-DRUGNAME
                   backfill closing the v3.10 architectural-debt finding).
                   Full revision history at{" "}
-                  <Link href="/about/methodology/changelog" style={LINK}>
-                    /about/methodology/changelog
-                  </Link>
+                  the methodology changelog
                   . Phase 1 is now a Live register row on the Roadmap as
                   &ldquo;Citation validation and summary grounding (Path
                   C);&rdquo; Phase 2 (sentence-level summary grounding

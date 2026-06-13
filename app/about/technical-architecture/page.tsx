@@ -220,7 +220,7 @@ const CATEGORY_STANDARDS: { label: string; body: string }[] = [
   },
   {
     label: "Community Forum Reports",
-    body: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient; the framework still requires specificity (not \"metformin changed things\" but \"after starting metformin, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. Whel also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
+    body: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient; the framework still requires specificity (not \"it changed things\" but \"after starting the medication, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. Whel also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
   },
 ];
 
@@ -458,31 +458,6 @@ export default function TechnicalArchitecturePage() {
             enforces, and the documented limitations of the methodology as
             currently shipped.
           </p>
-
-          <div style={{ marginTop: 28 }}>
-            <a
-              href="/whel-methods-v0.1.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                ...MONO,
-                display: "inline-flex",
-                alignItems: "baseline",
-                gap: 10,
-                fontSize: "12px",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--paper)",
-                backgroundColor: "var(--green-deep)",
-                border: "1px solid var(--green-deep)",
-                padding: "12px 20px",
-                textDecoration: "none",
-              }}
-            >
-              Read the methods (PDF)
-              <span aria-hidden="true">↓</span>
-            </a>
-          </div>
         </div>
       </div>
 

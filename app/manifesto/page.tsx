@@ -145,7 +145,8 @@ const CSS = `
 .mf-sec {
   display: grid;
   grid-template-columns: minmax(0, 680px) 224px;
-  gap: 72px;
+  row-gap: 20px;
+  column-gap: 72px;
   padding-bottom: 96px;
 }
 .mf-sec-head {
@@ -176,8 +177,8 @@ const CSS = `
 .mf-prose { font-size: 20px; line-height: 1.66; color: var(--body); }
 .mf-prose p { margin: 0 0 1.25em; }
 .mf-prose p:last-child { margin-bottom: 0; }
-.mf-prose a { color: var(--moss); text-decoration-color: rgba(46,61,43,0.4); text-underline-offset: 3px; }
-.mf-prose a:hover { text-decoration-color: var(--moss); }
+.mf-prose p a { color: var(--moss); text-decoration-color: rgba(46,61,43,0.4); text-underline-offset: 3px; }
+.mf-prose p a:hover { text-decoration-color: var(--moss); }
 .mf-dropcap::first-letter {
   font-size: 4.6em;
   float: left;

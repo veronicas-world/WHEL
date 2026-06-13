@@ -587,11 +587,7 @@ export default function MethodologyPage() {
                   rubric to every Moderate-and-above signal and re-checked
                   the condition-attribution of every ClinicalTrials.gov
                   citation; the findings and resolutions are recorded in
-                  the methodology revision history at{" "}
-                  <Link href="/about/methodology/changelog" style={LINK}>
-                    /about/methodology/changelog
-                  </Link>
-                  .
+                  the internal methodology revision history.
                 </p>
               </div>
             </div>
@@ -1317,21 +1313,6 @@ export default function MethodologyPage() {
               >
                 Read the rubric →
               </Link>
-              <Link
-                href="/featured"
-                style={{
-                  ...MONO,
-                  fontSize: "12px",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "var(--ink)",
-                  padding: "10px 4px",
-                  borderBottom: "1px solid var(--ink)",
-                  textDecoration: "none",
-                }}
-              >
-                See the featured signal
-              </Link>
             </div>
           </div>
 
@@ -1414,14 +1395,7 @@ export default function MethodologyPage() {
               JSON run log plus Supabase migration 045 with the UPDATE
               statements. After the script runs and migration 045 ships,
               Phase 2a runs against real data for the first time. See
-              full v3.13 entry on the{" "}
-              <Link
-                href="/about/methodology/changelog"
-                style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: "2px" }}
-              >
-                changelog
-              </Link>
-              .
+              full v3.13 entry in the internal changelog.
             </p>
 
             <div
@@ -1446,20 +1420,6 @@ export default function MethodologyPage() {
               >
                 14 dated revisions &middot; v2 through v3.13
               </span>
-              <Link
-                href="/about/methodology/changelog"
-                style={{
-                  ...MONO,
-                  fontSize: "11px",
-                  letterSpacing: "0.13em",
-                  textTransform: "uppercase",
-                  color: "var(--green-mid)",
-                  textDecoration: "underline",
-                  textUnderlineOffset: "2px",
-                }}
-              >
-                See full revision history &rarr;
-              </Link>
             </div>
           </div>
 
