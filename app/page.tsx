@@ -164,7 +164,7 @@ export default async function Home() {
               </div>
             </div>
             <div className="graph-hero" style={{ marginTop: -36 }}>
-              <KnowledgeGraph3D height={460} dense showLabels={false} scaleFactor={0.19} />
+              <KnowledgeGraph3D height={460} dense showLabels={false} scaleFactor={0.21} />
             </div>
           </div>
         </div>
@@ -421,10 +421,10 @@ export default async function Home() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────────── */}
-      <section className="surface-ink section scroll-section" style={{ position: "relative", overflow: "hidden" }}>
-        {/* Ambient 3D backdrop — aria-hidden, non-interactive */}
+      <section className="surface-ink section scroll-section" style={{ position: "relative", overflow: "hidden", paddingTop: 64, paddingBottom: 64 }}>
+        {/* Ambient 3D backdrop — aria-hidden, non-interactive, fills the block */}
         <div aria-hidden style={{ position: "absolute", inset: 0, opacity: 0.5, pointerEvents: "none", display: "flex", alignItems: "center" }}>
-          <KnowledgeGraph3D height={380} autoSpin={0.0014} interactive={false} />
+          <KnowledgeGraph3D height={520} autoSpin={0.0014} interactive={false} fillWidth scaleFactor={0.26} />
         </div>
         <div className="container-tight" style={{ textAlign: "center", position: "relative" }}>
           <div className="eyebrow on-ink" style={{ marginBottom: 20 }}>Whel · Women&apos;s Health Evidence Lab</div>

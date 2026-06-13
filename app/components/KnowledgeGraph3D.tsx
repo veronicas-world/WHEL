@@ -48,45 +48,31 @@ const GRAPH_COMPACT: GraphData = {
   ],
 };
 
-// Fuller substrate — the hero. Still compact (fits the box at the same size as
-// the original mesh) but with more drugs, mechanisms, and cross-links so the
-// graph reads as a real, robust knowledge graph rather than a sparse few arcs.
+// Fuller substrate — the hero. A single connected graph, kept to a dozen nodes
+// so it spreads cleanly inside the box rather than clumping. Drug → mechanism →
+// condition, with one contradiction edge for variety.
 const GRAPH_DENSE: GraphData = {
   nodes: [
     { id: "pcos",      label: "PCOS",         kind: "condition" },
     { id: "endo",      label: "Endo.",        kind: "condition" },
     { id: "pmdd",      label: "PMDD",         kind: "condition" },
-    { id: "adeno",     label: "Adeno.",       kind: "condition" },
     { id: "metformin", label: "Metformin",    kind: "drug" },
     { id: "gnrh",      label: "GnRH antag.",  kind: "drug" },
     { id: "ssri",      label: "SSRIs",        kind: "drug" },
     { id: "letrozole", label: "Letrozole",    kind: "drug" },
-    { id: "glp1",      label: "GLP-1",        kind: "drug" },
-    { id: "ldn",       label: "LDN",          kind: "drug" },
-    { id: "spiro",     label: "Spirono.",     kind: "drug" },
-    { id: "inositol",  label: "Inositol",     kind: "drug" },
     { id: "insulin",   label: "Insulin",      kind: "mech" },
     { id: "estrogen",  label: "Estrogen",     kind: "mech" },
     { id: "neuro",     label: "Neurosteroid", kind: "mech" },
     { id: "inflam",    label: "Inflam.",      kind: "mech" },
     { id: "aromatase", label: "Aromatase",    kind: "mech" },
-    { id: "androgen",  label: "Androgen",     kind: "mech" },
   ],
   edges: [
-    ["metformin", "insulin", "supports"],   ["metformin", "androgen", "supports"], ["metformin", "pcos", "supports"],
-    ["glp1", "insulin", "supports"],        ["glp1", "inflam", "supports"],        ["glp1", "pcos", "supports"],   ["glp1", "endo", "supports"],
-    ["gnrh", "estrogen", "supports"],       ["gnrh", "endo", "supports"],          ["gnrh", "adeno", "supports"],
-    ["letrozole", "aromatase", "supports"], ["letrozole", "pcos", "supports"],
-    ["ssri", "neuro", "supports"],          ["ssri", "pmdd", "supports"],
-    ["ldn", "inflam", "contradicts"],       ["ldn", "endo", "supports"],
-    ["spiro", "androgen", "supports"],      ["spiro", "pcos", "supports"],
-    ["inositol", "insulin", "supports"],    ["inositol", "pcos", "supports"],
-    ["insulin", "pcos", "supports"],
-    ["estrogen", "endo", "supports"],       ["estrogen", "pcos", "supports"],      ["estrogen", "adeno", "supports"],
-    ["aromatase", "estrogen", "supports"],  ["aromatase", "pcos", "supports"],
-    ["neuro", "pmdd", "supports"],
-    ["inflam", "endo", "supports"],         ["inflam", "pcos", "supports"],        ["inflam", "adeno", "supports"],
-    ["androgen", "pcos", "supports"],
+    ["metformin", "insulin", "supports"],   ["insulin", "pcos", "supports"],       ["metformin", "pcos", "supports"],
+    ["gnrh", "estrogen", "supports"],       ["estrogen", "endo", "supports"],      ["estrogen", "pcos", "supports"],
+    ["letrozole", "aromatase", "supports"], ["aromatase", "estrogen", "supports"], ["aromatase", "pcos", "supports"],
+    ["ssri", "neuro", "supports"],          ["neuro", "pmdd", "supports"],         ["neuro", "estrogen", "supports"],
+    ["inflam", "endo", "supports"],         ["inflam", "pcos", "supports"],
+    ["estrogen", "pmdd", "contradicts"],
   ],
 };
 
@@ -125,6 +111,8 @@ interface Props {
   dense?: boolean;
   /** World→screen zoom. Lower = nodes closer together / smaller. */
   scaleFactor?: number;
+  /** Scale to the full width (backdrop) instead of the smaller box dimension. */
+  fillWidth?: boolean;
 }
 
 export default function KnowledgeGraph3D({
@@ -134,6 +122,7 @@ export default function KnowledgeGraph3D({
   showLabels = true,
   dense = false,
   scaleFactor = 0.30,
+  fillWidth = false,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const cvRef = useRef<HTMLCanvasElement>(null);
@@ -243,7 +232,7 @@ export default function KnowledgeGraph3D({
       nodes.forEach((n) => { if (n.kind === "drug") n.rot += 0.006; });
 
       const cay = Math.cos(ay), say = Math.sin(ay), cax = Math.cos(ax), sax = Math.sin(ax);
-      const scale = Math.min(Wd, Hd) * scaleFactor;
+      const scale = (fillWidth ? Wd : Math.min(Wd, Hd)) * scaleFactor;
       const cx = Wd / 2, cy = Hd * 0.5;
       ctx.clearRect(0, 0, Wd, Hd);
 
@@ -309,7 +298,7 @@ export default function KnowledgeGraph3D({
         window.removeEventListener("mouseup", onUp);
       }
     };
-  }, [height, autoSpin, interactive, showLabels, dense, scaleFactor]);
+  }, [height, autoSpin, interactive, showLabels, dense, scaleFactor, fillWidth]);
 
   return (
     <div className="m3-stage" ref={wrapRef}>
