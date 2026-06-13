@@ -1386,6 +1386,7 @@ export default function ExternalReferencesPage() {
                     {Object.entries(snap.dataset_snapshot).map(([key, entry], i, arr) => (
                       <div
                         key={key}
+                        className="stack-640"
                         style={{
                           display: "grid",
                           gridTemplateColumns: "minmax(140px, 1fr) minmax(0, 2fr) minmax(0, 1.2fr)",

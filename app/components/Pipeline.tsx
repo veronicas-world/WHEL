@@ -8,7 +8,7 @@ const STAGES = [
 
 export default function Pipeline() {
   return (
-    <div style={{
+    <div className="pipeline-grid" style={{
       display: "grid",
       gridTemplateColumns: `repeat(${STAGES.length}, 1fr)`,
       gap: 1,

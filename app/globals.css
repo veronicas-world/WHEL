@@ -507,9 +507,10 @@ details.disclose-block[open] > summary .disclose-chev { transform: rotate(180deg
 
 /* ── Responsive collapses ─────────────────────────────────────────────── */
 
-@media (max-width: 960px){ .hero-grid { grid-template-columns: 1fr !important; gap: 36px !important; } .two-col { grid-template-columns: 1fr !important; gap: 32px !important; } }
-@media (max-width: 860px){ .arc-grid, .exp-grid { grid-template-columns: 1fr 1fr !important; } .tier-grid { grid-template-columns: 1fr 1fr !important; } }
+@media (max-width: 960px){ .hero-grid { grid-template-columns: 1fr !important; gap: 36px !important; } .two-col, .access-grid { grid-template-columns: 1fr !important; gap: 32px !important; } }
+@media (max-width: 860px){ .arc-grid, .exp-grid { grid-template-columns: 1fr 1fr !important; } .tier-grid { grid-template-columns: 1fr 1fr !important; } .pipeline-grid { grid-template-columns: repeat(2, 1fr) !important; } }
 @media (max-width: 760px){ .layer { grid-template-columns: 1fr !important; } }
+@media (max-width: 640px){ .pipeline-grid { grid-template-columns: 1fr !important; } .stack-640 { grid-template-columns: 1fr !important; gap: 6px !important; } }
 @media (max-width: 560px){ .arc-grid, .exp-grid, .tier-grid { grid-template-columns: 1fr !important; } }
 
 /* ── Typewriter cursor ───────────────────────────────────────────────── */

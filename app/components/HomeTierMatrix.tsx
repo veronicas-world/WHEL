@@ -43,9 +43,11 @@ export default function HomeTierMatrix({ rows }: { rows: MatrixRow[] }) {
 
   return (
     <div>
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
       <div style={{
         display: "grid",
-        gridTemplateColumns: "180px repeat(4,1fr) 70px",
+        gridTemplateColumns: "minmax(132px,180px) repeat(4,1fr) 64px",
+        minWidth: 520,
         gap: 1,
         background: "var(--line)",
         border: "1px solid var(--line)",
@@ -105,6 +107,7 @@ export default function HomeTierMatrix({ rows }: { rows: MatrixRow[] }) {
             </div>
           </div>
         ))}
+      </div>
       </div>
       <div style={{
         display: "flex", justifyContent: "space-between", marginTop: 14,

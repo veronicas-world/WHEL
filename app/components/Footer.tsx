@@ -34,7 +34,7 @@ export default function Footer() {
   return (
     <footer className="whel-footer">
       <div className="container">
-        <div className="grid" style={{ display: "grid", gridTemplateColumns: "1.6fr 1fr 1fr 1fr", gap: 44 }}>
+        <div className="grid">
 
           {/* Brand */}
           <div>

@@ -95,6 +95,7 @@ function RubricSourceBlock({
           .map(([label, value]) => (
             <div
               key={label}
+              className="stack-640"
               style={{
                 display: "grid",
                 gridTemplateColumns: "minmax(0, 180px) 1fr",
