@@ -63,11 +63,11 @@ Turns names into stable IDs so everything downstream (MATRIX joins, the graph, d
 - `target_conditions` (`target_id`, `condition_id`, `datatype` ∈ genetic/known_drug/literature/animal_model, `score`) — this is the structured form of Open Targets `datatypeScores`, currently dropped.
 - (Optional, later) `pathways` + `target_pathways` via Reactome.
 
-**B2 · Open Targets "store-all" rewrite.** Change `opentargets-pipeline.js` to persist the structured `associatedTargets` / `mechanismsOfAction` rows it already retrieves, instead of summarizing them. This is the core change and it has a bonus: storing structured data directly removes a Claude summarization call, so it *reduces* API spend rather than adding it.
+**B2 · Open Targets capture (script built).** `scripts/capture-opentargets-graph.py` reads the canonical compounds (`chembl_id`, from Path A) and conditions (`efo_id`/`mondo_id`), runs the existing `DiseaseData` query once per condition, and **emits a generated migration**, `055_backfill_graph.sql`: `targets` upsert on `ensembl_gene_id`, and `target_conditions` / `drug_targets` insert-on-conflict with endpoints resolved by natural key (ensembl / chembl / condition id). It writes through a reviewable migration like the Path A resolver, *not* directly into the DB — which is why this supersedes the earlier "rewrite `opentargets-pipeline.js` to write directly" idea (that broke the generated-migration rule). Free API, no Claude, and it lets the old summarization call go. Note: a `drug_targets` edge only forms for a drug whose Open Targets ChEMBL id matches one of our resolved compounds, so the class / combination / supplement rows from migration 053 correctly get no edges until Path B builds class-member nodes.
 
-**B3 · Graph-derived disclosure ("graph supports / graph silent").** For each drug–condition signal, compute whether the drug targets a gene that Open Targets associates with the condition (a join over `drug_targets` × `target_conditions`). A first useful cut lives entirely in Postgres — no Neo4j required — and yields, per signal, either "graph supports, via target X" or "graph silent." Surface it beside the existing MATRIX chip in the same independent-layer shape. (BioCypher / a real property graph is a later phase once the relational version proves its value.)
+**B3 · Graph-derived disclosure ("graph supports / graph silent").** Once 055 lands, for each drug–condition signal, compute whether the drug targets a gene that Open Targets associates with the condition (a join over `drug_targets` × `target_conditions`). A first useful cut lives entirely in Postgres — no Neo4j required — and yields, per signal, either "graph supports, via target X" or "graph silent." Surface it beside the existing MATRIX chip in the same independent-layer shape. (BioCypher / a real property graph is a later phase once the relational version proves its value.)
 
-**B4 · The sex-aware layer (the differentiation).** This is partly curation; be honest that it does not exist yet. First cut: a `female_specific` flag on conditions (already true for the six) and a `sex_specific_pk` flag on compounds seeded from documented cases (e.g., the FDA zolpidem dosing class). Carry these into the disclosure and scoring so the graph reads female biology rather than inheriting a male-default graph wholesale. Deeper sex-stratified edge weighting is a follow-on.
+**B4 · The sex-aware layer (the differentiation).** This is partly curation; be honest that it does not exist yet. The *schema* now exists as of **migration 054**: a `sex_specific_pk` flag on compounds and a `compound_pk` table (parameter, sex, direction, magnitude, optional `cycle_phase`, `source_ref`), plus a `cycle_phase` qualifier on the substrate `claims` table (engineering Decision 1). B4 is the step that *fills* them — seed `compound_pk` from documented cases (e.g., the FDA zolpidem / CYP3A4 case) and carry the flags into the disclosure and scoring, so the graph reads female biology rather than inheriting a male-default graph wholesale. Deeper sex-stratified edge weighting is a follow-on.
 
 **B5 · Surface in the app.** Add the "graph supports" disclosure to the gated signal view (and condition pages, behind the access wall where the drugs live). Public pages stay drug-free.
 
@@ -77,11 +77,13 @@ Turns names into stable IDs so everything downstream (MATRIX joins, the graph, d
 
 ## Milestones
 
-- **M1 (Path A):** ID columns + resolution scripts + review gate + app rewired to ID-based joins.
-- **M2 (Path B capture):** node/edge tables + Open Targets store-all rewrite, populated for the six.
+- **M1 (Path A):** ID columns + resolution scripts + review gate + app rewired to ID-based joins. *(Data layer done: 050/051 applied, ambiguity gate closed by 053. App-read rewiring still open.)*
+- **M2 (Path B capture):** node/edge tables (052) + `capture-opentargets-graph.py` → migration 055, populated for the six.
 - **M3 (Path B compute):** "graph supports / silent" disclosure computed and surfaced beside MATRIX.
-- **M4 (sex-aware):** female-specific and sex-PK flags carried into the disclosure.
+- **M4 (sex-aware):** schema in 054; seed `compound_pk` and carry female-specific / sex-PK flags into the disclosure.
 - **M5 (later):** BioCypher property graph, Reactome pathways, sex-stratified weighting.
+
+**Migration numbering:** 050 canonical-id columns · 051 backfill · 052 Path B graph tables · 053 ambiguous-compound decisions · 054 phase qualifier + sex-PK schema · 055 graph backfill (generated by `capture-opentargets-graph.py`).
 
 ---
 
