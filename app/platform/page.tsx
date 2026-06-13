@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import KnowledgeGraph from "@/app/components/KnowledgeGraph";
 import CyclicalPK from "@/app/components/CyclicalPK";
-import CandidateCard from "@/app/components/CandidateCard";
-import { getFeaturedCandidates } from "@/lib/candidates";
 
 export const metadata: Metadata = {
   title: "Platform",
@@ -91,7 +89,6 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function PlatformPage() {
-  const [candidate] = await getFeaturedCandidates(1);
   return (
     <main>
       {/* Hero */}
@@ -174,7 +171,7 @@ export default async function PlatformPage() {
               standard biomedical ontologies: <A href={MONDO}>MONDO</A> for diseases,{" "}
               <A href={HPO}>HPO</A> for phenotypes, <A href={RXNORM}>RxNorm</A> for drugs, and{" "}
               <A href={CHEMBL}>ChEMBL</A> for compound bioactivity. Grounding is what lets the
-              platform know that &ldquo;metformin&rdquo; and &ldquo;metformin hydrochloride&rdquo;
+              platform know that &ldquo;paracetamol&rdquo; and &ldquo;acetaminophen&rdquo;
               are the same drug and that a study of one disease subtype belongs under its parent.
               Without it, the same fact written two ways counts as two facts, or as none.
             </p>
@@ -265,14 +262,6 @@ export default async function PlatformPage() {
               basis for each grade visible, so a case report and a randomized trial never carry
               the same authority simply because they point the same way.
             </p>
-          </div>
-
-          {/* Provenance in practice */}
-          <div style={{ maxWidth: 980, margin: "44px auto 0" }}>
-            <div className="eyebrow" style={{ marginBottom: 16, textAlign: "center" }}>
-              Provenance, in practice
-            </div>
-            {candidate && <CandidateCard c={candidate} defaultOpen={true} />}
           </div>
         </div>
       </section>

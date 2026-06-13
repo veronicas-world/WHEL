@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CandidateCard from "@/app/components/CandidateCard";
-import { getSampleCandidates, getCorpusScope } from "@/lib/candidates";
+import { getCorpusScope } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CandidatesPage() {
-  const [sample, scope] = await Promise.all([getSampleCandidates(), getCorpusScope()]);
+  const scope = await getCorpusScope();
 
   return (
     <main>
@@ -26,32 +25,17 @@ export default async function CandidatesPage() {
             <span className="here">Candidates</span>
           </div>
           <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>
-            v0 corpus · sample · {scope.signals} candidates in the full index
+            v0 corpus · {scope.signals} candidates across {scope.conditions} conditions
           </div>
           <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(40px,5vw,76px)", maxWidth: "18ch" }}>
             Repurposing candidates, with the trail.
           </h1>
           <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
-            Every candidate surfaces a drug already approved for one indication with
-            evidence it works for a women&apos;s health condition. Each card shows the
-            mechanism, the claims, and the points where the literature disagrees. Below is the
-            top candidate in each condition, a sample of the full index.
+            Every candidate surfaces a drug already approved for one indication with evidence it
+            works for a women&apos;s health condition, scored across five dimensions, tiered, and
+            traceable to its sources. The index is open to researchers and clinicians on request
+            during the research preview.
           </p>
-        </div>
-      </section>
-
-      {/* Sample candidates — top per condition */}
-      <section className="surface-bone section tight">
-        <div className="container">
-          <div style={{ marginBottom: 24 }}>
-            <div className="eyebrow" style={{ marginBottom: 8 }}>Sample · top candidate per condition</div>
-            <h2 className="h3">The strongest signal in each condition</h2>
-          </div>
-          <div className="col" style={{ gap: 16 }}>
-            {sample.map((c, i) => (
-              <CandidateCard key={c.id} c={c} defaultOpen={i === 0} />
-            ))}
-          </div>
         </div>
       </section>
 
