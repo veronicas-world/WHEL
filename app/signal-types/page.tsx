@@ -1,69 +1,94 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import SignalTypesAccordion from "./SignalTypesAccordion";
 
-export const metadata = {
-  title: "Signal Types | Whel",
+export const metadata: Metadata = {
+  title: "Signal types | Whel",
+  description:
+    "Whel reads each drug-condition pair through four research arms, each pulling a different kind of source and held to its own inclusion bar: direct research, cross-condition signals, pathway insights, and community forum reports.",
 };
 
-const MONO: React.CSSProperties = {
-  fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
+const INLINE_LINK: React.CSSProperties = {
+  color: "var(--moss)",
+  textDecoration: "underline",
+  textUnderlineOffset: 3,
 };
 
 export default function SignalTypesPage() {
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <main style={{ background: "var(--bone)" }}>
 
-      {/* ── Page header ─────────────────────────────────────────────────────── */}
-      <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-          <nav
-            style={{
-              ...MONO,
-              fontSize: "11px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "var(--muted)",
-              marginBottom: 20,
-            }}
-          >
-            <Link href="/" style={{ color: "var(--muted)" }}>Home</Link>
-            <span style={{ margin: "0 10px", opacity: 0.4 }}>›</span>
-            <span style={{ color: "var(--ink)" }}>Signal Types</span>
-          </nav>
-
+      {/* ── Hero ──────────────────────────────────────────────────────────── */}
+      <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
+        <div className="container">
+          <div className="crumbs on-ink">
+            <Link href="/">Home</Link>
+            <span className="sep">/</span>
+            <Link href="/about">About</Link>
+            <span className="sep">/</span>
+            <span className="here">Signal types</span>
+          </div>
+          <div className="eyebrow on-ink" style={{ marginBottom: 18 }}>How the evidence is read</div>
           <h1
-            className="font-heading"
-            style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 500,
-              lineHeight: 1.08,
-              letterSpacing: "-0.02em",
-              color: "var(--ink)",
-              marginBottom: 16,
-            }}
+            className="display"
+            style={{ color: "var(--on-ink)", fontSize: "clamp(2.1rem, 4.4vw, 3.4rem)", lineHeight: 1.07, maxWidth: "20ch" }}
           >
-            Signal types.
+            Four ways of reading the evidence.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "56ch" }}>
-            Whel organizes evidence into four research arms. Select a signal type
-            to read how it works, what its sources are, and what to look for.
+          <p className="lede" style={{ color: "var(--on-ink-2)", marginTop: 24, maxWidth: "62ch" }}>
+            Whel reads each drug-condition pair through four research arms, each pulling a different
+            kind of source and held to its own inclusion bar. Together they supply the
+            hypothesis-from-signal layer of the platform, and once a signal is validated it populates
+            the substrate.
           </p>
-          <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "62ch", marginTop: 14 }}>
-            These four arms feed Whel&apos;s three-layer architecture: they supply the
-            hypothesis-from-signal layer, and once validated they populate the substrate. For an
-            honest status of where each layer is actually built today, see the{" "}
-            <Link href="/about/technical-architecture" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-              technical architecture
+          <div className="row" style={{ marginTop: 30, gap: 12 }}>
+            <Link href="/about/technical-architecture" className="btn btn-on-ink">
+              How evidence is scored <span className="arr">&rarr;</span>
             </Link>
-            .
-          </p>
+            <Link href="/about/external-references" className="btn btn-ghost-ink">
+              External references
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── Body ────────────────────────────────────────────────────────────── */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <SignalTypesAccordion />
-      </div>
+      {/* ── Framing + arms ────────────────────────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
+          <div style={{ maxWidth: 760, marginBottom: 44 }}>
+            <div className="eyebrow" style={{ marginBottom: 14 }}>The four arms</div>
+            <h2 className="h2" style={{ marginBottom: 18, maxWidth: "22ch" }}>
+              One pair, four readings.
+            </h2>
+            <p className="lede" style={{ color: "var(--body)" }}>
+              No single source is enough on its own. A published trial, an adverse-event pattern, a
+              mechanistic link, and a community report each carry a different kind of information and a
+              different kind of error. Whel reads all four, grades each against its own bar, and shows
+              where they agree and where they conflict. The arms below are the inputs; the{" "}
+              <Link href="/about/technical-architecture" style={INLINE_LINK}>scoring rubric and confidence tiers</Link>{" "}
+              that weigh them are documented separately.
+            </p>
+          </div>
+
+          <div style={{ maxWidth: 880 }}>
+            <SignalTypesAccordion />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Continue ──────────────────────────────────────────────────────── */}
+      <section className="surface-bone" style={{ paddingBottom: 72 }}>
+        <div className="container">
+          <div style={{ borderTop: "1px solid var(--line)", paddingTop: 28, display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Link href="/about/technical-architecture" className="btn btn-primary">
+              Technical architecture <span className="arr">&rarr;</span>
+            </Link>
+            <Link href="/about/external-references" className="btn btn-ghost">External references</Link>
+            <Link href="/access" className="btn btn-ghost">Request access</Link>
+          </div>
+        </div>
+      </section>
+
     </main>
   );
 }

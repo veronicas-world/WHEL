@@ -205,25 +205,6 @@ const TIERS: { name: string; range: string; color: string; soft: string; desc: s
   },
 ];
 
-const CATEGORY_STANDARDS: { label: string; body: string }[] = [
-  {
-    label: "Direct Research",
-    body: "The highest-confidence category carries the highest bar. Minimum requirements: at least one peer reviewed human study with clearly identified population, drug, outcome, and effect direction. Signals are excluded if they are mechanistic only with no human data. Preferred: at least one prospective study, trial, or meta-analysis. Quality criteria prioritize replication and outcome relevance over citation count; a highly cited older paper with no replication is not equivalent to two recent independent studies with similar findings.",
-  },
-  {
-    label: "Cross-Condition Signals",
-    body: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA AEMS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient; a documented shared pathway is required.",
-  },
-  {
-    label: "Pathway Insights",
-    body: "Pathway signals are powerful but easy to overinterpret. Minimum requirements: a specific named mechanism (mast cell activation, prostaglandin signaling, or androgen receptor modulation, not generic \"inflammation\"), at least one known drug target link, and at least one disease pathway link. Pathway-only signals with no human or pharmacovigilance corroboration are classified Exploratory and displayed with explicit framing. Pathway signals paired with human observation are classified Emerging or Moderate. Pathway signals with human observation plus independent replication are classified Strong.",
-  },
-  {
-    label: "Community Forum Reports",
-    body: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient; the framework still requires specificity (not \"it changed things\" but \"after starting the medication, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. Whel also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
-  },
-];
-
 const RELIABILITY_INTRO =
   "For every signal across all four categories, Whel applies five cross-cutting reliability checks:";
 
@@ -941,30 +922,25 @@ export default function TechnicalArchitecturePage() {
           <FigureHeader
             label="Figure 4 · Category standards"
             title="Category-specific minimum standards"
+            intro="Each of the four research arms carries its own inclusion bar, because a published trial, an adverse-event pattern, a mechanistic link, and a community report each demand a different kind of corroboration before they count. The full per-arm criteria, with their sources and worked examples, are documented on the signal types page."
           />
 
-          <div className="space-y-3">
-            {CATEGORY_STANDARDS.map((c) => (
-              <div
-                key={c.label}
-                style={{
-                  ...CARD,
-                  borderLeft: `3px solid ${ARM_COLORS[c.label]}`,
-                  padding: "22px 24px",
-                }}
-              >
-                <p
-                  className="font-heading"
-                  style={{ fontSize: "17px", color: "var(--ink)", marginBottom: 7 }}
-                >
-                  {c.label}
-                </p>
-                <p style={{ fontSize: "14px", lineHeight: 1.65, color: "var(--ink-2)" }}>
-                  {c.body}
-                </p>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/signal-types"
+            style={{
+              ...MONO,
+              fontSize: "11px",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--green-mid)",
+              borderBottom: "1px solid var(--green-mid)",
+              paddingBottom: 2,
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            The four research arms in depth →
+          </Link>
         </div>
       </section>
 

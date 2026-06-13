@@ -4,9 +4,9 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 const LINK_STYLE = {
-  color: "var(--green-mid)",
+  color: "var(--moss)",
   textDecoration: "underline",
-  textUnderlineOffset: "2px",
+  textUnderlineOffset: "3px",
 };
 
 const CARDS: {
@@ -76,15 +76,15 @@ export default function SignalTypesAccordion() {
   }
 
   return (
-    <div className="space-y-3">
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {CARDS.map((card, idx) => {
         const isActive = activeKey === card.key;
         return (
           <div
             key={card.key}
             style={{
-              border: "1px solid var(--rule)",
-              borderLeft: isActive ? "3px solid var(--green-mid)" : "1px solid var(--rule)",
+              border: "1px solid var(--line)",
+              borderLeft: isActive ? "3px solid var(--moss)" : "1px solid var(--line)",
               backgroundColor: "var(--paper)",
               transition: "border-left 0.15s ease",
             }}
@@ -96,41 +96,37 @@ export default function SignalTypesAccordion() {
             >
               <div className="flex-1 min-w-0">
                 <p
-                  className="font-mono mb-1.5"
                   style={{
-                    fontSize: "10px",
-                    fontWeight: 600,
-                    textTransform: "uppercase",
+                    fontFamily: "var(--font-plex-mono, monospace)",
+                    fontSize: "10.5px",
                     letterSpacing: "0.18em",
-                    color: isActive ? "var(--green-mid)" : "var(--muted)",
+                    textTransform: "uppercase",
+                    color: isActive ? "var(--moss)" : "var(--muted)",
+                    marginBottom: 8,
                   }}
                 >
                   Arm {String(idx + 1).padStart(2, "0")} / {String(CARDS.length).padStart(2, "0")}
                 </p>
-                <h2
-                  className="font-heading mb-1.5"
+                <h3
                   style={{
-                    fontSize: "1.25rem",
+                    fontFamily: "var(--font-newsreader, Georgia, serif)",
+                    fontSize: "clamp(1.3rem, 2vw, 1.6rem)",
                     fontWeight: 500,
-                    letterSpacing: "-0.01em",
-                    color: isActive ? "var(--green-mid)" : "var(--ink)",
+                    letterSpacing: "-0.015em",
+                    lineHeight: 1.1,
+                    margin: "0 0 8px",
+                    color: isActive ? "var(--moss)" : "var(--ink)",
                   }}
                 >
                   {card.title}
-                </h2>
-                <p
-                  style={{
-                    fontSize: "0.9rem",
-                    lineHeight: 1.6,
-                    color: "var(--ink-2)",
-                  }}
-                >
+                </h3>
+                <p style={{ fontSize: "0.95rem", lineHeight: 1.6, color: "var(--body)" }}>
                   {card.oneLine}
                 </p>
               </div>
               <span
-                className="shrink-0 text-lg font-light mt-0.5"
-                style={{ color: "var(--green-mid)", lineHeight: 1 }}
+                className="shrink-0 mt-1"
+                style={{ color: "var(--moss)", lineHeight: 1, fontSize: "1.4rem", fontWeight: 300 }}
                 aria-hidden="true"
               >
                 {isActive ? "−" : "+"}
@@ -139,36 +135,42 @@ export default function SignalTypesAccordion() {
 
             {isActive && (
               <div
-                className="px-6 sm:px-8 pb-8 space-y-4"
-                style={{ borderTop: "1px solid var(--rule)" }}
+                className="px-6 sm:px-8 pb-8"
+                style={{ borderTop: "1px solid var(--line)" }}
               >
                 <div
-                  className="pt-6 space-y-4"
-                  style={{ fontSize: "0.975rem", lineHeight: 1.72, color: "var(--ink-2)" }}
+                  style={{
+                    paddingTop: 24,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 18,
+                    fontSize: "1rem",
+                    lineHeight: 1.72,
+                    color: "var(--body)",
+                  }}
                 >
                   {card.paragraphs.map((p, i) => (
-                    <p key={i}>{p}</p>
+                    <p key={i} style={{ margin: 0 }}>{p}</p>
                   ))}
                 </div>
 
                 {/* Inclusion criteria */}
                 <div
-                  className="mt-6 p-5"
-                  style={{ backgroundColor: "var(--bg-2)", border: "1px solid var(--rule)" }}
+                  style={{ marginTop: 24, padding: "20px 22px", backgroundColor: "var(--bone-2)", border: "1px solid var(--line)" }}
                 >
                   <p
-                    className="font-mono mb-2"
                     style={{
-                      fontSize: "10px",
-                      fontWeight: 600,
-                      textTransform: "uppercase",
+                      fontFamily: "var(--font-plex-mono, monospace)",
+                      fontSize: "10.5px",
                       letterSpacing: "0.18em",
-                      color: "var(--green-mid)",
+                      textTransform: "uppercase",
+                      color: "var(--moss)",
+                      margin: "0 0 10px",
                     }}
                   >
                     Inclusion criteria
                   </p>
-                  <p style={{ fontSize: "0.925rem", lineHeight: 1.7, color: "var(--ink-2)" }}>
+                  <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
                     {card.inclusionCriteria}
                   </p>
                 </div>
