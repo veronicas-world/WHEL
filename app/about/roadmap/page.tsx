@@ -69,6 +69,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "Extend to further under-researched women's health conditions",
         "Add complementary pipelines once the existing ones are solid",
         "Deepen coverage of the conditions already in scope",
+        "Extend the substrate to hold sex-specific pharmacokinetics and cyclical hormonal phase as first-class variables, so a relationship carries the body and the cycle phase it holds in rather than a single averaged value",
         "Once the validation work above is in place, partner with formal women's health advocacy organizations, such as IAPMD, PCOS Challenge, and Endometriosis UK, to bring structured patient-reported signal beyond Reddit into the evidence base",
       ],
     },
@@ -228,7 +229,22 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Knowledge-graph grounding",
-    role: "A domain-restricted graph that informs scoring and surfaces a 'graph supports' or 'graph silent' layer beside each signal.",
+    role: "A domain-restricted graph of typed, directional relationships between drugs, targets, pathways, and conditions, grounded in canonical ontologies, that informs scoring and surfaces a 'graph supports' or 'graph silent' layer beside each signal.",
+    status: "Planned",
+  },
+  {
+    name: "Phase-aware relationships",
+    role: "Holding cyclical hormonal state as a first-class variable, so a drug and condition relationship can carry the menstrual-cycle phase in which it holds rather than being averaged into a single static edge.",
+    status: "Planned",
+  },
+  {
+    name: "Sex-stratified pharmacokinetics",
+    role: "Per-compound pharmacokinetic structure held by sex, so documented differences in metabolism and clearance, such as CYP3A4 activity, inform scoring rather than being assumed uniform across bodies.",
+    status: "Planned",
+  },
+  {
+    name: "Actionability layer",
+    role: "A second axis beside the evidence score that weighs management endpoints, 505(b)(2) regulatory viability, and patient-community signal, so a livable-management candidate is ranked for what it is rather than against a cure-focused default.",
     status: "Planned",
   },
   {

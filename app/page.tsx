@@ -155,11 +155,8 @@ export default async function Home() {
                 505(b)(2)-ready candidates that pharma women&apos;s health teams can act on.
               </p>
               <div className="row" style={{ marginTop: 32, gap: 12 }}>
-                <Link href="/candidates" className="btn btn-on-ink">
-                  See a worked example <span className="arr">→</span>
-                </Link>
-                <Link href="/manifesto" className="btn btn-ghost-ink">
-                  Read the manifesto
+                <Link href="/manifesto" className="btn btn-on-ink">
+                  Read the manifesto <span className="arr">→</span>
                 </Link>
               </div>
             </div>
