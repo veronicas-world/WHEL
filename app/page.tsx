@@ -282,7 +282,7 @@ export default async function Home() {
                 borderBottom: "1px solid var(--moss)", paddingBottom: 3,
               }}
             >
-              Why we start with drug repurposing <span className="arr">&rarr;</span>
+              Why a historical precedent led us to start with drug repurposing <span className="arr">&rarr;</span>
             </Link>
           </div>
         </div>
