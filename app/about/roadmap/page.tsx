@@ -69,6 +69,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "Extend to further under-researched women's health conditions",
         "Add complementary pipelines once the existing ones are solid",
         "Deepen coverage of the conditions already in scope",
+        "Once the validation work above is in place, partner with formal women's health advocacy organizations, such as IAPMD, PCOS Challenge, and Endometriosis UK, to bring structured patient-reported signal beyond Reddit into the evidence base",
       ],
     },
   ];
@@ -189,6 +190,11 @@ const SOURCES: { name: string; role: string; status: Status }[] = [
   { name: "FDA openFDA", role: "Adverse-event data", status: "Live" },
   { name: "Open Targets", role: "Genetic-target and pathway data", status: "Live" },
   { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
+  {
+    name: "Patient-advocacy organizations",
+    role: "Structured patient-reported signal beyond Reddit, through planned partnerships with formal women's health advocacy groups, taken on once the validation work is in place.",
+    status: "Planned",
+  },
   {
     name: "Every Cure MATRIX",
     role: "An independent treatment-probability cross-reference from Every Cure's graph-ML model, shown beside our grades rather than blended into them.",
