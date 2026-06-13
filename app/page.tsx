@@ -150,9 +150,9 @@ export default async function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 48, alignItems: "start", marginTop: 28 }} className="hero-grid">
             <div style={{ paddingTop: 8 }}>
               <p className="lede" style={{ color: "var(--on-ink-2)" }}>
-                Whel surfaces approved drugs that already work for women&apos;s health conditions,
-                validates them against mechanistic and clinical evidence, and produces
-                505(b)(2)-ready candidates that pharma women&apos;s health teams can act on.
+                Whel is building a drug-repurposing platform for female biology: one that surfaces
+                approved drugs already working for women&apos;s health conditions, validates them
+                against mechanistic and clinical evidence, and works toward 505(b)(2)-ready candidates.
               </p>
               <div className="row" style={{ marginTop: 32, gap: 12 }}>
                 <Link href="/manifesto" className="btn btn-on-ink">
