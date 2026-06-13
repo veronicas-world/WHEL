@@ -464,7 +464,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   PMDD is severe, common, and recent. It affects an estimated{" "}
-                  <A href={PMDD}>1.8 to 5.8 percent of menstruating women</A> and was only added as a
+                  <A href={PMDD}>1.8 to 5.8 percent of menstruating women</A>{" "}and was only added as a
                   formal diagnosis to the DSM-5 in 2013, after decades in the manual&rsquo;s appendix.
                   That lateness is the point: a condition recognized this recently has a thin, scattered
                   evidence base, which is exactly the terrain where a system that reads evidence carefully
@@ -633,7 +633,7 @@ export default function AboutPage() {
                   would be looking in the wrong places.
                 </p>
                 <p>
-                  <strong>The sources.</strong> The large biomedical AI platforms read the institutional
+                  <strong>The sources.</strong>{" "}The large biomedical AI platforms read the institutional
                   record. Causaly, for one, ingests{" "}
                   <A href={CAUSALY}>PubMed, MEDLINE, the trial registries, and patent filings</A>, which
                   is the right diet for most of biology. It is the wrong diet for conditions medicine
@@ -641,7 +641,7 @@ export default function AboutPage() {
                   patient communities no general platform reads.
                 </p>
                 <p>
-                  <strong>The variables.</strong> A general knowledge graph holds a drug and a disease
+                  <strong>The variables.</strong>{" "}A general knowledge graph holds a drug and a disease
                   as a fixed relationship. Female pharmacology moves: drug metabolism and immune
                   signaling shift across the menstrual cycle, and a condition like PMDD is defined by
                   that timing. A platform that asks whether a drug affects a pathway, without asking how
@@ -649,7 +649,7 @@ export default function AboutPage() {
                   whole insight.
                 </p>
                 <p>
-                  <strong>The candidates.</strong> General platforms serve pharma R&amp;D teams whose
+                  <strong>The candidates.</strong>{" "}General platforms serve pharma R&amp;D teams whose
                   budgets run on oncology, neuroscience, and immunology, and whose candidates have to be
                   ownable. A cheap generic that manages a women&rsquo;s condition is a{" "}
                   <A href={ORPHAN}>financial orphan</A>, clinically valuable and commercially
