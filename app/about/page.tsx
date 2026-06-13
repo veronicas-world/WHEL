@@ -33,6 +33,9 @@ const FIVE    = "https://www.fda.gov/media/156350/download"; // FDA 505(b)(2) ov
 const MARKET  = "https://www.precedenceresearch.com/drug-repurposing-market"; // repurposing market size
 const ORPHAN  = "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2025.1670845/full"; // financial orphans / off-patent barriers
 const VIAGRA  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/"; // sildenafil history
+const HEALX   = "https://www.pharmaceutical-technology.com/features/healx-ai-drug-repurposing-rare-disease/"; // Healx patient-foundation model
+const RECURSION = "https://www.utahbusiness.com/entrepreneurship/2023/07/20/how-chris-gibson-founded-recursion-pharmaceuticals/"; // Recursion founding / repurposing
+const WHOENDO = "https://www.who.int/news-room/fact-sheets/detail/endometriosis"; // endometriosis diagnostic delay
 
 const CSS = `
 /* ── about page ─────────────────────────────────────────────────────────── */
@@ -542,6 +545,19 @@ export default function AboutPage() {
                   week, and these communities accumulate practical knowledge years ahead of the
                   literature. We structure that record and test it against mechanistic and clinical
                   evidence, never mistaking it for proof and never discarding it as noise.
+                </p>
+                <p>
+                  Reading community signal this way is how the leading repurposing companies were built.{" "}
+                  <A href={HEALX}>Healx</A> grounded its rare-disease discovery in formal patient-foundation
+                  partnerships, and <A href={RECURSION}>Recursion</A> grew out of a rare-disease
+                  repurposing effort shaped by the community it served. Both leaned on organized
+                  foundations with registries and boards. Women&rsquo;s communities are far larger and
+                  almost entirely informal, living on forums and in advocacy groups, and they hold
+                  something institutional databases never recorded: the place where women confirm a
+                  symptom is real years before a diagnosis arrives, in a field where{" "}
+                  <A href={WHOENDO}>endometriosis alone takes years to identify</A>. That signal has never
+                  been read at scale. Reading it, and crediting the people who recorded it, is where our
+                  work begins.
                 </p>
               </div>
             </section>

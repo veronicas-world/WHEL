@@ -30,6 +30,8 @@ const VIAGRA    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/";
 const VIAGRA_REV = "https://www.statista.com/statistics/264827/pfizers-worldwide-viagra-revenue-since-2003/";
 const FIVEOHFIVE = "https://www.sciencedirect.com/science/article/abs/pii/S0022354923001508";
 const FUNDING   = "https://intuitionlabs.ai/articles/ai-biotech-funding-trends";
+const HEALX     = "https://www.pharmaceutical-technology.com/features/healx-ai-drug-repurposing-rare-disease/";
+const RECURSION = "https://www.utahbusiness.com/entrepreneurship/2023/07/20/how-chris-gibson-founded-recursion-pharmaceuticals/";
 
 const CSS = `
 /* ── manifesto page ─────────────────────────────────────────────────────── */
@@ -473,7 +475,10 @@ export default function ManifestoPage() {
                   The answers to these questions live in places cure-hunting engines ignore: off-label prescribing patterns, small trials that track daily function rather than remission, and patient communities where women record, month after month, what has helped them get through the week.
                 </p>
                 <p>
-                  That last source is real evidence and we treat it as such. Patient communities accumulate practical knowledge years ahead of the literature. We read that signal, structure it, and test it against mechanistic and clinical data, never mistaking it for proof on its own and never discarding it as noise.
+                  That last source is real evidence and we treat it as such. Patient communities accumulate practical knowledge years ahead of the literature, and in women&rsquo;s health they carry something more: they are where women confirm a symptom is real long before the medical system does, in a field where <A href={ENDO}>endometriosis still takes years to diagnose</A>. The off-label drugs that already help these conditions were largely found this way, in clinical practice and patient report, before formal research arrived.
+                </p>
+                <p>
+                  Reading that signal is how this category was built in the first place. <A href={HEALX}>Healx</A> grounded its rare-disease discovery in formal patient-foundation partnerships, and <A href={RECURSION}>Recursion</A> grew out of a rare-disease repurposing effort shaped by the community it served. Both leaned on organized foundations with registries and boards. Women&rsquo;s communities are far larger and almost entirely informal, scattered across forums, advocacy groups, and waiting-room conversation, which is why the signal has never been read at scale. We read it, structure it, and test it against mechanistic and clinical data, crediting the community it came from, never mistaking it for proof on its own and never discarding it as noise.
                 </p>
                 <p>
                   This is not a niche market. Women are half the population and these conditions are common. Endometriosis affects roughly <A href={ENDO}>one in ten women</A> of reproductive age, <A href={PCOS}>PCOS affects a comparable share</A>, and every woman who lives long enough reaches menopause. Yet managing chronic, non-fatal conditions has never had the prestige of curing cancer or rare disease, so attention and capital flow away. The result is a large, proven market that almost no one is building for, even as <A href={VIAGRA_REV}>Viagra has earned billions of dollars a year</A> at its peak by managing a condition that kills no one.
