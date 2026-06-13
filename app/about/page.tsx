@@ -41,6 +41,7 @@ const LDN_MECH = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3962576/"; // low-dos
 const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330"; // LDN endometriosis trial (terminated)
 const GABA = "https://pubmed.ncbi.nlm.nih.gov/15228033/"; // gabapentin off-label settlement
 const LYRICA = "https://www.drugs.com/history/lyrica.html"; // pregabalin / Lyrica
+const LYRICA_REV = "https://www.fiercepharma.com/pharma/lyrica-looking-grim-pfizer-s-blockbuster-faces-crumbling-market-share-after-generic"; // Lyrica peak revenue
 
 const CSS = `
 /* ── about page ─────────────────────────────────────────────────────────── */
@@ -550,8 +551,10 @@ export default function AboutPage() {
                   them, and paid a 430 million dollar settlement in 2004. The clinical value had been
                   real all along. What the model needed was an ownable version, and once Pfizer had one
                   it acted: pregabalin, sold as <A href={LYRICA}>Lyrica</A> and approved for the same
-                  pain and fibromyalgia indications gabapentin was already treating. The drugs that
-                  manage women&rsquo;s conditions are mostly generics with no such successor waiting.
+                  pain and fibromyalgia indications gabapentin was already treating, a drug that went on
+                  to earn <A href={LYRICA_REV}>around five billion dollars a year</A> at its peak. The
+                  drugs that manage women&rsquo;s conditions are mostly generics with no such successor
+                  waiting.
                 </p>
                 <p>
                   That is the consequence of the model difference. A platform scoring drug-disease pairs
@@ -650,8 +653,9 @@ export default function AboutPage() {
                   budgets run on oncology, neuroscience, and immunology, and whose candidates have to be
                   ownable. A cheap generic that manages a women&rsquo;s condition is a{" "}
                   <A href={ORPHAN}>financial orphan</A>, clinically valuable and commercially
-                  uninteresting. Our buyers are different, women&rsquo;s health teams, emerging biotechs,
-                  advocacy organizations, and public funders, and our ranking follows their priorities.
+                  uninteresting. Whel is built for a different audience, women&rsquo;s health
+                  researchers, emerging biotech teams, advocacy organizations, and public funders, and
+                  our ranking follows their priorities.
                 </p>
                 <p>
                   Low-dose naltrexone for endometriosis sits at the intersection of all three. At low

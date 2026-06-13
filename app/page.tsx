@@ -58,12 +58,12 @@ const EXPANSION = [
   {
     phase: "Phase 1", when: "Months 0–18",
     title: "Drug repurposing for core women's health",
-    detail: "PMDD, endometriosis, PCOS, adenomyosis, perimenopausal mood disorders, vulvodynia. Output: specific candidates with full evidence trails. Early SaaS contracts with women's health pharma and biotech teams.",
+    detail: "PMDD, endometriosis, PCOS, adenomyosis, perimenopausal mood disorders, vulvodynia. Output: specific candidates with full evidence trails for the researchers and women's health teams working on these conditions.",
   },
   {
     phase: "Phase 2", when: "Months 18–36",
     title: "Expand to sex-divergent conditions",
-    detail: "Autoimmune disease (80% female), pain conditions (1.5–4× female prevalence), neuropsychiatric conditions. The knowledge graph and sex-specific PK modeling transfer directly, the same platform serving bigger markets.",
+    detail: "Autoimmune disease (80% female), pain conditions (1.5–4× female prevalence), neuropsychiatric conditions. The knowledge graph and sex-specific PK modeling transfer directly, the same platform extended to larger patient populations.",
   },
   {
     phase: "Phase 3", when: "Months 36+",
