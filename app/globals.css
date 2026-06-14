@@ -565,17 +565,22 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 /* ──────────────────────────────────────────────────────────────────────────
    Floating document table-of-contents
    Shared by long About pages (external-references, technical-architecture,
-   methodology, roadmap). Sits in the left gutter beside the centred
-   max-w-5xl (1024px) column. Hidden when the gutter is too narrow.
+   methodology, roadmap).
+
+   Approach: on large screens the page content is shifted right to open a left
+   rail, and the TOC tracks the content's left edge (with a 36px floor so it
+   stays put on mid-size screens). Below 1140px the rail collapses and the TOC
+   is hidden, so the content returns to its normal centred layout. The coloured
+   full-bleed section bands are unaffected because only the inner centred
+   column is shifted, never the section box.
    ────────────────────────────────────────────────────────────────────────── */
 .doc-toc {
+  display: none;
   position: fixed;
-  top: 120px;
-  width: 184px;
-  left: calc(50vw - 512px);
-  margin-left: -208px;
+  top: 116px;
+  width: 188px;
   z-index: 20;
-  max-height: calc(100vh - 160px);
+  max-height: calc(100vh - 150px);
   overflow-y: auto;
 }
 .doc-toc-eyebrow {
@@ -597,22 +602,28 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
   font-size: 13px; line-height: 1.32; color: var(--ink-2);
 }
 .doc-toc a:hover .doc-t { color: var(--ink); }
-@media (max-width: 1429px) { .doc-toc { display: none; } }
 
-/* Methodology uses a narrower max-w-4xl (896px) column — anchor TOC to it. */
-.doc-toc.doc-toc--w4 { left: calc(50vw - 448px); }
-@media (max-width: 1311px) { .doc-toc.doc-toc--w4 { display: none; } }
+@media (min-width: 1140px) {
+  .doc-toc { display: block; }
 
-/* Roadmap uses the full 1440 .container with full-bleed bands, so there is no
-   left gutter. On large screens, shift the centred container right to open a
-   rail for the TOC; the coloured bands stay full-bleed (they are the section,
-   the .container is the inner box). Scoped to .rm-doc so no other page shifts. */
-@media (min-width: 1280px) {
-  .rm-doc .container {
-    margin-left: 248px;
+  /* Centred 1024px column (external-references, technical-architecture) */
+  .doc-shell .max-w-5xl.mx-auto {
+    margin-left: max(284px, calc(50vw - 512px));
     margin-right: auto;
-    max-width: 1160px;
   }
-  .rm-doc .doc-toc { left: 32px; margin-left: 0; }
+  .doc-toc { left: max(36px, calc(50vw - 512px - 220px)); }
+
+  /* Narrower 896px column (methodology) */
+  .doc-shell .max-w-4xl.mx-auto {
+    margin-left: max(284px, calc(50vw - 448px));
+    margin-right: auto;
+  }
+  .doc-toc.doc-toc--w4 { left: max(36px, calc(50vw - 448px - 220px)); }
+
+  /* Full-width 1440 container with full-bleed bands (roadmap) */
+  .rm-doc .container {
+    margin-left: max(284px, calc(50vw - 720px));
+    margin-right: auto;
+  }
+  .rm-doc .doc-toc { left: max(36px, calc(50vw - 720px - 220px)); }
 }
-@media (max-width: 1279px) { .rm-doc .doc-toc { display: none; } }

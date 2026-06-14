@@ -293,7 +293,7 @@ function SectionHeader({
 
 export default function ExternalReferencesPage() {
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <main className="flex-1 doc-shell" style={{ backgroundColor: "var(--bg)" }}>
 
       {/* ── Floating table of contents (large screens only) ──────────────── */}
       <aside className="doc-toc" aria-label="On this page">
@@ -302,7 +302,7 @@ export default function ExternalReferencesPage() {
         <a href="#underlying-data"><span className="doc-n">01</span><span className="doc-t">Underlying data</span></a>
         <a href="#structured-grounding-in-progress"><span className="doc-n">02</span><span className="doc-t">Structured grounding</span></a>
         <a href="#output-validation-in-progress"><span className="doc-n">03</span><span className="doc-t">Output validation</span></a>
-        <a href="#cross-references"><span className="doc-n">04</span><span className="doc-t">Independent cross-references</span></a>
+        <a href="#cross-references"><span className="doc-n">04</span><span className="doc-t">Cross-references</span></a>
         <a href="#coverage-disclosure"><span className="doc-n">05</span><span className="doc-t">Coverage disclosure</span></a>
         <a href="#female-biology"><span className="doc-n">06</span><span className="doc-t">Female-biology layer</span></a>
         <a href="#under-review"><span className="doc-n">07</span><span className="doc-t">Under review</span></a>

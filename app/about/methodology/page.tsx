@@ -415,7 +415,7 @@ function LiveLGradeScanBlock() {
 
 export default function MethodologyPage() {
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
+    <main className="flex-1 doc-shell" style={{ backgroundColor: "var(--bg)" }}>
 
       {/* ── Floating table of contents (large screens only) ──────────────── */}
       <aside className="doc-toc doc-toc--w4" aria-label="On this page">
