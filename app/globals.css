@@ -732,3 +732,8 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 
 /* signal detail uses a slightly tighter container than the 1440 default */
 .sigdetail .container { max-width: 1280px; }
+
+/* signal detail — standing epistemic frame (honest hypothesis voice) */
+.sigdetail .frame-note { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--ink-line-2); max-width: 74ch; font-size: 13.5px; line-height: 1.62; color: var(--on-ink-mut); }
+.sigdetail .frame-note .fl { display: block; font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-ink-2); margin-bottom: 8px; }
+.sigdetail .frame-note a { color: var(--on-ink-2); text-decoration: underline; text-underline-offset: 2px; }
