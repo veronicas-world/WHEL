@@ -557,7 +557,7 @@ export default function AboutPage() {
                   real all along. What the model needed was an ownable version, and once Pfizer had one
                   it acted: pregabalin, sold as <A href={LYRICA}>Lyrica</A> and approved for the same
                   pain and fibromyalgia indications gabapentin was already treating, a drug that went on
-                  to earn <A href={LYRICA_REV}>around five billion dollars a year</A> at its peak. The
+                  to earn <A href={LYRICA_REV}>around five billion dollars a year</A>{" "}at its peak. The
                   drugs that manage women&rsquo;s conditions are mostly generics with no such successor
                   waiting.
                 </p>
@@ -574,7 +574,7 @@ export default function AboutPage() {
                 <p>
                   Reading community signal this way is how the leading repurposing companies were built.{" "}
                   <A href={HEALX}>Healx</A> grounded its rare-disease discovery in formal patient-foundation
-                  partnerships, and <A href={RECURSION}>Recursion</A> grew out of a rare-disease
+                  partnerships, and <A href={RECURSION}>Recursion</A>{" "}grew out of a rare-disease
                   repurposing effort shaped by the community it served. Both leaned on organized
                   foundations with registries and boards. Women&rsquo;s communities are far larger and
                   almost entirely informal, living on forums and in advocacy groups, and they hold
