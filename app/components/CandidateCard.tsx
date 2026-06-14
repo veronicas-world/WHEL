@@ -41,6 +41,8 @@ export interface Candidate {
   lGrade?: "L0" | "L1" | "L2" | "L3";
   /** Every Cure MATRIX cross-reference percentile, e.g. "Top 12%", when MATRIX covers the pair. */
   matrixPercentile?: string;
+  /** Fuller MATRIX detail: the raw treat-score and the drug/disease entities MATRIX scored. */
+  matrixDetail?: { transformedScore?: number; sourceId?: string; mondo?: string };
   /**
    * Knowledge-graph (Path B) disclosure: the shared target(s) through which the
    * graph independently connects this drug to this condition. Present and

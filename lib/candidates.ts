@@ -133,6 +133,15 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
   const matrix = getMatrixScoreForPair(drug, condition);
   const matrixPercentile =
     matrix && matrix.quantile_rank != null ? formatMatrixPercentile(matrix.quantile_rank) : undefined;
+  // Fuller MATRIX detail for the signal page: the raw treat-score and the
+  // drug/disease entities MATRIX actually scored.
+  const matrixDetail = matrix
+    ? {
+        transformedScore: matrix.transformed_score ?? undefined,
+        sourceId: matrix.matrix_source_id ?? undefined,
+        mondo: matrix.matrix_mondo ?? undefined,
+      }
+    : undefined;
 
   // Path B disclosure: does the knowledge graph independently connect this drug
   // to this condition through a shared target? Keyed on the resolved FK ids.
@@ -161,6 +170,7 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     tier,
     lGrade,
     matrixPercentile,
+    matrixDetail: matrixPercentile ? matrixDetail : undefined,
     graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
     sexPk: sexPk && sexPk.length ? sexPk : undefined,
     cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,

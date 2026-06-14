@@ -68,6 +68,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 const LINK: React.CSSProperties = { color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 };
 
+const chebiUrl = (id: string) => `https://www.ebi.ac.uk/chebi/searchId.do?chebiId=${encodeURIComponent(id)}`;
+const mondoUrl = (id: string) => `https://monarchinitiative.org/${encodeURIComponent(id)}`;
+
 function Ext({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" style={LINK}>
@@ -152,6 +155,32 @@ export default async function SignalDetail({
       ))}
     </ul>
   ) : null;
+
+  // Fuller MATRIX read for this pair: the raw treat-score and the entities scored.
+  const md = c.matrixDetail;
+  const matrixForThisPair: React.ReactNode = c.matrixPercentile
+    ? `MATRIX places this pair at ${c.matrixPercentile}${
+        md?.transformedScore != null
+          ? `, with a treat-score of ${md.transformedScore.toFixed(2)} (higher is better; across the pairs we cover, scores span about 3.1 to 4.5)`
+          : ""
+      }.`
+    : "MATRIX has no score for this pair.";
+  const matrixEntities =
+    c.matrixPercentile && md && (md.sourceId || md.mondo) ? (
+      <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)", margin: "10px 0 0" }}>
+        Scored over MATRIX&rsquo;s own entities, confirming the same drug and disease:{" "}
+        {md.sourceId ? (
+          <a href={chebiUrl(md.sourceId)} target="_blank" rel="noopener noreferrer" style={LINK}>{md.sourceId}</a>
+        ) : "drug"}{" "}(drug)
+        {md.mondo ? (
+          <>
+            {" "}and{" "}
+            <a href={mondoUrl(md.mondo)} target="_blank" rel="noopener noreferrer" style={LINK}>{md.mondo}</a>{" "}(disease)
+          </>
+        ) : null}
+        .
+      </p>
+    ) : null;
 
   return (
     <main>
@@ -296,11 +325,8 @@ export default async function SignalDetail({
                 the structure of biomedical knowledge, reported alongside the direct evidence.
               </>
             }
-            forThisPair={
-              c.matrixPercentile
-                ? `MATRIX places this pair at ${c.matrixPercentile}.`
-                : "MATRIX has no score for this pair."
-            }
+            forThisPair={matrixForThisPair}
+            extra={matrixEntities}
             learnMore={
               <LearnMore href="/about/external-references#coverage-disclosure">
                 More on the MATRIX cross-reference and its provenance
