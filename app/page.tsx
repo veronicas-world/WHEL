@@ -158,6 +158,9 @@ export default async function Home() {
                 <Link href="/manifesto" className="btn btn-on-ink">
                   Read the manifesto <span className="arr">→</span>
                 </Link>
+                <Link href="/candidates" className="btn btn-ghost-ink">
+                  See the candidates <span className="arr">→</span>
+                </Link>
               </div>
             </div>
             <div className="graph-hero" style={{ marginTop: -36 }}>
