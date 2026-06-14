@@ -86,7 +86,7 @@ function buildOrigin(comp: Row | null): string {
   return ind ? `${status} · ${clip(ind, 64)}` : status;
 }
 
-function toCandidate(sig: Row, n: number, graph?: GraphSupportMap): Candidate {
+function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPkMap): Candidate {
   const comp = one(sig.compounds);
   const cond = one(sig.conditions);
   const sources = (Array.isArray(sig.sources) ? sig.sources : []) as Row[];
@@ -120,6 +120,9 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap): Candidate {
       ? graph.get(`${compoundId}::${conditionId}`)
       : undefined;
 
+  // Sex-aware layer (058): documented sex-specific PK facts for this compound.
+  const sexPk = sexpk && compoundId ? sexpk.get(compoundId) : undefined;
+
   return {
     id: `WHEL-C-${String(n).padStart(3, "0")}`,
     drug,
@@ -129,6 +132,7 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap): Candidate {
     lGrade,
     matrixPercentile,
     graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
+    sexPk: sexPk && sexPk.length ? sexPk : undefined,
     score: Math.round(Number(sig.total_evidence_score) || 0),
     origin: buildOrigin(comp),
     pathway: tier === "exploratory"
@@ -149,10 +153,43 @@ const SELECT = `
   replication_score, source_quality_score, specificity_score, plausibility_score,
   replication_level, plausibility_level, signal_type, effect_direction, status,
   compound_id, condition_id,
-  compounds ( name, drug_class, fda_status, original_indication ),
+  compounds ( name, drug_class, fda_status, original_indication, sex_specific_pk ),
   conditions ( name, slug ),
   sources ( external_id, source_type, journal, publication_date, key_finding_excerpt, title, url )
 `;
+
+/**
+ * Sex-aware layer (migration 058). Reads compound_pk, the documented,
+ * sourced sex-specific pharmacokinetic facts, and returns a map keyed by
+ * compound_id -> facts[]. If the table is empty or unreadable, returns an
+ * empty map so cards simply show no sex-PK disclosure.
+ */
+type SexPkFact = { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; note?: string };
+type SexPkMap = Map<string, SexPkFact[]>;
+
+async function getSexPkMap(): Promise<SexPkMap> {
+  const map: SexPkMap = new Map();
+  const { data, error } = await supabase
+    .from("compound_pk")
+    .select("compound_id, parameter, sex, direction, magnitude, source_ref, note");
+  if (error || !data) return map;
+  for (const row of data as Row[]) {
+    const cid = row.compound_id ? String(row.compound_id) : "";
+    if (!cid) continue;
+    const fact: SexPkFact = {
+      parameter: String(row.parameter ?? ""),
+      sex: String(row.sex ?? ""),
+      direction: row.direction ? String(row.direction) : undefined,
+      magnitude: row.magnitude ? String(row.magnitude) : undefined,
+      source: row.source_ref ? String(row.source_ref) : undefined,
+      note: row.note ? String(row.note) : undefined,
+    };
+    const list = map.get(cid);
+    if (list) list.push(fact);
+    else map.set(cid, [fact]);
+  }
+  return map;
+}
 
 /**
  * Path B disclosure layer. Reads the `graph_support` view (migration 057),
@@ -183,7 +220,7 @@ async function getGraphSupportMap(): Promise<GraphSupportMap> {
 
 /** All real candidates, highest evidence score first, with stable WHEL-C ids. */
 export async function getCandidates(): Promise<Candidate[]> {
-  const [{ data, error }, graph] = await Promise.all([
+  const [{ data, error }, graph, sexpk] = await Promise.all([
     supabase
       .from("repurposing_signals")
       .select(SELECT)
@@ -195,9 +232,10 @@ export async function getCandidates(): Promise<Candidate[]> {
       .order("total_evidence_score", { ascending: false })
       .order("id", { ascending: true }),
     getGraphSupportMap(),
+    getSexPkMap(),
   ]);
   if (error || !data) return [];
-  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph));
+  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph, sexpk));
 }
 
 /** Top N candidates for the homepage / platform feature strip. */

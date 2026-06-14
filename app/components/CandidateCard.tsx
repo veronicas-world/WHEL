@@ -35,6 +35,12 @@ export interface Candidate {
    * non-empty => "graph supports, via <target>"; absent => "graph silent".
    */
   graphViaTargets?: string[];
+  /**
+   * Sex-aware layer (migration 058): documented sex-specific pharmacokinetic
+   * facts for this compound, each carrying its source. Present => a "Sex-PK"
+   * marker and a detail block in the evidence trail.
+   */
+  sexPk?: { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; note?: string }[];
 }
 
 const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
@@ -121,6 +127,9 @@ export default function CandidateCard({
             {c.graphViaTargets && c.graphViaTargets.length > 0 && (
               <MarkerChip dot="var(--moss)" label={`Graph · ${formatViaTargets(c.graphViaTargets)}`} />
             )}
+            {c.sexPk && c.sexPk.length > 0 && (
+              <MarkerChip dot="var(--brick)" label="Sex-PK" />
+            )}
             <RelBadge rel={c.direction} />
             <TierBadge tier={c.tier} />
           </div>
@@ -155,6 +164,42 @@ export default function CandidateCard({
               </div>
             ))}
           </div>
+          {c.sexPk && c.sexPk.length > 0 && (
+            <div style={{ padding: "0 var(--card-pad) var(--card-pad)" }}>
+              <div className="eyebrow" style={{ margin: "6px 0 8px" }}>
+                Sex-specific pharmacokinetics
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)", maxWidth: "72ch", margin: "0 0 10px" }}>
+                Documented sex differences in how this drug behaves in the body, held as
+                first-class data rather than averaged away. Shown beside the signal, not folded
+                into its grade.
+              </p>
+              {c.sexPk.map((f, i) => (
+                <div
+                  key={i}
+                  style={{
+                    borderLeft: "2px solid var(--brick)",
+                    padding: "8px 0 8px 12px",
+                    marginBottom: 8,
+                    fontSize: 13.5,
+                    lineHeight: 1.6,
+                    color: "var(--body)",
+                  }}
+                >
+                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>
+                    {f.parameter}
+                  </span>
+                  {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
+                  {f.magnitude ? `: ${f.magnitude}` : ""}
+                  {f.source && (
+                    <span style={{ display: "block", fontSize: 11.5, color: "var(--muted)", marginTop: 3 }}>
+                      {f.source}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
           <div className="provenance">
             <div className="eyebrow" style={{ marginBottom: 4 }}>
               Per-claim provenance · synthesis marked · contradictions surfaced
