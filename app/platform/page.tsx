@@ -175,7 +175,7 @@ export default async function PlatformPage() {
               vocabulary, a discipline called ontology grounding. We ground entities in the
               standard biomedical ontologies: <A href={MONDO}>MONDO</A> for diseases,{" "}
               <A href={HPO}>HPO</A> for phenotypes, <A href={RXNORM}>RxNorm</A> for drugs, and{" "}
-              <A href={CHEMBL}>ChEMBL</A> for compound bioactivity. Grounding is what lets the
+              <A href={CHEMBL}>ChEMBL</A>{" "}for compound bioactivity. Grounding is what lets the
               platform know that &ldquo;paracetamol&rdquo; and &ldquo;acetaminophen&rdquo;
               are the same drug and that a study of one disease subtype belongs under its parent.
               Without it, the same fact written two ways counts as two facts, or as none.
@@ -329,7 +329,7 @@ export default async function PlatformPage() {
               lives. <strong style={{ color: "var(--on-ink)" }}>The variables:</strong> a general graph
               holds a drug and disease as a fixed link, while female pharmacology moves across the
               hormonal cycle, so a candidate whose insight is its timing reads as noise.{" "}
-              <strong style={{ color: "var(--on-ink)" }}>The candidates:</strong> a platform serving
+              <strong style={{ color: "var(--on-ink)" }}>The candidates:</strong>{" "}a platform serving
               oncology and immunology budgets ranks for ownable molecules, and the cheap generics that
               manage women&rsquo;s conditions are <A href={ORPHAN} ink>financial orphans</A> it has no
               reason to surface.
@@ -375,7 +375,7 @@ export default async function PlatformPage() {
               named paper, trial, or guideline section.
             </p>
             <p style={pBone}>
-              <strong>The MATRIX marker</strong> appears where Every Cure&rsquo;s MATRIX model has a
+              <strong>The MATRIX marker</strong>{" "}appears where Every Cure&rsquo;s MATRIX model has a
               score for the same pair. MATRIX is a machine-learned treatment-probability estimate
               drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000 diseases,
               and it predicts how plausible a drug and disease link looks given the structure of
@@ -385,7 +385,7 @@ export default async function PlatformPage() {
               can weigh a model&rsquo;s prior against the evidence on the ground.
             </p>
             <p style={pBone}>
-              <strong>The graph marker</strong> records whether the knowledge graph independently
+              <strong>The graph marker</strong>{" "}records whether the knowledge graph independently
               connects the drug to the condition. Computed over Open Targets, it reads &ldquo;graph
               supports, via target X&rdquo; when the drug acts on a target the graph associates with
               the condition, and stays silent when no such shared target is present. A silence is not a
@@ -393,14 +393,14 @@ export default async function PlatformPage() {
               often a real gap rather than a verdict, and we show it rather than hide it.
             </p>
             <p style={pBone}>
-              <strong>The sex-PK marker</strong> appears where the substrate holds documented
+              <strong>The sex-PK marker</strong>{" "}appears where the substrate holds documented
               sex-specific pharmacokinetics for the drug, the way its exposure or clearance differs in
               women. Each fact carries its source, an FDA label or the curated sex-PK literature, and is
               shown beside the signal rather than folded into the grade, because it informs how a result
               should be read rather than how strong the evidence is.
             </p>
             <p style={pBone}>
-              <strong>The phase marker</strong> appears where a treatment&rsquo;s effect depends on the
+              <strong>The phase marker</strong>{" "}appears where a treatment&rsquo;s effect depends on the
               menstrual-cycle phase, which matters most for a cyclical condition like PMDD. It records the
               phase the relationship holds in, for example luteal-phase dosing of an SSRI, with its source,
               and like the others it is shown beside the signal rather than folded into the grade.
