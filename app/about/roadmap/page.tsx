@@ -48,6 +48,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "Every drug and condition resolved to canonical biomedical registries (ChEMBL, MONDO, EFO), with ambiguous cases held for human review",
         "A knowledge-graph cross-check, computed over Open Targets, that shows beside each signal whether the graph supports it or stays silent",
         "A sex-specific pharmacokinetics layer, seeded from FDA labels and the curated sex-PK literature, shown beside the relevant signals",
+        "A cyclical-phase layer that records where a treatment's effect depends on the menstrual-cycle phase, seeded for the strongest-evidence PMDD cases and shown beside the relevant signals",
       ],
     },
     {
@@ -261,8 +262,8 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Phase-aware relationships",
-    role: "Holding cyclical hormonal state as a first-class variable, so a drug and condition relationship can carry the menstrual-cycle phase in which it holds rather than being averaged into a single static edge. The schema is in place; seeding it with documented cases is the next step.",
-    status: "Planned",
+    role: "Holding cyclical hormonal state as a first-class variable, so a drug and condition relationship can carry the menstrual-cycle phase in which it holds rather than being averaged into a single static edge. Seeded for the strongest-evidence PMDD cases (luteal-phase SSRI dosing; drospirenone cycle suppression) from ACOG guidance, FDA labels, and a placebo-controlled RCT, and shown beside the relevant signals. Validation basis is the DRSP and the ISPMD consensus. Broader population is ongoing.",
+    status: "Live",
   },
   {
     name: "Sex-stratified pharmacokinetics",

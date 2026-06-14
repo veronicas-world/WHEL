@@ -41,6 +41,12 @@ export interface Candidate {
    * marker and a detail block in the evidence trail.
    */
   sexPk?: { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; note?: string }[];
+  /**
+   * Cyclical-phase layer (migration 060): documented treatment-level cycle-phase
+   * dependence for this drug-condition pair, each carrying its source. Present =>
+   * a "Phase" marker and a detail block in the evidence trail.
+   */
+  cyclePhase?: { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string }[];
 }
 
 const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
@@ -130,6 +136,9 @@ export default function CandidateCard({
             {c.sexPk && c.sexPk.length > 0 && (
               <MarkerChip dot="var(--brick)" label="Sex-PK" />
             )}
+            {c.cyclePhase && c.cyclePhase.length > 0 && (
+              <MarkerChip dot="var(--arm-cross)" label={`Phase · ${c.cyclePhase[0].cyclePhase}`} />
+            )}
             <RelBadge rel={c.direction} />
             <TierBadge tier={c.tier} />
           </div>
@@ -191,6 +200,41 @@ export default function CandidateCard({
                   </span>
                   {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
                   {f.magnitude ? `: ${f.magnitude}` : ""}
+                  {f.source && (
+                    <span style={{ display: "block", fontSize: 11.5, color: "var(--muted)", marginTop: 3 }}>
+                      {f.source}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {c.cyclePhase && c.cyclePhase.length > 0 && (
+            <div style={{ padding: "0 var(--card-pad) var(--card-pad)" }}>
+              <div className="eyebrow" style={{ margin: "6px 0 8px" }}>
+                Cycle-phase dependence
+              </div>
+              <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)", maxWidth: "72ch", margin: "0 0 10px" }}>
+                Documented dependence of this treatment on the menstrual-cycle phase, held as
+                first-class data rather than averaged into a phase-less number. Shown beside the
+                signal, not folded into its grade.
+              </p>
+              {c.cyclePhase.map((f, i) => (
+                <div
+                  key={i}
+                  style={{
+                    borderLeft: "2px solid var(--arm-cross)",
+                    padding: "8px 0 8px 12px",
+                    marginBottom: 8,
+                    fontSize: 13.5,
+                    lineHeight: 1.6,
+                    color: "var(--body)",
+                  }}
+                >
+                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>
+                    {f.cyclePhase} phase
+                  </span>
+                  {f.dosingNote ? `: ${f.dosingNote}` : ""}
                   {f.source && (
                     <span style={{ display: "block", fontSize: 11.5, color: "var(--muted)", marginTop: 3 }}>
                       {f.source}

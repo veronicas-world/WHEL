@@ -2902,9 +2902,9 @@ export default function ExternalReferencesPage() {
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className={SECTION_INNER}>
           <SectionHeader
-            label="01e · Sex-aware layer"
-            title="Sex-specific pharmacokinetics, grounded and cross-checked"
-            intro="The differentiating layer of the substrate holds documented sex differences in how a drug behaves in the body as first-class, sourced rows rather than averaging them away. It is seeded today for an initial set of compounds and surfaces a sex-PK marker beside the relevant signals in the gated view. Cyclical hormonal phase, the other half of this layer, exists as schema and is not yet populated."
+            label="01e · Female-biology layer"
+            title="Sex-specific pharmacokinetics and cycle phase, grounded and cross-checked"
+            intro="The differentiating layer of the substrate holds two female-biology facts as first-class, sourced rows rather than averaging them away: how a drug behaves differently in women (sex-specific pharmacokinetics), and how a treatment's effect depends on the menstrual-cycle phase. Both are seeded today for an initial set of compounds and surface beside the relevant signals in the gated view, never folded into the grade."
           />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: "74ch" }}>
@@ -2952,6 +2952,28 @@ export default function ExternalReferencesPage() {
                 source, and surfaces as a sex-PK marker beside the candidate with the underlying facts in
                 the evidence trail. It is shown beside the signal, never folded into its grade, the same
                 posture as the MATRIX and knowledge-graph layers above.
+              </p>
+            </div>
+
+            <div>
+              <div style={{ ...MONO, fontSize: "10.5px", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--green-deep)", marginBottom: 8 }}>
+                Cycle-phase dependence
+              </div>
+              <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", margin: 0 }}>
+                The twin layer records where a treatment&rsquo;s effect depends on the menstrual-cycle phase,
+                which matters most for PMDD, a condition defined by cyclical timing. It is seeded with the
+                strongest-evidence cases: luteal-phase (intermittent) dosing of SSRIs for PMDD, fluoxetine,
+                sertraline, and paroxetine CR (
+                <a href="https://www.acog.org/clinical/clinical-guidance/clinical-practice-guideline/articles/2023/12/management-of-premenstrual-disorders" target="_blank" rel="noopener noreferrer" style={LINK}>ACOG Clinical Practice Guideline on PMDD, 2023</a>;
+                each FDA-approved for PMDD), escitalopram, supported by a placebo-controlled RCT (
+                <a href="https://pubmed.ncbi.nlm.nih.gov/18519827/" target="_blank" rel="noopener noreferrer" style={LINK}>Eriksson et al., 2008</a>), and
+                drospirenone/ethinyl estradiol, whose continuous 24/4 regimen suppresses the luteal-phase
+                symptom pathophysiology (
+                <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/021676s020lbl.pdf" target="_blank" rel="noopener noreferrer" style={LINK}>FDA YAZ label</a>).
+                The phase vocabulary follows the standard ovarian model (follicular, ovulatory, luteal,
+                menstrual). The validation basis for this layer, for when validation work begins, is the
+                Daily Record of Severity of Problems (DRSP), the FDA-recognized phase-tagged outcome
+                instrument for PMDD, and the ISPMD methodological consensus.
               </p>
             </div>
           </div>

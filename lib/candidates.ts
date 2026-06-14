@@ -86,7 +86,7 @@ function buildOrigin(comp: Row | null): string {
   return ind ? `${status} · ${clip(ind, 64)}` : status;
 }
 
-function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPkMap): Candidate {
+function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPkMap, phase?: PhaseMap): Candidate {
   const comp = one(sig.compounds);
   const cond = one(sig.conditions);
   const sources = (Array.isArray(sig.sources) ? sig.sources : []) as Row[];
@@ -123,6 +123,12 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
   // Sex-aware layer (058): documented sex-specific PK facts for this compound.
   const sexPk = sexpk && compoundId ? sexpk.get(compoundId) : undefined;
 
+  // Cyclical-phase layer (060): treatment-level cycle-phase dependence.
+  const cyclePhase =
+    phase && compoundId && conditionId
+      ? phase.get(`${compoundId}::${conditionId}`)
+      : undefined;
+
   return {
     id: `WHEL-C-${String(n).padStart(3, "0")}`,
     drug,
@@ -133,6 +139,7 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     matrixPercentile,
     graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
     sexPk: sexPk && sexPk.length ? sexPk : undefined,
+    cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,
     score: Math.round(Number(sig.total_evidence_score) || 0),
     origin: buildOrigin(comp),
     pathway: tier === "exploratory"
@@ -218,9 +225,41 @@ async function getGraphSupportMap(): Promise<GraphSupportMap> {
   return map;
 }
 
+/**
+ * Cyclical-phase layer (migration 060). Reads compound_condition_phase, the
+ * sourced treatment-level cycle-phase dependence, keyed
+ * `${compound_id}::${condition_id}` -> facts[]. Empty map => no phase marker.
+ */
+type PhaseFact = { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string };
+type PhaseMap = Map<string, PhaseFact[]>;
+
+async function getPhaseMap(): Promise<PhaseMap> {
+  const map: PhaseMap = new Map();
+  const { data, error } = await supabase
+    .from("compound_condition_phase")
+    .select("compound_id, condition_id, cycle_phase, pattern, dosing_note, source_ref");
+  if (error || !data) return map;
+  for (const row of data as Row[]) {
+    const cid = row.compound_id ? String(row.compound_id) : "";
+    const condId = row.condition_id ? String(row.condition_id) : "";
+    if (!cid || !condId) continue;
+    const fact: PhaseFact = {
+      cyclePhase: String(row.cycle_phase ?? ""),
+      pattern: row.pattern ? String(row.pattern) : undefined,
+      dosingNote: row.dosing_note ? String(row.dosing_note) : undefined,
+      source: row.source_ref ? String(row.source_ref) : undefined,
+    };
+    const key = `${cid}::${condId}`;
+    const list = map.get(key);
+    if (list) list.push(fact);
+    else map.set(key, [fact]);
+  }
+  return map;
+}
+
 /** All real candidates, highest evidence score first, with stable WHEL-C ids. */
 export async function getCandidates(): Promise<Candidate[]> {
-  const [{ data, error }, graph, sexpk] = await Promise.all([
+  const [{ data, error }, graph, sexpk, phase] = await Promise.all([
     supabase
       .from("repurposing_signals")
       .select(SELECT)
@@ -233,9 +272,10 @@ export async function getCandidates(): Promise<Candidate[]> {
       .order("id", { ascending: true }),
     getGraphSupportMap(),
     getSexPkMap(),
+    getPhaseMap(),
   ]);
   if (error || !data) return [];
-  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph, sexpk));
+  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph, sexpk, phase));
 }
 
 /** Top N candidates for the homepage / platform feature strip. */

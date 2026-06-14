@@ -63,7 +63,7 @@ const LAYERS = [
     n: "Layer 01",
     name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "Sex-specific PK"],
-    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets. The sex-specific pharmacokinetics layer is now seeded for an initial set of compounds, each sourced and shown beside the signal; cyclical hormonal state exists as schema and is not yet populated.",
+    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets. The sex-specific pharmacokinetics and cycle-phase layers are now seeded for an initial set of compounds, each sourced and shown beside the signal; broader population is ongoing.",
   },
   {
     n: "Layer 02",
@@ -216,10 +216,10 @@ export default async function PlatformPage() {
               </h2>
             </div>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "36ch" }}>
-              Drug response shifts across the menstrual cycle, so the substrate is built to hold
-              hormonal state as structured data, so a luteal-phase signal can be read in its phase
-              instead of averaged into a flat number. This phase layer exists as schema and is not
-              yet populated.
+              Drug response shifts across the menstrual cycle, so the substrate holds hormonal state
+              as structured data, so a luteal-phase signal is read in its phase instead of averaged
+              into a flat number. This layer is seeded for the strongest-evidence PMDD cases and
+              shown beside the relevant signals; broader population is ongoing.
             </p>
           </div>
           <CyclicalPK height={340} />
@@ -398,6 +398,12 @@ export default async function PlatformPage() {
               women. Each fact carries its source, an FDA label or the curated sex-PK literature, and is
               shown beside the signal rather than folded into the grade, because it informs how a result
               should be read rather than how strong the evidence is.
+            </p>
+            <p style={pBone}>
+              <strong>The phase marker</strong> appears where a treatment&rsquo;s effect depends on the
+              menstrual-cycle phase, which matters most for a cyclical condition like PMDD. It records the
+              phase the relationship holds in, for example luteal-phase dosing of an SSRI, with its source,
+              and like the others it is shown beside the signal rather than folded into the grade.
             </p>
             <p style={pBone}>
               The open data sources and tools we build on, the independent MATRIX
