@@ -2898,6 +2898,66 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
+      {/* ── 01e · Sex-aware layer ────────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+        <div className={SECTION_INNER}>
+          <SectionHeader
+            label="01e · Sex-aware layer"
+            title="Sex-specific pharmacokinetics, grounded and cross-checked"
+            intro="The differentiating layer of the substrate holds documented sex differences in how a drug behaves in the body as first-class, sourced rows rather than averaging them away. It is seeded today for an initial set of compounds and surfaces a sex-PK marker beside the relevant signals in the gated view. Cyclical hormonal phase, the other half of this layer, exists as schema and is not yet populated."
+          />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 18, maxWidth: "74ch" }}>
+            <div>
+              <div style={{ ...MONO, fontSize: "10.5px", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--green-deep)", marginBottom: 8 }}>
+                What grounds it
+              </div>
+              <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", margin: 0 }}>
+                Every row carries a primary source. Per-drug facts come from the FDA drug label, the
+                regulatory record, including the{" "}
+                <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2012/202611s000lbl.pdf" target="_blank" rel="noopener noreferrer" style={LINK}>mirabegron (Myrbetriq) label</a>{" "}
+                and the{" "}
+                <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2004/21427lbl.pdf" target="_blank" rel="noopener noreferrer" style={LINK}>duloxetine (Cymbalta) label</a>.
+                The curated literature provides the backbone and the cross-check:{" "}
+                <a href="https://doi.org/10.1186/s13293-020-00308-5" target="_blank" rel="noopener noreferrer" style={LINK}>Zucker and Prendergast, Biology of Sex Differences 2020</a>,
+                a dataset of 86 approved drugs in which 76 showed higher exposure or slower elimination
+                in women, and the review by{" "}
+                <a href="https://doi.org/10.2165/00003088-200948030-00001" target="_blank" rel="noopener noreferrer" style={LINK}>Soldin and Mattison, Clinical Pharmacokinetics 2009</a>.
+                The sertraline entry additionally rests on Ronfeld et al., Clinical Pharmacokinetics 1997.
+              </p>
+            </div>
+
+            <div>
+              <div style={{ ...MONO, fontSize: "10.5px", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--green-deep)", marginBottom: 8 }}>
+                What the cross-check found
+              </div>
+              <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", margin: 0 }}>
+                The layer is seeded for an initial set of eight compounds. Two of the three rows first
+                drawn from FDA labels, sertraline and mirabegron, are independently corroborated as
+                women-higher in the Zucker and Prendergast dataset; the third, duloxetine, rests on its
+                FDA label and is not in that dataset, with no contradiction. Citalopram appears in the
+                dataset but is left out on purpose, because other pharmacokinetic studies disagree on its
+                direction and magnitude. The remaining seeded compounds, fluoxetine, paroxetine,
+                gabapentin, diazepam, and bupropion, are each listed as women-higher in that same curated
+                source.
+              </p>
+            </div>
+
+            <div>
+              <div style={{ ...MONO, fontSize: "10.5px", fontWeight: 500, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--green-deep)", marginBottom: 8 }}>
+                How it is shown
+              </div>
+              <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", margin: 0 }}>
+                Each sex-PK fact is held as a structured row with its parameter, direction, magnitude, and
+                source, and surfaces as a sex-PK marker beside the candidate with the underlying facts in
+                the evidence trail. It is shown beside the signal, never folded into its grade, the same
+                posture as the MATRIX and knowledge-graph layers above.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 02 · Underlying data sources ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid var(--rule)" }}>
         <div className={SECTION_INNER}>
