@@ -514,18 +514,16 @@ details.disclose-block[open] > summary .disclose-chev { transform: rotate(180deg
 @media (max-width: 560px){ .arc-grid, .exp-grid, .tier-grid { grid-template-columns: 1fr !important; } }
 
 /* ── Typewriter cursor ───────────────────────────────────────────────── */
-/* Zero-width caret: paints a 2px bar via ::after so it adds no inline width
-   and therefore cannot shift the line wrapping while the title types out. */
-.type-cursor {
-  display: inline-block; width: 0; height: 0.82em;
-  vertical-align: middle; position: relative;
+/* Typing caret painted as the typed-span's right border. A border (unlike a
+   separate inline-block element) adds no line-break opportunity, so the word
+   being typed never breaks onto the line above. The -2px margin cancels the
+   border's width so the caret has zero effect on where the text wraps. */
+.type-caret {
+  border-right: 2px solid var(--on-ink);
+  margin-right: -2px;
+  animation: caret-blink 0.65s step-end infinite;
 }
-.type-cursor::after {
-  content: ""; position: absolute; left: 4px; top: 0;
-  width: 2px; height: 100%; background: var(--on-ink);
-  animation: cur-blink 0.65s step-end infinite;
-}
-@keyframes cur-blink { 50% { opacity: 0; } }
+@keyframes caret-blink { 50% { border-right-color: transparent; } }
 
 /* ── Scroll dynamics ─────────────────────────────────────────────────── */
 body.scroll-effects-ready .scroll-section {

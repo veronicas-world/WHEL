@@ -46,9 +46,12 @@ export default function HeroTitle({
 
   return (
     <h1 className={className} style={style} aria-label={FULL_TEXT}>
-      {/* Revealed text */}
-      <span aria-hidden="true">{FULL_TEXT.slice(0, count)}</span>
-      {typing && <span className="type-cursor" aria-hidden="true" />}
+      {/* Revealed text. The caret is a border on this span (not a separate
+          element), so it introduces no line-break opportunity that could let a
+          partial word sit on the line above before the rest types in. */}
+      <span aria-hidden="true" className={typing ? "type-caret" : undefined}>
+        {FULL_TEXT.slice(0, count)}
+      </span>
       {/* Untyped tail: occupies its final space (locking the wrap) but stays invisible */}
       {typing && (
         <span aria-hidden="true" style={{ visibility: "hidden" }}>
