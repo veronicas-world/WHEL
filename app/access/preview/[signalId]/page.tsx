@@ -410,72 +410,88 @@ export default async function SignalDetail({
       </section>
 
       {/* ── Sex-specific PK ──────────────────────────────────────────────── */}
-      {c.sexPk && c.sexPk.length > 0 && (
-        <section className="surface-paper section tight">
-          <div className="container" style={{ maxWidth: "72ch" }}>
-            <SectionLabel>Sex-specific pharmacokinetics</SectionLabel>
-            <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", marginBottom: 18 }}>
-              Documented differences in how this drug is handled in women, drawn from a primary source,
-              an FDA label or the curated sex-PK literature (
-              <Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
-              <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is reported beside the signal and is
-              not part of the composite score; it informs how a result should be interpreted.
+      <section className="surface-paper section tight">
+        <div className="container" style={{ maxWidth: "72ch" }}>
+          <SectionLabel>Sex-specific pharmacokinetics</SectionLabel>
+          {c.sexPk && c.sexPk.length > 0 ? (
+            <>
+              <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", marginBottom: 18 }}>
+                Documented differences in how this drug is handled in women, drawn from a primary source,
+                an FDA label or the curated sex-PK literature (
+                <Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
+                <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is reported beside the signal and is
+                not part of the composite score; it informs how a result should be interpreted.
+              </p>
+              {c.sexPk.map((f, i) => (
+                <div key={i} style={{ borderLeft: "2px solid var(--brick)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
+                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.parameter}</span>
+                  {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
+                  {f.magnitude ? `: ${f.magnitude}` : ""}
+                  {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
+                </div>
+              ))}
+            </>
+          ) : (
+            <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--muted)", maxWidth: "72ch", margin: 0 }}>
+              Not covered for this pair. This layer holds documented sex-specific pharmacokinetics for a
+              limited set of drugs, and this compound is not among them yet. A blank here means the drug is
+              not covered by the layer, not that no sex difference exists.
             </p>
-            {c.sexPk.map((f, i) => (
-              <div key={i} style={{ borderLeft: "2px solid var(--brick)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
-                <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.parameter}</span>
-                {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
-                {f.magnitude ? `: ${f.magnitude}` : ""}
-                {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
-              </div>
-            ))}
-            <LearnMore href="/about/external-references#female-biology">
-              More on the sex-specific pharmacokinetics layer and its sources
-            </LearnMore>
-          </div>
-        </section>
-      )}
+          )}
+          <LearnMore href="/about/external-references#female-biology">
+            More on the sex-specific pharmacokinetics layer and its sources
+          </LearnMore>
+        </div>
+      </section>
 
       {/* ── Cycle-phase dependence ───────────────────────────────────────── */}
-      {c.cyclePhase && c.cyclePhase.length > 0 && (
-        <section className="surface-bone section tight">
-          <div className="container" style={{ maxWidth: "72ch" }}>
-            <SectionLabel>Cycle-phase dependence</SectionLabel>
-            <div style={{ marginBottom: 20, display: "flex", flexDirection: "column", gap: 14 }}>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                <strong style={{ color: "var(--ink)" }}>Why it matters.</strong>{" "}Some treatments work
-                differently depending on where someone is in the menstrual cycle, and for a cyclical
-                condition like PMDD the timing can be the whole point. A drug that helps in the luteal
-                phase, the roughly two weeks before menstruation, can look weaker than it is when its
-                effect is averaged across the entire cycle.
-              </p>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                <strong style={{ color: "var(--ink)" }}>What tracking the phase adds.</strong>{" "}Holding the
-                phase as structured data lets a luteal-phase result be read in its phase rather than
-                averaged across the cycle, and records the dosing pattern, taking the drug only in the
-                luteal phase, that a phase-blind record does not capture.
-              </p>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                <strong style={{ color: "var(--ink)" }}>What the literature says.</strong>{" "}For PMDD this
-                is well established: intermittent luteal-phase SSRI dosing is an accepted first-line regimen
-                (<Ext href={ACOG_PMDD}>ACOG 2023</Ext>), and it works within days, which is itself a clue
-                that the drug acts through a faster route here than in depression. The standard outcome
-                instrument for measuring it is the Daily Record of Severity of Problems (DRSP).
-              </p>
-            </div>
-            {c.cyclePhase.map((f, i) => (
-              <div key={i} style={{ borderLeft: "2px solid var(--arm-cross)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
-                <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.cyclePhase} phase</span>
-                {f.dosingNote ? `: ${f.dosingNote}` : ""}
-                {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
+      <section className="surface-bone section tight">
+        <div className="container" style={{ maxWidth: "72ch" }}>
+          <SectionLabel>Cycle-phase dependence</SectionLabel>
+          {c.cyclePhase && c.cyclePhase.length > 0 ? (
+            <>
+              <div style={{ marginBottom: 20, display: "flex", flexDirection: "column", gap: 14 }}>
+                <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
+                  <strong style={{ color: "var(--ink)" }}>Why it matters.</strong>{" "}Some treatments work
+                  differently depending on where someone is in the menstrual cycle, and for a cyclical
+                  condition like PMDD the timing can be the whole point. A drug that helps in the luteal
+                  phase, the roughly two weeks before menstruation, can look weaker than it is when its
+                  effect is averaged across the entire cycle.
+                </p>
+                <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
+                  <strong style={{ color: "var(--ink)" }}>What tracking the phase adds.</strong>{" "}Holding the
+                  phase as structured data lets a luteal-phase result be read in its phase rather than
+                  averaged across the cycle, and records the dosing pattern, taking the drug only in the
+                  luteal phase, that a phase-blind record does not capture.
+                </p>
+                <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
+                  <strong style={{ color: "var(--ink)" }}>What the literature says.</strong>{" "}For PMDD this
+                  is well established: intermittent luteal-phase SSRI dosing is an accepted first-line regimen
+                  (<Ext href={ACOG_PMDD}>ACOG 2023</Ext>), and it works within days, which is itself a clue
+                  that the drug acts through a faster route here than in depression. The standard outcome
+                  instrument for measuring it is the Daily Record of Severity of Problems (DRSP).
+                </p>
               </div>
-            ))}
-            <LearnMore href="/about/external-references#female-biology">
-              More on the cycle-phase layer and its sources
-            </LearnMore>
-          </div>
-        </section>
-      )}
+              {c.cyclePhase.map((f, i) => (
+                <div key={i} style={{ borderLeft: "2px solid var(--arm-cross)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
+                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.cyclePhase} phase</span>
+                  {f.dosingNote ? `: ${f.dosingNote}` : ""}
+                  {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
+                </div>
+              ))}
+            </>
+          ) : (
+            <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--muted)", maxWidth: "72ch", margin: 0 }}>
+              Not covered for this pair. The cycle-phase layer is seeded for the strongest-evidence cases so
+              far (PMDD), and this pair is not among them yet. A blank here means the pair is not covered by
+              the layer, not that the effect was found to be phase-independent.
+            </p>
+          )}
+          <LearnMore href="/about/external-references#female-biology">
+            More on the cycle-phase layer and its sources
+          </LearnMore>
+        </div>
+      </section>
 
       {/* ── Provenance trail ─────────────────────────────────────────────── */}
       <section className="surface-paper section tight">
