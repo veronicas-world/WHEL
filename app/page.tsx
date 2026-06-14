@@ -34,21 +34,34 @@ const ARCS = [
   { drug: "GLP-1 agonists",    to: "PCOS · Endometriosis", note: "metabolic + inflammatory, under study" },
 ];
 
+/* Mono caption naming the concrete sources / references behind a layer. */
+const SOURCE_LINE: React.CSSProperties = {
+  fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
+  fontSize: 11.5,
+  lineHeight: 1.5,
+  letterSpacing: "0.02em",
+  color: "var(--on-ink-mut)",
+  margin: "14px 0 2px",
+};
+
 /* TODO(real-data): three-layer architecture — from design */
 const LAYERS = [
   {
     n: "Layer 01", name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "Sex-PK + cycle-phase"],
+    sources: "Open Targets, FDA drug labels, the curated sex-PK literature",
     desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL, with sex-specific pharmacokinetics and cyclical-phase layers already seeded and shown beside the relevant signals, and the fuller female-specific structure no existing ontology covers still being built in.",
   },
   {
     n: "Layer 02", name: "Retrieval & validation",
     tags: ["Per-claim provenance", "Marked synthesis", "Contradiction surfacing"],
+    sources: "PubMed, ClinicalTrials.gov, FDA openFDA",
     desc: "Provenance-preserving extraction tuned for biomedical literature. Every claim ties to a verbatim source span, every synthesis is marked as a synthesis, and every contradiction in the underlying literature is surfaced explicitly rather than averaged. This is what the §3060 research-support exemption requires and what clinicians need to trust the output.",
   },
   {
     n: "Layer 03", name: "Hypothesis from signal",
     tags: ["Off-label patterns", "Community reports", "Validated downstream"],
+    sources: "Patient-community reports (Reddit)",
     desc: "Patient-community signal, including off-label prescribing patterns, community reports, and structured patient-reported data, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence. It is never equated with the results of a controlled trial, and it is the input that surfaces the hypotheses worth checking. Formal advocacy-organization partnerships are planned, taken on once the validation work is in place.",
   },
 ];
@@ -286,12 +299,45 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="ldesc">{l.desc}</p>
+                  <div style={SOURCE_LINE}>
+                    <span style={{ color: "var(--signal)" }}>Sources</span> · {l.sources}
+                  </div>
                   <div className="ltags">
                     {l.tags.map((t) => <span key={t} className="pill on-ink">{t}</span>)}
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* The three layers above build a signal. This validation layer is a
+              separate, independent check shown beside the finished signal, kept
+              out of the score — it is not a fourth build layer. */}
+          <div className="layer" style={{ marginTop: 24, border: "1px solid var(--ink-line-2)" }}>
+            <div>
+              <div className="lnum" style={{ color: "var(--signal)" }}>Beside every signal</div>
+              <div className="lname">Independent validation</div>
+            </div>
+            <div>
+              <p className="ldesc">
+                Once a signal is built by the three layers above, it is checked against outside
+                references that are kept separate from its score rather than blended in: a literature
+                grade that traces to guideline bodies such as ESHRE, ACOG, and Cochrane; Every
+                Cure&rsquo;s MATRIX treatment-probability model; and an Open Targets knowledge-graph
+                check of whether the graph independently connects the drug to the condition. This is
+                the validation layer. It is shown beside each result, not folded into it, and is not
+                one of the three build layers.
+              </p>
+              <div style={SOURCE_LINE}>
+                <span style={{ color: "var(--signal)" }}>References</span> · Every Cure MATRIX, Open Targets, ESHRE / ACOG / Cochrane guidance
+              </div>
+              <div className="ltags">
+                <span className="pill on-ink">Literature grade</span>
+                <span className="pill on-ink">MATRIX cross-reference</span>
+                <span className="pill on-ink">Knowledge-graph check</span>
+                <span className="pill on-ink">DRKG · PrimeKG · TxGNN planned</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
