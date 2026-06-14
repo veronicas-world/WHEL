@@ -26,11 +26,42 @@ const REL_LABELS: Record<string, string> = {
   silent: "Evidence silent",
 };
 
+// Canonical sources for the explainers (the justifications), hyperlinked inline.
+const EVERYCURE = "https://huggingface.co/datasets/everycure/matrix-scores";
+const OPENTARGETS = "https://platform.opentargets.org/";
+const ACOG_PMDD = "https://www.acog.org/clinical/clinical-guidance/clinical-practice-guideline/articles/2023/12/management-of-premenstrual-disorders";
+const ESHRE = "https://www.eshre.eu/Guidelines-and-Legal/Guidelines";
+const COCHRANE = "https://www.cochranelibrary.com/";
+const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5";
+const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001";
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="eyebrow" style={{ marginBottom: 12 }}>
       {children}
     </div>
+  );
+}
+
+const LINK: React.CSSProperties = { color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 };
+
+function Ext({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" style={LINK}>
+      {children}
+    </a>
+  );
+}
+
+/** A source citation, rendered as a link when a URL is on file. */
+function SourceCite({ text, url }: { text: string; url?: string }) {
+  const base: React.CSSProperties = { display: "block", fontSize: 12, lineHeight: 1.5, marginTop: 4 };
+  return url ? (
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ ...base, ...LINK }}>
+      {text} ↗
+    </a>
+  ) : (
+    <span style={{ ...base, color: "var(--muted)" }}>{text}</span>
   );
 }
 
@@ -42,6 +73,20 @@ export default async function SignalDetail({
   const { signalId } = await params;
   const c = await getCandidateBySignalId(signalId);
   if (!c) notFound();
+
+  // Consolidated citation list: the data-flag sources (sex-PK, cycle-phase) and
+  // the evidence sources (provenance claims), deduped, with links where on file.
+  const citations: { text: string; url?: string }[] = [];
+  const seenCite = new Set<string>();
+  const addCite = (text?: string, url?: string) => {
+    const key = (text ?? "").trim();
+    if (!key || seenCite.has(key)) return;
+    seenCite.add(key);
+    citations.push({ text: key, url });
+  };
+  (c.sexPk ?? []).forEach((f) => addCite(f.source, f.sourceUrl));
+  (c.cyclePhase ?? []).forEach((f) => addCite(f.source, f.sourceUrl));
+  (c.claims ?? []).forEach((cl) => addCite(cl.src, cl.href));
 
   return (
     <main>
@@ -142,7 +187,16 @@ export default async function SignalDetail({
 
           <ReadingBlock
             heading={`Literature grade${c.lGrade ? ` · ${c.lGrade}` : ""}`}
-            whatItIs="How far the published record independently backs this pair, on a four-step scale that always traces to a source. L0 means no external record yet; L1, the pair appears in peer-reviewed literature; L2, a randomized trial or systematic review reports a result; L3, the pair is named in an active clinical guideline from a body such as ESHRE, ACOG, or Cochrane."
+            whatItIs={
+              <>
+                How far the published record independently backs this pair, on a four-step scale that
+                always traces to a source. L0 means no external record yet; L1, the pair appears in
+                peer-reviewed literature; L2, a randomized trial or systematic review reports a result;
+                L3, the pair is named in an active clinical guideline from a body such as{" "}
+                <Ext href={ESHRE}>ESHRE</Ext>, <Ext href={ACOG_PMDD}>ACOG</Ext>, or{" "}
+                <Ext href={COCHRANE}>Cochrane</Ext>.
+              </>
+            }
             forThisPair={
               c.lGrade
                 ? `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which you can check in the provenance trail below.`
@@ -152,7 +206,14 @@ export default async function SignalDetail({
 
           <ReadingBlock
             heading={`MATRIX cross-reference${c.matrixPercentile ? ` · ${c.matrixPercentile}` : ""}`}
-            whatItIs="Every Cure's machine-learned treatment-probability model, drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000 diseases. It estimates how plausible a drug-disease link looks given the structure of biomedical knowledge, a model's prior rather than the evidence on the ground."
+            whatItIs={
+              <>
+                <Ext href={EVERYCURE}>Every Cure&rsquo;s</Ext> machine-learned treatment-probability
+                model, drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000
+                diseases. It estimates how plausible a drug-disease link looks given the structure of
+                biomedical knowledge, a model&rsquo;s prior rather than the evidence on the ground.
+              </>
+            }
             forThisPair={
               c.matrixPercentile
                 ? `MATRIX places this pair at ${c.matrixPercentile}. We show that beside our grade rather than folding it in.`
@@ -162,7 +223,14 @@ export default async function SignalDetail({
 
           <ReadingBlock
             heading={`Knowledge graph · ${c.graphViaTargets && c.graphViaTargets.length ? "supports" : "silent"}`}
-            whatItIs="A check, computed over Open Targets, of whether the drug acts on a target that the graph independently associates with the condition. A silence is not a contradiction; it means the graph has no relevant edge, which for these conditions is often a real gap rather than a verdict."
+            whatItIs={
+              <>
+                A check, computed over <Ext href={OPENTARGETS}>Open Targets</Ext>, of whether the drug
+                acts on a target that the graph independently associates with the condition. A silence is
+                not a contradiction; it means the graph has no relevant edge, which for these conditions
+                is often a real gap rather than a verdict.
+              </>
+            }
             forThisPair={
               c.graphViaTargets && c.graphViaTargets.length
                 ? `The graph supports this link, through ${c.graphViaTargets.join(", ")}.`
@@ -179,15 +247,18 @@ export default async function SignalDetail({
             <SectionLabel>Sex-specific pharmacokinetics</SectionLabel>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", marginBottom: 18 }}>
               How this drug behaves differently in women, the part general databases average away. Each
-              fact is tied to its source. It is shown beside the signal, not folded into the grade,
-              because it changes how a result should be read rather than how strong the evidence is.
+              fact is tied to a primary source, an FDA label or the curated sex-PK literature (
+              <Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
+              <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is shown beside the signal, not
+              folded into the grade, because it changes how a result should be read rather than how
+              strong the evidence is.
             </p>
             {c.sexPk.map((f, i) => (
               <div key={i} style={{ borderLeft: "2px solid var(--brick)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
                 <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.parameter}</span>
                 {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
                 {f.magnitude ? `: ${f.magnitude}` : ""}
-                {f.source && <span style={{ display: "block", fontSize: 12, color: "var(--muted)", marginTop: 4 }}>{f.source}</span>}
+                {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
               </div>
             ))}
           </div>
@@ -216,16 +287,16 @@ export default async function SignalDetail({
               <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
                 <strong style={{ color: "var(--ink)" }}>What the literature says.</strong>{" "}For PMDD this
                 is well established: intermittent luteal-phase SSRI dosing is an accepted first-line regimen
-                (ACOG 2023), and it works within days, which is itself a clue that the drug acts through a
-                faster route here than in depression. The standard outcome instrument for measuring it is
-                the Daily Record of Severity of Problems (DRSP).
+                (<Ext href={ACOG_PMDD}>ACOG 2023</Ext>), and it works within days, which is itself a clue
+                that the drug acts through a faster route here than in depression. The standard outcome
+                instrument for measuring it is the Daily Record of Severity of Problems (DRSP).
               </p>
             </div>
             {c.cyclePhase.map((f, i) => (
               <div key={i} style={{ borderLeft: "2px solid var(--arm-cross)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
                 <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.cyclePhase} phase</span>
                 {f.dosingNote ? `: ${f.dosingNote}` : ""}
-                {f.source && <span style={{ display: "block", fontSize: 12, color: "var(--muted)", marginTop: 4 }}>{f.source}</span>}
+                {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
               </div>
             ))}
           </div>
@@ -263,7 +334,35 @@ export default async function SignalDetail({
             ))}
           </div>
 
-          <div style={{ borderTop: "1px solid var(--rule)", marginTop: 32, paddingTop: 24 }}>
+        </div>
+      </section>
+
+      {/* ── Sources & citations ──────────────────────────────────────────── */}
+      <section className="surface-bone section tight">
+        <div className="container" style={{ maxWidth: "76ch" }}>
+          <SectionLabel>Sources and citations</SectionLabel>
+          <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--body)", marginBottom: 16 }}>
+            Every source this signal draws on, both the literature behind the flag and the references
+            behind each justification above. Where a link is on file, it goes straight to the primary
+            source.
+          </p>
+          {citations.length > 0 ? (
+            <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+              {citations.map((s, i) => (
+                <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)" }}>
+                  {s.url ? (
+                    <a href={s.url} target="_blank" rel="noopener noreferrer" style={LINK}>{s.text} ↗</a>
+                  ) : (
+                    s.text
+                  )}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p style={{ fontSize: 13.5, color: "var(--muted)" }}>No itemized sources on file for this signal yet.</p>
+          )}
+
+          <div style={{ borderTop: "1px solid var(--rule)", marginTop: 28, paddingTop: 24 }}>
             <Link href="/access/preview" className="btn btn-ghost sm">
               <span className="arr">←</span> Back to the full index
             </Link>
@@ -274,7 +373,7 @@ export default async function SignalDetail({
   );
 }
 
-function ReadingBlock({ heading, whatItIs, forThisPair }: { heading: string; whatItIs: string; forThisPair: string }) {
+function ReadingBlock({ heading, whatItIs, forThisPair }: { heading: string; whatItIs: React.ReactNode; forThisPair: string }) {
   return (
     <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 18, marginTop: 18 }}>
       <div className="font-heading" style={{ fontSize: 17, color: "var(--ink)", marginBottom: 8 }}>{heading}</div>

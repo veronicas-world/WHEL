@@ -2966,7 +2966,7 @@ export default function ExternalReferencesPage() {
                 sertraline, and paroxetine CR (
                 <a href="https://www.acog.org/clinical/clinical-guidance/clinical-practice-guideline/articles/2023/12/management-of-premenstrual-disorders" target="_blank" rel="noopener noreferrer" style={LINK}>ACOG Clinical Practice Guideline on PMDD, 2023</a>;
                 each FDA-approved for PMDD), escitalopram, supported by a placebo-controlled RCT (
-                <a href="https://pubmed.ncbi.nlm.nih.gov/18519827/" target="_blank" rel="noopener noreferrer" style={LINK}>Eriksson et al., 2008</a>), and
+                <a href="https://pubmed.ncbi.nlm.nih.gov/18344730/" target="_blank" rel="noopener noreferrer" style={LINK}>Eriksson et al., 2008</a>), and
                 drospirenone/ethinyl estradiol, whose continuous 24/4 regimen suppresses the luteal-phase
                 symptom pathophysiology (
                 <a href="https://www.accessdata.fda.gov/drugsatfda_docs/label/2023/021676s020lbl.pdf" target="_blank" rel="noopener noreferrer" style={LINK}>FDA YAZ label</a>).

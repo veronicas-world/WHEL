@@ -42,13 +42,13 @@ export interface Candidate {
    * facts for this compound, each carrying its source. Present => a "Sex-PK"
    * marker and a detail block in the evidence trail.
    */
-  sexPk?: { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; note?: string }[];
+  sexPk?: { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; sourceUrl?: string; note?: string }[];
   /**
    * Cyclical-phase layer (migration 060): documented treatment-level cycle-phase
    * dependence for this drug-condition pair, each carrying its source. Present =>
    * a "Phase" marker and a detail block in the evidence trail.
    */
-  cyclePhase?: { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string }[];
+  cyclePhase?: { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string; sourceUrl?: string }[];
 }
 
 const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
@@ -63,6 +63,19 @@ function formatViaTargets(targets: string[]): string {
   if (targets.length === 1) return `via ${targets[0]}`;
   if (targets.length === 2) return `via ${targets[0]} + ${targets[1]}`;
   return `via ${targets[0]} + ${targets.length - 1} more`;
+}
+
+/** A source citation that becomes a link when a URL is on file. */
+function SourceLine({ text, url }: { text: string; url?: string }) {
+  const style: React.CSSProperties = { display: "block", fontSize: 11.5, marginTop: 3 };
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer" style={{ ...style, color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+        {text} ↗
+      </a>
+    );
+  }
+  return <span style={{ ...style, color: "var(--muted)" }}>{text}</span>;
 }
 
 function MarkerChip({ dot, label }: { dot: string; label: string }) {
@@ -202,11 +215,7 @@ export default function CandidateCard({
                   </span>
                   {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
                   {f.magnitude ? `: ${f.magnitude}` : ""}
-                  {f.source && (
-                    <span style={{ display: "block", fontSize: 11.5, color: "var(--muted)", marginTop: 3 }}>
-                      {f.source}
-                    </span>
-                  )}
+                  {f.source && <SourceLine text={f.source} url={f.sourceUrl} />}
                 </div>
               ))}
             </div>
@@ -237,11 +246,7 @@ export default function CandidateCard({
                     {f.cyclePhase} phase
                   </span>
                   {f.dosingNote ? `: ${f.dosingNote}` : ""}
-                  {f.source && (
-                    <span style={{ display: "block", fontSize: 11.5, color: "var(--muted)", marginTop: 3 }}>
-                      {f.source}
-                    </span>
-                  )}
+                  {f.source && <SourceLine text={f.source} url={f.sourceUrl} />}
                 </div>
               ))}
             </div>

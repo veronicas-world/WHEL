@@ -172,14 +172,14 @@ const SELECT = `
  * compound_id -> facts[]. If the table is empty or unreadable, returns an
  * empty map so cards simply show no sex-PK disclosure.
  */
-type SexPkFact = { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; note?: string };
+type SexPkFact = { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; sourceUrl?: string; note?: string };
 type SexPkMap = Map<string, SexPkFact[]>;
 
 async function getSexPkMap(): Promise<SexPkMap> {
   const map: SexPkMap = new Map();
   const { data, error } = await supabase
     .from("compound_pk")
-    .select("compound_id, parameter, sex, direction, magnitude, source_ref, note");
+    .select("compound_id, parameter, sex, direction, magnitude, source_ref, source_url, note");
   if (error || !data) return map;
   for (const row of data as Row[]) {
     const cid = row.compound_id ? String(row.compound_id) : "";
@@ -190,6 +190,7 @@ async function getSexPkMap(): Promise<SexPkMap> {
       direction: row.direction ? String(row.direction) : undefined,
       magnitude: row.magnitude ? String(row.magnitude) : undefined,
       source: row.source_ref ? String(row.source_ref) : undefined,
+      sourceUrl: row.source_url ? String(row.source_url) : undefined,
       note: row.note ? String(row.note) : undefined,
     };
     const list = map.get(cid);
@@ -231,14 +232,14 @@ async function getGraphSupportMap(): Promise<GraphSupportMap> {
  * sourced treatment-level cycle-phase dependence, keyed
  * `${compound_id}::${condition_id}` -> facts[]. Empty map => no phase marker.
  */
-type PhaseFact = { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string };
+type PhaseFact = { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string; sourceUrl?: string };
 type PhaseMap = Map<string, PhaseFact[]>;
 
 async function getPhaseMap(): Promise<PhaseMap> {
   const map: PhaseMap = new Map();
   const { data, error } = await supabase
     .from("compound_condition_phase")
-    .select("compound_id, condition_id, cycle_phase, pattern, dosing_note, source_ref");
+    .select("compound_id, condition_id, cycle_phase, pattern, dosing_note, source_ref, source_url");
   if (error || !data) return map;
   for (const row of data as Row[]) {
     const cid = row.compound_id ? String(row.compound_id) : "";
@@ -249,6 +250,7 @@ async function getPhaseMap(): Promise<PhaseMap> {
       pattern: row.pattern ? String(row.pattern) : undefined,
       dosingNote: row.dosing_note ? String(row.dosing_note) : undefined,
       source: row.source_ref ? String(row.source_ref) : undefined,
+      sourceUrl: row.source_url ? String(row.source_url) : undefined,
     };
     const key = `${cid}::${condId}`;
     const list = map.get(key);
