@@ -109,53 +109,49 @@ export default async function SignalDetail({
   const c = await getCandidateBySignalId(signalId);
   if (!c) notFound();
 
-  // What specifically earns this pair's literature grade, derived from the
-  // tagged sources actually attached to the signal (no model rerun needed).
-  const guidelineClaim = c.claims.find((cl) => (cl.studyType ?? "").toLowerCase().includes("guideline"));
-  const curatedGuideline = c.claims.find((cl) => cl.guidelineStrength);
-  const trialClaim = c.claims.find((cl) => {
-    const k = (cl.studyType ?? "").toLowerCase();
-    return k.includes("rct") || k.includes("randomi") || k.includes("systematic") || k.includes("meta") || k.includes("sr");
-  });
-  const namedGuideline = curatedGuideline ?? guidelineClaim;
-  const clipTitle = (s: string) => (s.length > 96 ? s.slice(0, 95).trimEnd() + "…" : s);
-  let litForThisPair: React.ReactNode;
+  // The grade-relevant records actually attached to this signal (guidelines,
+  // trials, reviews), tagged by type. These are what earn the literature grade,
+  // pulled from stored source tags, no model rerun needed.
+  const clipTitle = (s: string) => (s.length > 110 ? s.slice(0, 109).trimEnd() + "…" : s);
+  const GRADE_TYPES = ["Clinical guideline", "Randomized trial", "Systematic review / meta-analysis"];
+  const gradeRecords = c.claims.filter((cl) => GRADE_TYPES.includes(studyLabel(cl.studyType) ?? ""));
+
+  let litLead: string;
   if (!c.lGrade) {
-    litForThisPair = "This pair is not graded yet; no external record is on file for it.";
-  } else if (c.lGrade === "L3" && namedGuideline) {
-    const detail = curatedGuideline?.guidelineStrength
-      ? `, recommendation strength ${curatedGuideline.guidelineStrength}${curatedGuideline.guidelineCertainty ? `, ${curatedGuideline.guidelineCertainty} certainty` : ""}`
-      : "";
-    litForThisPair = (
-      <>
-        Graded L3 because this drug is named in a clinical guideline,{" "}
-        {namedGuideline.href ? (
-          <a href={namedGuideline.href} target="_blank" rel="noopener noreferrer" style={LINK}>
-            {clipTitle(namedGuideline.text)} ↗
-          </a>
-        ) : (
-          <span style={{ color: "var(--ink)" }}>{clipTitle(namedGuideline.text)}</span>
-        )}
-        {detail}. The full set of grade-relevant records is tagged by type in the provenance trail below.
-      </>
-    );
-  } else if (c.lGrade === "L2" && trialClaim) {
-    litForThisPair = (
-      <>
-        Graded L2 because a randomized trial or systematic review reports a result for this pair,{" "}
-        {trialClaim.href ? (
-          <a href={trialClaim.href} target="_blank" rel="noopener noreferrer" style={LINK}>
-            {clipTitle(trialClaim.text)} ↗
-          </a>
-        ) : (
-          <span style={{ color: "var(--ink)" }}>{clipTitle(trialClaim.text)}</span>
-        )}
-        . The records are tagged by type in the provenance trail below.
-      </>
-    );
+    litLead = "This pair is not graded yet; no external record is on file for it.";
+  } else if (gradeRecords.length > 0) {
+    const why =
+      c.lGrade === "L3" ? "a clinical guideline names this drug"
+      : c.lGrade === "L2" ? "a randomized trial or systematic review reports a result"
+      : "the published record backs it";
+    litLead = `Graded ${c.lGrade} because ${why}. The records that earn the grade:`;
   } else {
-    litForThisPair = `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which are tagged by type in the provenance trail below.`;
+    litLead = `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which are in the provenance trail below.`;
   }
+
+  const litRecords = gradeRecords.length > 0 ? (
+    <ul style={{ listStyle: "none", padding: 0, margin: "12px 0 0", display: "flex", flexDirection: "column", gap: 10 }}>
+      {gradeRecords.map((cl, i) => (
+        <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)", paddingLeft: 16, position: "relative" }}>
+          <span aria-hidden style={{ position: "absolute", left: 0, color: "var(--green-mid)", fontWeight: 600 }}>&rsaquo;</span>
+          {cl.href ? (
+            <a href={cl.href} target="_blank" rel="noopener noreferrer" style={LINK}>{clipTitle(cl.text)} ↗</a>
+          ) : (
+            <span style={{ color: "var(--ink)" }}>{clipTitle(cl.text)}</span>
+          )}
+          <span
+            style={{
+              ...DIM_MONO, display: "inline-block", marginLeft: 8, fontSize: 10.5, letterSpacing: "0.04em",
+              textTransform: "uppercase", whiteSpace: "nowrap", border: "1px solid var(--rule-strong)", padding: "1px 6px",
+              color: studyLabel(cl.studyType) === "Clinical guideline" ? "var(--green-deep)" : "var(--muted)",
+            }}
+          >
+            {studyLabel(cl.studyType)}{cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
+          </span>
+        </li>
+      ))}
+    </ul>
+  ) : null;
 
   return (
     <main>
@@ -281,7 +277,8 @@ export default async function SignalDetail({
                 benchmark and is not an input to the composite score.
               </>
             }
-            forThisPair={litForThisPair}
+            forThisPair={litLead}
+            extra={litRecords}
             learnMore={
               <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
                 Why the literature grade sits outside the score
@@ -472,7 +469,7 @@ export default async function SignalDetail({
   );
 }
 
-function ReadingBlock({ heading, whatItIs, forThisPair, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: React.ReactNode; learnMore?: React.ReactNode }) {
+function ReadingBlock({ heading, whatItIs, forThisPair, extra, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: React.ReactNode; extra?: React.ReactNode; learnMore?: React.ReactNode }) {
   return (
     <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 18, marginTop: 18 }}>
       <div className="font-heading" style={{ fontSize: 17, color: "var(--ink)", marginBottom: 8 }}>{heading}</div>
@@ -480,6 +477,7 @@ function ReadingBlock({ heading, whatItIs, forThisPair, learnMore }: { heading: 
       <p style={{ fontSize: 14.5, lineHeight: 1.65, color: "var(--ink-2)", margin: 0 }}>
         <strong style={{ color: "var(--ink)" }}>For this pair.</strong> {forThisPair}
       </p>
+      {extra}
       {learnMore}
     </div>
   );
