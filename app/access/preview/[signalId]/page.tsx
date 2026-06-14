@@ -442,7 +442,7 @@ export default async function SignalDetail({
             These are the sources the pipeline ingested to detect and score this signal, the published
             literature the model actually read, each tagged by study type. Where the model combined
             findings the claim is marked as a synthesis (S), and where the literature disagrees the
-            contradiction is shown (!) rather than averaged away.
+            contradiction is shown (!).
           </p>
           <div className="col" style={{ gap: 12 }}>
             {c.claims.map((cl, i) => (
