@@ -29,6 +29,12 @@ export interface Candidate {
   lGrade?: "L0" | "L1" | "L2" | "L3";
   /** Every Cure MATRIX cross-reference percentile, e.g. "Top 12%", when MATRIX covers the pair. */
   matrixPercentile?: string;
+  /**
+   * Knowledge-graph (Path B) disclosure: the shared target(s) through which the
+   * graph independently connects this drug to this condition. Present and
+   * non-empty => "graph supports, via <target>"; absent => "graph silent".
+   */
+  graphViaTargets?: string[];
 }
 
 const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
@@ -37,6 +43,13 @@ const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
   L2: "var(--lgrade-l2)",
   L3: "var(--lgrade-l3)",
 };
+
+/** "via ESR1", "via AR + PGR", "via ESR1 + 2 more" — keeps the chip compact. */
+function formatViaTargets(targets: string[]): string {
+  if (targets.length === 1) return `via ${targets[0]}`;
+  if (targets.length === 2) return `via ${targets[0]} + ${targets[1]}`;
+  return `via ${targets[0]} + ${targets.length - 1} more`;
+}
 
 function MarkerChip({ dot, label }: { dot: string; label: string }) {
   return (
@@ -105,6 +118,9 @@ export default function CandidateCard({
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             {c.lGrade && <MarkerChip dot={L_FILL[c.lGrade]} label={`Lit · ${c.lGrade}`} />}
             {c.matrixPercentile && <MarkerChip dot="var(--green-deep)" label={`Matrix · ${c.matrixPercentile}`} />}
+            {c.graphViaTargets && c.graphViaTargets.length > 0 && (
+              <MarkerChip dot="var(--moss)" label={`Graph · ${formatViaTargets(c.graphViaTargets)}`} />
+            )}
             <RelBadge rel={c.direction} />
             <TierBadge tier={c.tier} />
           </div>

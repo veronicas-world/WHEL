@@ -86,7 +86,7 @@ function buildOrigin(comp: Row | null): string {
   return ind ? `${status} · ${clip(ind, 64)}` : status;
 }
 
-function toCandidate(sig: Row, n: number): Candidate {
+function toCandidate(sig: Row, n: number, graph?: GraphSupportMap): Candidate {
   const comp = one(sig.compounds);
   const cond = one(sig.conditions);
   const sources = (Array.isArray(sig.sources) ? sig.sources : []) as Row[];
@@ -111,6 +111,15 @@ function toCandidate(sig: Row, n: number): Candidate {
   const matrixPercentile =
     matrix && matrix.quantile_rank != null ? formatMatrixPercentile(matrix.quantile_rank) : undefined;
 
+  // Path B disclosure: does the knowledge graph independently connect this drug
+  // to this condition through a shared target? Keyed on the resolved FK ids.
+  const compoundId = sig.compound_id ? String(sig.compound_id) : "";
+  const conditionId = sig.condition_id ? String(sig.condition_id) : "";
+  const graphViaTargets =
+    graph && compoundId && conditionId
+      ? graph.get(`${compoundId}::${conditionId}`)
+      : undefined;
+
   return {
     id: `WHEL-C-${String(n).padStart(3, "0")}`,
     drug,
@@ -119,6 +128,7 @@ function toCandidate(sig: Row, n: number): Candidate {
     tier,
     lGrade,
     matrixPercentile,
+    graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
     score: Math.round(Number(sig.total_evidence_score) || 0),
     origin: buildOrigin(comp),
     pathway: tier === "exploratory"
@@ -138,25 +148,56 @@ const SELECT = `
   id, confidence_tier, total_evidence_score, summary, mechanism_hypothesis,
   replication_score, source_quality_score, specificity_score, plausibility_score,
   replication_level, plausibility_level, signal_type, effect_direction, status,
+  compound_id, condition_id,
   compounds ( name, drug_class, fda_status, original_indication ),
   conditions ( name, slug ),
   sources ( external_id, source_type, journal, publication_date, key_finding_excerpt, title, url )
 `;
 
+/**
+ * Path B disclosure layer. Reads the `graph_support` view (migration 057),
+ * which collapses drug_targets x target_conditions into one row per
+ * drug-condition pair with the shared targets aggregated. Returns a map keyed
+ * `${compound_id}::${condition_id}` -> via_targets[]. If the view is not yet
+ * applied (or read fails), returns an empty map so cards simply show no chip.
+ */
+type GraphSupportMap = Map<string, string[]>;
+
+async function getGraphSupportMap(): Promise<GraphSupportMap> {
+  const map: GraphSupportMap = new Map();
+  const { data, error } = await supabase
+    .from("graph_support")
+    .select("compound_id, condition_id, via_targets");
+  if (error || !data) return map;
+  for (const row of data as Row[]) {
+    const cid = row.compound_id ? String(row.compound_id) : "";
+    const condId = row.condition_id ? String(row.condition_id) : "";
+    if (!cid || !condId) continue;
+    const targets = Array.isArray(row.via_targets)
+      ? (row.via_targets as unknown[]).map(String).filter(Boolean)
+      : [];
+    map.set(`${cid}::${condId}`, targets);
+  }
+  return map;
+}
+
 /** All real candidates, highest evidence score first, with stable WHEL-C ids. */
 export async function getCandidates(): Promise<Candidate[]> {
-  const { data, error } = await supabase
-    .from("repurposing_signals")
-    .select(SELECT)
-    .eq("status", "active")
-    .gt("total_evidence_score", 0)
-    // Secondary sort by id makes ordering (and the WHEL-C numbering + which
-    // candidates are "featured") deterministic across queries, since many
-    // signals tie on total_evidence_score.
-    .order("total_evidence_score", { ascending: false })
-    .order("id", { ascending: true });
+  const [{ data, error }, graph] = await Promise.all([
+    supabase
+      .from("repurposing_signals")
+      .select(SELECT)
+      .eq("status", "active")
+      .gt("total_evidence_score", 0)
+      // Secondary sort by id makes ordering (and the WHEL-C numbering + which
+      // candidates are "featured") deterministic across queries, since many
+      // signals tie on total_evidence_score.
+      .order("total_evidence_score", { ascending: false })
+      .order("id", { ascending: true }),
+    getGraphSupportMap(),
+  ]);
   if (error || !data) return [];
-  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1));
+  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph));
 }
 
 /** Top N candidates for the homepage / platform feature strip. */
