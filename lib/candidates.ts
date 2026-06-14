@@ -98,7 +98,7 @@ function buildOrigin(comp: Row | null): string {
   return ind ? `${status} · ${clip(ind, 64)}` : status;
 }
 
-function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPkMap, phase?: PhaseMap): Candidate {
+function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPkMap, phase?: PhaseMap, graphdetail?: GraphDetailMap): Candidate {
   const comp = one(sig.compounds);
   const cond = one(sig.conditions);
   const sources = (Array.isArray(sig.sources) ? sig.sources : []) as Row[];
@@ -151,6 +151,14 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     graph && compoundId && conditionId
       ? graph.get(`${compoundId}::${conditionId}`)
       : undefined;
+  const graphDetail =
+    graphdetail && compoundId && conditionId
+      ? graphdetail.get(`${compoundId}::${conditionId}`)
+      : undefined;
+  // Open Targets disease id (EFO preferred, else MONDO; underscore form) so the
+  // graph section can link out to the source on platform.opentargets.org.
+  const otRaw = cond?.efo_id ? String(cond.efo_id) : cond?.mondo_id ? String(cond.mondo_id) : "";
+  const conditionOtId = otRaw ? otRaw.replace(":", "_") : undefined;
 
   // Sex-aware layer (058): documented sex-specific PK facts for this compound.
   const sexPk = sexpk && compoundId ? sexpk.get(compoundId) : undefined;
@@ -172,6 +180,8 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     matrixPercentile,
     matrixDetail,
     graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
+    graphDetail: graphDetail && graphDetail.length ? graphDetail : undefined,
+    conditionOtId,
     sexPk: sexPk && sexPk.length ? sexPk : undefined,
     cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,
     score: Math.round(Number(sig.total_evidence_score) || 0),
@@ -198,7 +208,7 @@ const SELECT = `
   replication_level, plausibility_level, signal_type, evidence_strength, effect_direction, status,
   compound_id, condition_id,
   compounds ( name, drug_class, fda_status, original_indication, sex_specific_pk ),
-  conditions ( name, slug ),
+  conditions ( name, slug, efo_id, mondo_id ),
   sources ( external_id, source_type, study_type, guideline_strength, guideline_certainty, journal, publication_date, key_finding_excerpt, title, url )
 `;
 
@@ -264,6 +274,62 @@ async function getGraphSupportMap(): Promise<GraphSupportMap> {
 }
 
 /**
+ * Per-target detail behind the Path B graph-supports disclosure, assembled from
+ * the raw Open Targets tables (targets, drug_targets, target_conditions) so each
+ * connection on the signal page can cite its source: the drug's action on the
+ * target, and the target's association with the condition (datatype + score).
+ * Keyed `${compound_id}::${condition_id}` -> targets[].
+ */
+type GraphTarget = { symbol: string; ensembl: string; approvedName?: string; actionType?: string; datatypes: string[]; overallScore?: number };
+type GraphDetailMap = Map<string, GraphTarget[]>;
+
+async function getGraphDetailMap(): Promise<GraphDetailMap> {
+  const map: GraphDetailMap = new Map();
+  const [tRes, dtRes, tcRes] = await Promise.all([
+    supabase.from("targets").select("id, ensembl_gene_id, hgnc_symbol, approved_name"),
+    supabase.from("drug_targets").select("compound_id, target_id, action_type"),
+    supabase.from("target_conditions").select("target_id, condition_id, datatype, overall_score"),
+  ]);
+  if (tRes.error || dtRes.error || tcRes.error) return map;
+  const tById = new Map<string, Row>();
+  for (const t of (tRes.data ?? []) as Row[]) tById.set(String(t.id), t);
+  // Per (target, condition): the union of association datatypes and best score.
+  const tcByTarget = new Map<string, { conditionId: string; datatypes: Set<string>; maxScore: number }[]>();
+  for (const tc of (tcRes.data ?? []) as Row[]) {
+    const tid = String(tc.target_id);
+    const condId = String(tc.condition_id);
+    const list = tcByTarget.get(tid) ?? [];
+    let rec = list.find((r) => r.conditionId === condId);
+    if (!rec) { rec = { conditionId: condId, datatypes: new Set<string>(), maxScore: 0 }; list.push(rec); }
+    if (tc.datatype) rec.datatypes.add(String(tc.datatype));
+    const s = Number(tc.overall_score) || 0;
+    if (s > rec.maxScore) rec.maxScore = s;
+    tcByTarget.set(tid, list);
+  }
+  for (const dt of (dtRes.data ?? []) as Row[]) {
+    const target = tById.get(String(dt.target_id));
+    const recs = tcByTarget.get(String(dt.target_id));
+    if (!target || !recs) continue;
+    for (const rec of recs) {
+      const key = `${dt.compound_id}::${rec.conditionId}`;
+      const entry: GraphTarget = {
+        symbol: String(target.hgnc_symbol ?? ""),
+        ensembl: String(target.ensembl_gene_id ?? ""),
+        approvedName: target.approved_name ? String(target.approved_name) : undefined,
+        actionType: dt.action_type ? String(dt.action_type) : undefined,
+        datatypes: [...rec.datatypes],
+        overallScore: rec.maxScore || undefined,
+      };
+      const list = map.get(key) ?? [];
+      list.push(entry);
+      map.set(key, list);
+    }
+  }
+  for (const list of map.values()) list.sort((a, b) => (b.overallScore ?? 0) - (a.overallScore ?? 0));
+  return map;
+}
+
+/**
  * Cyclical-phase layer (migration 060). Reads compound_condition_phase, the
  * sourced treatment-level cycle-phase dependence, keyed
  * `${compound_id}::${condition_id}` -> facts[]. Empty map => no phase marker.
@@ -298,7 +364,7 @@ async function getPhaseMap(): Promise<PhaseMap> {
 
 /** All real candidates, highest evidence score first, with stable WHEL-C ids. */
 export async function getCandidates(): Promise<Candidate[]> {
-  const [{ data, error }, graph, sexpk, phase] = await Promise.all([
+  const [{ data, error }, graph, sexpk, phase, graphDetail] = await Promise.all([
     supabase
       .from("repurposing_signals")
       .select(SELECT)
@@ -312,9 +378,10 @@ export async function getCandidates(): Promise<Candidate[]> {
     getGraphSupportMap(),
     getSexPkMap(),
     getPhaseMap(),
+    getGraphDetailMap(),
   ]);
   if (error || !data) return [];
-  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph, sexpk, phase));
+  return (data as Row[]).map((sig, i) => toCandidate(sig, i + 1, graph, sexpk, phase, graphDetail));
 }
 
 /** Top N candidates for the homepage / platform feature strip. */

@@ -49,6 +49,10 @@ export interface Candidate {
    * non-empty => "graph supports, via <target>"; absent => "graph silent".
    */
   graphViaTargets?: string[];
+  /** Per-target detail behind the graph-supports disclosure, for citing each connection to Open Targets. */
+  graphDetail?: { symbol: string; ensembl: string; approvedName?: string; actionType?: string; datatypes: string[]; overallScore?: number }[];
+  /** Open Targets disease id (EFO/MONDO, underscore form) for linking the graph evidence to its source. */
+  conditionOtId?: string;
   /**
    * Sex-aware layer (migration 058): documented sex-specific pharmacokinetic
    * facts for this compound, each carrying its source. Present => a "Sex-PK"

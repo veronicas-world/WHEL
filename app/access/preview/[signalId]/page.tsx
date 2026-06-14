@@ -70,6 +70,9 @@ const LINK: React.CSSProperties = { color: "var(--moss)", textDecoration: "under
 
 const chebiUrl = (id: string) => `https://www.ebi.ac.uk/chebi/searchId.do?chebiId=${encodeURIComponent(id)}`;
 const mondoUrl = (id: string) => `https://monarchinitiative.org/${encodeURIComponent(id)}`;
+const otTargetUrl = (ensembl: string) => `https://platform.opentargets.org/target/${ensembl}`;
+const otEvidenceUrl = (ensembl: string, disease: string) => `https://platform.opentargets.org/evidence/${ensembl}/${disease}`;
+const otDiseaseUrl = (disease: string) => `https://platform.opentargets.org/disease/${disease}`;
 
 function Ext({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -188,6 +191,49 @@ export default async function SignalDetail({
         . Validate against the source:{" "}
         <a href={EVERYCURE} target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure&rsquo;s MATRIX dataset ↗</a>.
       </p>
+    ) : null;
+
+  // Knowledge-graph detail: cite each target connection back to Open Targets.
+  const gd = c.graphDetail;
+  const hasGraph = !!(c.graphViaTargets && c.graphViaTargets.length);
+  let graphForThisPair: React.ReactNode;
+  if (hasGraph && gd && gd.length) {
+    const n = gd.length;
+    graphForThisPair = `The drug acts on ${n} target${n === 1 ? "" : "s"} that Open Targets independently associates with the condition. Each connection, and its source on Open Targets:`;
+  } else if (hasGraph) {
+    graphForThisPair = `The graph connects this pair through ${c.graphViaTargets!.join(", ")}.`;
+  } else {
+    graphForThisPair = "No shared target is present, so the graph does not connect this pair.";
+  }
+  const graphTargets =
+    hasGraph && gd && gd.length ? (
+      <>
+        <ul style={{ listStyle: "none", padding: 0, margin: "12px 0 0", display: "flex", flexDirection: "column", gap: 10 }}>
+          {gd.map((t, i) => (
+            <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)", paddingLeft: 16, position: "relative" }}>
+              <span aria-hidden style={{ position: "absolute", left: 0, color: "var(--moss)", fontWeight: 600 }}>&rsaquo;</span>
+              <a href={otTargetUrl(t.ensembl)} target="_blank" rel="noopener noreferrer" style={LINK}>{t.symbol}</a>
+              {t.approvedName ? <span style={{ color: "var(--muted)" }}> ({t.approvedName})</span> : null}
+              {t.actionType ? `, drug acts as ${t.actionType.toLowerCase()}` : ""}
+              {t.datatypes.length
+                ? `; associated via ${t.datatypes.join(", ")}${t.overallScore != null ? ` (Open Targets score ${t.overallScore.toFixed(2)})` : ""}`
+                : ""}
+              {c.conditionOtId ? (
+                <>
+                  {" "}
+                  <a href={otEvidenceUrl(t.ensembl, c.conditionOtId)} target="_blank" rel="noopener noreferrer" style={LINK}>evidence ↗</a>
+                </>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+        {c.conditionOtId ? (
+          <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)", margin: "12px 0 0" }}>
+            Browse the condition&rsquo;s full target associations on{" "}
+            <a href={otDiseaseUrl(c.conditionOtId)} target="_blank" rel="noopener noreferrer" style={LINK}>Open Targets ↗</a>.
+          </p>
+        ) : null}
+      </>
     ) : null;
 
   return (
@@ -352,11 +398,8 @@ export default async function SignalDetail({
                 conditions it often reflects limited source coverage.
               </>
             }
-            forThisPair={
-              c.graphViaTargets && c.graphViaTargets.length
-                ? `The graph connects this pair through ${c.graphViaTargets.join(", ")}.`
-                : "No shared target is present, so the graph does not connect this pair."
-            }
+            forThisPair={graphForThisPair}
+            extra={graphTargets}
             learnMore={
               <LearnMore href="/about/external-references#structured-grounding-in-progress">
                 More on the knowledge-graph grounding
