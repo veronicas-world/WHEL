@@ -186,6 +186,27 @@ const SOURCES: {
     href: "http://sideeffects.embl.de/",
     status: "Planned",
   },
+  {
+    name: "DRKG (Drug Repurposing Knowledge Graph)",
+    role: "Open, multi-source repurposing knowledge graph. Planned as an independent validation cross-reference shown beside a signal, not merged into Whel's own graph, because it carries the field's male-default coverage that Whel exists to correct",
+    href: "https://github.com/gnn4dr/DRKG",
+    status: "Planned",
+    note: "Validation cross-reference; not integrated into the core architecture",
+  },
+  {
+    name: "PrimeKG (Precision Medicine Knowledge Graph)",
+    role: "Open precision-medicine graph across drugs, diseases, phenotypes, and pathways. Planned as a second independent cross-reference to widen the graph-supports-or-silent disclosure beyond one source",
+    href: "https://github.com/mims-harvard/PrimeKG",
+    status: "Planned",
+    note: "Validation cross-reference; not integrated into the core architecture",
+  },
+  {
+    name: "TxGNN (graph foundation model)",
+    role: "Open, zero-shot drug-repurposing model. Planned as a benchmark and hypothesis cross-reference whose predictions Whel would validate rather than adopt, since the model inherits the same male-default training data",
+    href: "https://www.nature.com/articles/s41591-024-03233-x",
+    status: "Planned",
+    note: "Validation cross-reference; not integrated into the core architecture",
+  },
 ];
 
 const STATUS_COLOR: Record<string, string> = {
@@ -2973,7 +2994,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="03 · Under review"
             title="Where the external layer expands"
-            intro="A second tier of resources is under active review for inclusion. Each fills a gap that the current pipelines either cannot reach (European adverse-event data, structured drug-target indications) or only reaches indirectly (cross-validation against an independent biological-plausibility model). Inclusion is conditional on stable licensing, citable provenance, and the ability to round-trip every record from Whel back to its source."
+            intro="A second tier of resources sits under active review. Two kinds appear here. Some are data sources under review for inclusion in the pipelines, filling a gap the current arms either cannot reach (European adverse-event data, structured drug-target indications) or only reach indirectly. Others are independent validation layers shown beside a signal rather than built into it: the open biomedical knowledge graphs and models that lead the drug-repurposing field. Those validation layers are marked as not integrated into the core architecture, because they carry the field's male-default coverage that Whel exists to correct. Inclusion of any source is conditional on stable licensing, citable provenance, and the ability to round-trip every record from Whel back to its origin. The roadmap sets out the same split as a technical-architecture track and a validation-layer track."
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -3010,9 +3031,23 @@ export default function ExternalReferencesPage() {
                 >
                   {c.name}
                 </p>
-                <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--ink-2)", marginBottom: 14, flex: 1 }}>
+                <p style={{ fontSize: "13px", lineHeight: 1.6, color: "var(--ink-2)", marginBottom: c.note ? 10 : 14, flex: 1 }}>
                   {c.role}
                 </p>
+                {c.note && (
+                  <p
+                    style={{
+                      ...MONO,
+                      fontSize: "10.5px",
+                      lineHeight: 1.5,
+                      letterSpacing: "0.04em",
+                      color: "var(--muted-2)",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {c.note}
+                  </p>
+                )}
                 <a
                   href={c.href}
                   target="_blank"

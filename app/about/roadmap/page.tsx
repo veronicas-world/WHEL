@@ -70,6 +70,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "Add complementary pipelines once the existing ones are solid",
         "Deepen coverage of the conditions already in scope",
         "Extend the substrate to hold sex-specific pharmacokinetics and cyclical hormonal phase as first-class variables, so a relationship carries the body and the cycle phase it holds in rather than a single averaged value",
+        "Add an independent validation layer of open knowledge graphs and models, such as DRKG, PrimeKG, and TxGNN, shown beside each signal as an outside cross-reference and kept separate from the core architecture",
         "Once the validation work above is in place, partner with formal women's health advocacy organizations, such as IAPMD, PCOS Challenge, and Endometriosis UK, to bring structured patient-reported signal beyond Reddit into the evidence base",
       ],
     },
@@ -185,7 +186,9 @@ const CANDIDATES: { name: string; pathways: string[]; body: string }[] = [
 
 type Status = "Live" | "Under review" | "Planned";
 
-const SOURCES: { name: string; role: string; status: Status }[] = [
+// The original sources Whel pulls from to build its conditions and signals,
+// plus the data sources under review or planned for that same build layer.
+const BUILD_SOURCES: { name: string; role: string; status: Status }[] = [
   { name: "PubMed", role: "Published literature", status: "Live" },
   { name: "ClinicalTrials.gov", role: "Trial registry", status: "Live" },
   { name: "FDA openFDA", role: "Adverse-event data", status: "Live" },
@@ -196,6 +199,16 @@ const SOURCES: { name: string; role: string; status: Status }[] = [
     role: "Structured patient-reported signal beyond Reddit, through planned partnerships with formal women's health advocacy groups, taken on once the validation work is in place.",
     status: "Planned",
   },
+  { name: "EudraVigilance", role: "European adverse-event data", status: "Under review" },
+  { name: "SIDER", role: "Drug side-effect reference", status: "Under review" },
+  { name: "DrugBank", role: "Drug-target and indication data", status: "Planned" },
+];
+
+// Independent cross-references shown beside each signal rather than used to
+// build it. Some are live; the open knowledge graphs and models are planned,
+// and stay outside the core architecture on purpose (see the note below the
+// register on the page).
+const VALIDATION_LAYERS: { name: string; role: string; status: Status }[] = [
   {
     name: "Every Cure MATRIX",
     role: "An independent treatment-probability cross-reference from Every Cure's graph-ML model, shown beside our grades rather than blended into them.",
@@ -203,12 +216,24 @@ const SOURCES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Clinical-guideline curation",
-    role: "Strength and certainty drawn from named society guidelines and normalized into the highest validation grade.",
+    role: "Strength and certainty drawn from named society guidelines, normalized into the highest external-validation grade where a named recommendation covers a pair.",
     status: "Live",
   },
-  { name: "EudraVigilance", role: "European adverse-event data", status: "Under review" },
-  { name: "SIDER", role: "Drug side-effect reference", status: "Under review" },
-  { name: "DrugBank", role: "Drug-target and indication data", status: "Planned" },
+  {
+    name: "DRKG (Drug Repurposing Knowledge Graph)",
+    role: "An open, multi-source repurposing knowledge graph. Planned as an outside cross-reference shown beside a signal, not folded into Whel's own graph, since it carries the field's male-default coverage that Whel exists to correct.",
+    status: "Planned",
+  },
+  {
+    name: "PrimeKG (Precision Medicine Knowledge Graph)",
+    role: "An open precision-medicine graph spanning drugs, diseases, phenotypes, and pathways. Planned as a second independent cross-reference to widen the 'graph supports or graph silent' disclosure beyond a single source.",
+    status: "Planned",
+  },
+  {
+    name: "TxGNN (graph foundation model)",
+    role: "An open, zero-shot drug-repurposing model. Planned as a benchmark and hypothesis cross-reference whose predictions Whel would validate rather than trust outright, because the model inherits the same male-default training data.",
+    status: "Planned",
+  },
 ];
 
 const UPGRADES: { name: string; role: string; status: Status }[] = [
@@ -438,9 +463,10 @@ export default async function RoadmapPage() {
           >
             Where the database goes next.
           </h1>
-          <p className="lede" style={{ marginTop: 24, color: "var(--on-ink-2)", maxWidth: "60ch" }}>
-            What the database covers today, and the conditions, methods, and data releases
-            planned for the versions to come.
+          <p className="lede" style={{ marginTop: 24, color: "var(--on-ink-2)", maxWidth: "62ch" }}>
+            What the database covers today, the technical architecture it runs on, the independent
+            layers it is checked against, and the conditions and data releases planned for the
+            versions to come.
           </p>
         </div>
       </section>
@@ -656,15 +682,15 @@ export default async function RoadmapPage() {
       <section className="surface-bone section">
         <div className="container">
           <SectionHeader
-            label="04 · Method"
-            title="Strengthening the evidence engine"
-            intro="The most valuable near-term work is to make the existing engine more rigorous before adding new data sources, because a new condition is worth little if the evidence behind each signal is not as solid as it can be. The priorities come directly from our own methods document and from the project's first independent review."
+            label="04 · Technical architecture"
+            title="The engine, and the sources it is built on"
+            intro="This is Whel's technical architecture: the original sources each condition and signal is built from, and the engine work that makes the evidence behind each signal more rigorous. The most valuable near-term work is to strengthen that engine before widening the data it draws on, because a new condition is worth little if the reasoning underneath it is not as solid as it can be. The priorities come directly from our own methods document and from the project's first independent review. The independent layers Whel is checked against, rather than built from, are kept separate in the validation layer below."
           />
 
           <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginBottom: 18 }}>
-            The sources
+            The sources Whel is built on
           </p>
-          <RegisterTable rows={SOURCES} />
+          <RegisterTable rows={BUILD_SOURCES} />
 
           <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginTop: 44, marginBottom: 18 }}>
             Method upgrades in progress
@@ -682,10 +708,58 @@ export default async function RoadmapPage() {
         </div>
       </section>
 
-      {/* ── 05 · A living page ───────────────────────────────────────────── */}
+      {/* ── 05 · Validation layer ────────────────────────────────────────── */}
       <section className="surface-paper section">
         <div className="container">
-          <SectionHeader label="05 · This page" title="A living page" />
+          <SectionHeader
+            label="05 · Validation layer"
+            title="What Whel is checked against"
+            intro="Separate from the sources Whel is built on is the layer it is checked against: independent references shown beside each signal rather than blended into its grade. Some are live today. Others are open knowledge graphs and models that lead the biomedical drug-repurposing field, and are planned as outside cross-references. The fuller account of how each external layer is disclosed lives on the external references page."
+          />
+
+          <RegisterTable rows={VALIDATION_LAYERS} />
+
+          <div
+            style={{
+              background: "var(--paper)",
+              border: "1px solid var(--rule)",
+              borderLeft: "3px solid var(--moss)",
+              padding: "22px 24px",
+              marginTop: 28,
+              maxWidth: "76ch",
+            }}
+          >
+            <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
+              The planned graphs and models are kept outside Whel&rsquo;s core architecture on purpose.
+              Resources like DRKG, PrimeKG, and TxGNN are built on the same general biomedical record that
+              under-covers women&rsquo;s hormonal and reproductive health, so folding them into the engine
+              would import the exact blind spot Whel exists to correct. They are most useful as an outside
+              check: a place where the graph either agrees with a signal, stays silent, or disagrees, shown
+              plainly beside Whel&rsquo;s own grade. Where these layers are silent on a women&rsquo;s health
+              condition, that silence is itself a finding worth surfacing.
+            </p>
+            <Link
+              href="/about/external-references"
+              style={{
+                ...MONO,
+                display: "inline-block",
+                marginTop: 16,
+                fontSize: 12,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--moss)",
+              }}
+            >
+              How each external layer is disclosed →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 06 · A living page ───────────────────────────────────────────── */}
+      <section className="surface-bone section">
+        <div className="container">
+          <SectionHeader label="06 · This page" title="A living page" />
 
           <p style={{ fontSize: 16, lineHeight: 1.72, color: "var(--body)", maxWidth: "70ch" }}>
             This roadmap is a dated document, and it will change. We release Whel as dated snapshots
