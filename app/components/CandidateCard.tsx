@@ -26,6 +26,11 @@ export interface Candidate {
   rationale: string;
   mechanism: string;
   dims: Record<string, string>;
+  /** The five rubric dimensions with their actual 0-2 sub-scores, for the score breakdown. */
+  dimBreakdown?: { key: string; label: string; score: number; level: string }[];
+  /** The signal's type (e.g. clinical_trial_finding) and qualitative evidence strength. */
+  signalType?: string;
+  evidenceStrength?: string;
   claims: Claim[];
   /** External-validation grade for the drug-condition pair (L0–L3), when present. */
   lGrade?: "L0" | "L1" | "L2" | "L3";

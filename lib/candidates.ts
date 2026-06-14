@@ -101,6 +101,17 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     plausibility: sig.plausibility_level ? String(sig.plausibility_level) : lvl(sig.plausibility_score),
   };
 
+  // The five rubric dimensions with their actual 0-2 sub-scores, for the
+  // per-signal score breakdown on the detail page.
+  const sub = (v: unknown) => Math.max(0, Math.min(2, Math.round(Number(v) || 0)));
+  const dimBreakdown = [
+    { key: "replication", label: "Replication", score: sub(sig.replication_score), level: sig.replication_level ? String(sig.replication_level) : lvl(sig.replication_score) },
+    { key: "source", label: "Source quality", score: sub(sig.source_quality_score), level: lvl(sig.source_quality_score) },
+    { key: "specificity", label: "Specificity", score: sub(sig.specificity_score), level: lvl(sig.specificity_score) },
+    { key: "plausibility", label: "Plausibility", score: sub(sig.plausibility_score), level: sig.plausibility_level ? String(sig.plausibility_level) : lvl(sig.plausibility_score) },
+    { key: "direction", label: "Consistency of direction", score: sub(sig.direction_score), level: lvl(sig.direction_score) },
+  ];
+
   const drug = comp?.name ? String(comp.name) : "Unknown compound";
   const condition = cond?.name ? String(cond.name) : "—";
 
@@ -152,14 +163,17 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
       ? String(sig.mechanism_hypothesis)
       : "Mechanism not yet characterized in the substrate.",
     dims,
+    dimBreakdown,
+    signalType: sig.signal_type ? String(sig.signal_type) : undefined,
+    evidenceStrength: sig.evidence_strength ? String(sig.evidence_strength) : undefined,
     claims: buildClaims(sources),
   };
 }
 
 const SELECT = `
   id, confidence_tier, total_evidence_score, summary, mechanism_hypothesis,
-  replication_score, source_quality_score, specificity_score, plausibility_score,
-  replication_level, plausibility_level, signal_type, effect_direction, status,
+  replication_score, source_quality_score, specificity_score, plausibility_score, direction_score,
+  replication_level, plausibility_level, signal_type, evidence_strength, effect_direction, status,
   compound_id, condition_id,
   compounds ( name, drug_class, fda_status, original_indication, sex_specific_pk ),
   conditions ( name, slug ),

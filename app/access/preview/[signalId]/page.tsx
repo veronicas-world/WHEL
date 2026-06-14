@@ -35,6 +35,17 @@ const COCHRANE = "https://www.cochranelibrary.com/";
 const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5";
 const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001";
 
+const DIM_MONO: React.CSSProperties = { fontFamily: "var(--font-plex-mono, ui-monospace, monospace)" };
+
+// What each rubric dimension measures (the model assigns each a 0-2 sub-score).
+const DIM_WHAT: Record<string, string> = {
+  replication: "How many independent sources report the same effect. A higher score means the finding is replicated rather than resting on a single report.",
+  source: "The strength of the source types behind the signal, weighting registered trials and peer-reviewed work above community reports.",
+  specificity: "How directly the evidence speaks to this exact drug and condition, rather than a related compound or a broader indication.",
+  plausibility: "Whether a credible biological mechanism connects the drug to the condition, as opposed to an unexplained association.",
+  direction: "Whether the sources agree on the direction of the effect, rather than pointing in conflicting directions.",
+};
+
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="eyebrow" style={{ marginBottom: 12 }}>
@@ -85,20 +96,6 @@ export default async function SignalDetail({
   const { signalId } = await params;
   const c = await getCandidateBySignalId(signalId);
   if (!c) notFound();
-
-  // Consolidated citation list: the data-flag sources (sex-PK, cycle-phase) and
-  // the evidence sources (provenance claims), deduped, with links where on file.
-  const citations: { text: string; url?: string }[] = [];
-  const seenCite = new Set<string>();
-  const addCite = (text?: string, url?: string) => {
-    const key = (text ?? "").trim();
-    if (!key || seenCite.has(key)) return;
-    seenCite.add(key);
-    citations.push({ text: key, url });
-  };
-  (c.sexPk ?? []).forEach((f) => addCite(f.source, f.sourceUrl));
-  (c.cyclePhase ?? []).forEach((f) => addCite(f.source, f.sourceUrl));
-  (c.claims ?? []).forEach((cl) => addCite(cl.src, cl.href));
 
   return (
     <main>
@@ -169,24 +166,35 @@ export default async function SignalDetail({
       {/* ── Evidence dimensions ──────────────────────────────────────────── */}
       <section className="surface-bone section tight">
         <div className="container">
-          <SectionLabel>How the score was reached</SectionLabel>
-          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", maxWidth: "72ch", marginBottom: 18 }}>
-            The composite score is our own reading, kept separate from the independent cross-references
-            below. Each signal is graded on the dimensions the rubric measures, replication, source
-            quality, specificity, and biological plausibility, which combine into a score out of ten and
-            place the candidate in one of four tiers. This pair scored {c.score} of 10, a{" "}
-            {c.tier} reading.
+          <SectionLabel>How the score was reached, for this pair</SectionLabel>
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", maxWidth: "74ch", marginBottom: 8 }}>
+            The composite score is the sum of five dimensions, each scored 0 to 2 by the model from the
+            evidence on file. Below is the sub-score this specific pair received on each, with what that
+            dimension measures. It scored {c.score} of 10 overall, a {c.tier} reading
+            {c.signalType ? `, from a ${c.signalType.replace(/_/g, " ")}` : ""}
+            {c.evidenceStrength ? ` rated ${c.evidenceStrength} in strength` : ""}.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3" style={{ maxWidth: "72ch" }}>
-            {Object.entries(c.dims).map(([k, v]) => (
-              <div key={k} style={{ background: "var(--paper)", border: "1px solid var(--rule)", padding: "16px 16px 18px" }}>
-                <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>{k}</div>
-                <div className="font-heading" style={{ fontSize: 17, color: "var(--ink)" }}>{v}</div>
+          <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--muted)", maxWidth: "74ch", marginBottom: 20 }}>
+            The model&rsquo;s overall reasoning for this pair is the summary at the top of the page, and
+            the mechanism it proposed is in the section above.
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: "74ch" }}>
+            {(c.dimBreakdown ?? []).map((d) => (
+              <div key={d.key} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: "4px 16px", alignItems: "baseline", borderTop: "1px solid var(--rule)", paddingTop: 12 }}>
+                <div className="font-heading" style={{ fontSize: 16, color: "var(--ink)" }}>{d.label}</div>
+                <div style={{ ...DIM_MONO, fontSize: 13, color: "var(--ink)", textAlign: "right" }}>
+                  {d.score} / 2 · {d.level}
+                </div>
+                <div style={{ gridColumn: "1 / -1", fontSize: 13.5, lineHeight: 1.6, color: "var(--body)" }}>
+                  {DIM_WHAT[d.key]}
+                </div>
               </div>
             ))}
           </div>
+
           <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
-            How the score is decided, in depth
+            How the scoring rubric works, in general
           </LearnMore>
         </div>
       </section>
@@ -370,34 +378,10 @@ export default async function SignalDetail({
             ))}
           </div>
 
-        </div>
-      </section>
-
-      {/* ── Sources & citations ──────────────────────────────────────────── */}
-      <section className="surface-bone section tight">
-        <div className="container" style={{ maxWidth: "76ch" }}>
-          <SectionLabel>Sources and citations</SectionLabel>
-          <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--body)", marginBottom: 16 }}>
-            Every source this signal draws on, both the literature behind the flag and the references
-            behind each justification above. Where a link is on file, it goes straight to the primary
-            source.
+          <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)", maxWidth: "72ch", marginTop: 18 }}>
+            These are the sources behind the signal itself. The references behind the markers above
+            (literature grade, MATRIX, sex-PK, cycle phase) are linked in their own sections.
           </p>
-          {citations.length > 0 ? (
-            <ol style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
-              {citations.map((s, i) => (
-                <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)" }}>
-                  {s.url ? (
-                    <a href={s.url} target="_blank" rel="noopener noreferrer" style={LINK}>{s.text} ↗</a>
-                  ) : (
-                    s.text
-                  )}
-                </li>
-              ))}
-            </ol>
-          ) : (
-            <p style={{ fontSize: 13.5, color: "var(--muted)" }}>No itemized sources on file for this signal yet.</p>
-          )}
-
           <LearnMore href="/about/external-references">
             What these external sources are, and why they carry weight
           </LearnMore>
