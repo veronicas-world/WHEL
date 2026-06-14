@@ -634,3 +634,101 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
   }
   .rm-doc .doc-toc { left: max(48px, calc(50vw - 664px)); }
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Signal detail page — redesigned layout (scoped under .sigdetail so the
+   page-local component classes never collide with the global ones, e.g. the
+   global .kicker). Built on the existing brand tokens.
+   ────────────────────────────────────────────────────────────────────────── */
+.sigdetail .serif { font-family: var(--font-newsreader, Georgia, serif); }
+.sigdetail .mono  { font-family: var(--font-plex-mono, ui-monospace, monospace); }
+
+/* hero verdict layout */
+.sigdetail .verdict-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 64px; align-items: start; }
+@media (max-width: 1000px){ .sigdetail .verdict-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+.sigdetail .id-line { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); margin: 4px 0 22px; }
+.sigdetail h1.signal-title { font-family: var(--font-newsreader, Georgia, serif); font-weight: 400; font-size: clamp(40px, 5.2vw, 76px); line-height: 0.99; letter-spacing: -0.026em; margin: 0; color: var(--on-ink); }
+.sigdetail h1.signal-title .soft { color: var(--on-ink-2); font-style: normal; }
+.sigdetail .signal-summary { font-family: var(--font-newsreader, Georgia, serif); font-size: clamp(18px, 1.45vw, 21px); line-height: 1.56; color: var(--on-ink-2); max-width: 62ch; margin: 30px 0 0; }
+.sigdetail .signal-meta { display: flex; flex-wrap: wrap; gap: 14px 28px; margin-top: 34px; font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11.5px; letter-spacing: 0.02em; color: var(--on-ink-mut); }
+.sigdetail .signal-meta b { color: var(--on-ink); font-weight: 500; }
+.sigdetail .signal-meta .supports { color: var(--signal); }
+
+/* scorecard rail in hero */
+.sigdetail .scorecard { border: 1px solid var(--ink-line); background: rgba(244,239,230,0.02); }
+.sigdetail .scorecard .sc-head { padding: 22px 24px 20px; border-bottom: 1px solid var(--ink-line); display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.sigdetail .scorecard .sc-label { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--on-ink-mut); }
+.sigdetail .scorecard .sc-score { font-family: var(--font-newsreader, Georgia, serif); font-size: 60px; line-height: 0.9; color: var(--on-ink); font-weight: 400; letter-spacing: -0.02em; }
+.sigdetail .scorecard .sc-score small { font-size: 26px; color: var(--on-ink-mut); }
+.sigdetail .scorecard .sc-tier { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.sigdetail .scorecard .sc-tier .tdot { width: 9px; height: 9px; background: var(--signal); display: inline-block; }
+.sigdetail .sc-dim { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 24px; border-bottom: 1px solid var(--ink-line-2); }
+.sigdetail .sc-dim:last-child { border-bottom: none; }
+.sigdetail .sc-dim .sc-name { font-family: var(--font-newsreader, Georgia, serif); font-size: 16px; color: var(--on-ink); }
+.sigdetail .sc-dim .sc-val { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.04em; color: var(--on-ink-2); display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+.sigdetail .sc-dim .pips { display: inline-flex; gap: 4px; }
+.sigdetail .sc-dim .pips i { width: 7px; height: 7px; border-radius: 50%; background: var(--signal); display: inline-block; }
+
+/* section kicker + prose (override global .kicker within the page) */
+.sigdetail .kicker { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 22px; }
+.sigdetail .measure { max-width: 70ch; }
+.sigdetail .prose-lg { font-family: var(--font-newsreader, Georgia, serif); font-size: clamp(19px, 1.5vw, 22px); line-height: 1.55; color: var(--ink); margin: 0; }
+.sigdetail .prose { font-family: var(--font-newsreader, Georgia, serif); font-size: 17px; line-height: 1.62; color: var(--body); margin: 0 0 1em; max-width: 72ch; }
+.sigdetail .prose:last-child { margin-bottom: 0; }
+.sigdetail .prose strong { color: var(--ink); font-weight: 600; }
+.sigdetail .note { font-size: 15px; color: var(--muted); max-width: 72ch; margin: 0; }
+.sigdetail a.ulink { color: inherit; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; text-decoration-color: var(--line-strong); }
+.sigdetail a.ulink:hover { text-decoration-color: var(--ink); }
+.sigdetail a.more { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; letter-spacing: 0.03em; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--line-strong); display: inline-block; margin-top: 18px; }
+.sigdetail a.more:hover { text-decoration-color: var(--ink); }
+.sigdetail .ext { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); }
+
+/* scoring rubric rows */
+.sigdetail .rubric { border-top: 1px solid var(--line); margin-top: 30px; }
+.sigdetail .rubric .r { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.sigdetail .rubric .r .rk { font-family: var(--font-newsreader, Georgia, serif); font-size: 22px; font-weight: 500; letter-spacing: -0.01em; margin: 0 0 6px; }
+.sigdetail .rubric .r .rd { font-size: 15px; line-height: 1.55; color: var(--body); max-width: 70ch; margin: 0; }
+.sigdetail .rubric .r .rv { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; letter-spacing: 0.04em; color: var(--ink); white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; padding-top: 4px; }
+.sigdetail .rubric .r .rv .pips { display: inline-flex; gap: 4px; }
+.sigdetail .rubric .r .rv .pips i { width: 8px; height: 8px; border-radius: 50%; background: var(--moss); display: inline-block; }
+
+/* outside readings */
+.sigdetail .reading { padding: 36px 0; border-bottom: 1px solid var(--line); }
+.sigdetail .reading:last-of-type { border-bottom: none; }
+.sigdetail .reading h3 { font-family: var(--font-newsreader, Georgia, serif); font-size: 28px; font-weight: 500; letter-spacing: -0.015em; margin: 0 0 18px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; color: var(--ink); }
+.sigdetail .reading h3 .grade { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 13px; letter-spacing: 0.06em; color: var(--moss); border: 1px solid var(--line-strong); padding: 3px 9px; text-transform: none; }
+.sigdetail .src-list { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.sigdetail .src-list > li { display: grid; grid-template-columns: 18px 1fr; gap: 12px; font-size: 15.5px; line-height: 1.5; color: var(--body); align-items: start; }
+.sigdetail .src-list > li .chev { font-family: var(--font-plex-mono, ui-monospace, monospace); color: var(--muted); }
+.sigdetail .tag { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-strong); padding: 3px 8px; display: inline-block; margin-top: 8px; }
+.sigdetail .tag.guideline { color: var(--green-deep); }
+
+/* covered-layer record cards (sex-PK, cycle-phase) */
+.sigdetail .reclist { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.sigdetail .rec { border-left: 2px solid var(--brick); padding: 10px 0 10px 14px; font-size: 16px; line-height: 1.65; color: var(--body); }
+.sigdetail .rec.cross { border-left-color: var(--khaki); }
+.sigdetail .rec .rl { color: var(--ink); font-weight: 500; text-transform: capitalize; }
+.sigdetail .rec .src { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); display: block; margin-top: 4px; }
+
+/* demoted "not covered" strip */
+.sigdetail .notcovered { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+@media (max-width: 700px){ .sigdetail .notcovered { grid-template-columns: 1fr; } }
+.sigdetail .notcovered.one { grid-template-columns: 1fr; }
+.sigdetail .notcovered .nc { background: var(--sage); padding: 26px 28px; }
+.sigdetail .notcovered .nc .nh { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sigdetail .notcovered .nc .nh .stat { color: var(--muted-2); font-size: 10px; }
+.sigdetail .notcovered .nc p { font-size: 14.5px; line-height: 1.55; color: var(--body); margin: 14px 0 0; max-width: 56ch; }
+.sigdetail .notcovered .nc a.more { margin-top: 14px; }
+
+/* numbered ingested sources */
+.sigdetail .ingest { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.sigdetail .ingest > li { display: grid; grid-template-columns: 30px 1fr; gap: 16px; align-items: start; }
+.sigdetail .ingest > li .num { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); border: 1px solid var(--line-strong); width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.sigdetail .ingest > li .num.contradict { color: var(--brick); border-color: var(--brick); }
+.sigdetail .ingest > li .title { font-family: var(--font-newsreader, Georgia, serif); font-size: 18px; line-height: 1.4; color: var(--ink); }
+
+.sigdetail .backbar { padding: 56px 0 0; }
+
+/* signal detail uses a slightly tighter container than the 1440 default */
+.sigdetail .container { max-width: 1280px; }

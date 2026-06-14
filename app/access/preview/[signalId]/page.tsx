@@ -35,8 +35,6 @@ const COCHRANE = "https://www.cochranelibrary.com/";
 const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5";
 const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001";
 
-const DIM_MONO: React.CSSProperties = { fontFamily: "var(--font-plex-mono, ui-monospace, monospace)" };
-
 /** Human label for a source's study type (used to tag the provenance trail). */
 function studyLabel(t?: string): string | undefined {
   if (!t) return undefined;
@@ -58,51 +56,50 @@ const DIM_WHAT: Record<string, string> = {
   direction: "Whether the sources agree on the direction of the effect, rather than pointing in conflicting directions.",
 };
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="eyebrow" style={{ marginBottom: 12 }}>
-      {children}
-    </div>
-  );
-}
-
-const LINK: React.CSSProperties = { color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 };
-
 const chebiUrl = (id: string) => `https://www.ebi.ac.uk/chebi/searchId.do?chebiId=${encodeURIComponent(id)}`;
 const mondoUrl = (id: string) => `https://monarchinitiative.org/${encodeURIComponent(id)}`;
 const otTargetUrl = (ensembl: string) => `https://platform.opentargets.org/target/${ensembl}`;
 const otEvidenceUrl = (ensembl: string, disease: string) => `https://platform.opentargets.org/evidence/${ensembl}/${disease}`;
 const otDiseaseUrl = (disease: string) => `https://platform.opentargets.org/disease/${disease}`;
 
+/** Inline external link, underlined. */
 function Ext({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" style={LINK}>
+    <a className="ulink" href={href} target="_blank" rel="noopener noreferrer">
       {children}
     </a>
   );
 }
 
-/** An in-site link to a fuller explanation of a reading or source. */
-function LearnMore({ href, children }: { href: string; children: React.ReactNode }) {
+/** In-site "more" link to a fuller explanation. */
+function More({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link
-      href={href}
-      style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, lineHeight: 1.5, color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}
-    >
+    <Link href={href} className="more">
       {children} →
     </Link>
   );
 }
 
-/** A source citation, rendered as a link when a URL is on file. */
+/** A source citation under a record, rendered as a link when a URL is on file. */
 function SourceCite({ text, url }: { text: string; url?: string }) {
-  const base: React.CSSProperties = { display: "block", fontSize: 12, lineHeight: 1.5, marginTop: 4 };
   return url ? (
-    <a href={url} target="_blank" rel="noopener noreferrer" style={{ ...base, ...LINK }}>
+    <a className="ulink src" href={url} target="_blank" rel="noopener noreferrer">
       {text} ↗
     </a>
   ) : (
-    <span style={{ ...base, color: "var(--muted)" }}>{text}</span>
+    <span className="src">{text}</span>
+  );
+}
+
+/** Filled score pips (0-2 scale): one dot per point scored. */
+function Pips({ n }: { n: number }) {
+  const count = Math.max(0, Math.min(2, Math.round(n)));
+  return (
+    <span className="pips">
+      {Array.from({ length: count }).map((_, i) => (
+        <i key={i} />
+      ))}
+    </span>
   );
 }
 
@@ -136,26 +133,27 @@ export default async function SignalDetail({
   }
 
   const litRecords = gradeRecords.length > 0 ? (
-    <ul style={{ listStyle: "none", padding: 0, margin: "12px 0 0", display: "flex", flexDirection: "column", gap: 10 }}>
-      {gradeRecords.map((cl, i) => (
-        <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)", paddingLeft: 16, position: "relative" }}>
-          <span aria-hidden style={{ position: "absolute", left: 0, color: "var(--green-mid)", fontWeight: 600 }}>&rsaquo;</span>
-          {cl.href ? (
-            <a href={cl.href} target="_blank" rel="noopener noreferrer" style={LINK}>{clipTitle(cl.text)} ↗</a>
-          ) : (
-            <span style={{ color: "var(--ink)" }}>{clipTitle(cl.text)}</span>
-          )}
-          <span
-            style={{
-              ...DIM_MONO, display: "inline-block", marginLeft: 8, fontSize: 10.5, letterSpacing: "0.04em",
-              textTransform: "uppercase", whiteSpace: "nowrap", border: "1px solid var(--rule-strong)", padding: "1px 6px",
-              color: studyLabel(cl.studyType) === "Clinical guideline" ? "var(--green-deep)" : "var(--muted)",
-            }}
-          >
-            {studyLabel(cl.studyType)}{cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
-          </span>
-        </li>
-      ))}
+    <ul className="src-list">
+      {gradeRecords.map((cl, i) => {
+        const label = studyLabel(cl.studyType);
+        return (
+          <li key={i}>
+            <span className="chev" aria-hidden>›</span>
+            <span>
+              {cl.href ? (
+                <a className="ulink" href={cl.href} target="_blank" rel="noopener noreferrer">{clipTitle(cl.text)}</a>
+              ) : (
+                <span style={{ color: "var(--ink)" }}>{clipTitle(cl.text)}</span>
+              )}
+              {cl.href ? <> <span className="ext">↗</span></> : null}
+              <br />
+              <span className={"tag" + (label === "Clinical guideline" ? " guideline" : "")}>
+                {label}{cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
+              </span>
+            </span>
+          </li>
+        );
+      })}
     </ul>
   ) : null;
 
@@ -177,19 +175,19 @@ export default async function SignalDetail({
   }
   const matrixEntities =
     matrixMapped && md ? (
-      <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)", margin: "10px 0 0" }}>
+      <p className="note" style={{ marginTop: 12 }}>
         Scored over MATRIX&rsquo;s own entities, confirming the same drug and disease:{" "}
         {md.sourceId ? (
-          <a href={chebiUrl(md.sourceId)} target="_blank" rel="noopener noreferrer" style={LINK}>{md.sourceId}</a>
+          <a className="ulink" href={chebiUrl(md.sourceId)} target="_blank" rel="noopener noreferrer">{md.sourceId}</a>
         ) : "drug"}{" "}(drug)
         {md.mondo ? (
           <>
             {" "}and{" "}
-            <a href={mondoUrl(md.mondo)} target="_blank" rel="noopener noreferrer" style={LINK}>{md.mondo}</a>{" "}(disease)
+            <a className="ulink" href={mondoUrl(md.mondo)} target="_blank" rel="noopener noreferrer">{md.mondo}</a>{" "}(disease)
           </>
         ) : null}
         . Validate against the source:{" "}
-        <a href={EVERYCURE} target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure&rsquo;s MATRIX dataset ↗</a>.
+        <a className="ulink" href={EVERYCURE} target="_blank" rel="noopener noreferrer">Every Cure&rsquo;s MATRIX dataset ↗</a>.
       </p>
     ) : null;
 
@@ -208,38 +206,63 @@ export default async function SignalDetail({
   const graphTargets =
     hasGraph && gd && gd.length ? (
       <>
-        <ul style={{ listStyle: "none", padding: 0, margin: "12px 0 0", display: "flex", flexDirection: "column", gap: 10 }}>
+        <ul className="src-list">
           {gd.map((t, i) => (
-            <li key={i} style={{ fontSize: 13.5, lineHeight: 1.6, color: "var(--body)", paddingLeft: 16, position: "relative" }}>
-              <span aria-hidden style={{ position: "absolute", left: 0, color: "var(--moss)", fontWeight: 600 }}>&rsaquo;</span>
-              <a href={otTargetUrl(t.ensembl)} target="_blank" rel="noopener noreferrer" style={LINK}>{t.symbol}</a>
-              {t.approvedName ? <span style={{ color: "var(--muted)" }}> ({t.approvedName})</span> : null}
-              {t.actionType ? `, drug acts as ${t.actionType.toLowerCase()}` : ""}
-              {t.datatypes.length
-                ? `; associated via ${t.datatypes.join(", ")}${t.overallScore != null ? ` (Open Targets score ${t.overallScore.toFixed(2)})` : ""}`
-                : ""}
-              {c.conditionOtId ? (
-                <>
-                  {" "}
-                  <a href={otEvidenceUrl(t.ensembl, c.conditionOtId)} target="_blank" rel="noopener noreferrer" style={LINK}>evidence ↗</a>
-                </>
-              ) : null}
+            <li key={i}>
+              <span className="chev" aria-hidden>›</span>
+              <span>
+                <a className="ulink" href={otTargetUrl(t.ensembl)} target="_blank" rel="noopener noreferrer">{t.symbol}</a>
+                {t.approvedName ? <span style={{ color: "var(--muted)" }}> ({t.approvedName})</span> : null}
+                {t.actionType ? `, drug acts as ${t.actionType.toLowerCase()}` : ""}
+                {t.datatypes.length
+                  ? `; associated via ${t.datatypes.join(", ")}${t.overallScore != null ? ` (Open Targets score ${t.overallScore.toFixed(2)})` : ""}`
+                  : ""}
+                {c.conditionOtId ? (
+                  <>
+                    {" "}
+                    <a className="ulink" href={otEvidenceUrl(t.ensembl, c.conditionOtId)} target="_blank" rel="noopener noreferrer">evidence ↗</a>
+                  </>
+                ) : null}
+              </span>
             </li>
           ))}
         </ul>
         {c.conditionOtId ? (
-          <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)", margin: "12px 0 0" }}>
+          <p className="note" style={{ marginTop: 12 }}>
             Browse the condition&rsquo;s full target associations on{" "}
-            <a href={otDiseaseUrl(c.conditionOtId)} target="_blank" rel="noopener noreferrer" style={LINK}>Open Targets ↗</a>.
+            <a className="ulink" href={otDiseaseUrl(c.conditionOtId)} target="_blank" rel="noopener noreferrer">Open Targets ↗</a>.
           </p>
         ) : null}
       </>
     ) : null;
 
+  const sexCovered = !!(c.sexPk && c.sexPk.length > 0);
+  const phaseCovered = !!(c.cyclePhase && c.cyclePhase.length > 0);
+  const relColor =
+    c.direction === "supports" ? "var(--signal)" : c.direction === "contradicts" ? "var(--brick)" : "var(--on-ink)";
+
+  const notCovered: { title: string; body: string; href: string; more: string }[] = [];
+  if (!sexCovered) {
+    notCovered.push({
+      title: "Sex-specific pharmacokinetics",
+      body: "Not covered for this pair. This layer holds documented sex-specific pharmacokinetics for a limited set of drugs, and this compound is not among them yet. A blank here means the drug is not covered by the layer, not that no sex difference exists.",
+      href: "/about/external-references#female-biology",
+      more: "More on the sex-specific pharmacokinetics layer and its sources",
+    });
+  }
+  if (!phaseCovered) {
+    notCovered.push({
+      title: "Cycle-phase dependence",
+      body: "Not covered for this pair. The cycle-phase layer is seeded for the strongest-evidence cases so far (PMDD), and this pair is not among them yet. A blank here means the pair is not covered by the layer, not that the effect was found to be phase-independent.",
+      href: "/about/external-references#female-biology",
+      more: "More on the cycle-phase layer and its sources",
+    });
+  }
+
   return (
-    <main>
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="surface-ink" style={{ paddingTop: 40, paddingBottom: 52 }}>
+    <main className="sigdetail">
+      {/* ── 1 · Verdict + scorecard ──────────────────────────────────────── */}
+      <section className="surface-ink" style={{ paddingTop: 34, paddingBottom: 80 }}>
         <div className="container">
           <div className="crumbs on-ink">
             <Link href="/">Home</Link>
@@ -248,318 +271,287 @@ export default async function SignalDetail({
             <span className="sep">/</span>
             <span className="here">{c.id}</span>
           </div>
-          <div className="eyebrow on-ink" style={{ marginBottom: 16, color: "var(--signal)" }}>
-            {c.id} · {TIER_LABELS[c.tier]} evidence · {c.score}/10
-          </div>
-          <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(32px,4vw,56px)", lineHeight: 1.08, maxWidth: "20ch" }}>
-            {c.drug}
-            <span style={{ color: "var(--on-ink-2)" }}> for </span>
-            {c.condition}
-          </h1>
-          <p className="lede" style={{ marginTop: 22, color: "var(--on-ink-2)", maxWidth: "80ch" }}>
-            {c.rationale}
-          </p>
-          <div style={{ marginTop: 20, display: "flex", flexWrap: "wrap", gap: "8px 18px", fontSize: 13, color: "var(--on-ink-2)" }}>
-            <span><strong style={{ color: "var(--on-ink)" }}>Origin</strong> · {c.origin}</span>
-            <span><strong style={{ color: "var(--on-ink)" }}>Pathway</strong> · {c.pathway}</span>
-            <span><strong style={{ color: "var(--on-ink)" }}>{REL_LABELS[c.direction]}</strong></span>
+
+          <div className="verdict-grid" style={{ marginTop: 18 }}>
+            <div>
+              <div className="id-line">{c.id} · {TIER_LABELS[c.tier]} evidence · {c.score}/10</div>
+              <h1 className="signal-title">
+                {c.drug}
+                <span className="soft"> for </span>
+                {c.condition}
+              </h1>
+              <p className="signal-summary">{c.rationale}</p>
+              <div className="signal-meta">
+                <span><b>Origin</b> · {c.origin}</span>
+                <span><b>Pathway</b> · {c.pathway}</span>
+                <span><b style={{ color: relColor }}>{REL_LABELS[c.direction]}</b></span>
+              </div>
+            </div>
+
+            <aside className="scorecard">
+              <div className="sc-head">
+                <div>
+                  <div className="sc-label">Our composite score</div>
+                  <div className="sc-score" style={{ marginTop: 10 }}>{c.score}<small> / 10</small></div>
+                </div>
+                <div className="sc-tier"><span className="tdot" />{TIER_LABELS[c.tier]} tier</div>
+              </div>
+              {(c.dimBreakdown ?? []).map((d) => (
+                <div className="sc-dim" key={d.key}>
+                  <span className="sc-name">{d.label}</span>
+                  <span className="sc-val"><Pips n={d.score} />{d.score} / 2 · {d.level}</span>
+                </div>
+              ))}
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* ── At a glance: the readings ────────────────────────────────────── */}
-      <section className="surface-bone section tight">
-        <div className="container">
-          <SectionLabel>The readings, side by side</SectionLabel>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <Reading label="Our composite score" value={`${c.score} / 10`} sub={`${TIER_LABELS[c.tier]} tier`} />
-            <Reading label="Literature grade" value={c.lGrade ?? "Not graded"} sub={c.lGrade ? "External validation, L0 to L3" : "No external record yet"} />
-            <Reading label="MATRIX cross-reference" value={c.matrixPercentile ?? "Not covered"} sub="Every Cure treatment-probability model" />
-            <Reading
-              label="Knowledge graph"
-              value={c.graphViaTargets && c.graphViaTargets.length ? "Supports" : "Silent"}
-              sub={c.graphViaTargets && c.graphViaTargets.length ? `via ${c.graphViaTargets.join(", ")}` : "No shared target in Open Targets"}
-            />
-            <Reading
-              label="Sex-specific PK"
-              value={c.sexPk && c.sexPk.length ? "Documented" : "None on file"}
-              sub={c.sexPk && c.sexPk.length ? "How the drug behaves differently in women" : "No sex-PK record for this drug"}
-            />
-            <Reading
-              label="Cycle-phase dependence"
-              value={c.cyclePhase && c.cyclePhase.length ? `${c.cyclePhase[0].cyclePhase} phase` : "None on file"}
-              sub={c.cyclePhase && c.cyclePhase.length ? "Effect depends on menstrual-cycle phase" : "No phase-dependence on file"}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Hypothesized mechanism ───────────────────────────────────────── */}
+      {/* ── 2 · Hypothesized mechanism ───────────────────────────────────── */}
       <section className="surface-paper section tight">
-        <div className="container" style={{ maxWidth: "92ch" }}>
-          <SectionLabel>Hypothesized mechanism</SectionLabel>
-          <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--body)" }}>{c.mechanism}</p>
+        <div className="container">
+          <p className="kicker">Hypothesized mechanism</p>
+          <p className="prose-lg measure">{c.mechanism}</p>
         </div>
       </section>
 
-      {/* ── Evidence dimensions ──────────────────────────────────────────── */}
+      {/* ── 3 · How the score was reached ────────────────────────────────── */}
       <section className="surface-bone section tight">
         <div className="container">
-          <SectionLabel>How the score was reached, for this pair</SectionLabel>
-          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", maxWidth: "92ch", marginBottom: 8 }}>
+          <p className="kicker">How the score was reached, for this pair</p>
+          <p className="prose-lg measure" style={{ marginBottom: 18 }}>
             The composite score is the sum of five dimensions, each scored 0 to 2 by the model from the
             evidence on file. Below is the sub-score this specific pair received on each, with what that
             dimension measures. It scored {c.score} of 10 overall, a {c.tier} reading
             {c.signalType ? `, from a ${c.signalType.replace(/_/g, " ")}` : ""}
             {c.evidenceStrength ? ` rated ${c.evidenceStrength} in strength` : ""}.
           </p>
-          <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--muted)", maxWidth: "92ch", marginBottom: 20 }}>
+          <p className="note">
             The model&rsquo;s overall reasoning for this pair is the summary at the top of the page, and
             the mechanism it proposed is in the section above.
           </p>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: "92ch" }}>
+          <div className="rubric">
             {(c.dimBreakdown ?? []).map((d) => (
-              <div key={d.key} style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) auto", gap: "4px 16px", alignItems: "baseline", borderTop: "1px solid var(--rule)", paddingTop: 12 }}>
-                <div className="font-heading" style={{ fontSize: 16, color: "var(--ink)" }}>{d.label}</div>
-                <div style={{ ...DIM_MONO, fontSize: 13, color: "var(--ink)", textAlign: "right" }}>
-                  {d.score} / 2 · {d.level}
+              <div className="r" key={d.key}>
+                <div>
+                  <p className="rk">{d.label}</p>
+                  <p className="rd">{DIM_WHAT[d.key]}</p>
                 </div>
-                <div style={{ gridColumn: "1 / -1", fontSize: 13.5, lineHeight: 1.6, color: "var(--body)" }}>
-                  {DIM_WHAT[d.key]}
-                </div>
+                <span className="rv"><Pips n={d.score} />{d.score} / 2 · {d.level}</span>
               </div>
             ))}
           </div>
 
-          <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
+          <More href="/about/technical-architecture#how-evidence-is-scored">
             How the scoring rubric works, in general
-          </LearnMore>
+          </More>
         </div>
       </section>
 
-      {/* ── Independent readings ─────────────────────────────────────────── */}
+      {/* ── 4 · Independent readings ─────────────────────────────────────── */}
       <section className="surface-paper section tight">
-        <div className="container" style={{ maxWidth: "92ch" }}>
-          <SectionLabel>Independent readings, reported beside the score</SectionLabel>
-          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", marginBottom: 22 }}>
+        <div className="container">
+          <p className="kicker">Independent readings, reported beside the score</p>
+          <p className="prose-lg measure" style={{ marginBottom: 8 }}>
             Three outside checks are reported alongside the composite score. Each is recorded separately
             and is not combined into the score.
           </p>
 
-          <ReadingBlock
-            heading={`Literature grade${c.lGrade ? ` · ${c.lGrade}` : ""}`}
-            whatItIs={
-              <>
-                How far the published record independently backs this pair, on a four-step scale that
-                always traces to a source. L0 means no external record yet; L1, the pair appears in
-                peer-reviewed literature; L2, a randomized trial or systematic review reports a result;
-                L3, the pair is named in an active clinical guideline from a body such as{" "}
-                <Ext href={ESHRE}>ESHRE</Ext>, <Ext href={ACOG_PMDD}>ACOG</Ext>, or{" "}
-                <Ext href={COCHRANE}>Cochrane</Ext>. The grade is applied after scoring as an independent
-                benchmark and is not an input to the composite score.
-              </>
-            }
-            forThisPair={litLead}
-            extra={litRecords}
-            learnMore={
-              <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
-                Why the literature grade sits outside the score
-              </LearnMore>
-            }
-          />
+          {/* Literature grade */}
+          <div className="reading">
+            <h3>Literature grade <span className="grade">{c.lGrade ?? "Not graded"}</span></h3>
+            <p className="prose">
+              How far the published record independently backs this pair, on a four-step scale that always
+              traces to a source. L0 means no external record yet; L1, the pair appears in peer-reviewed
+              literature; L2, a randomized trial or systematic review reports a result; L3, the pair is
+              named in an active clinical guideline from a body such as <Ext href={ESHRE}>ESHRE</Ext>,{" "}
+              <Ext href={ACOG_PMDD}>ACOG</Ext>, or <Ext href={COCHRANE}>Cochrane</Ext>. The grade is
+              applied after scoring as an independent benchmark and is not an input to the composite score.
+            </p>
+            <p className="prose"><strong>For this pair.</strong> {litLead}</p>
+            {litRecords}
+            <More href="/about/technical-architecture#how-evidence-is-scored">
+              Why the literature grade sits outside the score
+            </More>
+          </div>
 
-          <ReadingBlock
-            heading={`MATRIX cross-reference${c.matrixPercentile ? ` · ${c.matrixPercentile}` : ""}`}
-            whatItIs={
-              <>
-                <Ext href={EVERYCURE}>Every Cure&rsquo;s</Ext> machine-learned treatment-probability
-                model, drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000
-                diseases. It provides a model-based estimate of how plausible a drug-disease link is given
-                the structure of biomedical knowledge, reported alongside the direct evidence.
-              </>
-            }
-            forThisPair={matrixForThisPair}
-            extra={matrixEntities}
-            learnMore={
-              <LearnMore href="/about/external-references#coverage-disclosure">
-                More on the MATRIX cross-reference and its provenance
-              </LearnMore>
-            }
-          />
+          {/* MATRIX */}
+          <div className="reading">
+            <h3>MATRIX cross-reference {c.matrixPercentile ? <span className="grade">{c.matrixPercentile}</span> : null}</h3>
+            <p className="prose">
+              <Ext href={EVERYCURE}>Every Cure&rsquo;s</Ext> machine-learned treatment-probability model,
+              drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000 diseases. It
+              provides a model-based estimate of how plausible a drug-disease link is given the structure of
+              biomedical knowledge, reported alongside the direct evidence.
+            </p>
+            <p className="prose"><strong>For this pair.</strong> {matrixForThisPair}</p>
+            {matrixEntities}
+            <More href="/about/external-references#coverage-disclosure">
+              More on the MATRIX cross-reference and its provenance
+            </More>
+          </div>
 
-          <ReadingBlock
-            heading={`Knowledge graph · ${c.graphViaTargets && c.graphViaTargets.length ? "supports" : "silent"}`}
-            whatItIs={
-              <>
-                A check, computed over <Ext href={OPENTARGETS}>Open Targets</Ext>, of whether the drug
-                acts on a target that the graph independently associates with the condition. Absence of a
-                connection means the graph has no relevant edge, not evidence against the pair; for these
-                conditions it often reflects limited source coverage.
-              </>
-            }
-            forThisPair={graphForThisPair}
-            extra={graphTargets}
-            learnMore={
-              <LearnMore href="/about/external-references#structured-grounding-in-progress">
-                More on the knowledge-graph grounding
-              </LearnMore>
-            }
-          />
+          {/* Knowledge graph */}
+          <div className="reading">
+            <h3>Knowledge graph <span className="grade">{hasGraph ? "supports" : "silent"}</span></h3>
+            <p className="prose">
+              A check, computed over <Ext href={OPENTARGETS}>Open Targets</Ext>, of whether the drug acts on
+              a target that the graph independently associates with the condition. Absence of a connection
+              means the graph has no relevant edge, not evidence against the pair; for these conditions it
+              often reflects limited source coverage.
+            </p>
+            <p className="prose"><strong>For this pair.</strong> {graphForThisPair}</p>
+            {graphTargets}
+            <More href="/about/external-references#structured-grounding-in-progress">
+              More on the knowledge-graph grounding
+            </More>
+          </div>
         </div>
       </section>
 
-      {/* ── Sex-specific PK ──────────────────────────────────────────────── */}
-      <section className="surface-paper section tight">
-        <div className="container" style={{ maxWidth: "92ch" }}>
-          <SectionLabel>Sex-specific pharmacokinetics</SectionLabel>
-          {c.sexPk && c.sexPk.length > 0 ? (
-            <>
-              <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", marginBottom: 18 }}>
-                Documented differences in how this drug is handled in women, drawn from a primary source,
-                an FDA label or the curated sex-PK literature (
-                <Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
-                <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is reported beside the signal and is
-                not part of the composite score; it informs how a result should be interpreted.
-              </p>
-              {c.sexPk.map((f, i) => (
-                <div key={i} style={{ borderLeft: "2px solid var(--brick)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 16, lineHeight: 1.65, color: "var(--body)" }}>
-                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.parameter}</span>
+      {/* ── 5a · Sex-specific PK (covered) ───────────────────────────────── */}
+      {sexCovered ? (
+        <section className="surface-bone section tight">
+          <div className="container">
+            <p className="kicker">Sex-specific pharmacokinetics</p>
+            <p className="prose-lg measure" style={{ marginBottom: 18 }}>
+              Documented differences in how this drug is handled in women, drawn from a primary source, an
+              FDA label or the curated sex-PK literature (<Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
+              <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is reported beside the signal and is not
+              part of the composite score; it informs how a result should be interpreted.
+            </p>
+            <div className="reclist">
+              {c.sexPk!.map((f, i) => (
+                <div className="rec" key={i}>
+                  <span className="rl">{f.parameter}</span>
                   {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
                   {f.magnitude ? `: ${f.magnitude}` : ""}
                   {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
                 </div>
               ))}
-            </>
-          ) : (
-            <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--muted)", maxWidth: "92ch", margin: 0 }}>
-              Not covered for this pair. This layer holds documented sex-specific pharmacokinetics for a
-              limited set of drugs, and this compound is not among them yet. A blank here means the drug is
-              not covered by the layer, not that no sex difference exists.
-            </p>
-          )}
-          <LearnMore href="/about/external-references#female-biology">
-            More on the sex-specific pharmacokinetics layer and its sources
-          </LearnMore>
-        </div>
-      </section>
+            </div>
+            <More href="/about/external-references#female-biology">
+              More on the sex-specific pharmacokinetics layer and its sources
+            </More>
+          </div>
+        </section>
+      ) : null}
 
-      {/* ── Cycle-phase dependence ───────────────────────────────────────── */}
-      <section className="surface-bone section tight">
-        <div className="container" style={{ maxWidth: "92ch" }}>
-          <SectionLabel>Cycle-phase dependence</SectionLabel>
-          {c.cyclePhase && c.cyclePhase.length > 0 ? (
-            <>
-              <div style={{ marginBottom: 20, display: "flex", flexDirection: "column", gap: 14 }}>
-                <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                  <strong style={{ color: "var(--ink)" }}>Why it matters.</strong>{" "}Some treatments work
-                  differently depending on where someone is in the menstrual cycle, and for a cyclical
-                  condition like PMDD the timing can be the whole point. A drug that helps in the luteal
-                  phase, the roughly two weeks before menstruation, can look weaker than it is when its
-                  effect is averaged across the entire cycle.
-                </p>
-                <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                  <strong style={{ color: "var(--ink)" }}>What tracking the phase adds.</strong>{" "}Holding the
-                  phase as structured data lets a luteal-phase result be read in its phase rather than
-                  averaged across the cycle, and records the dosing pattern, taking the drug only in the
-                  luteal phase, that a phase-blind record does not capture.
-                </p>
-                <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                  <strong style={{ color: "var(--ink)" }}>What the literature says.</strong>{" "}For PMDD this
-                  is well established: intermittent luteal-phase SSRI dosing is an accepted first-line regimen
-                  (<Ext href={ACOG_PMDD}>ACOG 2023</Ext>), and it works within days, which is itself a clue
-                  that the drug acts through a faster route here than in depression. The standard outcome
-                  instrument for measuring it is the Daily Record of Severity of Problems (DRSP).
-                </p>
-              </div>
-              {c.cyclePhase.map((f, i) => (
-                <div key={i} style={{ borderLeft: "2px solid var(--arm-cross)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 16, lineHeight: 1.65, color: "var(--body)" }}>
-                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>{f.cyclePhase} phase</span>
+      {/* ── 5b · Cycle-phase dependence (covered) ────────────────────────── */}
+      {phaseCovered ? (
+        <section className="surface-paper section tight">
+          <div className="container">
+            <p className="kicker">Cycle-phase dependence</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
+              <p className="prose">
+                <strong>Why it matters.</strong> Some treatments work differently depending on where someone
+                is in the menstrual cycle, and for a cyclical condition like PMDD the timing can be the whole
+                point. A drug that helps in the luteal phase, the roughly two weeks before menstruation, can
+                look weaker than it is when its effect is averaged across the entire cycle.
+              </p>
+              <p className="prose">
+                <strong>What tracking the phase adds.</strong> Holding the phase as structured data lets a
+                luteal-phase result be read in its phase rather than averaged across the cycle, and records
+                the dosing pattern, taking the drug only in the luteal phase, that a phase-blind record does
+                not capture.
+              </p>
+              <p className="prose">
+                <strong>What the literature says.</strong> For PMDD this is well established: intermittent
+                luteal-phase SSRI dosing is an accepted first-line regimen (<Ext href={ACOG_PMDD}>ACOG 2023</Ext>),
+                and it works within days, which is itself a clue that the drug acts through a faster route here
+                than in depression. The standard outcome instrument for measuring it is the Daily Record of
+                Severity of Problems (DRSP).
+              </p>
+            </div>
+            <div className="reclist">
+              {c.cyclePhase!.map((f, i) => (
+                <div className="rec cross" key={i}>
+                  <span className="rl">{f.cyclePhase} phase</span>
                   {f.dosingNote ? `: ${f.dosingNote}` : ""}
                   {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
                 </div>
               ))}
-            </>
-          ) : (
-            <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--muted)", maxWidth: "92ch", margin: 0 }}>
-              Not covered for this pair. The cycle-phase layer is seeded for the strongest-evidence cases so
-              far (PMDD), and this pair is not among them yet. A blank here means the pair is not covered by
-              the layer, not that the effect was found to be phase-independent.
-            </p>
-          )}
-          <LearnMore href="/about/external-references#female-biology">
-            More on the cycle-phase layer and its sources
-          </LearnMore>
-        </div>
-      </section>
-
-      {/* ── Provenance trail ─────────────────────────────────────────────── */}
-      <section className="surface-paper section tight">
-        <div className="container" style={{ maxWidth: "94ch" }}>
-          <SectionLabel>Source evidence · what the pipeline ingested</SectionLabel>
-          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "var(--body)", maxWidth: "92ch", marginBottom: 18 }}>
-            These are the sources the pipeline ingested to detect and score this signal, the published
-            literature the model actually read, each tagged by study type. Where the model combined
-            findings the claim is marked as a synthesis (S), and where the literature disagrees the
-            contradiction is shown (!).
-          </p>
-          <div className="col" style={{ gap: 12 }}>
-            {c.claims.map((cl, i) => (
-              <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", fontSize: 16, lineHeight: 1.6, color: "var(--body)" }}>
-                <span
-                  className="font-heading"
-                  style={{
-                    flexShrink: 0, width: 24, height: 24, display: "inline-flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 12, color: cl.type === "contradict" ? "var(--brick)" : "var(--ink)",
-                    border: `1px solid ${cl.type === "contradict" ? "var(--brick)" : "var(--rule-strong)"}`,
-                  }}
-                >
-                  {cl.type === "synth" ? "S" : cl.type === "contradict" ? "!" : String(i + 1)}
-                </span>
-                <span>
-                  {cl.text}{" "}
-                  {cl.href ? (
-                    <a href={cl.href} target="_blank" rel="noopener noreferrer" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-                      {cl.src} ↗
-                    </a>
-                  ) : (
-                    <span style={{ color: "var(--muted)" }}>{cl.src}</span>
-                  )}
-                  {studyLabel(cl.studyType) && (
-                    <span
-                      style={{
-                        ...DIM_MONO,
-                        display: "inline-block",
-                        marginLeft: 8,
-                        fontSize: 10.5,
-                        letterSpacing: "0.04em",
-                        textTransform: "uppercase",
-                        color: cl.studyType && cl.studyType.toLowerCase().includes("guideline") ? "var(--green-deep)" : "var(--muted)",
-                        border: "1px solid var(--rule-strong)",
-                        padding: "1px 6px",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {studyLabel(cl.studyType)}
-                      {cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
-                    </span>
-                  )}
-                </span>
-              </div>
-            ))}
+            </div>
+            <More href="/about/external-references#female-biology">
+              More on the cycle-phase layer and its sources
+            </More>
           </div>
+        </section>
+      ) : null}
 
-          <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)", maxWidth: "92ch", marginTop: 18 }}>
-            The literature grade above is read off these same ingested sources; the guideline or trial
-            that earns it is one of the records listed here. MATRIX, sex-specific pharmacokinetics, and
-            cycle phase are separate layers the pipeline does not ingest, external cross-references
-            applied after scoring, and they link to their own sources in their sections above.
+      {/* ── 5c · Layers not covered ──────────────────────────────────────── */}
+      {notCovered.length > 0 ? (
+        <section className="surface-sage section tight">
+          <div className="container">
+            <p className="kicker">Layers not covered for this pair</p>
+            <div className={"notcovered" + (notCovered.length === 1 ? " one" : "")}>
+              {notCovered.map((n) => (
+                <div className="nc" key={n.title}>
+                  <div className="nh"><span>{n.title}</span><span className="stat">None on file</span></div>
+                  <p>{n.body}</p>
+                  <More href={n.href}>{n.more}</More>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {/* ── 6 · Source evidence ──────────────────────────────────────────── */}
+      <section className="surface-paper section tight">
+        <div className="container">
+          <p className="kicker">Source evidence · what the pipeline ingested</p>
+          <p className="prose-lg measure">
+            These are the sources the pipeline ingested to detect and score this signal, the published
+            literature the model actually read, each tagged by study type. Where the model combined findings
+            the claim is marked as a synthesis (S), and where the literature disagrees the contradiction is
+            shown (!).
           </p>
-          <LearnMore href="/about/external-references">
-            The primary sources and pipelines this evidence is drawn from
-          </LearnMore>
 
-          <div style={{ borderTop: "1px solid var(--rule)", marginTop: 28, paddingTop: 24 }}>
+          <ul className="ingest">
+            {c.claims.map((cl, i) => {
+              const label = studyLabel(cl.studyType);
+              return (
+                <li key={i}>
+                  <span className={"num" + (cl.type === "contradict" ? " contradict" : "")}>
+                    {cl.type === "synth" ? "S" : cl.type === "contradict" ? "!" : String(i + 1)}
+                  </span>
+                  <span>
+                    <span className="title">{cl.text}</span>{" "}
+                    <span className="ext">
+                      {cl.href ? (
+                        <a className="ulink" href={cl.href} target="_blank" rel="noopener noreferrer">{cl.src}</a>
+                      ) : (
+                        cl.src
+                      )}
+                      {cl.href ? " ↗" : ""}
+                    </span>
+                    {label ? (
+                      <>
+                        {" "}
+                        <span className={"tag" + (cl.studyType && cl.studyType.toLowerCase().includes("guideline") ? " guideline" : "")}>
+                          {label}{cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          <p className="note" style={{ marginTop: 30 }}>
+            The literature grade above is read off these same ingested sources; the guideline or trial that
+            earns it is one of the records listed here. MATRIX, sex-specific pharmacokinetics, and cycle phase
+            are separate layers the pipeline does not ingest, external cross-references applied after scoring,
+            and they link to their own sources in their sections above.
+          </p>
+          <More href="/about/external-references">
+            The primary sources and pipelines this evidence is drawn from
+          </More>
+
+          <div className="backbar">
             <Link href="/access/preview" className="btn btn-ghost sm">
               <span className="arr">←</span> Back to the full index
             </Link>
@@ -567,29 +559,5 @@ export default async function SignalDetail({
         </div>
       </section>
     </main>
-  );
-}
-
-function ReadingBlock({ heading, whatItIs, forThisPair, extra, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: React.ReactNode; extra?: React.ReactNode; learnMore?: React.ReactNode }) {
-  return (
-    <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 18, marginTop: 18 }}>
-      <div className="font-heading" style={{ fontSize: 19, color: "var(--ink)", marginBottom: 8 }}>{heading}</div>
-      <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--body)", margin: "0 0 8px" }}>{whatItIs}</p>
-      <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--ink-2)", margin: 0 }}>
-        <strong style={{ color: "var(--ink)" }}>For this pair.</strong> {forThisPair}
-      </p>
-      {extra}
-      {learnMore}
-    </div>
-  );
-}
-
-function Reading({ label, value, sub }: { label: string; value: string; sub: string }) {
-  return (
-    <div style={{ background: "var(--paper)", border: "1px solid var(--rule)", padding: "18px 18px 20px", display: "flex", flexDirection: "column", gap: 4 }}>
-      <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--muted)" }}>{label}</div>
-      <div className="font-heading" style={{ fontSize: 20, color: "var(--ink)", lineHeight: 1.15 }}>{value}</div>
-      <div style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--body)" }}>{sub}</div>
-    </div>
   );
 }
