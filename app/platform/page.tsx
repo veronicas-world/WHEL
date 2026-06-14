@@ -63,7 +63,7 @@ const LAYERS = [
     n: "Layer 01",
     name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "Sex-specific PK"],
-    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets, and being extended with the female-specific structure no existing ontology covers adequately, a layer whose schema is in place and now being seeded.",
+    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets. The sex-specific pharmacokinetics layer is now seeded for an initial set of compounds, each sourced and shown beside the signal; cyclical hormonal state exists as schema and is not yet populated.",
   },
   {
     n: "Layer 02",
@@ -216,9 +216,10 @@ export default async function PlatformPage() {
               </h2>
             </div>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "36ch" }}>
-              Drug response shifts across the menstrual cycle, so we hold hormonal state as
-              structured pharmacokinetic data, which means a luteal-phase signal is read in its
-              phase instead of being averaged into a flat number.
+              Drug response shifts across the menstrual cycle, so the substrate is built to hold
+              hormonal state as structured data, so a luteal-phase signal can be read in its phase
+              instead of averaged into a flat number. This phase layer exists as schema and is not
+              yet populated.
             </p>
           </div>
           <CyclicalPK height={340} />
@@ -354,10 +355,10 @@ export default async function PlatformPage() {
           <div style={wrap}>
             <div className="eyebrow" style={{ marginBottom: 14 }}>Reading the evidence markers</div>
             <h2 className="h2" style={{ marginBottom: 24, maxWidth: "24ch" }}>
-              Three readings on every candidate, shown side by side.
+              Several independent readings on every candidate, shown side by side.
             </h2>
             <p style={pBone}>
-              Each candidate carries three independent readings, and we keep them separate rather
+              Each candidate carries several independent readings, and we keep them separate rather
               than blending them into one number, because a reader should be able to see where
               confidence comes from. <strong>The confidence tier</strong> is our own score: every
               signal is graded on five dimensions, including replication, source quality, specificity,
@@ -382,6 +383,21 @@ export default async function PlatformPage() {
               women&rsquo;s health conditions, so the two are doing different things, and we show the
               MATRIX percentile beside our own grade rather than folding them together, so a reader
               can weigh a model&rsquo;s prior against the evidence on the ground.
+            </p>
+            <p style={pBone}>
+              <strong>The graph marker</strong> records whether the knowledge graph independently
+              connects the drug to the condition. Computed over Open Targets, it reads &ldquo;graph
+              supports, via target X&rdquo; when the drug acts on a target the graph associates with
+              the condition, and stays silent when no such shared target is present. A silence is not a
+              contradiction, it means the graph has no relevant edge, which for these conditions is
+              often a real gap rather than a verdict, and we show it rather than hide it.
+            </p>
+            <p style={pBone}>
+              <strong>The sex-PK marker</strong> appears where the substrate holds documented
+              sex-specific pharmacokinetics for the drug, the way its exposure or clearance differs in
+              women. Each fact carries its source, an FDA label or the curated sex-PK literature, and is
+              shown beside the signal rather than folded into the grade, because it informs how a result
+              should be read rather than how strong the evidence is.
             </p>
             <p style={pBone}>
               The open data sources and tools we build on, the independent MATRIX

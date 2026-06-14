@@ -47,6 +47,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
         "An external-validation grade on every drug and condition pair, with the highest grade reserved for signals backed by named clinical-guideline strength and certainty",
         "Every drug and condition resolved to canonical biomedical registries (ChEMBL, MONDO, EFO), with ambiguous cases held for human review",
         "A knowledge-graph cross-check, computed over Open Targets, that shows beside each signal whether the graph supports it or stays silent",
+        "A sex-specific pharmacokinetics layer, seeded from FDA labels and the curated sex-PK literature, shown beside the relevant signals",
       ],
     },
     {
@@ -265,8 +266,8 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Sex-stratified pharmacokinetics",
-    role: "Per-compound pharmacokinetic structure held by sex, so documented differences in metabolism and clearance, such as CYP3A4 activity, inform scoring rather than being assumed uniform across bodies. The schema is in place; seeding it with documented cases is the next step.",
-    status: "Planned",
+    role: "Per-compound pharmacokinetic structure held by sex, so documented differences in metabolism and clearance inform scoring rather than being assumed uniform across bodies. Seeded for an initial set of compounds from FDA labels and the curated sex-PK literature, each carrying its source, and shown beside the relevant signals. Broader population is ongoing.",
+    status: "Live",
   },
   {
     name: "Actionability layer",

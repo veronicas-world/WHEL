@@ -586,7 +586,7 @@ export default function ManifestoPage() {
                       <div className="mf-ln">Layer<b>01</b></div>
                       <div>
                         <h3>The substrate.</h3>
-                        <p>A corrected knowledge graph that captures sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms that general platforms miss because they were trained on male-default data, grounded in the standard biomedical ontologies, including MONDO, HPO, RxNorm, and ChEMBL, and extended with female-specific concepts that no existing ontology covers adequately.</p>
+                        <p>A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms that general platforms miss because they were trained on male-default data, grounded in the standard biomedical ontologies, including MONDO, HPO, RxNorm, and ChEMBL, and extended with female-specific concepts that no existing ontology covers adequately.</p>
                       </div>
                     </div>
                     <div className="mf-layer">
