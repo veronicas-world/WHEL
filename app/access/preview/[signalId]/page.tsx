@@ -37,6 +37,18 @@ const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001";
 
 const DIM_MONO: React.CSSProperties = { fontFamily: "var(--font-plex-mono, ui-monospace, monospace)" };
 
+/** Human label for a source's study type (used to tag the provenance trail). */
+function studyLabel(t?: string): string | undefined {
+  if (!t) return undefined;
+  const k = t.toLowerCase();
+  if (k.includes("guideline")) return "Clinical guideline";
+  if (k.includes("rct") || k.includes("randomi")) return "Randomized trial";
+  if (k.includes("systematic") || k.includes("meta") || k === "sr_or_ma" || k.includes("sr/")) return "Systematic review / meta-analysis";
+  if (k.includes("expert") || k.includes("opinion")) return "Expert opinion";
+  if (k.includes("observ") || k.includes("cohort") || k.includes("case")) return "Observational study";
+  return t.replace(/_/g, " ");
+}
+
 // What each rubric dimension measures (the model assigns each a 0-2 sub-score).
 const DIM_WHAT: Record<string, string> = {
   replication: "How many independent sources report the same effect. A higher score means the finding is replicated rather than resting on a single report.",
@@ -96,6 +108,28 @@ export default async function SignalDetail({
   const { signalId } = await params;
   const c = await getCandidateBySignalId(signalId);
   if (!c) notFound();
+
+  // What specifically earns this pair's literature grade, derived from the
+  // tagged sources actually attached to the signal (no model rerun needed).
+  const guidelineClaim = c.claims.find((cl) => (cl.studyType ?? "").toLowerCase().includes("guideline"));
+  const curatedGuideline = c.claims.find((cl) => cl.guidelineStrength);
+  const trialClaim = c.claims.find((cl) => {
+    const k = (cl.studyType ?? "").toLowerCase();
+    return k.includes("rct") || k.includes("randomi") || k.includes("systematic") || k.includes("meta") || k.includes("sr");
+  });
+  let litForThisPair: string;
+  if (!c.lGrade) {
+    litForThisPair = "This pair is not graded yet; no external record is on file for it.";
+  } else if (c.lGrade === "L3" && guidelineClaim) {
+    const detail = curatedGuideline?.guidelineStrength
+      ? ` (${curatedGuideline.guidelineStrength}${curatedGuideline.guidelineCertainty ? `, ${curatedGuideline.guidelineCertainty} certainty` : ""})`
+      : "";
+    litForThisPair = `Graded L3 because a named clinical guideline covers this pair${detail}. The grade-relevant records are tagged by type in the provenance trail below.`;
+  } else if (c.lGrade === "L2" && trialClaim) {
+    litForThisPair = "Graded L2 because a randomized trial or systematic review reports a result for this pair. The records are tagged by type in the provenance trail below.";
+  } else {
+    litForThisPair = `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which are tagged by type in the provenance trail below.`;
+  }
 
   return (
     <main>
@@ -221,11 +255,7 @@ export default async function SignalDetail({
                 benchmark and is not an input to the composite score.
               </>
             }
-            forThisPair={
-              c.lGrade
-                ? `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which can be checked in the provenance trail below.`
-                : "This pair is not graded yet; no external record is on file for it."
-            }
+            forThisPair={litForThisPair}
             learnMore={
               <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
                 Why the literature grade sits outside the score
@@ -372,6 +402,25 @@ export default async function SignalDetail({
                     </a>
                   ) : (
                     <span style={{ color: "var(--muted)" }}>{cl.src}</span>
+                  )}
+                  {studyLabel(cl.studyType) && (
+                    <span
+                      style={{
+                        ...DIM_MONO,
+                        display: "inline-block",
+                        marginLeft: 8,
+                        fontSize: 10.5,
+                        letterSpacing: "0.04em",
+                        textTransform: "uppercase",
+                        color: cl.studyType && cl.studyType.toLowerCase().includes("guideline") ? "var(--green-deep)" : "var(--muted)",
+                        border: "1px solid var(--rule-strong)",
+                        padding: "1px 6px",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {studyLabel(cl.studyType)}
+                      {cl.guidelineStrength ? ` · ${cl.guidelineStrength}${cl.guidelineCertainty ? `, ${cl.guidelineCertainty}` : ""}` : ""}
+                    </span>
                   )}
                 </span>
               </div>

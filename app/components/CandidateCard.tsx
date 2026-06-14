@@ -9,6 +9,11 @@ export interface Claim {
   src: string;
   /** Direct link to the source (PubMed, ClinicalTrials.gov, Reddit, etc.), when available. */
   href?: string;
+  /** Source study type (guideline, rct, systematic_review, expert_opinion, etc.), for the grade tag. */
+  studyType?: string;
+  /** For curated guideline sources: the recommendation strength and certainty that drive an L3 grade. */
+  guidelineStrength?: string;
+  guidelineCertainty?: string;
 }
 
 export interface Candidate {

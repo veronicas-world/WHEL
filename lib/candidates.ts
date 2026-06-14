@@ -65,14 +65,26 @@ function sourceHref(s: Row): string | undefined {
   return undefined;
 }
 
+/** Rank sources so the grade-relevant ones (guidelines, then trials/reviews)
+ *  appear in the shown set, ahead of excerpt-only and the rest. */
+function claimRank(s: Row): number {
+  const k = String(s.study_type ?? "").toLowerCase();
+  if (k.includes("guideline")) return 0;
+  if (k.includes("rct") || k.includes("randomi") || k.includes("systematic") || k.includes("meta") || k.includes("sr")) return 1;
+  if (s.key_finding_excerpt) return 2;
+  return 3;
+}
+
 function buildClaims(sources: Row[]): Claim[] {
-  const withExcerpt = sources.filter((s) => s.key_finding_excerpt);
-  const chosen = (withExcerpt.length ? withExcerpt : sources).slice(0, 4);
+  const chosen = [...sources].sort((a, b) => claimRank(a) - claimRank(b)).slice(0, 4);
   return chosen.map((s) => ({
     type: "extract",
     text: String(s.key_finding_excerpt || s.title || "Source on file."),
     src: sourceLabel(s),
     href: sourceHref(s),
+    studyType: s.study_type ? String(s.study_type) : undefined,
+    guidelineStrength: s.guideline_strength ? String(s.guideline_strength) : undefined,
+    guidelineCertainty: s.guideline_certainty ? String(s.guideline_certainty) : undefined,
   }));
 }
 
@@ -177,7 +189,7 @@ const SELECT = `
   compound_id, condition_id,
   compounds ( name, drug_class, fda_status, original_indication, sex_specific_pk ),
   conditions ( name, slug ),
-  sources ( external_id, source_type, journal, publication_date, key_finding_excerpt, title, url )
+  sources ( external_id, source_type, study_type, guideline_strength, guideline_certainty, journal, publication_date, key_finding_excerpt, title, url )
 `;
 
 /**
