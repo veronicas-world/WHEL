@@ -8,7 +8,7 @@ const ROLES = [
   "Pharma / biotech R&D",
   "Academic / research institution",
   "Advocacy organization",
-  "Investor",
+  "Student",
   "Other",
 ];
 
