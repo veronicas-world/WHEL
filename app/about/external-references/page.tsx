@@ -1461,28 +1461,29 @@ export default function ExternalReferencesPage() {
         </div>
       </section>
 
-      {/* ── 01c · Structured grounding in progress ───────────────────────── */}
+      {/* ── 01c · Structured grounding ───────────────────────────────────── */}
       {/* Two collapsible blocks for Path A (ontology-grounded entity
-          resolution) and Path B (knowledge-graph grounding via BioCypher)
-          recorded in methodology v3.4. Both are architectural additions to
-          the LLM pipeline, not pure post-hoc validation: Path A canonicalizes
-          and enriches every extracted compound and condition against
-          ChEMBL/DrugBank and MONDO before write, Path B adds a persistent KG
-          that informs LLM scoring at prompt time and surfaces as a disclosure
-          layer beside each signal. The block structure parallels the MATRIX
-          disclosure block above so the page reads as a single 'here are the
-          grounding layers' surface, with explicit 'Pending' status pills so
-          no synthetic numbers are implied. Patterned on the section 05
-          brand-name dictionary's <details> collapsible. */}
+          resolution) and Path B (knowledge-graph grounding) recorded in
+          methodology v3.4. Both are architectural additions to the LLM
+          pipeline, not pure post-hoc validation: Path A canonicalizes and
+          enriches every extracted compound and condition against ChEMBL and
+          MONDO/EFO (now applied across the corpus), Path B adds a persistent
+          relational graph over Open Targets that surfaces a graph-supports /
+          graph-silent disclosure beside each signal (live in the gated view),
+          with the BioCypher property graph and prompt-time scoring still
+          planned. The block structure parallels the MATRIX disclosure block
+          above so the page reads as a single 'here are the grounding layers'
+          surface. Patterned on the section 05 brand-name dictionary's
+          <details> collapsible. */}
       <section
         id="structured-grounding-in-progress"
         style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}
       >
         <div className={SECTION_INNER}>
           <SectionHeader
-            label="01c · Structured grounding in progress"
-            title="Two structured grounding layers planned on top of LLM extraction"
-            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; high reference-fabrication rates reported by Bhattacharyya et al. 2023 in Cureus — 47 percent of ChatGPT-generated medical references fully fabricated and 46 percent authentic but with bibliographic errors) motivate adding structured external knowledge to the pipeline rather than relying on LLM output alone. Two such layers are planned and recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding via the BioCypher framework (Path B). Neither is shipped yet. These are architectural additions, not post-hoc checks: Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, changing the shape of every signal row that lands in the database. Path B builds a persistent domain-restricted knowledge graph that both informs LLM scoring at prompt time and surfaces beside each signal as a disclosure layer in the same shape as the MATRIX coverage block above. This section sets out what each layer does and what its disclosure will look like when populated. Both blocks are collapsed by default; expand for the full plan."
+            label="01c · Structured grounding"
+            title="Two structured grounding layers on top of LLM extraction"
+            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; high reference-fabrication rates reported by Bhattacharyya et al. 2023 in Cureus, 47 percent of ChatGPT-generated medical references fully fabricated and 46 percent authentic but with bibliographic errors) motivate grounding the pipeline in structured external knowledge rather than relying on LLM output alone. Two such layers are recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding (Path B). Both are now in place in their first form. Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, and is applied across the corpus with ambiguous cases held for human review. Path B builds a domain-restricted graph over Open Targets and surfaces a 'graph supports' or 'graph silent' layer beside each signal, in the same shape as the MATRIX coverage block above. Two extensions stay planned and are called out below: feeding the graph into LLM scoring at prompt time, and a deeper property-graph version alongside an independent open-knowledge-graph validation track. These are architectural additions, not post-hoc checks. Both blocks are collapsed by default; expand for the full account."
           />
 
           {/* Path A: Entity validation */}
@@ -1521,12 +1522,12 @@ export default function ExternalReferencesPage() {
                     fontSize: "11px",
                     letterSpacing: "0.13em",
                     textTransform: "uppercase",
-                    color: "var(--tier-emerging)",
+                    color: "var(--green-mid)",
                     lineHeight: 1.5,
                     marginBottom: 4,
                   }}
                 >
-                  Pending &middot; Schema designed, not yet wired
+                  Live &middot; Canonical IDs resolved; audit numbers to follow
                 </span>
                 <span
                   style={{
@@ -1538,7 +1539,7 @@ export default function ExternalReferencesPage() {
                     lineHeight: 1.5,
                   }}
                 >
-                  ChEMBL or DrugBank &middot; MONDO
+                  ChEMBL &middot; MONDO &middot; EFO
                 </span>
               </span>
               <span
@@ -1603,7 +1604,7 @@ export default function ExternalReferencesPage() {
                     marginBottom: 8,
                   }}
                 >
-                  What the disclosure will display when shipped
+                  What the audit disclosure will show once surfaced
                 </div>
                 <ul
                   style={{
@@ -1732,17 +1733,20 @@ export default function ExternalReferencesPage() {
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   Recorded in the methodology revision history at v3.4 (see{" "}
                   the methodology changelog
-                  ). Listed as a Planned register row on the Roadmap as
-                  &ldquo;Ontology-grounded entity resolution (Path A).&rdquo;
-                  This disclosure block will switch from Pending to Live, and
-                  the structured fields above will populate with real audit
-                  numbers, when the integration ships.
+                  ). Listed on the Roadmap under the technical-architecture
+                  track as &ldquo;Ontology-grounded entity resolution (Path
+                  A).&rdquo; The resolution, enrichment, and human-review gate
+                  are now applied across the corpus, so the canonical
+                  identifiers and structured metadata travel with every signal.
+                  The per-pipeline and per-condition audit numbers above are the
+                  remaining piece: they populate this block once the
+                  resolution-rate disclosure is surfaced.
                 </p>
               </div>
             </div>
           </details>
 
-          {/* Path B: BioCypher KG cross-reference */}
+          {/* Path B: knowledge-graph grounding (relational over Open Targets; BioCypher version planned) */}
           <details className="disclose-block">
             <summary
               style={{
@@ -1756,7 +1760,7 @@ export default function ExternalReferencesPage() {
                 background: "var(--surface)",
                 color: "var(--ink-2)",
               }}
-              aria-label="Open Path B: Knowledge-graph grounding via BioCypher"
+              aria-label="Open Path B: Knowledge-graph grounding (graph supports / graph silent)"
             >
               <span style={{ display: "block", minWidth: 0 }}>
                 <span
@@ -1770,7 +1774,7 @@ export default function ExternalReferencesPage() {
                     marginBottom: 6,
                   }}
                 >
-                  Path B: Knowledge-graph grounding via BioCypher
+                  Path B: Knowledge-graph grounding (graph supports / graph silent)
                 </span>
                 <span
                   style={{
@@ -1778,12 +1782,12 @@ export default function ExternalReferencesPage() {
                     fontSize: "11px",
                     letterSpacing: "0.13em",
                     textTransform: "uppercase",
-                    color: "var(--tier-emerging)",
+                    color: "var(--green-mid)",
                     lineHeight: 1.5,
                     marginBottom: 4,
                   }}
                 >
-                  Pending &middot; Framework selected, schema not yet built
+                  Live &middot; Graph supports / silent shipped over Open Targets
                 </span>
                 <span
                   style={{
@@ -1795,7 +1799,7 @@ export default function ExternalReferencesPage() {
                     lineHeight: 1.5,
                   }}
                 >
-                  BioCypher &middot; DRKG data &middot; PheKnowLator data
+                  Open Targets &middot; gated view &middot; BioCypher version planned
                 </span>
               </span>
               <span
@@ -1830,23 +1834,26 @@ export default function ExternalReferencesPage() {
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   This layer is both a grounding mechanism and a disclosure
-                  layer. A domain-restricted biomedical knowledge graph is
-                  built using the BioCypher framework (Lobentanzer et al.,
-                  Nature Biotechnology 2023), restricted to Whel&apos;s six
-                  conditions and the compounds attached to active signals.
-                  Edges are drawn from open biomedical sources: the Drug
-                  Repurposing Knowledge Graph (DRKG) for drug-target,
-                  target-pathway, and pathway-disease relationships, and
-                  PheKnowLator for ontology-aligned condition and gene
-                  annotations. The KG informs Whel&apos;s LLM at prompt time,
-                  following the knowledge-augmented prompting pattern
-                  documented in the biomedical NLP literature: when
-                  the LLM scores a signal, the relevant subgraph of
-                  mechanistic paths is included as structured context,
-                  reducing the model&apos;s reliance on parametric memory
-                  alone. The KG also surfaces beside each signal as a
-                  disclosure layer (graph supports or graph silent), in the
-                  same shape as the existing MATRIX score row above.
+                  layer, and it arrives in stages. The stage live today is
+                  relational: a domain-restricted graph of drug, target, and
+                  condition relationships built over Open Targets, restricted to
+                  Whel&apos;s six conditions and the compounds attached to active
+                  signals. From it, each signal carries a &lsquo;graph
+                  supports&rsquo; or &lsquo;graph silent&rsquo; tag beside its
+                  grade, in the same shape as the MATRIX score row above.
+                  &lsquo;Graph supports, via target X&rsquo; means the drug acts
+                  on a target that Open Targets associates with the condition;
+                  &lsquo;graph silent&rsquo; means no such shared target is
+                  present, which can reflect either a real biological gap or a
+                  limit of the source data. The planned stage deepens this: a
+                  property-graph version built with the BioCypher framework
+                  (Lobentanzer et al., Nature Biotechnology 2023), grounded in
+                  canonical ontologies, and a feed of the relevant subgraph into
+                  the LLM at prompt time so the model relies less on parametric
+                  memory alone. Open repurposing graphs and models such as DRKG,
+                  PrimeKG, and TxGNN sit in a separate validation track, checked
+                  against rather than merged in, because they carry the
+                  field&apos;s male-default coverage that Whel exists to correct.
                 </p>
               </div>
 
@@ -1862,8 +1869,15 @@ export default function ExternalReferencesPage() {
                     marginBottom: 8,
                   }}
                 >
-                  What the disclosure will display when shipped
+                  What the disclosure covers
                 </div>
+                <p style={{ fontSize: 13.5, lineHeight: 1.65, color: "var(--muted-2)", maxWidth: "72ch", margin: "0 0 12px" }}>
+                  The signal-level &lsquo;graph supports / graph silent&rsquo; tag
+                  is live in the gated view today. The aggregate audit views
+                  below (graph size, per-condition coverage, tier
+                  cross-tabulation) are computed from the same data and are being
+                  surfaced as reporting.
+                </p>
                 <ul
                   style={{
                     listStyle: "none",
@@ -1999,15 +2013,17 @@ export default function ExternalReferencesPage() {
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
                   Recorded in the methodology revision history at v3.4 (see{" "}
                   the methodology changelog
-                  ). Listed as a Planned register row on the Roadmap as
-                  &ldquo;Knowledge-graph grounding via BioCypher (Path
-                  B).&rdquo; This disclosure block will switch from Pending
-                  to Live, and the structured fields above will populate with
-                  real graph counts and per-signal tags, when the integration
-                  ships. Whel will not train a custom graph neural network;
-                  the platform consumes machine learning (Claude Opus 4.6 for
-                  extraction and scoring, MATRIX scores as the existing
-                  cross-reference) but does not develop its own ML models.
+                  ). Listed on the Roadmap under the technical-architecture
+                  track as &ldquo;Knowledge-graph grounding,&rdquo; now live for
+                  the relational Open Targets version with the per-signal tag in
+                  the gated view. The BioCypher property graph and the
+                  prompt-time scoring feed remain planned, and the open
+                  knowledge graphs and models are tracked separately under the
+                  Roadmap&apos;s validation layer. Whel will not train a custom
+                  graph neural network; the platform consumes machine learning
+                  (Claude Opus 4.6 for extraction and scoring, MATRIX scores as
+                  the existing cross-reference) but does not develop its own ML
+                  models.
                 </p>
               </div>
             </div>
@@ -2076,7 +2092,7 @@ export default function ExternalReferencesPage() {
                     marginBottom: 4,
                   }}
                 >
-                  Pending &middot; Three phases, designed to ship in parallel with Path A and Path B
+                  Phase 1 live &middot; Phases 2 and 3 pending
                 </span>
                 <span
                   style={{
@@ -2859,7 +2875,7 @@ export default function ExternalReferencesPage() {
                   the remaining fields when Phase 2 and Phase 3 ship.
                   Path C is distinct from Path A (ontology-grounded
                   entity resolution) and Path B (knowledge-graph
-                  grounding via BioCypher), which are documented in
+                  grounding), which are documented in
                   section 01c above. Path A and Path B ground the
                   LLM&apos;s inputs; Path C validates the LLM&apos;s
                   outputs.
