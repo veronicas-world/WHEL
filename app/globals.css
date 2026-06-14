@@ -567,12 +567,16 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
    Shared by long About pages (external-references, technical-architecture,
    methodology, roadmap).
 
-   Approach: on large screens the page content is shifted right to open a left
-   rail, and the TOC tracks the content's left edge (with a 36px floor so it
-   stays put on mid-size screens). Below 1140px the rail collapses and the TOC
-   is hidden, so the content returns to its normal centred layout. The coloured
-   full-bleed section bands are unaffected because only the inner centred
-   column is shifted, never the section box.
+   Approach: the TOC and the page content are treated as ONE two-column block
+   (TOC 188px + 60px gap + content) that is centred in the viewport, the same
+   composition the manifesto and About pages use. Both the TOC's left edge and
+   the content's left margin are derived from centring that block, so they move
+   together and stay balanced (equal left/right gutters) on wide screens. On
+   narrower screens both clamp to a fixed left rail and the content column
+   shrinks gracefully. Below 1160px the rail collapses and the TOC hides, so the
+   content returns to its normal centred layout. Full-bleed section bands are
+   unaffected because only the inner centred column is shifted, not the section
+   box. (188 + 60 = 248 = the rail the content is offset by.)
    ────────────────────────────────────────────────────────────────────────── */
 .doc-toc {
   display: none;
@@ -603,27 +607,30 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 }
 .doc-toc a:hover .doc-t { color: var(--ink); }
 
-@media (min-width: 1140px) {
+@media (min-width: 1160px) {
   .doc-toc { display: block; }
 
-  /* Centred 1024px column (external-references, technical-architecture) */
+  /* 1024px column (external-references, technical-architecture).
+     block = 248 (rail) + 1024 = 1272; centred → content margin = 50vw - 388. */
   .doc-shell .max-w-5xl.mx-auto {
-    margin-left: max(284px, calc(50vw - 512px));
+    margin-left: max(252px, calc(50vw - 388px));
     margin-right: auto;
   }
-  .doc-toc { left: max(36px, calc(50vw - 512px - 220px)); }
+  .doc-toc { left: max(48px, calc(50vw - 636px)); }
 
-  /* Narrower 896px column (methodology) */
+  /* 896px column (methodology). block = 248 + 896 = 1144 → margin = 50vw - 324. */
   .doc-shell .max-w-4xl.mx-auto {
-    margin-left: max(284px, calc(50vw - 448px));
+    margin-left: max(252px, calc(50vw - 324px));
     margin-right: auto;
   }
-  .doc-toc.doc-toc--w4 { left: max(36px, calc(50vw - 448px - 220px)); }
+  .doc-toc.doc-toc--w4 { left: max(48px, calc(50vw - 572px)); }
 
-  /* Full-width 1440 container with full-bleed bands (roadmap) */
+  /* Roadmap: full-bleed bands, .container capped to 1080 when railed.
+     block = 248 + 1080 = 1328 → margin = 50vw - 416. */
   .rm-doc .container {
-    margin-left: max(284px, calc(50vw - 720px));
+    margin-left: max(252px, calc(50vw - 416px));
     margin-right: auto;
+    max-width: 1080px;
   }
-  .rm-doc .doc-toc { left: max(36px, calc(50vw - 720px - 220px)); }
+  .rm-doc .doc-toc { left: max(48px, calc(50vw - 664px)); }
 }
