@@ -158,15 +158,22 @@ export default async function SignalDetail({
 
   // Fuller MATRIX read for this pair: the raw treat-score and the entities scored.
   const md = c.matrixDetail;
-  const matrixForThisPair: React.ReactNode = c.matrixPercentile
-    ? `MATRIX places this pair at ${c.matrixPercentile}${
-        md?.transformedScore != null
-          ? `, with a treat-score of ${md.transformedScore.toFixed(2)} (higher is better; across the pairs we cover, scores span about 3.1 to 4.5)`
-          : ""
-      }.`
-    : "MATRIX has no score for this pair.";
+  const matrixMapped = !!(md && (md.sourceId || md.mondo));
+  let matrixForThisPair: React.ReactNode;
+  if (c.matrixPercentile) {
+    matrixForThisPair = `MATRIX places this pair at ${c.matrixPercentile}${
+      md?.transformedScore != null
+        ? `, with a treat-score of ${md.transformedScore.toFixed(2)} (higher is better; across the pairs we cover, scores span about 3.1 to 4.5)`
+        : ""
+    }.`;
+  } else if (matrixMapped) {
+    matrixForThisPair =
+      "MATRIX maps this drug and disease in its graph but returned no treat-score for the pair, which can mean the predicted link fell below the model's publication threshold.";
+  } else {
+    matrixForThisPair = "MATRIX does not cover this pair.";
+  }
   const matrixEntities =
-    c.matrixPercentile && md && (md.sourceId || md.mondo) ? (
+    matrixMapped && md ? (
       <p style={{ fontSize: 12.5, lineHeight: 1.55, color: "var(--muted)", margin: "10px 0 0" }}>
         Scored over MATRIX&rsquo;s own entities, confirming the same drug and disease:{" "}
         {md.sourceId ? (

@@ -170,7 +170,7 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
     tier,
     lGrade,
     matrixPercentile,
-    matrixDetail: matrixPercentile ? matrixDetail : undefined,
+    matrixDetail,
     graphViaTargets: graphViaTargets && graphViaTargets.length ? graphViaTargets : undefined,
     sexPk: sexPk && sexPk.length ? sexPk : undefined,
     cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,
