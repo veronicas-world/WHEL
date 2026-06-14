@@ -514,9 +514,15 @@ details.disclose-block[open] > summary .disclose-chev { transform: rotate(180deg
 @media (max-width: 560px){ .arc-grid, .exp-grid, .tier-grid { grid-template-columns: 1fr !important; } }
 
 /* ── Typewriter cursor ───────────────────────────────────────────────── */
+/* Zero-width caret: paints a 2px bar via ::after so it adds no inline width
+   and therefore cannot shift the line wrapping while the title types out. */
 .type-cursor {
-  display: inline-block; width: 2px; height: 0.82em;
-  background: var(--on-ink); margin-left: 4px; vertical-align: middle;
+  display: inline-block; width: 0; height: 0.82em;
+  vertical-align: middle; position: relative;
+}
+.type-cursor::after {
+  content: ""; position: absolute; left: 4px; top: 0;
+  width: 2px; height: 100%; background: var(--on-ink);
   animation: cur-blink 0.65s step-end infinite;
 }
 @keyframes cur-blink { 50% { opacity: 0; } }

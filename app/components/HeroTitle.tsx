@@ -13,14 +13,17 @@ export default function HeroTitle({
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const [text, setText] = useState(FULL_TEXT);
+  // Number of characters revealed. The full string is always laid out (the
+  // untyped tail is rendered but hidden), so the line wrapping is fixed from
+  // the first frame and the text never reflows or jumps as it types.
+  const [count, setCount] = useState(FULL_TEXT.length);
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
     // Only animate on the first visit per browser session
     if (sessionStorage.getItem("whel-intro-done")) return;
 
-    setText("");
+    setCount(0);
     setTyping(true);
 
     let i = 0;
@@ -28,7 +31,7 @@ export default function HeroTitle({
 
     const tick = () => {
       i++;
-      setText(FULL_TEXT.slice(0, i));
+      setCount(i);
       if (i < FULL_TEXT.length) {
         timerId = setTimeout(tick, CHAR_DELAY);
       } else {
@@ -42,10 +45,15 @@ export default function HeroTitle({
   }, []);
 
   return (
-    <h1 className={className} style={style}>
-      {text}
+    <h1 className={className} style={style} aria-label={FULL_TEXT}>
+      {/* Revealed text */}
+      <span aria-hidden="true">{FULL_TEXT.slice(0, count)}</span>
+      {typing && <span className="type-cursor" aria-hidden="true" />}
+      {/* Untyped tail: occupies its final space (locking the wrap) but stays invisible */}
       {typing && (
-        <span className="type-cursor" aria-hidden="true" />
+        <span aria-hidden="true" style={{ visibility: "hidden" }}>
+          {FULL_TEXT.slice(count)}
+        </span>
       )}
     </h1>
   );
