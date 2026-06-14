@@ -38,8 +38,8 @@ const ARCS = [
 const LAYERS = [
   {
     n: "Layer 01", name: "The substrate",
-    tags: ["Postgres-native", "Ontology-grounded", "PrimeKG · CTKG seed"],
-    desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL, and being extended with the female-specific structure no existing ontology adequately covers.",
+    tags: ["Postgres-native", "Ontology-grounded", "Sex-PK + cycle-phase"],
+    desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL, with sex-specific pharmacokinetics and cyclical-phase layers already seeded and shown beside the relevant signals, and the fuller female-specific structure no existing ontology covers still being built in.",
   },
   {
     n: "Layer 02", name: "Retrieval & validation",
@@ -48,8 +48,8 @@ const LAYERS = [
   },
   {
     n: "Layer 03", name: "Hypothesis from signal",
-    tags: ["Off-label patterns", "Advocacy registries", "Validated downstream"],
-    desc: "Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured reports, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence. It is never equated with the results of a controlled trial, and it is the input that surfaces the hypotheses worth checking.",
+    tags: ["Off-label patterns", "Community reports", "Validated downstream"],
+    desc: "Patient-community signal, including off-label prescribing patterns, community reports, and structured patient-reported data, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence. It is never equated with the results of a controlled trial, and it is the input that surfaces the hypotheses worth checking. Formal advocacy-organization partnerships are planned, taken on once the validation work is in place.",
   },
 ];
 
@@ -274,7 +274,7 @@ export default async function Home() {
         <div className="container">
           <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>How it works</div>
           <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 40, maxWidth: "18ch" }}>
-            One platform, three layers.
+            Built in three layers.
           </h2>
           {/* TODO(real-data): layer descriptions from design */}
           <div className="layers">
