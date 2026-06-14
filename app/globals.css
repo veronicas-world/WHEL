@@ -561,3 +561,58 @@ body.scroll-effects-ready .scroll-section.s-focus::after {
 body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
   opacity: 1;
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Floating document table-of-contents
+   Shared by long About pages (external-references, technical-architecture,
+   methodology, roadmap). Sits in the left gutter beside the centred
+   max-w-5xl (1024px) column. Hidden when the gutter is too narrow.
+   ────────────────────────────────────────────────────────────────────────── */
+.doc-toc {
+  position: fixed;
+  top: 120px;
+  width: 184px;
+  left: calc(50vw - 512px);
+  margin-left: -208px;
+  z-index: 20;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+.doc-toc-eyebrow {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+}
+.doc-toc a {
+  display: flex; gap: 11px; align-items: baseline; padding: 8px 0;
+  text-decoration: none; border-top: 1px solid var(--rule);
+}
+.doc-toc a:last-child { border-bottom: 1px solid var(--rule); }
+.doc-toc .doc-n {
+  font-family: var(--font-plex-mono, monospace);
+  font-size: 9.5px; letter-spacing: 0.1em; color: var(--muted);
+  width: 18px; flex: none;
+}
+.doc-toc .doc-t {
+  font-size: 13px; line-height: 1.32; color: var(--ink-2);
+}
+.doc-toc a:hover .doc-t { color: var(--ink); }
+@media (max-width: 1429px) { .doc-toc { display: none; } }
+
+/* Methodology uses a narrower max-w-4xl (896px) column — anchor TOC to it. */
+.doc-toc.doc-toc--w4 { left: calc(50vw - 448px); }
+@media (max-width: 1311px) { .doc-toc.doc-toc--w4 { display: none; } }
+
+/* Roadmap uses the full 1440 .container with full-bleed bands, so there is no
+   left gutter. On large screens, shift the centred container right to open a
+   rail for the TOC; the coloured bands stay full-bleed (they are the section,
+   the .container is the inner box). Scoped to .rm-doc so no other page shifts. */
+@media (min-width: 1280px) {
+  .rm-doc .container {
+    margin-left: 248px;
+    margin-right: auto;
+    max-width: 1160px;
+  }
+  .rm-doc .doc-toc { left: 32px; margin-left: 0; }
+}
+@media (max-width: 1279px) { .rm-doc .doc-toc { display: none; } }

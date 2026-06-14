@@ -447,7 +447,19 @@ export default async function RoadmapPage() {
   const PHASES = buildPhases(totalSignals);
 
   return (
-    <main>
+    <main className="rm-doc">
+
+      {/* ── Floating table of contents (large screens only) ──────────────── */}
+      <aside className="doc-toc" aria-label="On this page">
+        <div className="doc-toc-eyebrow">On this page</div>
+        <a href="#at-a-glance"><span className="doc-n">00</span><span className="doc-t">At a glance</span></a>
+        <a href="#orientation"><span className="doc-n">01</span><span className="doc-t">Orientation</span></a>
+        <a href="#selection"><span className="doc-n">02</span><span className="doc-t">Selection</span></a>
+        <a href="#expansion"><span className="doc-n">03</span><span className="doc-t">Expansion</span></a>
+        <a href="#tech-architecture"><span className="doc-n">04</span><span className="doc-t">Technical architecture</span></a>
+        <a href="#validation-layer"><span className="doc-n">05</span><span className="doc-t">Validation layer</span></a>
+        <a href="#this-page"><span className="doc-n">06</span><span className="doc-t">This page</span></a>
+      </aside>
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="surface-ink" style={{ paddingTop: 44, paddingBottom: 60 }}>
@@ -475,7 +487,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── At a glance — Now / Next / Later ─────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="at-a-glance" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 22 }}>At a glance</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -515,7 +527,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 01 · Orientation ─────────────────────────────────────────────── */}
-      <section className="surface-paper section">
+      <section id="orientation" className="surface-paper section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader label="01 · Orientation" title="What Whel is, and who it is for" />
 
@@ -541,7 +553,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 02 · Selection ───────────────────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="selection" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader
             label="02 · Selection"
@@ -635,7 +647,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 03 · Expansion ───────────────────────────────────────────────── */}
-      <section className="surface-paper section">
+      <section id="expansion" className="surface-paper section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader
             label="03 · Expansion"
@@ -682,7 +694,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 04 · Method ──────────────────────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="tech-architecture" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader
             label="04 · Technical architecture"
@@ -712,7 +724,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 05 · Validation layer ────────────────────────────────────────── */}
-      <section className="surface-paper section">
+      <section id="validation-layer" className="surface-paper section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader
             label="05 · Validation layer"
@@ -768,7 +780,7 @@ export default async function RoadmapPage() {
       </section>
 
       {/* ── 06 · A living page ───────────────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="this-page" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <SectionHeader label="06 · This page" title="A living page" />
 

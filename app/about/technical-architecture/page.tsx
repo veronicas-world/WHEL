@@ -398,6 +398,20 @@ export default function TechnicalArchitecturePage() {
   return (
     <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
 
+      {/* ── Floating table of contents (large screens only) ──────────────── */}
+      <aside className="doc-toc" aria-label="On this page">
+        <div className="doc-toc-eyebrow">On this page</div>
+        <a href="#architecture"><span className="doc-n">01</span><span className="doc-t">Where each layer stands</span></a>
+        <a href="#pipeline-register"><span className="doc-n">02</span><span className="doc-t">Pipeline register</span></a>
+        <a href="#how-evidence-is-scored"><span className="doc-n">03</span><span className="doc-t">Scoring framework</span></a>
+        <a href="#confidence-tiers"><span className="doc-n">04</span><span className="doc-t">Tier mapping</span></a>
+        <a href="#category-standards"><span className="doc-n">05</span><span className="doc-t">Category standards</span></a>
+        <a href="#reliability-rules"><span className="doc-n">06</span><span className="doc-t">Reliability rules</span></a>
+        <a href="#guiding-principle"><span className="doc-n">07</span><span className="doc-t">Guiding principle</span></a>
+        <a href="#infrastructure"><span className="doc-n">08</span><span className="doc-t">Infrastructure</span></a>
+        <a href="#limitations"><span className="doc-n">09</span><span className="doc-t">Limitations</span></a>
+      </aside>
+
       {/* ── Header ───────────────────────────────────────────────────────── */}
       <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
@@ -443,7 +457,7 @@ export default function TechnicalArchitecturePage() {
       </div>
 
       {/* ── The three-layer architecture (honest status) ─────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="architecture" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Architecture · Where each layer stands"
@@ -502,7 +516,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 1 — Pipeline register ─────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="pipeline-register" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 1 · Pipeline register"
@@ -927,7 +941,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 4 — Category-specific standards ───────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="category-standards" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 4 · Category standards"
@@ -955,7 +969,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 5 — Cross-cutting reliability rules ───────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="reliability-rules" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 5 · Reliability rules"
@@ -982,7 +996,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Guiding principle ────────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="guiding-principle" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <div style={{ backgroundColor: "var(--green-deep)", padding: "clamp(32px, 5vw, 48px)" }}>
             <div
@@ -1026,7 +1040,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 6 — Database and infrastructure ───────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="infrastructure" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 6 · Infrastructure"
@@ -1072,7 +1086,7 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 7 — Documented limitations ────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="limitations" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 7 · Limitations"

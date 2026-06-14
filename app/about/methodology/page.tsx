@@ -417,6 +417,19 @@ export default function MethodologyPage() {
   return (
     <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
 
+      {/* ── Floating table of contents (large screens only) ──────────────── */}
+      <aside className="doc-toc doc-toc--w4" aria-label="On this page">
+        <div className="doc-toc-eyebrow">On this page</div>
+        <a href="#purpose"><span className="doc-n">01</span><span className="doc-t">Purpose</span></a>
+        <a href="#sample"><span className="doc-n">02</span><span className="doc-t">Sample</span></a>
+        <a href="#external-comparators"><span className="doc-n">03</span><span className="doc-t">External comparators</span></a>
+        <a href="#levels"><span className="doc-n">04</span><span className="doc-t">Levels of validation</span></a>
+        <a href="#adjudication"><span className="doc-n">05</span><span className="doc-t">Adjudication</span></a>
+        <a href="#analysis-plan"><span className="doc-n">06</span><span className="doc-t">Analysis plan</span></a>
+        <a href="#limitations"><span className="doc-n">07</span><span className="doc-t">Limitations</span></a>
+        <a href="#reporting"><span className="doc-n">08</span><span className="doc-t">Reporting</span></a>
+      </aside>
+
       {/* ── Page header ─────────────────────────────────────────────────────── */}
       <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
@@ -512,7 +525,7 @@ export default function MethodologyPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
 
           {/* 01 — What this page is */}
-          <section>
+          <section id="purpose" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>01 · Purpose</div>
             <h2 className="font-heading" style={H2}>Why pre-register</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -541,7 +554,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 02 — Sample */}
-          <section>
+          <section id="sample" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>02 · Sample</div>
             <h2 className="font-heading" style={H2}>What gets evaluated</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -595,7 +608,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 03 — External sources of truth */}
-          <section>
+          <section id="external-comparators" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>03 · External comparators</div>
             <h2 className="font-heading" style={H2}>Where the external evidence comes from</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -627,7 +640,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 04 — Hit criteria */}
-          <section>
+          <section id="levels" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>04 · Levels of external validation</div>
             <h2 className="font-heading" style={H2}>What counts as a hit</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1120,7 +1133,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 05 — Adjudication */}
-          <section>
+          <section id="adjudication" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>05 · Adjudication</div>
             <h2 className="font-heading" style={H2}>How signals are scored</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1147,7 +1160,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 06 — Analysis */}
-          <section>
+          <section id="analysis-plan" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>06 · Analysis plan</div>
             <h2 className="font-heading" style={H2}>What gets reported</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1207,7 +1220,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 07 — Limitations */}
-          <section>
+          <section id="limitations" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>07 · Limitations</div>
             <h2 className="font-heading" style={H2}>What this benchmark does not show</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1241,7 +1254,7 @@ export default function MethodologyPage() {
           </section>
 
           {/* 08 — Reporting */}
-          <section>
+          <section id="reporting" style={{ scrollMarginTop: 80 }}>
             <div style={EYEBROW}>08 · Reporting</div>
             <h2 className="font-heading" style={H2}>Where the result will land</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
