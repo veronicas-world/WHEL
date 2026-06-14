@@ -117,16 +117,42 @@ export default async function SignalDetail({
     const k = (cl.studyType ?? "").toLowerCase();
     return k.includes("rct") || k.includes("randomi") || k.includes("systematic") || k.includes("meta") || k.includes("sr");
   });
-  let litForThisPair: string;
+  const namedGuideline = curatedGuideline ?? guidelineClaim;
+  const clipTitle = (s: string) => (s.length > 96 ? s.slice(0, 95).trimEnd() + "…" : s);
+  let litForThisPair: React.ReactNode;
   if (!c.lGrade) {
     litForThisPair = "This pair is not graded yet; no external record is on file for it.";
-  } else if (c.lGrade === "L3" && guidelineClaim) {
+  } else if (c.lGrade === "L3" && namedGuideline) {
     const detail = curatedGuideline?.guidelineStrength
-      ? ` (${curatedGuideline.guidelineStrength}${curatedGuideline.guidelineCertainty ? `, ${curatedGuideline.guidelineCertainty} certainty` : ""})`
+      ? `, recommendation strength ${curatedGuideline.guidelineStrength}${curatedGuideline.guidelineCertainty ? `, ${curatedGuideline.guidelineCertainty} certainty` : ""}`
       : "";
-    litForThisPair = `Graded L3 because a named clinical guideline covers this pair${detail}. The grade-relevant records are tagged by type in the provenance trail below.`;
+    litForThisPair = (
+      <>
+        Graded L3 because this drug is named in a clinical guideline,{" "}
+        {namedGuideline.href ? (
+          <a href={namedGuideline.href} target="_blank" rel="noopener noreferrer" style={LINK}>
+            {clipTitle(namedGuideline.text)} ↗
+          </a>
+        ) : (
+          <span style={{ color: "var(--ink)" }}>{clipTitle(namedGuideline.text)}</span>
+        )}
+        {detail}. The full set of grade-relevant records is tagged by type in the provenance trail below.
+      </>
+    );
   } else if (c.lGrade === "L2" && trialClaim) {
-    litForThisPair = "Graded L2 because a randomized trial or systematic review reports a result for this pair. The records are tagged by type in the provenance trail below.";
+    litForThisPair = (
+      <>
+        Graded L2 because a randomized trial or systematic review reports a result for this pair,{" "}
+        {trialClaim.href ? (
+          <a href={trialClaim.href} target="_blank" rel="noopener noreferrer" style={LINK}>
+            {clipTitle(trialClaim.text)} ↗
+          </a>
+        ) : (
+          <span style={{ color: "var(--ink)" }}>{clipTitle(trialClaim.text)}</span>
+        )}
+        . The records are tagged by type in the provenance trail below.
+      </>
+    );
   } else {
     litForThisPair = `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which are tagged by type in the provenance trail below.`;
   }
@@ -446,7 +472,7 @@ export default async function SignalDetail({
   );
 }
 
-function ReadingBlock({ heading, whatItIs, forThisPair, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: string; learnMore?: React.ReactNode }) {
+function ReadingBlock({ heading, whatItIs, forThisPair, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: React.ReactNode; learnMore?: React.ReactNode }) {
   return (
     <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 18, marginTop: 18 }}>
       <div className="font-heading" style={{ fontSize: 17, color: "var(--ink)", marginBottom: 8 }}>{heading}</div>
