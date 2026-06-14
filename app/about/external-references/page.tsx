@@ -1845,7 +1845,19 @@ export default function ExternalReferencesPage() {
                   on a target that Open Targets associates with the condition;
                   &lsquo;graph silent&rsquo; means no such shared target is
                   present, which can reflect either a real biological gap or a
-                  limit of the source data. The planned stage deepens this: a
+                  limit of the source data. Two of the six conditions show this
+                  plainly: vulvodynia and PMDD return{" "}
+                  <a
+                    href="https://platform.opentargets.org/search?q=vulvodynia"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={LINK}
+                  >
+                    no disease entry in Open Targets at all
+                  </a>
+                  , so every signal under them is graph silent by construction,
+                  an absence the page shows rather than hides. The planned stage
+                  deepens this: a
                   property-graph version built with the BioCypher framework
                   (Lobentanzer et al., Nature Biotechnology 2023), grounded in
                   canonical ontologies, and a feed of the relevant subgraph into

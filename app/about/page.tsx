@@ -42,6 +42,9 @@ const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330"; // LDN endomet
 const GABA = "https://pubmed.ncbi.nlm.nih.gov/15228033/"; // gabapentin off-label settlement
 const LYRICA = "https://www.drugs.com/history/lyrica.html"; // pregabalin / Lyrica
 const LYRICA_REV = "https://www.fiercepharma.com/pharma/lyrica-looking-grim-pfizer-s-blockbuster-faces-crumbling-market-share-after-generic"; // Lyrica peak revenue
+const GTEX = "https://www.science.org/doi/10.1126/science.aaz1776"; // GTEx v8 atlas; ~two-thirds male donors (557/838)
+const OLIVA = "https://www.science.org/doi/10.1126/science.aba3066"; // Oliva et al. 2020, sex effects on gene expression across tissues
+const OT_VULVO = "https://platform.opentargets.org/search?q=vulvodynia"; // Open Targets returns zero disease results for vulvodynia
 
 const CSS = `
 /* ── about page ─────────────────────────────────────────────────────────── */
@@ -686,12 +689,16 @@ export default function AboutPage() {
                   mostly on its mechanism: a drug binding a target, a gene linked to a disease, the part of
                   biology least distorted by who was enrolled in a trial. That layer is not perfectly
                   sex-neutral. The receptor binding is, but the signaling context it sits in is modulated by
-                  hormonal state, which is exactly the gap our cyclical-phase and sex-specific layer is
-                  built to fill. The predictive graphs and models that have already digested the literature
-                  we keep beside the work as a cross-reference, never letting their averaged verdict become
-                  our ground truth. And where the evidence genuinely runs out, we show the gap rather than
-                  fill it, because for these conditions a marked silence is worth more than a confident
-                  number resting on almost nothing.
+                  hormonal state, which is exactly the gap our cyclical-phase and sex-specific layer is built
+                  to fill. Even the molecular reference data tilts male: roughly two-thirds of donors in{" "}
+                  <A href={GTEX}>GTEx</A>, the standard tissue-expression atlas, are men, and{" "}
+                  <A href={OLIVA}>sex shapes gene expression across nearly every tissue</A>. The predictive
+                  graphs and models that have already digested the literature we keep beside the work as a
+                  cross-reference, never letting their averaged verdict become our ground truth. And where the
+                  evidence genuinely runs out, we show the gap rather than fill it: query{" "}
+                  <A href={OT_VULVO}>Open Targets for vulvodynia</A> or PMDD, two of our six conditions, and
+                  it returns nothing at all, a silence we surface rather than smooth over, because for these
+                  conditions a marked gap is worth more than a confident number resting on almost nothing.
                 </p>
               </div>
             </section>
