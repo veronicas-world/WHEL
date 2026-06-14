@@ -358,9 +358,9 @@ export default async function PlatformPage() {
               Several independent readings on every candidate, shown side by side.
             </h2>
             <p style={pBone}>
-              Each candidate carries several independent readings, and we keep them separate rather
-              than blending them into one number, because a reader should be able to see where
-              confidence comes from. <strong>The confidence tier</strong> is our own score: every
+              Each candidate carries several independent readings, recorded separately rather than
+              combined into a single number, so the basis for each reading stays visible.{" "}
+              <strong>The confidence tier</strong> is our own score: every
               signal is graded on five dimensions, including replication, source quality, specificity,
               biological plausibility, and consistency of direction, which sum to a score out of ten
               and place the candidate in one of four tiers from exploratory to strong.

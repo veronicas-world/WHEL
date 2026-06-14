@@ -53,6 +53,18 @@ function Ext({ href, children }: { href: string; children: React.ReactNode }) {
   );
 }
 
+/** An in-site link to a fuller explanation of a reading or source. */
+function LearnMore({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      style={{ display: "inline-block", marginTop: 10, fontSize: 12.5, lineHeight: 1.5, color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}
+    >
+      {children} →
+    </Link>
+  );
+}
+
 /** A source citation, rendered as a link when a URL is on file. */
 function SourceCite({ text, url }: { text: string; url?: string }) {
   const base: React.CSSProperties = { display: "block", fontSize: 12, lineHeight: 1.5, marginTop: 4 };
@@ -173,16 +185,19 @@ export default async function SignalDetail({
               </div>
             ))}
           </div>
+          <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
+            How the score is decided, in depth
+          </LearnMore>
         </div>
       </section>
 
       {/* ── Independent readings ─────────────────────────────────────────── */}
       <section className="surface-paper section tight">
         <div className="container" style={{ maxWidth: "74ch" }}>
-          <SectionLabel>Independent readings, shown beside our grade</SectionLabel>
+          <SectionLabel>Independent readings, reported beside the score</SectionLabel>
           <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", marginBottom: 22 }}>
-            Three outside checks sit next to our own score. We keep them separate rather than blending
-            them into one number, so you can see where confidence comes from.
+            Three outside checks are reported alongside the composite score. Each is recorded separately
+            and is not combined into the score.
           </p>
 
           <ReadingBlock
@@ -194,13 +209,19 @@ export default async function SignalDetail({
                 peer-reviewed literature; L2, a randomized trial or systematic review reports a result;
                 L3, the pair is named in an active clinical guideline from a body such as{" "}
                 <Ext href={ESHRE}>ESHRE</Ext>, <Ext href={ACOG_PMDD}>ACOG</Ext>, or{" "}
-                <Ext href={COCHRANE}>Cochrane</Ext>.
+                <Ext href={COCHRANE}>Cochrane</Ext>. The grade is applied after scoring as an independent
+                benchmark and is not an input to the composite score.
               </>
             }
             forThisPair={
               c.lGrade
-                ? `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which you can check in the provenance trail below.`
+                ? `This pair is graded ${c.lGrade}. The grade rises only as far as the attached sources support, which can be checked in the provenance trail below.`
                 : "This pair is not graded yet; no external record is on file for it."
+            }
+            learnMore={
+              <LearnMore href="/about/technical-architecture#how-evidence-is-scored">
+                Why the literature grade sits outside the score
+              </LearnMore>
             }
           />
 
@@ -210,14 +231,19 @@ export default async function SignalDetail({
               <>
                 <Ext href={EVERYCURE}>Every Cure&rsquo;s</Ext> machine-learned treatment-probability
                 model, drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000
-                diseases. It estimates how plausible a drug-disease link looks given the structure of
-                biomedical knowledge, a model&rsquo;s prior rather than the evidence on the ground.
+                diseases. It provides a model-based estimate of how plausible a drug-disease link is given
+                the structure of biomedical knowledge, reported alongside the direct evidence.
               </>
             }
             forThisPair={
               c.matrixPercentile
-                ? `MATRIX places this pair at ${c.matrixPercentile}. We show that beside our grade rather than folding it in.`
-                : "MATRIX has no score for this pair, so there is nothing to show here."
+                ? `MATRIX places this pair at ${c.matrixPercentile}.`
+                : "MATRIX has no score for this pair."
+            }
+            learnMore={
+              <LearnMore href="/about/external-references#coverage-disclosure">
+                More on the MATRIX cross-reference and its provenance
+              </LearnMore>
             }
           />
 
@@ -226,15 +252,20 @@ export default async function SignalDetail({
             whatItIs={
               <>
                 A check, computed over <Ext href={OPENTARGETS}>Open Targets</Ext>, of whether the drug
-                acts on a target that the graph independently associates with the condition. A silence is
-                not a contradiction; it means the graph has no relevant edge, which for these conditions
-                is often a real gap rather than a verdict.
+                acts on a target that the graph independently associates with the condition. Absence of a
+                connection means the graph has no relevant edge, not evidence against the pair; for these
+                conditions it often reflects limited source coverage.
               </>
             }
             forThisPair={
               c.graphViaTargets && c.graphViaTargets.length
-                ? `The graph supports this link, through ${c.graphViaTargets.join(", ")}.`
-                : "The graph is silent on this pair: no shared target is present. We surface the silence rather than hide it."
+                ? `The graph connects this pair through ${c.graphViaTargets.join(", ")}.`
+                : "No shared target is present, so the graph does not connect this pair."
+            }
+            learnMore={
+              <LearnMore href="/about/external-references#structured-grounding-in-progress">
+                More on the knowledge-graph grounding
+              </LearnMore>
             }
           />
         </div>
@@ -246,12 +277,11 @@ export default async function SignalDetail({
           <div className="container" style={{ maxWidth: "72ch" }}>
             <SectionLabel>Sex-specific pharmacokinetics</SectionLabel>
             <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", marginBottom: 18 }}>
-              How this drug behaves differently in women, the part general databases average away. Each
-              fact is tied to a primary source, an FDA label or the curated sex-PK literature (
+              Documented differences in how this drug is handled in women, drawn from a primary source,
+              an FDA label or the curated sex-PK literature (
               <Ext href={ZUCKER}>Zucker and Prendergast 2020</Ext>;{" "}
-              <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is shown beside the signal, not
-              folded into the grade, because it changes how a result should be read rather than how
-              strong the evidence is.
+              <Ext href={SOLDIN}>Soldin and Mattison 2009</Ext>). It is reported beside the signal and is
+              not part of the composite score; it informs how a result should be interpreted.
             </p>
             {c.sexPk.map((f, i) => (
               <div key={i} style={{ borderLeft: "2px solid var(--brick)", padding: "10px 0 10px 14px", marginBottom: 12, fontSize: 14.5, lineHeight: 1.65, color: "var(--body)" }}>
@@ -261,6 +291,9 @@ export default async function SignalDetail({
                 {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
               </div>
             ))}
+            <LearnMore href="/about/external-references#female-biology">
+              More on the sex-specific pharmacokinetics layer and its sources
+            </LearnMore>
           </div>
         </section>
       )}
@@ -279,10 +312,10 @@ export default async function SignalDetail({
                 effect is averaged across the entire cycle.
               </p>
               <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                <strong style={{ color: "var(--ink)" }}>What holding the phase buys.</strong>{" "}Keeping the
-                phase as structured data lets the platform read a luteal-phase result in its phase rather
-                than flattening it, and it surfaces a real dosing strategy, taking the drug only when it is
-                needed, that a phase-blind database would miss.
+                <strong style={{ color: "var(--ink)" }}>What tracking the phase adds.</strong>{" "}Holding the
+                phase as structured data lets a luteal-phase result be read in its phase rather than
+                averaged across the cycle, and records the dosing pattern, taking the drug only in the
+                luteal phase, that a phase-blind record does not capture.
               </p>
               <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
                 <strong style={{ color: "var(--ink)" }}>What the literature says.</strong>{" "}For PMDD this
@@ -299,6 +332,9 @@ export default async function SignalDetail({
                 {f.source && <SourceCite text={f.source} url={f.sourceUrl} />}
               </div>
             ))}
+            <LearnMore href="/about/external-references#female-biology">
+              More on the cycle-phase layer and its sources
+            </LearnMore>
           </div>
         </section>
       )}
@@ -362,6 +398,10 @@ export default async function SignalDetail({
             <p style={{ fontSize: 13.5, color: "var(--muted)" }}>No itemized sources on file for this signal yet.</p>
           )}
 
+          <LearnMore href="/about/external-references">
+            What these external sources are, and why they carry weight
+          </LearnMore>
+
           <div style={{ borderTop: "1px solid var(--rule)", marginTop: 28, paddingTop: 24 }}>
             <Link href="/access/preview" className="btn btn-ghost sm">
               <span className="arr">←</span> Back to the full index
@@ -373,7 +413,7 @@ export default async function SignalDetail({
   );
 }
 
-function ReadingBlock({ heading, whatItIs, forThisPair }: { heading: string; whatItIs: React.ReactNode; forThisPair: string }) {
+function ReadingBlock({ heading, whatItIs, forThisPair, learnMore }: { heading: string; whatItIs: React.ReactNode; forThisPair: string; learnMore?: React.ReactNode }) {
   return (
     <div style={{ borderTop: "1px solid var(--rule)", paddingTop: 18, marginTop: 18 }}>
       <div className="font-heading" style={{ fontSize: 17, color: "var(--ink)", marginBottom: 8 }}>{heading}</div>
@@ -381,6 +421,7 @@ function ReadingBlock({ heading, whatItIs, forThisPair }: { heading: string; wha
       <p style={{ fontSize: 14.5, lineHeight: 1.65, color: "var(--ink-2)", margin: 0 }}>
         <strong style={{ color: "var(--ink)" }}>For this pair.</strong> {forThisPair}
       </p>
+      {learnMore}
     </div>
   );
 }

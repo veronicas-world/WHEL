@@ -645,13 +645,22 @@ export default function TechnicalArchitecturePage() {
       </section>
 
       {/* ── Figure 2 — Scoring framework ─────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="how-evidence-is-scored" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <FigureHeader
             label="Figure 2 · Scoring framework"
             title="How evidence is scored"
             intro={SCORING_INTRO}
           />
+
+          <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "74ch", marginBottom: 24 }}>
+            The composite score is produced by the five-dimension rubric applied to the extracted
+            evidence. The literature grade (L0 to L3) and the MATRIX cross-reference are independent
+            external benchmarks: they are computed separately and reported beside the score, not used as
+            inputs to it. Keeping them out of the scoring pipeline means an outside benchmark cannot raise
+            or lower the rubric score, and agreement between an independent benchmark and the score
+            remains informative rather than circular.
+          </p>
 
           {/* Model selection callout */}
           <div

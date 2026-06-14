@@ -2899,7 +2899,7 @@ export default function ExternalReferencesPage() {
       </section>
 
       {/* ── 01e · Sex-aware layer ────────────────────────────────────────── */}
-      <section style={{ borderBottom: "1px solid var(--rule)" }}>
+      <section id="female-biology" style={{ borderBottom: "1px solid var(--rule)", scrollMarginTop: 24 }}>
         <div className={SECTION_INNER}>
           <SectionHeader
             label="01e · Female-biology layer"
