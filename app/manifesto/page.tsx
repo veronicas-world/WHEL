@@ -405,6 +405,9 @@ export default function ManifestoPage() {
                 <p>
                   The cost of this is measurable. When doses are set on bodies that are not theirs, women are overmedicated and experience adverse drug reactions <A href={ADR}>nearly twice as often as men</A>. The pattern is not subtle once anyone looks for it: when the Government Accountability Office examined the prescription drugs pulled from the United States market in the years around the turn of the century, it found that <A href={GAO}>eight of the ten</A> posed greater health risks to women than to men. For decades, half the population has taken medicine designed around the other half, and the harm of this has been visible in the data the entire time.
                 </p>
+                <p>
+                  That record is also the only record there is. Every database a tool like this could draw on inherits the same gap, because all of them were built from the same under-studied literature. What separates one tool from another is whether it shows you where the evidence runs out or fills that silence with a confident guess. We built Whel to show it.
+                </p>
               </div>
               <div className="mf-marg mf-rise">
                 <div className="mf-stat">

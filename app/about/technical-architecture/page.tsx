@@ -39,9 +39,9 @@ const LAYERS: { n: string; name: string; status: string; color: string; body: st
   {
     n: "Layer 01",
     name: "The substrate",
-    status: "Foundation live · graph in progress",
+    status: "Foundation live · graph live (Open Targets conditions)",
     color: "var(--green-mid)",
-    body: "The corrected, sex-aware knowledge base. Its grounding is live: every condition resolves to a MONDO disease identifier and every drug to canonical ChEMBL and RxNorm identifiers, so entities are matched by identity rather than by name string. The graph itself, the drug-to-target-to-disease edges drawn from Open Targets, is being built and is not yet live behind the six-condition product.",
+    body: "The corrected, sex-aware knowledge base. Its grounding is live: every condition resolves to a MONDO disease identifier and every drug to canonical ChEMBL and RxNorm identifiers, so entities are matched by identity rather than by name string. The graph itself, the drug-to-target-to-disease edges drawn from Open Targets, is now built over the conditions Open Targets covers and surfaces a graph-supports or graph-silent cross-check beside each signal in the gated view. Where Open Targets has no entry, the graph stays silent, which is shown rather than hidden. The sex-aware extension, cyclical phase and sex-specific pharmacokinetics, is in place as schema and now being seeded.",
   },
   {
     n: "Layer 02",
@@ -494,8 +494,9 @@ export default function TechnicalArchitecturePage() {
           <p style={{ ...MONO, fontSize: "11.5px", lineHeight: 1.6, color: "var(--muted)", marginTop: 18 }}>
             The candidate index and condition pages live today are produced by the scored-signals
             engine described below: the five data pipelines, the five-dimension rubric, and the four
-            confidence tiers. The substrate graph and the validation layer are being built on top of
-            it, condition by condition.
+            confidence tiers. The substrate graph now runs over the Open Targets conditions and
+            surfaces beside each signal; the validation layer and the full sex-aware extension are
+            still being built on top, condition by condition.
           </p>
         </div>
       </section>

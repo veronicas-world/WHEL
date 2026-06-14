@@ -739,6 +739,14 @@ export default async function RoadmapPage() {
               plainly beside Whel&rsquo;s own grade. Where these layers are silent on a women&rsquo;s health
               condition, that silence is itself a finding worth surfacing.
             </p>
+            <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--body)", margin: "14px 0 0" }}>
+              How they are read, once added, is asymmetric by design. Because these models draw on the
+              same literature Whel does, their agreement is weak evidence rather than independent
+              confirmation. The informative case is disagreement: a model confident where Whel&rsquo;s own
+              graph is silent is a flag that the model may be filling a gap, and Whel&rsquo;s graph
+              supporting a pair the models miss is a candidate worth a closer look. Agreement nudges
+              confidence a little; disagreement starts an investigation.
+            </p>
             <Link
               href="/about/external-references"
               style={{

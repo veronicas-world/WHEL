@@ -670,6 +670,29 @@ export default function AboutPage() {
                   shown rather than smoothed away, because the signal and the mechanism are both real and
                   no one else is reading them together.
                 </p>
+                <p>
+                  <strong>The form of the bias.</strong>{" "}There is a deeper version of this, and it is
+                  the question a careful reader eventually asks: if women&rsquo;s health was under-studied
+                  everywhere, is Whel not built on the same biased record as everyone else? It is. No
+                  biomedical source escaped that gap. What differs is the form the bias takes. In raw,
+                  granular sources, a single paper, or a typed drug-to-target relationship that carries its
+                  own provenance, the bias shows up as sparsity: fewer records, missing edges, gaps we can
+                  see, measure, flag, and fill with patient-community signal and our own sex-specific
+                  modeling. In a pre-trained predictive model, the same bias is collapsed into a confidence
+                  score, a hidden gap that emits an answer where there should be an honest silence.
+                </p>
+                <p>
+                  That distinction is why we build where we do. We rely on the raw, traceable layer, and
+                  mostly on its mechanism: a drug binding a target, a gene linked to a disease, the part of
+                  biology least distorted by who was enrolled in a trial. That layer is not perfectly
+                  sex-neutral. The receptor binding is, but the signaling context it sits in is modulated by
+                  hormonal state, which is exactly the gap our cyclical-phase and sex-specific layer is
+                  built to fill. The predictive graphs and models that have already digested the literature
+                  we keep beside the work as a cross-reference, never letting their averaged verdict become
+                  our ground truth. And where the evidence genuinely runs out, we show the gap rather than
+                  fill it, because for these conditions a marked silence is worth more than a confident
+                  number resting on almost nothing.
+                </p>
               </div>
             </section>
 
