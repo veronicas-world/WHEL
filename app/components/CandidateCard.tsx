@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 
 export interface Claim {
@@ -81,19 +78,6 @@ function formatViaTargets(targets: string[]): string {
   return `via ${targets[0]} + ${targets.length - 1} more`;
 }
 
-/** A source citation that becomes a link when a URL is on file. */
-function SourceLine({ text, url }: { text: string; url?: string }) {
-  const style: React.CSSProperties = { display: "block", fontSize: 11.5, marginTop: 3 };
-  if (url) {
-    return (
-      <a href={url} target="_blank" rel="noopener noreferrer" style={{ ...style, color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
-        {text} ↗
-      </a>
-    );
-  }
-  return <span style={{ ...style, color: "var(--muted)" }}>{text}</span>;
-}
-
 function MarkerChip({ dot, label }: { dot: string; label: string }) {
   return (
     <Link
@@ -120,7 +104,7 @@ function MarkerChip({ dot, label }: { dot: string; label: string }) {
 }
 
 function TierBadge({ tier }: { tier: Candidate["tier"] }) {
-  const labels = { strong: "Strong", moderate: "Moderate", emerging: "Emerging", exploratory: "Exploratory" };
+  const labels = { strong: "Strong tier", moderate: "Moderate tier", emerging: "Emerging tier", exploratory: "Exploratory tier" };
   return (
     <span className={`tier-badge ${tier}`}>
       <span className="tdot" />
@@ -130,7 +114,7 @@ function TierBadge({ tier }: { tier: Candidate["tier"] }) {
 }
 
 function RelBadge({ rel }: { rel: Candidate["direction"] }) {
-  const labels = { supports: "Supports", contradicts: "Contradiction", silent: "Evidence silent" };
+  const labels = { supports: "Evidence supports", contradicts: "Contradiction present", silent: "Evidence silent" };
   return <span className={`rel-badge ${rel}`}>{labels[rel]}</span>;
 }
 
@@ -144,15 +128,7 @@ function Readout({ score, max = 10 }: { score: number; max?: number }) {
   );
 }
 
-export default function CandidateCard({
-  c,
-  defaultOpen = false,
-}: {
-  c: Candidate;
-  defaultOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-
+export default function CandidateCard({ c }: { c: Candidate }) {
   return (
     <article className="candidate">
       <div className="c-top">
@@ -184,143 +160,17 @@ export default function CandidateCard({
         <div className="c-meta">
           <Readout score={c.score} />
           <span className="m"><b>Pathway</b> · {c.pathway}</span>
-          <span className="m"><b>Claims</b> · {c.claims.length}</span>
+          <span className="m"><b>Sources</b> · {c.claims.length}</span>
         </div>
       </div>
 
-      {open && (
-        <>
-          <div style={{ padding: "0 var(--card-pad) var(--card-pad)" }}>
-            <div className="eyebrow" style={{ margin: "6px 0 8px" }}>Hypothesized mechanism</div>
-            <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--body)", maxWidth: "72ch", margin: 0 }}>
-              {c.mechanism}
-            </p>
-          </div>
-          <div className="dims">
-            {Object.entries(c.dims).map(([k, v]) => (
-              <div key={k} className="d">
-                <div className="k">{k}</div>
-                <div className="v">{v}</div>
-              </div>
-            ))}
-          </div>
-          {c.sexPk && c.sexPk.length > 0 && (
-            <div style={{ padding: "0 var(--card-pad) var(--card-pad)" }}>
-              <div className="eyebrow" style={{ margin: "6px 0 8px" }}>
-                Sex-specific pharmacokinetics
-              </div>
-              <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)", maxWidth: "72ch", margin: "0 0 10px" }}>
-                Documented sex differences in how this drug behaves in the body, held as
-                first-class data rather than averaged away. Shown beside the signal, not folded
-                into its grade.
-              </p>
-              {c.sexPk.map((f, i) => (
-                <div
-                  key={i}
-                  style={{
-                    borderLeft: "2px solid var(--brick)",
-                    padding: "8px 0 8px 12px",
-                    marginBottom: 8,
-                    fontSize: 13.5,
-                    lineHeight: 1.6,
-                    color: "var(--body)",
-                  }}
-                >
-                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>
-                    {f.parameter}
-                  </span>
-                  {f.direction ? `, ${f.direction} in ${f.sex === "female" ? "women" : "men"}` : ` (${f.sex})`}
-                  {f.magnitude ? `: ${f.magnitude}` : ""}
-                  {f.source && <SourceLine text={f.source} url={f.sourceUrl} />}
-                </div>
-              ))}
-            </div>
-          )}
-          {c.cyclePhase && c.cyclePhase.length > 0 && (
-            <div style={{ padding: "0 var(--card-pad) var(--card-pad)" }}>
-              <div className="eyebrow" style={{ margin: "6px 0 8px" }}>
-                Cycle-phase dependence
-              </div>
-              <p style={{ fontSize: 13, lineHeight: 1.55, color: "var(--muted)", maxWidth: "72ch", margin: "0 0 10px" }}>
-                Documented dependence of this treatment on the menstrual-cycle phase, held as
-                first-class data rather than averaged into a phase-less number. Shown beside the
-                signal, not folded into its grade.
-              </p>
-              {c.cyclePhase.map((f, i) => (
-                <div
-                  key={i}
-                  style={{
-                    borderLeft: "2px solid var(--arm-cross)",
-                    padding: "8px 0 8px 12px",
-                    marginBottom: 8,
-                    fontSize: 13.5,
-                    lineHeight: 1.6,
-                    color: "var(--body)",
-                  }}
-                >
-                  <span style={{ color: "var(--ink)", fontWeight: 500, textTransform: "capitalize" }}>
-                    {f.cyclePhase} phase
-                  </span>
-                  {f.dosingNote ? `: ${f.dosingNote}` : ""}
-                  {f.source && <SourceLine text={f.source} url={f.sourceUrl} />}
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="provenance">
-            <div className="eyebrow" style={{ marginBottom: 4 }}>
-              Per-claim provenance · synthesis marked · contradictions surfaced
-            </div>
-            {c.claims.map((cl, i) => (
-              <div
-                key={i}
-                className={`prov-claim ${cl.type === "synth" ? "synth" : ""} ${cl.type === "contradict" ? "contradict" : ""}`}
-              >
-                <span className="tok">
-                  {cl.type === "synth" ? "S" : cl.type === "contradict" ? "!" : String(i + 1)}
-                </span>
-                <span>
-                  {cl.type === "synth" && <span className="synth-flag">Synthesis</span>}
-                  {cl.type === "contradict" && (
-                    <span className="synth-flag" style={{ color: "var(--brick)", borderColor: "var(--brick)" }}>
-                      Contradiction
-                    </span>
-                  )}
-                  {" "}{cl.text}
-                  {cl.href ? (
-                    <a
-                      className="src"
-                      href={cl.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ textDecoration: "underline", textUnderlineOffset: 2 }}
-                    >
-                      {cl.src} ↗
-                    </a>
-                  ) : (
-                    <span className="src">{cl.src}</span>
-                  )}
-                </span>
-              </div>
-            ))}
-          </div>
-        </>
+      {c.signalId && (
+        <div className="c-foot" style={{ justifyContent: "flex-end" }}>
+          <Link href={`/access/preview/${c.signalId}`} className="btn btn-ghost sm">
+            Full breakdown <span className="arr">→</span>
+          </Link>
+        </div>
       )}
-
-      <div className="c-foot">
-        <span className="id">{c.condition} · indexed signal</span>
-        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-          {c.signalId && (
-            <Link href={`/access/preview/${c.signalId}`} className="btn btn-ghost sm">
-              Full breakdown <span className="arr">→</span>
-            </Link>
-          )}
-          <button className="btn btn-ghost sm" onClick={() => setOpen(!open)}>
-            {open ? "Collapse" : "Open evidence trail"}
-            <span className="arr">{open ? "↑" : "↓"}</span>
-          </button>
-        </div>
-      </div>
     </article>
   );
 }
