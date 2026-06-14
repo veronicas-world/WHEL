@@ -314,6 +314,42 @@ export async function getSampleCandidates(): Promise<Candidate[]> {
   return sample;
 }
 
+const L_WEIGHT: Record<string, number> = { L3: 3, L2: 2, L1: 1, L0: 0 };
+
+/**
+ * Robustness of a candidate: the composite score plus a bonus for each
+ * independent marker present, so the showcase favors candidates with the
+ * deepest, most cross-validated evidence rather than score alone.
+ */
+function robustness(c: Candidate): number {
+  return (
+    c.score +
+    (c.lGrade ? L_WEIGHT[c.lGrade] ?? 0 : 0) +
+    (c.matrixPercentile ? 2 : 0) +
+    (c.graphViaTargets && c.graphViaTargets.length ? 2 : 0) +
+    (c.sexPk && c.sexPk.length ? 1.5 : 0) +
+    (c.cyclePhase && c.cyclePhase.length ? 2 : 0)
+  );
+}
+
+/**
+ * Public showcase: the single most robust candidate per condition (~6), ranked
+ * by {@link robustness} so the one with the most validation and the most
+ * markers wins each condition. Returned strongest-first.
+ */
+export async function getShowcaseCandidates(): Promise<Candidate[]> {
+  const all = await getCandidates();
+  const best = new Map<string, Candidate>();
+  for (const c of all) {
+    const key = c.conditionId ?? c.condition;
+    const cur = best.get(key);
+    if (!cur || robustness(c) > robustness(cur) || (robustness(c) === robustness(cur) && c.score > cur.score)) {
+      best.set(key, c);
+    }
+  }
+  return [...best.values()].sort((a, b) => robustness(b) - robustness(a));
+}
+
 /** The single strongest candidate from the PMDD flagship (falls back to the top overall). */
 export async function getFlagshipCandidate(): Promise<Candidate | null> {
   const all = await getCandidates();

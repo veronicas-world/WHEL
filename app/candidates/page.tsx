@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getCorpusScope } from "@/lib/candidates";
+import CandidateCard from "@/app/components/CandidateCard";
+import { getCorpusScope, getShowcaseCandidates } from "@/lib/candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CandidatesPage() {
-  const scope = await getCorpusScope();
+  const [scope, showcase] = await Promise.all([getCorpusScope(), getShowcaseCandidates()]);
 
   return (
     <main>
@@ -38,6 +39,29 @@ export default async function CandidatesPage() {
           </p>
         </div>
       </section>
+
+      {/* Showcase: the strongest candidate in each condition */}
+      {showcase.length > 0 && (
+        <section className="surface-bone section">
+          <div className="container">
+            <div className="eyebrow" style={{ marginBottom: 12 }}>A sample of the index</div>
+            <h2 className="h2" style={{ maxWidth: "26ch", marginBottom: 16 }}>
+              The strongest candidate in each of the {scope.conditions} conditions.
+            </h2>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--body)", maxWidth: "70ch", marginBottom: 30 }}>
+              One per condition, chosen for the depth of evidence behind it: the composite score, the
+              independent cross-references (literature grade, MATRIX, knowledge graph), and, where they
+              apply, the female-biology layers. Open any card for its evidence trail. The full index of{" "}
+              {scope.signals} candidates is available on request.
+            </p>
+            <div className="col" style={{ gap: 16 }}>
+              {showcase.map((c) => (
+                <CandidateCard key={c.id} c={c} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Gate band */}
       <section className="surface-moss section tight">
