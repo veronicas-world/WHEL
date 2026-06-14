@@ -44,6 +44,8 @@ const LYRICA = "https://www.drugs.com/history/lyrica.html"; // pregabalin / Lyri
 const LYRICA_REV = "https://www.fiercepharma.com/pharma/lyrica-looking-grim-pfizer-s-blockbuster-faces-crumbling-market-share-after-generic"; // Lyrica peak revenue
 const GTEX = "https://www.science.org/doi/10.1126/science.aaz1776"; // GTEx v8 atlas; ~two-thirds male donors (557/838)
 const OLIVA = "https://www.science.org/doi/10.1126/science.aba3066"; // Oliva et al. 2020, sex effects on gene expression across tissues
+const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5"; // Zucker & Prendergast 2020, curated sex-PK dataset (86 drugs)
+const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001"; // Soldin & Mattison 2009, sex differences in PK/PD review
 const OT_VULVO = "https://platform.opentargets.org/search?q=vulvodynia"; // Open Targets returns zero disease results for vulvodynia
 
 const CSS = `
@@ -690,7 +692,10 @@ export default function AboutPage() {
                   biology least distorted by who was enrolled in a trial. That layer is not perfectly
                   sex-neutral. The receptor binding is, but the signaling context it sits in is modulated by
                   hormonal state, which is exactly the gap our cyclical-phase and sex-specific layer is built
-                  to fill. Even the molecular reference data tilts male: roughly two-thirds of donors in{" "}
+                  to fill. Every fact in that layer is grounded in a primary source, an FDA drug label or the
+                  curated sex-PK literature (<A href={ZUCKER}>Zucker and Prendergast 2020</A>;{" "}
+                  <A href={SOLDIN}>Soldin and Mattison 2009</A>), and cross-checked against it rather than
+                  asserted. Even the molecular reference data tilts male: roughly two-thirds of donors in{" "}
                   <A href={GTEX}>GTEx</A>, the standard tissue-expression atlas, are men, and{" "}
                   <A href={OLIVA}>sex shapes gene expression across nearly every tissue</A>. The predictive
                   graphs and models that have already digested the literature we keep beside the work as a
