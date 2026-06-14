@@ -437,7 +437,13 @@ export default async function SignalDetail({
       {/* ── Provenance trail ─────────────────────────────────────────────── */}
       <section className="surface-paper section tight">
         <div className="container" style={{ maxWidth: "76ch" }}>
-          <SectionLabel>Per-claim provenance · synthesis marked · contradictions surfaced</SectionLabel>
+          <SectionLabel>Source evidence · what the pipeline ingested</SectionLabel>
+          <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--body)", maxWidth: "74ch", marginBottom: 18 }}>
+            These are the sources the pipeline ingested to detect and score this signal, the published
+            literature the model actually read, each tagged by study type. Where the model combined
+            findings the claim is marked as a synthesis (S), and where the literature disagrees the
+            contradiction is shown (!) rather than averaged away.
+          </p>
           <div className="col" style={{ gap: 12 }}>
             {c.claims.map((cl, i) => (
               <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", fontSize: 14.5, lineHeight: 1.6, color: "var(--body)" }}>
@@ -485,11 +491,13 @@ export default async function SignalDetail({
           </div>
 
           <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--muted)", maxWidth: "72ch", marginTop: 18 }}>
-            These are the sources behind the signal itself. The references behind the markers above
-            (literature grade, MATRIX, sex-PK, cycle phase) are linked in their own sections.
+            The literature grade above is read off these same ingested sources; the guideline or trial
+            that earns it is one of the records listed here. MATRIX, sex-specific pharmacokinetics, and
+            cycle phase are separate layers the pipeline does not ingest, external cross-references
+            applied after scoring, and they link to their own sources in their sections above.
           </p>
           <LearnMore href="/about/external-references">
-            What these external sources are, and why they carry weight
+            The primary sources and pipelines this evidence is drawn from
           </LearnMore>
 
           <div style={{ borderTop: "1px solid var(--rule)", marginTop: 28, paddingTop: 24 }}>
