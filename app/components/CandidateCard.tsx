@@ -13,6 +13,8 @@ export interface Claim {
 
 export interface Candidate {
   id: string;
+  /** Underlying repurposing_signals id; the stable key for the per-signal detail page. */
+  signalId?: string;
   drug: string;
   condition: string;
   conditionId?: string;
@@ -286,10 +288,17 @@ export default function CandidateCard({
 
       <div className="c-foot">
         <span className="id">{c.condition} · indexed signal</span>
-        <button className="btn btn-ghost sm" onClick={() => setOpen(!open)}>
-          {open ? "Collapse" : "Open evidence trail"}
-          <span className="arr">{open ? "↑" : "↓"}</span>
-        </button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+          {c.signalId && (
+            <Link href={`/access/preview/${c.signalId}`} className="btn btn-ghost sm">
+              Full breakdown <span className="arr">→</span>
+            </Link>
+          )}
+          <button className="btn btn-ghost sm" onClick={() => setOpen(!open)}>
+            {open ? "Collapse" : "Open evidence trail"}
+            <span className="arr">{open ? "↑" : "↓"}</span>
+          </button>
+        </div>
       </div>
     </article>
   );

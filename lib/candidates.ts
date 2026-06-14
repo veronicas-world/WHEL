@@ -131,6 +131,7 @@ function toCandidate(sig: Row, n: number, graph?: GraphSupportMap, sexpk?: SexPk
 
   return {
     id: `WHEL-C-${String(n).padStart(3, "0")}`,
+    signalId: sig.id ? String(sig.id) : undefined,
     drug,
     condition,
     conditionId: cond?.slug ? String(cond.slug) : undefined,
@@ -281,6 +282,16 @@ export async function getCandidates(): Promise<Candidate[]> {
 /** Top N candidates for the homepage / platform feature strip. */
 export async function getFeaturedCandidates(n = 3): Promise<Candidate[]> {
   return (await getCandidates()).slice(0, n);
+}
+
+/**
+ * A single candidate by its underlying signal id, for the per-signal detail
+ * page. Runs the full list so the WHEL-C numbering and every marker map stay
+ * consistent with the index, then finds the match.
+ */
+export async function getCandidateBySignalId(signalId: string): Promise<Candidate | null> {
+  const all = await getCandidates();
+  return all.find((c) => c.signalId === signalId) ?? null;
 }
 
 /**
