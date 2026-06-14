@@ -185,7 +185,8 @@ export default async function SignalDetail({
             <a href={mondoUrl(md.mondo)} target="_blank" rel="noopener noreferrer" style={LINK}>{md.mondo}</a>{" "}(disease)
           </>
         ) : null}
-        .
+        . Validate against the source:{" "}
+        <a href={EVERYCURE} target="_blank" rel="noopener noreferrer" style={LINK}>Every Cure&rsquo;s MATRIX dataset ↗</a>.
       </p>
     ) : null;
 
