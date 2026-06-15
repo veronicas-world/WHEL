@@ -7,6 +7,8 @@ import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
+import CandidateCard from "@/app/components/CandidateCard";
+import { getShowcaseCandidates } from "@/lib/candidates";
 import ScrollEffects from "@/app/components/ScrollEffects";
 
 export const dynamic = "force-dynamic";
@@ -91,6 +93,7 @@ export default async function Home() {
     { data: conditionsRaw },
     { data: signalsRaw },
     { count: sourcesCount },
+    showcase,
   ] = await Promise.all([
     supabase.from("conditions").select("id, name, slug, description").order("name"),
     supabase
@@ -103,6 +106,7 @@ export default async function Home() {
       .from("sources")
       .select("repurposing_signals!inner(status)", { count: "exact", head: true })
       .eq("repurposing_signals.status", "active"),
+    getShowcaseCandidates(),
   ]);
 
   const conditions = conditionsRaw ?? [];
@@ -281,6 +285,32 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── PROOF ── strongest candidates, before the architecture ───────────── */}
+      {showcase.length > 0 && (
+        <section className="surface-bone section scroll-section">
+          <div className="container">
+            <div className="between" style={{ marginBottom: 28 }}>
+              <div>
+                <div className="eyebrow" style={{ marginBottom: 14 }}>The output</div>
+                <h2 className="h2" style={{ maxWidth: "24ch" }}>What the platform has surfaced.</h2>
+              </div>
+              <Link href="/candidates" className="btn btn-ghost">
+                See all candidates <span className="arr">→</span>
+              </Link>
+            </div>
+            <p className="lede" style={{ marginBottom: 32, maxWidth: "62ch" }}>
+              A look at the strongest drug-repurposing candidates so far, each scored, tiered, and
+              traceable to its sources. Open one for the full evidence trail; the full index has the rest.
+            </p>
+            <div className="col" style={{ gap: 16 }}>
+              {showcase.slice(0, 2).map((c) => (
+                <CandidateCard key={c.id} c={c} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── THREE LAYERS ── how it works ─────────────────────────────────────── */}
       <section className="surface-ink section scroll-section">
