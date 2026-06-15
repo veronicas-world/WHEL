@@ -257,7 +257,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Knowledge-graph grounding",
-    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a BioCypher property-graph version, are follow-ons.",
+    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would run on Apache AGE to stay native to Postgres, or on BioCypher and Neo4j as the heavier alternative.",
     status: "Live",
   },
   {
@@ -282,7 +282,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Summary grounding",
-    role: "Checking every summary sentence against its source text and flagging any that drifts beyond what the source supports. The verifier is built; it is waiting on the per-source finding excerpts it reads from being populated, then a first run.",
+    role: "Checking every summary sentence against its source text and flagging any that drifts beyond what the source supports. The verifier is built; it is waiting on the per-source finding excerpts it reads from being populated, then a first run. A biomedical embedding model such as PubMedBERT-NLI is under evaluation to sharpen recall over the current general-purpose embeddings.",
     status: "Planned",
   },
   {
