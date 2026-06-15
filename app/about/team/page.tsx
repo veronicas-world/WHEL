@@ -104,7 +104,7 @@ export default function TeamPage() {
               <p style={BODY}>
                 Veronica is building Whel from Columbia University, where she is a member of the Class
                 of 2028. Her background is in finance and venture capital, with experience at New
-                Enterprise Associates, Dorm Room Fund, and J.P. Morgan.
+                Enterprise Associates (NEA), Dorm Room Fund, and J.P. Morgan.
               </p>
               <p style={BODY}>
                 That lens is where Whel began. Spending time around how capital gets allocated made a
