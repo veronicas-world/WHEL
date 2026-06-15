@@ -133,8 +133,9 @@ export default function TeamPage() {
               </p>
               <p style={BODY}>
                 She is an incoming psychiatry resident (PGY-1) at Harvard South Shore Hospital, with
-                roughly a decade of federally funded clinical research behind her. She holds a DO from
-                the New England College of Osteopathic Medicine and a BA from Harvard.
+                roughly a decade of clinical research funded by the National Institute of Mental Health,
+                PCORI, and HRSA across Boston University, Tufts Medical Center, and Rutgers. She holds a
+                DO from the New England College of Osteopathic Medicine and a BA from Harvard.
               </p>
               <p style={BODY}>
                 Her clinical and research background anchors the conditions Whel covers, the ones where
