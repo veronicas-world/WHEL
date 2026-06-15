@@ -201,11 +201,6 @@ export default async function Home() {
               </div>
             ))}
           </div>
-          <p style={{ marginTop: 28, maxWidth: "74ch", fontSize: 14.5, lineHeight: 1.6, color: "var(--on-ink-2)" }}>
-            The six conditions covered affect hundreds of millions of women, yet have long been left to
-            off-label practice rather than dedicated drug development. Each signal is a drug-condition
-            candidate, carried with its full evidence trail back to primary sources.
-          </p>
         </div>
       </section>
 
