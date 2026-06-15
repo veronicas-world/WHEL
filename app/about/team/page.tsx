@@ -83,11 +83,6 @@ export default function TeamPage() {
           >
             The team.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "60ch" }}>
-            Whel is the work of a founder and a medical advisor: one bringing the computational tools
-            and an investor&rsquo;s read on why these drugs go undeveloped, the other the clinical
-            judgment that holds the evidence to a real standard.
-          </p>
         </div>
       </div>
 
