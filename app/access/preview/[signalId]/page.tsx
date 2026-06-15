@@ -201,7 +201,7 @@ export default async function SignalDetail({
   } else if (hasGraph) {
     graphForThisPair = `The graph connects this pair through ${c.graphViaTargets!.join(", ")}.`;
   } else {
-    graphForThisPair = "No shared target is present, so the graph does not connect this pair.";
+    graphForThisPair = "No shared target is present, so the graph does not connect this pair, which for these conditions more often reflects Open Targets' limited coverage than evidence against the pair.";
   }
   const graphTargets =
     hasGraph && gd && gd.length ? (
@@ -555,10 +555,12 @@ export default async function SignalDetail({
           </ul>
 
           <p className="note" style={{ marginTop: 30 }}>
-            The literature grade above is read off these same ingested sources; the guideline or trial that
-            earns it is one of the records listed here. MATRIX, sex-specific pharmacokinetics, and cycle phase
-            are separate layers the pipeline does not ingest, external cross-references applied after scoring,
-            and they link to their own sources in their sections above.
+            These are the sources the pipeline surfaced and read; they may not be the full published record
+            for a pair, and the score reflects the strength and agreement of the evidence rather than its
+            volume. The literature grade above is read off this same set and set by the strongest source type
+            present, so a single active guideline can carry an L3. MATRIX, sex-specific pharmacokinetics, and
+            cycle phase are separate layers the pipeline does not ingest, external cross-references applied
+            after scoring, and they link to their own sources in their sections above.
           </p>
           <More href="/about/external-references">
             The primary sources and pipelines this evidence is drawn from
