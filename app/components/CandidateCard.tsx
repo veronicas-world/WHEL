@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
 
 export interface Claim {
   type: "extract" | "synth" | "contradict";
@@ -129,6 +130,8 @@ function Readout({ score, max = 10 }: { score: number; max?: number }) {
 }
 
 export default function CandidateCard({ c }: { c: Candidate }) {
+  const armKey = c.signalType ? toArmKey(c.signalType) : null;
+  const armLabel = armKey ? ARM_LABELS[armKey] : null;
   return (
     <article className="candidate">
       <div className="c-top">
@@ -159,6 +162,7 @@ export default function CandidateCard({ c }: { c: Candidate }) {
         <p className="c-rationale">{c.rationale}</p>
         <div className="c-meta">
           <Readout score={c.score} />
+          {armLabel && <span className="m"><b>Arm</b> · {armLabel}</span>}
           <span className="m"><b>Pathway</b> · {c.pathway}</span>
           <span className="m"><b>Sources</b> · {c.claims.length}</span>
         </div>

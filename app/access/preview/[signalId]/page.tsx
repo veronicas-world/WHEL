@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCandidateBySignalId } from "@/lib/candidates";
+import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -118,6 +119,11 @@ export default async function SignalDetail({
   const clipTitle = (s: string) => (s.length > 110 ? s.slice(0, 109).trimEnd() + "…" : s);
   const GRADE_TYPES = ["Clinical guideline", "Randomized trial", "Systematic review / meta-analysis"];
   const gradeRecords = c.claims.filter((cl) => GRADE_TYPES.includes(studyLabel(cl.studyType) ?? ""));
+
+  // The evidence arm (one of four pipelines) this signal was surfaced through.
+  // The arm is a signal-level property; every source on the signal belongs to it.
+  const armKey = c.signalType ? toArmKey(c.signalType) : null;
+  const armLabel = armKey ? ARM_LABELS[armKey] : null;
 
   let litLead: string;
   if (!c.lGrade) {
@@ -284,6 +290,14 @@ export default async function SignalDetail({
               <div className="signal-meta">
                 <span><b>Origin</b> · {c.origin}</span>
                 <span><b>Pathway</b> · {c.pathway}</span>
+                {armLabel && (
+                  <span>
+                    <b>Evidence arm</b> ·{" "}
+                    <Link href="/signal-types" style={{ color: "var(--signal)", textDecoration: "underline", textUnderlineOffset: 3 }}>
+                      {armLabel}
+                    </Link>
+                  </span>
+                )}
                 <span><b style={{ color: relColor }}>{REL_LABELS[c.direction]}</b></span>
               </div>
               <div className="frame-note">
@@ -521,6 +535,14 @@ export default async function SignalDetail({
             the claim is marked as a synthesis (S), and where the literature disagrees the contradiction is
             shown (!).
           </p>
+          {armLabel && (
+            <p className="note" style={{ marginTop: 12 }}>
+              Every source below belongs to this signal&rsquo;s evidence arm,{" "}
+              <Link href="/signal-types" className="ulink">{armLabel}</Link>. Whel reads each
+              drug-condition pair through four such arms, each held to its own inclusion bar; a signal
+              is surfaced through one of them.
+            </p>
+          )}
 
           <ul className="ingest">
             {c.claims.map((cl, i) => {
