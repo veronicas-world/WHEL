@@ -281,6 +281,11 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
     status: "Live",
   },
   {
+    name: "Per-claim synthesis and contradiction marking",
+    role: "Tagging individual claims where the model combined findings (a synthesis) or where the underlying sources disagree (a contradiction), and surfacing those markers beside each signal. The marking is built into the signal view; populating it across the corpus, so the markers appear wherever they apply, is the remaining work.",
+    status: "Planned",
+  },
+  {
     name: "Cross-arm concordance flag",
     role: "Marking where two or more arms support the same drug and condition pair.",
     status: "Planned",

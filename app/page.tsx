@@ -151,6 +151,20 @@ export default async function Home() {
       ? sourcesCount.toLocaleString("en-US")
       : "–";
 
+  // Showcase contrast card: when its independent readings disagree (a MATRIX
+  // cross-reference present while the literature grade is still low), surface
+  // that disagreement explicitly as a teaching "key" under the two cards.
+  const contrastCard = showcase[1];
+  const disagreement =
+    contrastCard && contrastCard.matrixPercentile && (!contrastCard.lGrade || contrastCard.lGrade === "L0" || contrastCard.lGrade === "L1")
+      ? contrastCard
+      : null;
+  const litGloss = !disagreement
+    ? ""
+    : disagreement.lGrade === "L1"
+      ? "L1, where it appears in peer-reviewed literature but no trial or guideline has reported a result yet"
+      : "L0, where no external record names the pair yet";
+
   return (
     <main>
       <ScrollEffects />
@@ -310,6 +324,16 @@ export default async function Home() {
                 <CandidateCard key={c.id} c={c} />
               ))}
             </div>
+            {disagreement && (
+              <p style={{ marginTop: 22, maxWidth: "74ch", fontSize: 14.5, lineHeight: 1.62, color: "var(--body)" }}>
+                <strong style={{ color: "var(--ink)", fontWeight: 600 }}>Where the readings disagree.</strong>{" "}
+                The second pair is a deliberate example. For {disagreement.drug} in {disagreement.condition},
+                Every Cure&rsquo;s MATRIX model places the pair at {disagreement.matrixPercentile}, while its
+                literature grade sits at {litGloss}. Whel reports both side by side rather than averaging
+                them into one number; keeping the layers independent is what lets a disagreement like this
+                stay visible instead of being smoothed over.
+              </p>
+            )}
           </div>
         </section>
       )}
