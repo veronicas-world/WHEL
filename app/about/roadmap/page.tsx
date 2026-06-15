@@ -257,7 +257,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Knowledge-graph grounding",
-    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would run on Apache AGE to stay native to Postgres, or on BioCypher and Neo4j as the heavier alternative.",
+    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would move to BioCypher or Neo4j for richer graph tooling, with Apache AGE as a lighter Postgres-native fallback.",
     status: "Live",
   },
   {
