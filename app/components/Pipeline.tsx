@@ -3,7 +3,7 @@ const STAGES = [
   { k: "Ground",    t: "Ontology grounding",                d: "Entities resolved to MONDO, EFO, RxNorm, ChEMBL." },
   { k: "Validate",  t: "Mechanistic & clinical check",      d: "Per-claim provenance; synthesis marked; contradictions surfaced." },
   { k: "Tier",      t: "Confidence tiering",                d: "Graded from strong to exploratory, never flattened into one weight." },
-  { k: "Candidate", t: "505(b)(2)-eligible candidate",      d: "Which drug, which condition, which regulatory path." },
+  { k: "Candidate", t: "505(b)(2)-eligible candidate",      d: "Which drug, which condition, with its full evidence trail." },
 ];
 
 export default function Pipeline() {
