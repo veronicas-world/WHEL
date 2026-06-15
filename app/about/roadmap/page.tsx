@@ -276,9 +276,14 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
     status: "Planned",
   },
   {
-    name: "Citation validation and summary grounding",
-    role: "Verifying every generated citation against its registry and grounding every summary sentence against its source text.",
+    name: "Citation validation",
+    role: "Verifying every generated citation against its registry, so a fabricated or mis-attributed reference is caught before publication.",
     status: "Live",
+  },
+  {
+    name: "Summary grounding",
+    role: "Checking every summary sentence against its source text and flagging any that drifts beyond what the source supports. The verifier is built; it is waiting on the per-source finding excerpts it reads from being populated, then a first run.",
+    status: "Planned",
   },
   {
     name: "Per-claim synthesis and contradiction marking",
