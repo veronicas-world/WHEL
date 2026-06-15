@@ -252,7 +252,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Ontology-grounded entity resolution",
-    role: "Every extracted drug and condition resolved against canonical registries (ChEMBL, MONDO, EFO), with anything that fails to resolve held for human review. Applied across the corpus; the per-pipeline audit numbers are the remaining piece to surface.",
+    role: "Every extracted drug and condition resolved against canonical registries (ChEMBL, RxNorm, MONDO, EFO), with anything that fails to resolve held for human review. Applied across the corpus; the per-pipeline audit numbers are the remaining piece to surface.",
     status: "Live",
   },
   {

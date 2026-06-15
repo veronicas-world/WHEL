@@ -1,6 +1,6 @@
 const STAGES = [
   { k: "Signal",    t: "Off-label & patient signal",        d: "Prescribing patterns, community reports, under-read literature." },
-  { k: "Ground",    t: "Ontology grounding",                d: "Entities resolved to MONDO, HPO, RxNorm, ChEMBL." },
+  { k: "Ground",    t: "Ontology grounding",                d: "Entities resolved to MONDO, EFO, RxNorm, ChEMBL." },
   { k: "Validate",  t: "Mechanistic & clinical check",      d: "Per-claim provenance; synthesis marked; contradictions surfaced." },
   { k: "Tier",      t: "Confidence tiering",                d: "Graded from strong to exploratory, never flattened into one weight." },
   { k: "Candidate", t: "505(b)(2)-ready trail",             d: "Which drug, which condition, which regulatory path." },

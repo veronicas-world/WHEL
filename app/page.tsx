@@ -50,7 +50,7 @@ const LAYERS = [
     n: "Layer 01", name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "Sex-PK + cycle-phase"],
     sources: "Open Targets, FDA drug labels, the curated sex-PK literature",
-    desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL, with sex-specific pharmacokinetics and cyclical-phase layers already seeded and shown beside the relevant signals, and the fuller female-specific structure no existing ontology covers still being built in.",
+    desc: "A corrected knowledge graph built to hold sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanistic relationships general platforms miss because they were trained on male-default data. Grounded today in MONDO, EFO, RxNorm, and ChEMBL, with sex-specific pharmacokinetics and cyclical-phase layers already seeded and shown beside the relevant signals, and the fuller female-specific structure no existing ontology covers still being built in.",
   },
   {
     n: "Layer 02", name: "Retrieval & validation",

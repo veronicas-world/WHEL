@@ -36,7 +36,7 @@ const A = ({
 const HET = "https://het.io/repurpose/";
 const PRIMEKG = "https://www.nature.com/articles/s41597-023-01960-3";
 const MONDO = "https://mondo.monarchinitiative.org/";
-const HPO = "https://hpo.jax.org/";
+const EFO = "https://www.ebi.ac.uk/efo/";
 const RXNORM = "https://www.nlm.nih.gov/research/umls/rxnorm/index.html";
 const CHEMBL = "https://www.ebi.ac.uk/chembl/";
 const BIAS = "https://pmc.ncbi.nlm.nih.gov/articles/PMC6877896/";
@@ -63,7 +63,7 @@ const LAYERS = [
     n: "Layer 01",
     name: "The substrate",
     tags: ["Postgres-native", "Ontology-grounded", "Sex-specific PK"],
-    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, HPO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets. The sex-specific pharmacokinetics and cycle-phase layers are now seeded for an initial set of compounds, each sourced and shown beside the signal; broader population is ongoing.",
+    desc: "A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms general platforms miss because they were trained on male-default data. Grounded today in MONDO, EFO, RxNorm, and ChEMBL with a live mechanistic graph over Open Targets. The sex-specific pharmacokinetics and cycle-phase layers are now seeded for an initial set of compounds, each sourced and shown beside the signal; broader population is ongoing.",
   },
   {
     n: "Layer 02",
@@ -197,9 +197,9 @@ export default async function PlatformPage() {
             <p style={pBone}>
               What those graphs share is that the meaning of every node is fixed to a standard
               vocabulary, a discipline called ontology grounding. We ground entities in the
-              standard biomedical ontologies: <A href={MONDO}>MONDO</A> for diseases,{" "}
-              <A href={HPO}>HPO</A> for phenotypes, <A href={RXNORM}>RxNorm</A> for drugs, and{" "}
-              <A href={CHEMBL}>ChEMBL</A>{" "}for compound bioactivity. Grounding is what lets the
+              standard biomedical ontologies: <A href={MONDO}>MONDO</A>{" "}and{" "}<A href={EFO}>EFO</A>{" "}
+              for diseases, and{" "}<A href={RXNORM}>RxNorm</A>{" "}and{" "}<A href={CHEMBL}>ChEMBL</A>{" "}for
+              drugs and compound bioactivity. Grounding is what lets the
               platform know that &ldquo;paracetamol&rdquo; and &ldquo;acetaminophen&rdquo;
               are the same drug and that a study of one disease subtype belongs under its parent.
               Without it, the same fact written two ways counts as two facts, or as none.

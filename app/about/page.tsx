@@ -609,7 +609,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   So we are building the corrected version from the ground up, grounded in the same
-                  standard biomedical ontologies the field trusts (MONDO, HPO, RxNorm, ChEMBL) and then
+                  standard biomedical ontologies the field trusts (MONDO, EFO, RxNorm, ChEMBL) and then
                   extended with the female-specific concepts no existing ontology captures adequately:
                   sex-divergent pharmacokinetics, cyclical hormonal state, and the cross-condition
                   mechanisms that only become visible once you stop treating the male body as the default.
