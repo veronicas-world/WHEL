@@ -4,6 +4,25 @@ export const metadata = {
   title: "Team | Whel",
 };
 
+// Page-local layout CSS, shipped inline with the markup so it can never fall
+// out of sync with a separately-cached stylesheet.
+const TM_CSS = `
+.tm-person + .tm-person { margin-top: 60px; }
+.tm-rule { border-top: 1px solid var(--ink); }
+.tm-grid { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 56px; align-items: start; padding-top: 30px; }
+.tm-num { font-family: var(--font-newsreader, Georgia, serif); font-weight: 400; font-size: 70px; line-height: 0.9; letter-spacing: -0.02em; color: var(--green-deep); }
+.tm-eyebrow { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted-2); margin-top: 20px; }
+.tm-name { font-family: var(--font-newsreader, Georgia, serif); font-weight: 500; font-size: clamp(24px, 2.6vw, 30px); line-height: 1.1; letter-spacing: -0.015em; color: var(--ink); margin: 6px 0 0; }
+.tm-bio p { font-family: var(--font-newsreader, Georgia, serif); font-size: 17px; line-height: 1.72; color: var(--body); max-width: 64ch; margin: 0 0 1.15em; }
+.tm-bio p:last-child { margin-bottom: 0; }
+.tm-bio a { color: var(--green-mid); text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 820px) {
+  .tm-grid { grid-template-columns: 1fr; gap: 16px; }
+  .tm-num { font-size: 54px; }
+  .tm-eyebrow { margin-top: 8px; }
+}
+`;
+
 /** The four-ring Whel mark, used as a faint background watermark. */
 function RingMark({ style, opacity = 0.05 }: { style?: React.CSSProperties; opacity?: number }) {
   return (
@@ -21,6 +40,7 @@ function RingMark({ style, opacity = 0.05 }: { style?: React.CSSProperties; opac
 export default function TeamPage() {
   return (
     <main className="flex-1">
+      <style dangerouslySetInnerHTML={{ __html: TM_CSS }} />
 
       {/* ── Header (dark, glyph watermark) ──────────────────────────────────── */}
       <section
