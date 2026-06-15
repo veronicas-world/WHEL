@@ -165,7 +165,7 @@ export default async function Home() {
               <p className="lede" style={{ color: "var(--on-ink-2)" }}>
                 Whel is building a drug-repurposing platform for female biology: one that surfaces
                 approved drugs already working for women&apos;s health conditions, validates them
-                against mechanistic and clinical evidence, and works toward 505(b)(2)-ready candidates.
+                against mechanistic and clinical evidence, and maps each to the 505(b)(2) regulatory pathway.
               </p>
               <div className="row" style={{ marginTop: 32, gap: 12 }}>
                 <Link href="/manifesto" className="btn btn-on-ink">
@@ -347,7 +347,7 @@ export default async function Home() {
         <div className="container">
           <div className="between" style={{ marginBottom: 32 }}>
             <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "20ch" }}>
-              From off-label signal to a 505(b)(2)-ready trail.
+              From off-label signal to a 505(b)(2)-eligible candidate.
             </h2>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "34ch" }}>
               Off-label use is the largest uncontrolled clinical trial in women&apos;s health.

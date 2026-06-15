@@ -8,7 +8,7 @@ export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Candidates",
-  description: "A sample of Whel's drug-repurposing candidates, scored, tiered, and 505(b)(2)-ready. The full index is available on request.",
+  description: "A sample of Whel's drug-repurposing candidates, scored, tiered, and mapped to the 505(b)(2) pathway. The full index is available on request.",
 };
 
 export default async function CandidatesPage() {
