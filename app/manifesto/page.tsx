@@ -586,7 +586,7 @@ export default function ManifestoPage() {
                       <div className="mf-ln">Layer<b>01</b></div>
                       <div>
                         <h3>The substrate.</h3>
-                        <p>A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms that general platforms miss because they were trained on male-default data, grounded in the standard biomedical ontologies, including MONDO, HPO, RxNorm, and ChEMBL, and extended with female-specific concepts that no existing ontology covers adequately.</p>
+                        <p>A corrected knowledge graph built to capture sex-specific pharmacokinetics, cyclical hormonal state, and the cross-condition mechanisms that general platforms miss because they were trained on male-default data, grounded in the standard biomedical ontologies, including MONDO, HPO, RxNorm, and ChEMBL, and extended with female-specific concepts that no existing ontology covers adequately, beginning with the sex-specific pharmacokinetics and cycle-phase layers now seeded and shown beside the relevant signals.</p>
                       </div>
                     </div>
                     <div className="mf-layer">
@@ -600,7 +600,7 @@ export default function ManifestoPage() {
                       <div className="mf-ln">Layer<b>03</b></div>
                       <div>
                         <h3>Hypothesis from signal.</h3>
-                        <p>Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured patient reports, which enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, never equated with the results of a controlled trial and never discarded, because it is the input that surfaces the hypotheses worth checking.</p>
+                        <p>Patient-community signal, including off-label prescribing patterns, community reports, and structured patient reports, which enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, never equated with the results of a controlled trial and never discarded, because it is the input that surfaces the hypotheses worth checking; formal advocacy-organization partnerships are planned.</p>
                       </div>
                     </div>
                   </div>

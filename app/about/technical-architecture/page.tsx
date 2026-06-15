@@ -509,8 +509,8 @@ export default function TechnicalArchitecturePage() {
             The candidate index and condition pages live today are produced by the scored-signals
             engine described below: the five data pipelines, the five-dimension rubric, and the four
             confidence tiers. The substrate graph now runs over the Open Targets conditions and
-            surfaces beside each signal; the validation layer and the full sex-aware extension are
-            still being built on top, condition by condition.
+            surfaces beside each signal; the retrieval-and-validation layer and the full sex-aware
+            extension are still being built out across every condition.
           </p>
         </div>
       </section>

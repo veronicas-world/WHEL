@@ -74,8 +74,8 @@ const LAYERS = [
   {
     n: "Layer 03",
     name: "Hypothesis from signal",
-    tags: ["Off-label patterns", "Advocacy registries", "Validated downstream"],
-    desc: "Patient-community signal, including off-label prescribing patterns, advocacy-organization registries, and structured reports, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, never equated with the result of a controlled trial.",
+    tags: ["Off-label patterns", "Community reports", "Validated downstream"],
+    desc: "Patient-community signal, including off-label prescribing patterns, community reports, and structured patient-reported data, enters as hypothesis generation and is validated downstream against mechanistic and clinical evidence, never equated with the result of a controlled trial. Formal advocacy-organization partnerships are planned.",
   },
 ];
 
@@ -148,6 +148,30 @@ export default async function PlatformPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Independent validation layer — sits beside each signal, separate
+              from the three build layers and from the score itself. */}
+          <div className="layer" style={{ marginTop: 24, border: "1px solid var(--ink-line-2)" }}>
+            <div>
+              <div className="lnum" style={{ color: "var(--signal)" }}>Beside every signal</div>
+              <div className="lname">Independent validation</div>
+            </div>
+            <div>
+              <p className="ldesc">
+                The three layers above build a signal and score it. Each finished signal then carries an
+                independent validation layer, shown beside the score rather than folded into it: a
+                literature grade traced to guideline bodies such as ESHRE, ACOG, and Cochrane, Every
+                Cure&rsquo;s MATRIX treatment-probability model, and an Open Targets knowledge-graph check.
+                It is kept separate from Layer 02&rsquo;s internal validation and is not one of the three
+                build layers. The full set of readings is detailed below.
+              </p>
+              <div className="ltags">
+                <span className="pill on-ink">Literature grade</span>
+                <span className="pill on-ink">MATRIX cross-reference</span>
+                <span className="pill on-ink">Knowledge-graph check</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -293,7 +317,7 @@ export default async function PlatformPage() {
             <p style={pInk}>
               We treat that signal the way the field treats{" "}
               <A href={RWE} ink>real-world evidence</A> generally, as hypothesis-generating
-              rather than confirmatory. Off-label patterns, advocacy-organization registries,
+              rather than confirmatory. Off-label patterns, community reports,
               and structured patient reports can tell you where to look; they cannot, on their
               own, tell you that a drug works, because observational signal carries confounding,
               selection effects, and placebo response that only a controlled comparison can
