@@ -1134,7 +1134,7 @@ export default function ExternalReferencesPage() {
           <SectionHeader
             label="03 · Output validation in progress"
             title="A three-part pipeline for LLM output validation"
-            intro="Whel's structured grounding layers (Path A and Path B, documented in section 01c above) constrain what data the LLM works with. A separate set of failure modes apply to what the LLM produces as output: per-source extraction misclassification, summary drift beyond the source, and fabricated or mis-attributed citations in long-form prose. Path C is a three-part pipeline that validates the LLM's outputs against external authoritative sources before publication. Recorded in methodology v3.6. Not shipped yet. This section sets out what each phase will do and what its disclosure will look like when populated. The block is collapsed by default; expand for the full plan."
+            intro="Whel's structured grounding layers (Path A and Path B, documented in section 01c above) constrain what data the LLM works with. A separate set of failure modes apply to what the LLM produces as output: per-source extraction misclassification, summary drift beyond the source, and fabricated or mis-attributed citations in long-form prose. Path C is a three-part pipeline that validates the LLM's outputs against external authoritative sources before publication. Recorded in methodology v3.6. Phase 1, citation validation, is live; phases 2 and 3 are planned. This section sets out what each phase does, or will do, and what its disclosure looks like. The block is collapsed by default; expand for the full plan."
           />
 
           {/* Path C: Citation validation, summary grounding, prompt hardening */}

@@ -158,7 +158,7 @@ export default function ContactPage() {
             <h2 className="font-heading" style={H2}>If you work in this field</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Whel is meant to be useful to researchers, clinicians, and patients, and
+                Whel is meant to be useful to researchers and clinicians, and
                 it improves fastest with input from people who know these conditions
                 well. If you spot an error, a missing study, or a signal that has been
                 miscategorized, please tell us; accuracy matters more to this project

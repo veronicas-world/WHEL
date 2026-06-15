@@ -578,6 +578,16 @@ export default async function RoadmapPage() {
             ))}
           </div>
 
+          <p style={{ fontSize: 15, lineHeight: 1.72, color: "var(--body)", maxWidth: "72ch", marginTop: 30 }}>
+            A thread runs through all three criteria: these six conditions are rarely fatal but routinely
+            life-debilitating, lived with and managed over years rather than cured. That is exactly the
+            kind of problem the cure-focused blockbuster model overlooks, and where repurposing the drugs
+            that already help matters most.{" "}
+            <Link href="/about#management" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 2 }}>
+              More on building for management →
+            </Link>
+          </p>
+
           {/* The six conditions, mapped */}
           <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginTop: 44, marginBottom: 4 }}>
             The six conditions, mapped
