@@ -8,7 +8,7 @@ import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getShowcaseCandidates } from "@/lib/candidates";
+import { getShowcasePair } from "@/lib/candidates";
 import ScrollEffects from "@/app/components/ScrollEffects";
 
 export const dynamic = "force-dynamic";
@@ -106,7 +106,7 @@ export default async function Home() {
       .from("sources")
       .select("repurposing_signals!inner(status)", { count: "exact", head: true })
       .eq("repurposing_signals.status", "active"),
-    getShowcaseCandidates(),
+    getShowcasePair(),
   ]);
 
   const conditions = conditionsRaw ?? [];
@@ -299,12 +299,14 @@ export default async function Home() {
                 See all candidates <span className="arr">→</span>
               </Link>
             </div>
-            <p className="lede" style={{ marginBottom: 32, maxWidth: "62ch" }}>
-              A look at the strongest drug-repurposing candidates so far, each scored, tiered, and
-              traceable to its sources. Open one for the full evidence trail; the full index has the rest.
+            <p className="lede" style={{ marginBottom: 32, maxWidth: "64ch" }}>
+              Two candidates, chosen to show the range the score captures: one of the strongest signals
+              on the platform, and one rated lower, where the evidence is thinner or the independent
+              readings disagree. The score separates them. Open either for the full evidence trail; the
+              full index has the rest.
             </p>
             <div className="col" style={{ gap: 16 }}>
-              {showcase.slice(0, 2).map((c) => (
+              {showcase.map((c) => (
                 <CandidateCard key={c.id} c={c} />
               ))}
             </div>

@@ -453,6 +453,40 @@ export async function getShowcaseCandidates(): Promise<Candidate[]> {
   return [...best.values()].sort((a, b) => robustness(b) - robustness(a));
 }
 
+/**
+ * Homepage hero pair: the single strongest signal, plus a deliberately
+ * contrasting one, so the homepage shows the score's RANGE rather than two
+ * perfect scores. The contrast is a different condition and a lower tier;
+ * we prefer a moderate-tier pair where the independent layers disagree (a
+ * MATRIX cross-reference present while the literature grade is still low),
+ * which puts the multi-layer independence on display. Falls back through
+ * moderate, then emerging, then the second-strongest.
+ */
+export async function getShowcasePair(): Promise<Candidate[]> {
+  const all = await getCandidates(); // sorted by score desc
+  const best = new Map<string, Candidate>();
+  for (const c of all) {
+    const key = c.conditionId ?? c.condition;
+    const cur = best.get(key);
+    if (!cur || robustness(c) > robustness(cur) || (robustness(c) === robustness(cur) && c.score > cur.score)) {
+      best.set(key, c);
+    }
+  }
+  const ranked = [...best.values()].sort((a, b) => robustness(b) - robustness(a));
+  const lead = ranked[0];
+  if (!lead) return [];
+
+  const diff = (c: Candidate) => c.conditionId !== lead.conditionId && c.condition !== lead.condition;
+  const lowGrade = (c: Candidate) => !c.lGrade || c.lGrade === "L0" || c.lGrade === "L1";
+  const contrast =
+    all.find((c) => diff(c) && c.tier === "moderate" && !!c.matrixPercentile && lowGrade(c)) ??
+    all.find((c) => diff(c) && c.tier === "moderate") ??
+    all.find((c) => diff(c) && c.tier === "emerging") ??
+    ranked[1];
+
+  return contrast ? [lead, contrast] : [lead];
+}
+
 /** The single strongest candidate from the PMDD flagship (falls back to the top overall). */
 export async function getFlagshipCandidate(): Promise<Candidate | null> {
   const all = await getCandidates();
