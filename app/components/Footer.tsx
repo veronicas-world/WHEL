@@ -31,6 +31,7 @@ const HOWITWORKS_LINKS = [
 
 const COMPANY_LINKS = [
   { label: "About",          href: "/about" },
+  { label: "Team",           href: "/about/team" },
   { label: "Roadmap",        href: "/about/roadmap" },
   { label: "Contact",        href: "/about/contact" },
   { label: "Request access", href: "/access" },
