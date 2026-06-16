@@ -88,3 +88,4 @@ guideline-pdfs/
 
 # Substrate pipeline local working store (SQLite scratch; not the production DB)
 scripts/substrate/.work/
+apply-substrate/
