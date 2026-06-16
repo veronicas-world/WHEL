@@ -279,9 +279,48 @@ function ArmStrengths({ arms }: { arms: NonNullable<Candidate["arms"]> }) {
   );
 }
 
+/**
+ * The model's per-dimension logic for one arm: each of the five categories with
+ * its 0–2 score and the rationale the scorer wrote for it.
+ */
+function ArmDimensions({ arm }: { arm: NonNullable<Candidate["arms"]>[number] }) {
+  const meta = ARM_META[arm.arm];
+  return (
+    <div style={{ marginTop: 12, borderTop: "1px solid var(--rule)", paddingTop: 10 }}>
+      <div style={{
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10.5,
+        letterSpacing: "0.06em", textTransform: "uppercase", color: meta.color, marginBottom: 8,
+      }}>
+        Scoring logic · {meta.label} arm
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+        {arm.dimensions.map((d) => (
+          <div key={d.key}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+              <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink)" }}>{d.label}</span>
+              <span style={{
+                fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 11,
+                color: meta.color, flexShrink: 0,
+              }}>
+                {d.score}/2
+              </span>
+            </div>
+            {d.rationale && (
+              <p style={{ margin: "2px 0 0", fontSize: 12, lineHeight: 1.45, color: "var(--ink)", opacity: 0.74 }}>
+                {d.rationale}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function CandidateCard({ c }: { c: Candidate }) {
   // Substrate cards carry per-arm data + the female lens; legacy cards fall back.
   const isSubstrate = !!c.arms && c.arms.length > 0;
+  const anchorArm = c.arms?.find((a) => a.isAnchor) ?? c.arms?.[0];
   const armKey = c.signalType ? toArmKey(c.signalType) : null;
   const armLabel = armKey ? ARM_LABELS[armKey] : null;
   return (
@@ -326,6 +365,7 @@ export default function CandidateCard({ c }: { c: Candidate }) {
                 <span className="m" style={{ color: "var(--brick)" }}><b>⚠ Contradiction</b></span>
               )}
             </div>
+            {anchorArm && <ArmDimensions arm={anchorArm} />}
           </>
         ) : (
           <div className="c-meta">
