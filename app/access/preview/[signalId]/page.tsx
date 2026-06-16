@@ -27,6 +27,13 @@ const REL_LABELS: Record<string, string> = {
   silent: "Evidence silent",
 };
 
+const ARM3: Record<string, string> = {
+  direct: "Direct research",
+  pathway: "Pathway",
+  community: "Community",
+};
+const MONO = "var(--font-plex-mono, ui-monospace, monospace)";
+
 // Canonical sources for the explainers (the justifications), hyperlinked inline.
 const EVERYCURE = "https://huggingface.co/datasets/everycure/matrix-scores";
 const OPENTARGETS = "https://platform.opentargets.org/";
@@ -358,17 +365,52 @@ export default async function SignalDetail({
             the mechanism it proposed is in the section above.
           </p>
 
-          <div className="rubric">
-            {(c.dimBreakdown ?? []).map((d) => (
-              <div className="r" key={d.key}>
-                <div>
-                  <p className="rk">{d.label}</p>
-                  <p className="rd">{DIM_WHAT[d.key]}</p>
+          {c.arms && c.arms.length ? (
+            <div className="armbreak">
+              {c.arms.map((arm) => (
+                <div key={arm.arm} style={{ marginBottom: 30 }}>
+                  <div style={{
+                    display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12,
+                    borderBottom: "1px solid var(--rule)", paddingBottom: 9, marginBottom: 12,
+                  }}>
+                    <span style={{ fontWeight: 700, fontSize: 16, color: "var(--ink)" }}>
+                      {ARM3[arm.arm] ?? arm.arm} arm{arm.isAnchor ? " — anchors the headline" : ""}
+                    </span>
+                    <span style={{ fontFamily: MONO, fontSize: 13, color: "var(--ink)", flexShrink: 0 }}>
+                      {arm.armScore.toFixed(1)} / 10 · {TIER_LABELS[arm.tier]}
+                    </span>
+                  </div>
+                  <p className="note" style={{ marginBottom: 14 }}>
+                    <strong>Scored for women.</strong> {arm.female.rationale}
+                    {arm.female.band ? ` (band ${arm.female.band}, ×${arm.female.multiplier.toFixed(2)})` : ""}.
+                  </p>
+                  <div className="rubric">
+                    {arm.dimensions.map((d) => (
+                      <div className="r" key={d.key}>
+                        <div>
+                          <p className="rk">{d.label}</p>
+                          <p className="rd">{d.rationale || "No rationale recorded for this dimension."}</p>
+                        </div>
+                        <span className="rv"><Pips n={d.score} />{d.score} / 2</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <span className="rv"><Pips n={d.score} />{d.score} / 2 · {d.level}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rubric">
+              {(c.dimBreakdown ?? []).map((d) => (
+                <div className="r" key={d.key}>
+                  <div>
+                    <p className="rk">{d.label}</p>
+                    <p className="rd">{DIM_WHAT[d.key]}</p>
+                  </div>
+                  <span className="rv"><Pips n={d.score} />{d.score} / 2 · {d.level}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           <More href="/about/technical-architecture#how-evidence-is-scored">
             How the scoring rubric works, in general

@@ -214,6 +214,12 @@ function ValidationStamp({ status }: { status: NonNullable<Candidate["validation
 function FemaleLens({ fa }: { fa: NonNullable<Candidate["femaleApplicability"]> }) {
   const full = fa.multiplier >= 1.0;
   const accent = full ? "var(--arm-direct)" : "var(--brick)";
+  const band = FEMALE_BAND_TEXT[fa.band] ?? "Applicability uncertain";
+  // Drop the rationale's leading phrase when it just restates the band headline.
+  let detail = (fa.rationale ?? "").trim();
+  if (detail.toLowerCase().startsWith(band.toLowerCase())) {
+    detail = detail.slice(band.length).replace(/^[\s.,:—–-]+/, "");
+  }
   return (
     <div style={{
       display: "flex", alignItems: "stretch", gap: 12, margin: "12px 0",
@@ -228,8 +234,8 @@ function FemaleLens({ fa }: { fa: NonNullable<Candidate["femaleApplicability"]> 
           Scored for women
         </div>
         <div style={{ fontSize: 14, color: "var(--ink)", marginTop: 3, lineHeight: 1.35 }}>
-          <b>{FEMALE_BAND_TEXT[fa.band] ?? "Applicability uncertain"}</b>
-          {fa.rationale ? <span style={{ opacity: 0.78 }}> — {fa.rationale}</span> : null}
+          <b>{band}</b>
+          {detail ? <span style={{ opacity: 0.78 }}> — {detail}</span> : null}
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "center", flexShrink: 0 }}>
@@ -253,6 +259,14 @@ function ArmStrengths({ arms }: { arms: NonNullable<Candidate["arms"]> }) {
   const sorted = [...arms].sort((a, b) => order.indexOf(a.arm) - order.indexOf(b.arm));
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6, margin: "10px 0 2px" }}>
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "baseline",
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10,
+        letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink)", opacity: 0.55, marginBottom: 1,
+      }}>
+        <span>Signal type</span>
+        <span>◂ anchors the headline</span>
+      </div>
       {sorted.map((a) => {
         const meta = ARM_META[a.arm];
         return (
@@ -280,36 +294,28 @@ function ArmStrengths({ arms }: { arms: NonNullable<Candidate["arms"]> }) {
 }
 
 /**
- * The model's per-dimension logic for one arm: each of the five categories with
- * its 0–2 score and the rationale the scorer wrote for it.
+ * Compact per-dimension SCORES for the anchor arm (the five categories, 0–2 each).
+ * The model's written rationale for each lives in the full breakdown, not the card.
  */
 function ArmDimensions({ arm }: { arm: NonNullable<Candidate["arms"]>[number] }) {
   const meta = ARM_META[arm.arm];
   return (
-    <div style={{ marginTop: 12, borderTop: "1px solid var(--rule)", paddingTop: 10 }}>
+    <div style={{ marginTop: 11, borderTop: "1px solid var(--rule)", paddingTop: 9 }}>
       <div style={{
-        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10.5,
-        letterSpacing: "0.06em", textTransform: "uppercase", color: meta.color, marginBottom: 8,
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10,
+        letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink)", opacity: 0.55, marginBottom: 6,
       }}>
-        Scoring logic · {meta.label} arm
+        Score by metric · {meta.label} arm
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", columnGap: 18, rowGap: 4 }}>
         {arm.dimensions.map((d) => (
-          <div key={d.key}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
-              <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--ink)" }}>{d.label}</span>
-              <span style={{
-                fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 11,
-                color: meta.color, flexShrink: 0,
-              }}>
-                {d.score}/2
-              </span>
-            </div>
-            {d.rationale && (
-              <p style={{ margin: "2px 0 0", fontSize: 12, lineHeight: 1.45, color: "var(--ink)", opacity: 0.74 }}>
-                {d.rationale}
-              </p>
-            )}
+          <div key={d.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
+            <span style={{ fontSize: 12, color: "var(--ink)", opacity: 0.82 }}>{d.label}</span>
+            <span style={{
+              fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 11, color: meta.color, flexShrink: 0,
+            }}>
+              {d.score}/2
+            </span>
           </div>
         ))}
       </div>
