@@ -213,8 +213,9 @@ patient-reported contradiction is presented as heterogeneity of experience
 | **Emerging** | 3.5 – 5.9 |
 | **Exploratory** | < 3.5 |
 
-A starting point; recalibrated **once** against the real distribution and hand-judged
-anchor pairs after the first scoring pass, before cutover (§7).
+**FROZEN (2026-06-16)** against the real 228-signal distribution and hand-judged anchor
+pairs — see `CALIBRATION_RECORD.md`. The scores fall on a lattice and all three cutoffs
+land in natural empty gaps, so they were confirmed unchanged. Not re-tuned per run.
 
 ---
 
@@ -300,8 +301,15 @@ mis-attached claims, all of which the scorer itself had flagged in its rationale
 
 ## 9. Calibration & validation (a planned gate, runs after the first scoring pass, before cutover)
 
-The numeric thresholds in this spec are **deliberately provisional**. They are set on
-reason, not yet on data, and several can only be settled once real scores exist. This
+**STATUS: RUN AND REVIEWED 2026-06-16 — see `CALIBRATION_RECORD.md`.** Tier cutoffs
+frozen at 8.0 / 6.0 / 3.5 (confirmed against the real distribution, unchanged). Female
+multiplier kept (×1.0 / ×0.75); the corpus exercises only F1 and F4, collapsing the axis
+to two levels, so the F5/F6 + Janusmed/FAERS external validation (§10b) is deferred until
+cross-condition repurposing introduces male-derived drugs. Other dials (§10c)
+spot-checked. The text below is retained as the original commitment.
+
+The numeric thresholds in this spec were **deliberately provisional**. They were set on
+reason, not yet on data, and several could only be settled once real scores existed. This
 section is the recorded commitment to settle them; the feature flag does not flip until it
 has run and been reviewed (§8.3).
 
