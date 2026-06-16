@@ -332,3 +332,49 @@ export async function getCorpusScope(): Promise<{ signals: number; conditions: n
   const conds = new Set(all.map((c) => c.conditionId ?? c.condition));
   return { signals: all.length, conditions: conds.size };
 }
+
+export interface HomeConditionStat {
+  strong: number; moderate: number; emerging: number; exploratory: number; total: number;
+}
+
+/**
+ * Homepage statistics, all from the substrate: the pair count, per-condition
+ * confidence-tier distribution (by each pair's headline tier), and the provenance
+ * volume (distinct verbatim claims and source documents behind the active signals).
+ */
+export async function getSubstrateHomeData(): Promise<{
+  totalPairs: number;
+  byCondition: Map<string, HomeConditionStat>;
+  claims: number;
+  documents: number;
+}> {
+  const all = await getCandidates();
+  const byCondition = new Map<string, HomeConditionStat>();
+  for (const c of all) {
+    const slug = c.conditionId ?? c.condition.toLowerCase();
+    let s = byCondition.get(slug);
+    if (!s) { s = { strong: 0, moderate: 0, emerging: 0, exploratory: 0, total: 0 }; byCondition.set(slug, s); }
+    s[c.tier] += 1;
+    s.total += 1;
+  }
+  // Provenance volume: distinct verbatim claims and source documents that actually
+  // back the active signals (claim_ids on the signals → claims → documents).
+  const [sigRes, claimRes] = await Promise.all([
+    supabase.from("substrate_signals").select("claim_ids").eq("status", "active"),
+    supabase.from("claims").select("id, document_id"),
+  ]);
+  const referenced = new Set<string>();
+  for (const s of (sigRes.data ?? []) as unknown as Row[]) {
+    const ids = Array.isArray(s.claim_ids) ? (s.claim_ids as unknown[]).map(String) : [];
+    ids.forEach((id) => referenced.add(id));
+  }
+  const docs = new Set<string>();
+  let claims = 0;
+  for (const cl of (claimRes.data ?? []) as Row[]) {
+    if (referenced.has(String(cl.id))) {
+      claims += 1;
+      if (cl.document_id) docs.add(String(cl.document_id));
+    }
+  }
+  return { totalPairs: all.length, byCondition, claims, documents: docs.size };
+}

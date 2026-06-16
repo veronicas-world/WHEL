@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
-import type { TierKey } from "@/app/components/TierHeatmap";
 import KnowledgeGraph3D from "@/app/components/KnowledgeGraph3D";
 import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getShowcasePair } from "@/lib/substrate-candidates";
+import { getShowcasePair, getSubstrateHomeData } from "@/lib/substrate-candidates";
 import ScrollEffects from "@/app/components/ScrollEffects";
 
 export const dynamic = "force-dynamic";
@@ -88,43 +86,24 @@ const EXPANSION = [
 ];
 
 export default async function Home() {
-  // ── Real Supabase data ──────────────────────────────────────────────────────
-  const [
-    { data: conditionsRaw },
-    { data: signalsRaw },
-    { count: sourcesCount },
-    showcase,
-  ] = await Promise.all([
+  // ── Real data — now from the substrate (the new arm-aware engine) ────────────
+  const [{ data: conditionsRaw }, home, showcase] = await Promise.all([
     supabase.from("conditions").select("id, name, slug, description").order("name"),
-    supabase
-      .from("repurposing_signals")
-      .select("condition_id, confidence_tier, total_evidence_score, created_at, signal_type")
-      .eq("status", "active")
-      .not("total_evidence_score", "is", null)
-      .gt("total_evidence_score", 0),
-    supabase
-      .from("sources")
-      .select("repurposing_signals!inner(status)", { count: "exact", head: true })
-      .eq("repurposing_signals.status", "active"),
+    getSubstrateHomeData(),
     getShowcasePair(),
   ]);
 
   const conditions = conditionsRaw ?? [];
-  const signals    = signalsRaw   ?? [];
 
-  const totalSignals    = signals.length;
+  // Pair count (one drug–condition signal per pair, headline-anchored).
+  const totalSignals    = home.totalPairs;
   const totalConditions = conditions.length;
 
-  // Per-condition tier counts for the matrix
+  // Per-condition headline-tier counts for the matrix, from the substrate.
+  const EMPTY = { strong: 0, moderate: 0, emerging: 0, exploratory: 0, total: 0 };
   const conditionsWithStats = conditions.map((c) => {
-    const cSigs = signals.filter((s) => s.condition_id === c.id);
-    const tierCounts: Record<TierKey, number> = { strong: 0, moderate: 0, emerging: 0, exploratory: 0 };
-    for (const s of cSigs) {
-      const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
-      if (t in tierCounts) tierCounts[t]++;
-      else tierCounts.exploratory++;
-    }
-    return { ...c, totalSignals: cSigs.length, tierCounts };
+    const st = home.byCondition.get(c.slug) ?? EMPTY;
+    return { ...c, totalSignals: st.total, tierCounts: st };
   });
 
   const matrixRows: MatrixRow[] = conditionsWithStats.map((c) => ({
@@ -139,17 +118,8 @@ export default async function Home() {
     total:       c.totalSignals,
   }));
 
-  // Arm counts for display
-  const armCounts: Partial<Record<ArmKey, number>> = {};
-  for (const s of signals) {
-    const key = toArmKey((s as { signal_type?: string | null }).signal_type);
-    if (key) armCounts[key] = (armCounts[key] ?? 0) + 1;
-  }
-
-  const citationsLabel =
-    typeof sourcesCount === "number" && sourcesCount > 0
-      ? sourcesCount.toLocaleString("en-US")
-      : "–";
+  // Provenance volume: distinct verbatim claims behind the active signals.
+  const citationsLabel = home.claims > 0 ? home.claims.toLocaleString("en-US") : "–";
 
   // Showcase contrast card: when its independent readings disagree (a MATRIX
   // cross-reference present while the literature grade is still low), surface
@@ -210,7 +180,7 @@ export default async function Home() {
             </div>
             <div className="s">
               <div className="v">{citationsLabel}</div>
-              <div className="l">source citations across active signals</div>
+              <div className="l">verbatim claims, each pinned to a source quote</div>
             </div>
             {FACTS.slice(0, 2).map((f) => (
               <div className="s" key={f.n}>
