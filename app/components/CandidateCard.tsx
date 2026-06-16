@@ -63,6 +63,45 @@ export interface Candidate {
    * a "Phase" marker and a detail block in the evidence trail.
    */
   cyclePhase?: { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string; sourceUrl?: string }[];
+
+  // ── Substrate fields (the new arm-aware engine; optional so legacy consumers
+  //    are unaffected until the cutover wires them in) ───────────────────────
+  /**
+   * Honesty stamp derived per pair at read time (SCORING_SPEC §6):
+   *  - "clinical"           = a non-trivial Direct arm anchors the pair
+   *  - "unvalidated_signal" = no/thin Direct, but other arms converge (surfaced, hedged)
+   *  - "preliminary"        = a single weak arm
+   */
+  validationStatus?: "clinical" | "unvalidated_signal" | "preliminary";
+  /** Anchor arm's female-applicability discount — Whel's first-class differentiator. */
+  femaleApplicability?: { band: string; multiplier: number; rationale: string };
+  /** Per-arm efficacy/mechanistic readings of this pair (Direct / Pathway / Community), never blended. */
+  arms?: SubstrateArm[];
+  /** Separate safety/tolerability readings (aspect='safety'), never blended into the headline. */
+  safetyArms?: SubstrateArm[];
+}
+
+/** One evidence arm's scored reading of a pair, from substrate_signals. */
+export interface SubstrateArm {
+  arm: "direct" | "pathway" | "community";
+  /** 'efficacy' | 'safety' | 'other' (mechanistic) — efficacy/other drive the headline; safety is separate. */
+  aspect: string;
+  /** arm_score = strength × female multiplier, 0–10. */
+  armScore: number;
+  /** Pre-multiplier sum of the five dimensions, 0–10. */
+  strength: number;
+  tier: "strong" | "moderate" | "emerging" | "exploratory";
+  /** True for the arm that anchors the pair headline. */
+  isAnchor: boolean;
+  /** The five arm-aware dimensions with their 0–2 scores and rationales. */
+  dimensions: { key: string; label: string; score: number; rationale: string }[];
+  female: { band: string; multiplier: number; rationale: string };
+  synthesis?: string;
+  mechanism?: string;
+  precisionNote?: string;
+  needsFulltext: boolean;
+  contradictionFlag: boolean;
+  numContradictions: number;
 }
 
 const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
