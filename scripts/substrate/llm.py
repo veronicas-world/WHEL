@@ -61,11 +61,16 @@ def prompt_hash(*parts: str) -> str:
 
 
 def complete(system: str, user: str, max_tokens: int = 2000,
-             temperature: float = 0.0, retries: int = 6) -> str:
-    body = json.dumps({
-        "model": MODEL, "max_tokens": max_tokens, "temperature": temperature,
+             temperature: float = 0.0, retries: int = 6, model: str = None) -> str:
+    payload = {
+        "model": model or MODEL, "max_tokens": max_tokens,
         "system": system, "messages": [{"role": "user", "content": user}],
-    }).encode("utf-8")
+    }
+    # Some newer models (e.g. Opus 4.8) deprecate `temperature` and 400 if it's sent.
+    # Pass temperature=None to omit it entirely.
+    if temperature is not None:
+        payload["temperature"] = temperature
+    body = json.dumps(payload).encode("utf-8")
     headers = {
         "content-type": "application/json", "anthropic-version": ANTHROPIC_VERSION,
         "x-api-key": _key(), "user-agent": USER_AGENT,
@@ -98,8 +103,10 @@ def complete(system: str, user: str, max_tokens: int = 2000,
     raise RuntimeError(f"Anthropic call failed after {retries} retries: {last}")
 
 
-def complete_json(system: str, user: str, max_tokens: int = 3000):
-    return extract_json(complete(system, user, max_tokens=max_tokens))
+def complete_json(system: str, user: str, max_tokens: int = 3000, model: str = None,
+                  temperature: float = 0.0):
+    return extract_json(complete(system, user, max_tokens=max_tokens, model=model,
+                                 temperature=temperature))
 
 
 def map_parallel(fn, items, workers: int = 4):

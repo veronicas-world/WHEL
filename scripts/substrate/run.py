@@ -20,6 +20,10 @@ import argparse
 
 import db
 import fetch_pubmed
+import fetch_trials
+import fetch_pathway
+import fetch_sider
+import fetch_community
 import chunk
 import extract_claims
 import verify_provenance
@@ -37,28 +41,53 @@ def _print_usage(stage):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--reset", action="store_true")
-    ap.add_argument("--max-docs", type=int, default=5)
+    ap.add_argument("--max-docs", type=int, default=5,
+                    help="max NEW documents to fetch PER CONDITION")
+    ap.add_argument("--conditions", type=str, default=None,
+                    help="comma-separated subset of conditions (default: all six)")
+    ap.add_argument("--sources", type=str, default="pubmed,trials,pathway,community",
+                    help="which sources to fetch: pubmed + trials (direct), pathway, community")
     args = ap.parse_args()
 
-    print("== Whel substrate pipeline ==")
+    conds = [c.strip() for c in args.conditions.split(",")] if args.conditions else None
+    sources = {s.strip() for s in args.sources.split(",") if s.strip()}
+
+    print("== Whel substrate pipeline (three arms) ==")
     db.init_db(reset=args.reset)
 
-    print("\n[1/5] Fetch PMDD/PMS abstracts from PubMed ...")
-    fetch_pubmed.run(max_documents=args.max_docs)
-    print("\n[2/5] Chunk into source spans ...")
+    # ── Fetch all selected sources up front so a single run.py covers them all. ──
+    print("\n[fetch] Direct (PubMed + ClinicalTrials.gov) + Community (Reddit) text ...")
+    if "pubmed" in sources:
+        fetch_pubmed.run(max_per_condition=args.max_docs, conditions=conds)
+    if "trials" in sources:
+        fetch_trials.run(conditions=conds, max_trials=args.max_docs)
+    if "community" in sources:
+        fetch_community.run(conditions=conds, max_posts=args.max_docs)
+    if "pathway" in sources:
+        print("\n[fetch] Pathway — Open Targets (deterministic claims, no model) ...")
+        fetch_pathway.run(conditions=conds, sources=("opentargets",))
+
+    print("\n[chunk] Chunk text documents into source spans ...")
     print(f"  {chunk.run()} new spans")
 
     stopped = None
     try:
-        print("\n[3/5] Extract atomic claims with verified provenance ...")
+        print("\n[extract] Extract atomic claims (literature + community-tuned prompts) ...")
         extract_claims.run()
         _print_usage("extraction")
 
-        print("\n[4/5] Verify entailment (claim supported by its quote) ...")
+        print("\n[verify] Verify entailment (claim supported by its quote) ...")
         verify_provenance.run()
         _print_usage("entailment")
 
-        print("\n[5/5] Surface contradictions ...")
+        # AEMS + SIDER run AFTER extraction so they can query the candidate drugs every arm
+        # surfaced. Both are free (deterministic structured rendering, no model).
+        if "pathway" in sources:
+            print("\n[fetch] Pathway — AEMS + SIDER safety/mechanism over candidate drugs ...")
+            fetch_pathway.run(conditions=conds, sources=("aems",))
+            fetch_sider.run(conditions=conds)
+
+        print("\n[contradictions] Surface contradictions ...")
         detect_contradictions.run()
         _print_usage("contradictions")
     except CreditsExhausted as e:
