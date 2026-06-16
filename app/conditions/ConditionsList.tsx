@@ -1,5 +1,4 @@
 import Link from "next/link";
-import type { LGradeLevel } from "@/lib/literature-grade-rubric";
 
 type TierKey = "strong" | "moderate" | "emerging" | "exploratory";
 
@@ -11,7 +10,6 @@ export type ConditionWithStats = {
   conditionCode: string;
   totalSignals: number;
   tierCounts: Record<TierKey, number>;
-  lGradeCounts: Record<LGradeLevel, number>;
 };
 
 // ── Visual constants ─────────────────────────────────────────────────────────
@@ -25,18 +23,6 @@ const TIER_BAR: Record<TierKey, string> = {
 
 const TIER_ORDER: TierKey[] = ["strong", "moderate", "emerging", "exploratory"];
 
-// L-grade bar colors. Same tokens as the chip on /conditions/[slug] so the
-// two surfaces read as a single visual family. Order is low → high so the
-// stacked bar reads L0 (left) → L3 (right), matching the rubric's ascent.
-const L_GRADE_BAR: Record<LGradeLevel, string> = {
-  L0: "var(--lgrade-l0)",
-  L1: "var(--lgrade-l1)",
-  L2: "var(--lgrade-l2)",
-  L3: "var(--lgrade-l3)",
-};
-
-const L_GRADE_ORDER: LGradeLevel[] = ["L0", "L1", "L2", "L3"];
-
 const MONO: React.CSSProperties = {
   fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
 };
@@ -45,14 +31,6 @@ const MONO: React.CSSProperties = {
 
 function ConditionCard({ c }: { c: ConditionWithStats }) {
   const total = c.totalSignals;
-  const lGradeTotal =
-    c.lGradeCounts.L0 + c.lGradeCounts.L1 + c.lGradeCounts.L2 + c.lGradeCounts.L3;
-  // Render high → low so L3 (rarest, strongest) appears first when present.
-  const lGradeCountsLine = ([...L_GRADE_ORDER].reverse() as LGradeLevel[])
-    .map((l) => ({ level: l, count: c.lGradeCounts[l] }))
-    .filter((x) => x.count > 0)
-    .map((x) => `${x.count} ${x.level}`)
-    .join(" · ");
 
   return (
     <Link
@@ -154,38 +132,6 @@ function ConditionCard({ c }: { c: ConditionWithStats }) {
               {c.tierCounts.strong} strong · {c.tierCounts.moderate} moderate
             </span>
             <span style={{ color: "var(--moss)", fontWeight: 500 }}>Open →</span>
-          </div>
-        )}
-        {lGradeTotal > 0 && (
-          <div style={{ paddingTop: 10, borderTop: "1px dashed var(--rule)", display: "flex", flexDirection: "column", gap: 8 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-              <span
-                style={{
-                  ...MONO,
-                  fontSize: "9.5px",
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "var(--muted)",
-                  fontWeight: 500,
-                }}
-              >
-                Literature
-              </span>
-              <div style={{ flex: 1, display: "flex", height: 6, border: "1px solid var(--rule-strong)", overflow: "hidden", maxWidth: 140 }}>
-                {L_GRADE_ORDER.map((l) => {
-                  const pct = (c.lGradeCounts[l] / lGradeTotal) * 100;
-                  if (pct === 0) return null;
-                  return (
-                    <span key={l} style={{ display: "block", width: `${pct}%`, height: "100%", background: L_GRADE_BAR[l] }} />
-                  );
-                })}
-              </div>
-            </div>
-            {lGradeCountsLine && (
-              <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.06em", color: "var(--muted)" }}>
-                {lGradeCountsLine}
-              </div>
-            )}
           </div>
         )}
       </div>

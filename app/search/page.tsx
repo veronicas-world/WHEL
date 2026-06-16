@@ -1,16 +1,16 @@
 import Link from"next/link";
 import { supabase } from"@/lib/supabase";
+import { getCandidates } from"@/lib/substrate-candidates";
 import NoSignalsDisclosure from"./NoSignalsDisclosure";
 import SearchBar from"../components/SearchBar";
 
 export const metadata = { title:"Search" };
 
 interface ConditionRow { id: string; name: string; slug: string }
-interface CompoundRow { id: string; name: string; generic_name: string | null; drug_class: string | null }
-interface SignalRow { id: string; summary: string; conditions: unknown }
 
 async function search(q: string) {
- const [conditionsRes, compoundsRes, signalsRes] = await Promise.all([
+ const ql = q.toLowerCase();
+ const [conditionsRes, compoundsRes, allCandidates] = await Promise.all([
  supabase
  .from("conditions")
  .select("id, name, slug")
@@ -23,52 +23,43 @@ async function search(q: string) {
  .or(`name.ilike.%${q}%,generic_name.ilike.%${q}%,drug_class.ilike.%${q}%,mechanism_of_action.ilike.%${q}%`)
  .limit(20),
 
- supabase
- .from("repurposing_signals")
- .select("id, summary, conditions(id, name, slug)")
- .or(`summary.ilike.%${q}%,mechanism_hypothesis.ilike.%${q}%`)
- .eq("status","active")
- .limit(20),
+ getCandidates(),
  ]);
 
  const conditions: ConditionRow[] = conditionsRes.data ?? [];
 
- // For each matched compound, fetch ALL conditions it has active signals for.
- // No .limit() here. We want every condition link, not just the first.
- const compoundRows: CompoundRow[] = compoundsRes.data ?? [];
- const conditionsByCompound: Record<string, ConditionRow[]> = {};
-
- if (compoundRows.length > 0) {
- const { data: linkRows } = await supabase
- .from("repurposing_signals")
- .select("compound_id, conditions(id, name, slug)")
- .in("compound_id", compoundRows.map((c) => c.id))
- .eq("status","active");
-
- for (const row of linkRows ?? []) {
- const cid = row.compound_id as string;
- const raw = row.conditions as unknown;
- const cond = (Array.isArray(raw) ? raw[0] : raw) as ConditionRow | null;
- if (!cond?.id) continue;
- if (!conditionsByCompound[cid]) conditionsByCompound[cid] = [];
- if (!conditionsByCompound[cid].some((c) => c.id === cond.id)) {
- conditionsByCompound[cid].push(cond);
+ // Link each matched compound to the conditions it has SUBSTRATE signals for,
+ // matched by drug name (the substrate is keyed by entity label, not compound id).
+ const compoundRows = (compoundsRes.data ?? []) as { id: string; name: string; generic_name: string | null; drug_class: string | null }[];
+ const condsForDrug = (drug: string): ConditionRow[] => {
+ const d = drug.toLowerCase();
+ const out: ConditionRow[] = [];
+ for (const c of allCandidates) {
+ const cd = c.drug.toLowerCase();
+ if (cd !== d && !cd.includes(d) && !d.includes(cd)) continue;
+ const slug = c.conditionId ?? c.condition.toLowerCase();
+ if (!out.some((x) => x.slug === slug)) out.push({ id: slug, name: c.condition, slug });
  }
- }
- }
-
- // Sort: compounds with at least one condition first, no-signal compounds last
+ return out;
+ };
  const compounds = compoundRows
- .map((c) => ({ ...c, conditions: conditionsByCompound[c.id] ?? [] }))
+ .map((c) => ({ ...c, conditions: condsForDrug(c.name) }))
  .sort((a, b) => (b.conditions.length > 0 ? 1 : 0) - (a.conditions.length > 0 ? 1 : 0));
 
- // Resolve signals → condition
+ // Signals: substrate candidates whose drug, condition, or synthesis matches.
  const signalMap = new Map<string, { id: string; summary: string; condition: ConditionRow }>();
- for (const row of (signalsRes.data ?? []) as SignalRow[]) {
- const raw = row.conditions;
- const cond = (Array.isArray(raw) ? raw[0] : raw) as ConditionRow | null;
- if (!cond?.id || signalMap.has(row.id)) continue;
- signalMap.set(row.id, { id: row.id, summary: row.summary, condition: cond });
+ for (const c of allCandidates) {
+ const hay = `${c.drug} ${c.condition} ${c.rationale} ${c.mechanism}`.toLowerCase();
+ if (!hay.includes(ql)) continue;
+ const slug = c.conditionId ?? c.condition.toLowerCase();
+ const key = c.signalId ?? `${c.drug}-${slug}`;
+ if (signalMap.has(key)) continue;
+ signalMap.set(key, {
+ id: key,
+ summary: `${c.drug} → ${c.condition}: ${c.rationale}`,
+ condition: { id: slug, name: c.condition, slug },
+ });
+ if (signalMap.size >= 20) break;
  }
 
  return {

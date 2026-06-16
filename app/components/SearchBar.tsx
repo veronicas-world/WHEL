@@ -19,54 +19,32 @@ interface CompoundResult {
  name: string;
  generic_name: string | null;
  drug_class: string | null;
- conditions: { id: string; name: string; slug: string }[];
 }
 
-interface SignalResult {
- type:"signal";
- id: string;
- summary: string;
- condition: { id: string; name: string; slug: string };
-}
-
-type Result = ConditionResult | CompoundResult | SignalResult;
+type Result = ConditionResult | CompoundResult;
 
 // ── Search function ────────────────────────────────────────────────────────────
+// Typeahead over the condition + medication dictionaries. Full substrate signal
+// matching (drug → condition links, synthesis text) lives on the /search page.
 
 async function runSearch(query: string): Promise<Result[]> {
  const q = query.trim();
  if (q.length < 2) return [];
 
- const [conditionsRes, compoundsRes, signalsRes] = await Promise.all([
- // 1. Conditions
+ const [conditionsRes, compoundsRes] = await Promise.all([
  supabase
  .from("conditions")
  .select("id, name, slug")
  .or(`name.ilike.%${q}%,description.ilike.%${q}%,biology_summary.ilike.%${q}%`)
  .limit(5),
 
- // 2. Compounds
  supabase
  .from("compounds")
  .select("id, name, generic_name, drug_class")
  .or(`name.ilike.%${q}%,generic_name.ilike.%${q}%,drug_class.ilike.%${q}%,mechanism_of_action.ilike.%${q}%`)
  .limit(6),
-
- // 3. Signals joined to their condition
- supabase
- .from("repurposing_signals")
- .select("id, summary, conditions(id, name, slug)")
- .or(`summary.ilike.%${q}%,mechanism_hypothesis.ilike.%${q}%`)
- .eq("status","active")
- .limit(5),
  ]);
 
- console.log("[search] query:", q);
- console.log("[search] conditions →", conditionsRes.data,"| error:", conditionsRes.error?.message);
- console.log("[search] compounds →", compoundsRes.data,"| error:", compoundsRes.error?.message);
- console.log("[search] signals →", signalsRes.data,"| error:", signalsRes.error?.message);
-
- // Conditions
  const conditions: ConditionResult[] = (conditionsRes.data ?? []).map((c) => ({
  type:"condition",
  id: c.id,
@@ -74,58 +52,15 @@ async function runSearch(query: string): Promise<Result[]> {
  slug: c.slug,
  }));
 
- // Compounds: look up which conditions each matched compound has signals for
- const compoundRows = compoundsRes.data ?? [];
- const conditionsByCompound: Record<string, { id: string; name: string; slug: string }[]> = {};
-
- if (compoundRows.length > 0) {
- const { data: signalRows, error: signalLinkErr } = await supabase
- .from("repurposing_signals")
- .select("compound_id, conditions(id, name, slug)")
- .in("compound_id", compoundRows.map((c) => c.id))
- .eq("status","active");
-
- console.log("[search] compound→condition links →", signalRows,"| error:", signalLinkErr?.message);
-
- for (const row of signalRows ?? []) {
- const cid = row.compound_id as string;
- const raw = row.conditions as unknown;
- const cond = (Array.isArray(raw) ? raw[0] : raw) as { id: string; name: string; slug: string } | null;
- if (!cond?.id) continue;
- if (!conditionsByCompound[cid]) conditionsByCompound[cid] = [];
- if (!conditionsByCompound[cid].some((c) => c.id === cond.id)) {
- conditionsByCompound[cid].push(cond);
- }
- }
- }
-
- const compounds: CompoundResult[] = compoundRows.map((c) => ({
+ const compounds: CompoundResult[] = (compoundsRes.data ?? []).map((c) => ({
  type:"compound",
  id: c.id,
  name: c.name,
  generic_name: c.generic_name ?? null,
  drug_class: c.drug_class ?? null,
- conditions: conditionsByCompound[c.id] ?? [],
  }));
 
- // Signals
- const signalMap = new Map<string, SignalResult>();
- for (const row of signalsRes.data ?? []) {
- const raw = row.conditions as unknown;
- const cond = (Array.isArray(raw) ? raw[0] : raw) as { id: string; name: string; slug: string } | null;
- if (!cond?.id) continue;
- if (!signalMap.has(row.id)) {
- signalMap.set(row.id, {
- type:"signal",
- id: row.id,
- summary: row.summary,
- condition: cond,
- });
- }
- }
- const signals = Array.from(signalMap.values());
-
- return [...conditions, ...compounds, ...signals];
+ return [...conditions, ...compounds];
 }
 
 // ── Props ──────────────────────────────────────────────────────────────────────
@@ -206,16 +141,8 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
  for (const r of results) {
  if (r.type ==="condition") {
  items.push({ path: `/conditions/${r.slug}` });
- } else if (r.type ==="signal") {
- items.push({ path: `/conditions/${r.condition.slug}` });
  } else {
- if (r.conditions.length === 1) {
- items.push({ path: `/conditions/${r.conditions[0].slug}` });
- } else {
- for (const cond of r.conditions) {
- items.push({ path: `/conditions/${cond.slug}` });
- }
- }
+ items.push({ path: `/search?q=${encodeURIComponent(r.name)}` });
  }
  }
  return items;
@@ -245,7 +172,6 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
 
  const conditionResults = results.filter((r): r is ConditionResult => r.type ==="condition");
  const compoundResults = results.filter((r): r is CompoundResult => r.type ==="compound");
- const signalResults = results.filter((r): r is SignalResult => r.type ==="signal");
  const hasResults = results.length > 0;
 
  return (
@@ -340,14 +266,11 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
  <p className="section-label px-4 pt-3 pb-1.5">
  Medications
  </p>
- {compoundResults.map((compound) => {
- const single = compound.conditions.length === 1 ? compound.conditions[0] : null;
- return (
- <div key={compound.id}>
- {single ? (
+ {compoundResults.map((compound) => (
  <button
- onMouseDown={() => navigate(`/conditions/${single.slug}`)}
- className="w-full text-left px-4 pt-2.5 pb-1 transition-colors"
+ key={compound.id}
+ onMouseDown={() => navigate(`/search?q=${encodeURIComponent(compound.name)}`)}
+ className="w-full text-left px-4 pt-2.5 pb-2 transition-colors"
  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor ="#F5F3EF")}
  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor ="transparent")}
  >
@@ -357,63 +280,6 @@ export default function SearchBar({ size ="sm", onNavigate }: SearchBarProps) {
  {[compound.generic_name, compound.drug_class].filter(Boolean).join(" ·")}
  </p>
  )}
- <p className="text-xs mt-1" style={{ color:"#4D5E4D" }}>{"→︎"} {single.name}</p>
- </button>
- ) : (
- <div className="px-4 pt-2.5 pb-1">
- <p className="text-sm font-medium" style={{ color:"#1a1a1a" }}>{compound.name}</p>
- {(compound.generic_name || compound.drug_class) && (
- <p className="text-xs mt-0.5" style={{ color:"#111" }}>
- {[compound.generic_name, compound.drug_class].filter(Boolean).join(" ·")}
- </p>
- )}
- </div>
- )}
- {compound.conditions.length > 1 && (
- <div className="pb-1.5">
- {compound.conditions.map((cond) => (
- <button
- key={cond.id}
- onMouseDown={() => navigate(`/conditions/${cond.slug}`)}
- className="w-full text-left flex items-center gap-2 pl-7 pr-4 py-1.5 transition-colors"
- onMouseEnter={(e) => (e.currentTarget.style.backgroundColor ="#F5F3EF")}
- onMouseLeave={(e) => (e.currentTarget.style.backgroundColor ="transparent")}
- >
- <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color:"#111", flexShrink: 0 }}>
- <polyline points="9 18 15 12 9 6" />
- </svg>
- <span className="text-xs" style={{ color:"#4D5E4D" }}>{cond.name}</span>
- </button>
- ))}
- </div>
- )}
- {compound.conditions.length === 0 && (
- <p className="pl-4 pr-4 pb-3 text-xs" style={{ color:"#111" }}>
- No active signals yet.
- </p>
- )}
- </div>
- );
- })}
- </div>
- )}
-
- {/* Signals */}
- {signalResults.length > 0 && (
- <div style={conditionResults.length > 0 || compoundResults.length > 0 ? { borderTop:"1px solid #F0EDE8" } : {}}>
- <p className="section-label px-4 pt-3 pb-1.5">
- Signals
- </p>
- {signalResults.map((r) => (
- <button
- key={r.id}
- onMouseDown={() => navigate(`/conditions/${r.condition.slug}`)}
- className="w-full text-left px-4 py-2.5 transition-colors"
- onMouseEnter={(e) => (e.currentTarget.style.backgroundColor ="#F5F3EF")}
- onMouseLeave={(e) => (e.currentTarget.style.backgroundColor ="transparent")}
- >
- <p className="text-xs line-clamp-2 leading-relaxed" style={{ color:"#444" }}>{r.summary}</p>
- <p className="text-xs mt-1" style={{ color:"#4D5E4D" }}>{"→︎"} {r.condition.name}</p>
  </button>
  ))}
  </div>

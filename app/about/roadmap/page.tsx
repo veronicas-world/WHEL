@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { getCorpusScope } from "@/lib/substrate-candidates";
 
 export const metadata = {
   title: "Roadmap | Whel",
@@ -446,14 +446,7 @@ function RegisterTable({ rows }: { rows: { name: string; role: string; status: S
    ────────────────────────────────────────────────────────────────────────── */
 
 export default async function RoadmapPage() {
-  const { count: totalSignalsRaw } = await supabase
-    .from("repurposing_signals")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "active")
-    .not("total_evidence_score", "is", null)
-    .gt("total_evidence_score", 0);
-
-  const totalSignals = totalSignalsRaw ?? 0;
+  const { signals: totalSignals } = await getCorpusScope();
   const PHASES = buildPhases(totalSignals);
 
   return (
