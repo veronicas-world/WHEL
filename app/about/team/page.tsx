@@ -23,15 +23,14 @@ const TM_CSS = `
 }
 `;
 
-/** The four-ring Whel mark, used as a faint background watermark. */
+/** The three-ring Whel mark, used as a faint background watermark. */
 function RingMark({ style, opacity = 0.05 }: { style?: React.CSSProperties; opacity?: number }) {
   return (
     <svg viewBox="0 0 100 100" aria-hidden="true" style={style}>
       <g fill="none" stroke="var(--on-ink)" strokeWidth={1} strokeLinecap="round" style={{ opacity }}>
         <circle cx="50" cy="33" r="21" />
-        <circle cx="67" cy="50" r="21" />
-        <circle cx="50" cy="67" r="21" />
-        <circle cx="33" cy="50" r="21" />
+        <circle cx="64.7" cy="58.5" r="21" />
+        <circle cx="35.3" cy="58.5" r="21" />
       </g>
     </svg>
   );

@@ -1,9 +1,10 @@
 import Link from "next/link";
 
 function WhelMark({ size = 28 }: { size?: number }) {
-  const off = 17, r = 21, sw = 4.6;
+  const r = 21, sw = 4.6;
+  // Three circles in a symmetric trefoil (120° apart), offset 17 from center.
   const centers: [number, number][] = [
-    [50, 50 - off], [50 + off, 50], [50, 50 + off], [50 - off, 50],
+    [50, 33], [64.7, 58.5], [35.3, 58.5],
   ];
   return (
     <svg width={size} height={size} viewBox="0 0 100 100" aria-hidden="true" style={{ overflow: "visible" }}>
