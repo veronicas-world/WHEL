@@ -8,6 +8,7 @@ supported. The model proposes; the substrate verifies.
 """
 import re
 import json
+import sqlite3
 from datetime import datetime, timezone
 
 import db
@@ -123,6 +124,21 @@ def _is_candidate(text):
     return bool(_SIGNAL.search(text))
 
 
+def _passes_triage(span):
+    """Stage-1 gate. The clinical keyword regex (_is_candidate) is tuned for journal
+    abstracts and rejects casual patient language ("completely changed everything",
+    "life changing") that carries no clinical vocabulary. For COMMUNITY sources we
+    therefore bypass it: the community extraction prompt itself is the filter (it
+    REQUIRES a reported outcome and returns [] otherwise), so a no-signal title costs
+    one cheap call and yields nothing rather than being silently dropped before the
+    model ever sees it. Literature spans still go through the clinical regex.
+    (For high-volume live community ingestion a lightweight community pre-filter could
+    be added here; for the archival backfill the model-as-filter is fine.)"""
+    if _is_community(span["_source"]):
+        return True
+    return _is_candidate(span["text"])
+
+
 def _norm(s):
     return re.sub(r"\s+", " ", s).strip().lower()
 
@@ -168,8 +184,8 @@ def run():
     pending = conn.execute(
         "SELECT s.*, d.meta_json AS _meta, d.source AS _source FROM source_spans s"
         " JOIN documents d ON s.document_id = d.id WHERE s.extracted = 0").fetchall()
-    spans = [s for s in pending if _is_candidate(s["text"])]
-    for s in [s for s in pending if not _is_candidate(s["text"])]:
+    spans = [s for s in pending if _passes_triage(s)]
+    for s in [s for s in pending if not _passes_triage(s)]:
         conn.execute("UPDATE source_spans SET extracted = 1 WHERE id = ?", (s["id"],))
     conn.commit()
     print(f"  triage: {len(spans)} candidate spans, {len(pending) - len(spans)} skipped (no signal)")
@@ -233,5 +249,46 @@ def run():
     return total
 
 
+def recheck_community():
+    """Reset community spans that produced NO claim back to extracted=0, so a
+    community-aware re-run sends them through the patient extractor. This recovers the
+    titles the old clinical triage silently dropped. Spans that already yielded a claim
+    are left untouched (re-extracting them would duplicate claims). Returns the count
+    reset. Cheap: only the empty community spans get a (one) extraction call on re-run."""
+    conn = db.connect()
+    rows = conn.execute(
+        "SELECT s.id AS sid, d.source AS source FROM source_spans s"
+        " JOIN documents d ON s.document_id = d.id WHERE s.extracted = 1").fetchall()
+    n = 0
+    for r in rows:
+        if not _is_community(r["source"]):
+            continue
+        if conn.execute("SELECT 1 FROM claims WHERE span_id = ? LIMIT 1", (r["sid"],)).fetchone():
+            continue  # already produced a claim — don't re-extract (would duplicate)
+        conn.execute("UPDATE source_spans SET extracted = 0 WHERE id = ?", (r["sid"],))
+        n += 1
+    # Re-extraction will add corroborating claims to existing community groups, so their
+    # current signals are stale — and --only-unscored would skip them. Clear the (small)
+    # community arm so every community group re-scores fresh with the fuller claim set.
+    # Guard: the signals table may not exist in a brand-new store.
+    cleared = 0
+    try:
+        cleared = conn.execute("DELETE FROM substrate_signals WHERE arm = 'community'").rowcount
+    except sqlite3.OperationalError:
+        pass
+    conn.commit()
+    print(f"  recheck-community: reset {n} community span(s) with no claims -> will re-extract"
+          + (f"; cleared {cleared} stale community signal(s) for re-score" if cleared else ""))
+    return n
+
+
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--recheck-community", action="store_true",
+                    help="reset community spans that yielded no claim (recover titles the old "
+                         "clinical triage dropped), then re-extract them community-aware")
+    args = ap.parse_args()
+    if args.recheck_community:
+        recheck_community()
     run()
