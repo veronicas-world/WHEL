@@ -18,12 +18,14 @@ Free to run (public Reddit JSON, no auth). Writes only to the local working stor
     python3 scripts/substrate/fetch_community.py                       # all six conditions
     python3 scripts/substrate/fetch_community.py --conditions endometriosis --max-posts 10
 """
+import os
 import re
 import sys
-import json
 import ssl
 import time
+import json
 import html
+import base64
 import argparse
 import urllib.error
 import urllib.parse
@@ -31,11 +33,12 @@ import urllib.request
 from datetime import datetime, timezone
 
 import db
-from config import CONDITIONS
+from config import CONDITIONS, load_dotenv
 
 _CTX = ssl.create_default_context()
-_UA = "WhelSubstrate/1.0 (research tool; women's-health evidence; contact via whel.bio)"
-_DELAY = 0.8  # polite, matches the legacy pipeline
+# Reddit recommends a unique descriptive UA: "<platform>:<app>:<version> (by /u/<user>)".
+_UA = "python:whel-substrate:1.0 (by /u/whel-bio; women's-health research)"
+_DELAY = 1.5  # be polite — Reddit rate-limits unauthenticated JSON aggressively
 
 # condition key -> subreddits (ported from scripts/reddit-pipeline.js CONDITION_SUBREDDITS)
 _SUBREDDITS = {
@@ -55,22 +58,58 @@ _QUERIES = [
 _DELETED = {"[deleted]", "[removed]", ""}
 
 
-def _get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": _UA})
+_TOKEN = None
+
+
+def _oauth_token():
+    """App-only OAuth token for read-only public data. Needs REDDIT_CLIENT_ID /
+    REDDIT_CLIENT_SECRET in .env.local (from a free Reddit 'script' app). Returns None
+    if unconfigured — Reddit now blocks/429s all unauthenticated access."""
+    global _TOKEN
+    if _TOKEN:
+        return _TOKEN
+    load_dotenv()
+    cid = os.environ.get("REDDIT_CLIENT_ID", "").strip()
+    secret = os.environ.get("REDDIT_CLIENT_SECRET", "").strip()
+    if not cid or not secret:
+        return None
+    body = urllib.parse.urlencode({"grant_type": "client_credentials"}).encode()
+    auth = base64.b64encode(f"{cid}:{secret}".encode()).decode()
+    req = urllib.request.Request(
+        "https://www.reddit.com/api/v1/access_token", data=body,
+        headers={"User-Agent": _UA, "Authorization": "Basic " + auth})
+    try:
+        with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
+            _TOKEN = (json.load(r) or {}).get("access_token")
+    except urllib.error.HTTPError as e:
+        print(f"  [reddit] OAuth token request failed: HTTP {e.code} ({e.reason}) "
+              f"\u2014 check REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET")
+        return None
+    return _TOKEN
+
+
+def _api_get(path):
+    """GET an oauth.reddit.com path with the app token. Returns parsed JSON or None."""
+    token = _oauth_token()
+    if not token:
+        return None
+    req = urllib.request.Request(
+        "https://oauth.reddit.com" + path,
+        headers={"User-Agent": _UA, "Authorization": "bearer " + token})
     try:
         with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
-        if e.code in (403, 404, 429):
-            return None
-        raise
+        print(f"  [reddit] HTTP {e.code} ({e.reason}) for {path.split('?')[0]}")
+        return None
+    except urllib.error.URLError as e:
+        print(f"  [reddit] network error for {path.split('?')[0]}: {e}")
+        return None
 
 
 def _search(subreddit, query, limit=25):
     q = urllib.parse.quote(query)
-    url = (f"https://www.reddit.com/r/{subreddit}/search.json"
-           f"?q={q}&sort=top&limit={limit}&t=all&restrict_sr=1")
-    data = _get(url)
+    data = _api_get(f"/r/{subreddit}/search?q={q}&sort=top&limit={limit}&t=all&restrict_sr=1")
     time.sleep(_DELAY)
     if not data:
         return []
@@ -104,7 +143,7 @@ def _flatten_comments(listing, thread_id, acc, cap):
 
 
 def _fetch_comments(permalink, thread_id, cap=20):
-    data = _get(f"https://www.reddit.com{permalink}.json?limit=50&sort=top")
+    data = _api_get(f"{permalink}?limit=50&sort=top")
     time.sleep(_DELAY)
     if not isinstance(data, list) or len(data) < 2:
         return []
@@ -180,6 +219,16 @@ def fetch_condition(conn, cond_key, max_posts=15, max_comments=20):
 
 def run(conditions=None, max_posts=15, max_comments=20):
     conn = db.connect()
+    if not _oauth_token():
+        print("  Reddit blocks unauthenticated access (429/403). One-time OAuth setup:")
+        print("    1. Visit https://www.reddit.com/prefs/apps  ->  'create another app...'")
+        print("       Choose type: script.  Name: anything.  redirect uri: http://localhost:8080")
+        print("    2. Copy the app id (the string just under the app's name) and the 'secret',")
+        print("       then add both to .env.local:")
+        print("         REDDIT_CLIENT_ID=your_app_id")
+        print("         REDDIT_CLIENT_SECRET=your_secret")
+        print("    3. Re-run:  python3 scripts/substrate/fetch_community.py --conditions PMDD --max-posts 3")
+        return 0
     keys = conditions or list(CONDITIONS.keys())
     total = 0
     for ck in keys:

@@ -61,7 +61,7 @@ def prompt_hash(*parts: str) -> str:
 
 
 def complete(system: str, user: str, max_tokens: int = 2000,
-             temperature: float = 0.0, retries: int = 6, model: str = None) -> str:
+             temperature: float = 0.0, retries: int = 9, model: str = None) -> str:
     payload = {
         "model": model or MODEL, "max_tokens": max_tokens,
         "system": system, "messages": [{"role": "user", "content": user}],
@@ -93,8 +93,9 @@ def complete(system: str, user: str, max_tokens: int = 2000,
             if e.code == 400 and "credit balance is too low" in detail.lower():
                 raise CreditsExhausted(detail[:200])
             last = e
+            # 529 = Anthropic overloaded (transient); back off longer and keep trying.
             if e.code in (429, 500, 502, 503, 529):
-                time.sleep(min(2 ** attempt * 2, 20))
+                time.sleep(min(2 ** attempt * 2, 45))
                 continue
             raise RuntimeError(f"Anthropic HTTP {e.code}: {detail[:300]}")
         except (urllib.error.URLError, TimeoutError) as e:

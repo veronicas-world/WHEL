@@ -266,13 +266,17 @@ def community_independence(claims):
                if a and a not in ("[deleted]", "AutoModerator")}
     threads = {t for t in (_meta(c).get("thread_id") for c in claims) if t}
     a, t = len(authors), len(threads)
-    if a <= 1:
+    # archival/title-only legacy data lacks author handles; fall back to distinct posts.
+    n = a if a else t
+    if n <= 1:
         score = 0
-    elif a <= 4:
+    elif n <= 4:
         score = 1
     else:
-        score = 2 if t >= 2 else 1   # 5+ accounts but one thread = anchored, cap at 1
+        score = 2 if t >= 2 else 1   # 5+ but one thread = anchored, cap at 1
     notes = [f"{a} distinct account(s) across {t} thread(s)"]
+    if not a and t:
+        notes[0] += " (author handles unavailable \u2014 counting distinct posts)"
     if _near_duplicate(claims):
         score = min(score, 1)
         notes.append("near-duplicate wording across accounts (possible coordination) — capped")
@@ -346,7 +350,7 @@ def _ensure_signal_columns(conn):
     conn.commit()
 
 
-def run(limit=None, model=None):
+def run(limit=None, model=None, only_unscored=False):
     model = model or MODEL
     conn = db.connect()
     conn.executescript(WORK_SCHEMA)
@@ -363,6 +367,15 @@ def run(limit=None, model=None):
     print(f"  model: {model}")
     ph = prompt_hash(SYSTEM, PROMPT_VERSION, model)
     groups = list(_group_claims(conn).items())
+    if only_unscored:
+        # Score only groups not already in substrate_signals — so adding an arm later
+        # (e.g. community once Reddit is wired) costs only the new groups, never a re-pay.
+        have = {(r["intervention_id"], r["condition_id"], r["aspect"], r["arm"])
+                for r in conn.execute("SELECT intervention_id, condition_id, aspect, arm"
+                                      " FROM substrate_signals")}
+        before = len(groups)
+        groups = [(k, c) for (k, c) in groups if k not in have]
+        print(f"  --only-unscored: {before - len(groups)} already scored, {len(groups)} new to score")
     if limit:
         groups = groups[:limit]
         print(f"  scoring a sample of {len(groups)} group(s) (--limit)")
@@ -685,6 +698,8 @@ def main():
     ap.add_argument("--limit", type=int, default=None, help="score only the first N groups (cheap validation peek)")
     ap.add_argument("--model", type=str, default=None,
                     help="model id to score with (defaults to config.MODEL). Use your Opus 4.8 string here.")
+    ap.add_argument("--only-unscored", action="store_true",
+                    help="score only groups not yet in substrate_signals (cheap incremental top-up)")
     args = ap.parse_args()
 
     if args.selftest:
@@ -699,7 +714,7 @@ def main():
     stopped = None
     scored = 0
     try:
-        scored = run(limit=args.limit, model=args.model)
+        scored = run(limit=args.limit, model=args.model, only_unscored=args.only_unscored)
     except CreditsExhausted as e:
         stopped = str(e)
     export_signals()

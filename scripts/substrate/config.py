@@ -129,6 +129,93 @@ DEFAULT_CONDITION = "PMDD"  # legacy documents with no condition tag fall back t
 STRUCTURED_SOURCES = {"opentargets", "aems", "sider"}
 
 
+# ── Condition normalization ────────────────────────────────────────────────
+# Extraction (and the structured arms) surface condition labels verbatim from the
+# source, so the same disease shows up under many names: "vasomotor symptoms",
+# "hot flashes", "perimenopause" are all menopause; "PMS" and "premenstrual
+# anxiety" are PMDD; "vestibulodynia" is vulvodynia. Left alone, these fragment
+# the evidence across dozens of near-duplicate condition rows. `canonical_condition`
+# folds a free-text label into one of the six canonical keys, or returns None when
+# the label is genuinely outside Whel's scope (so callers can mark it off_scope
+# rather than inventing a seventh condition). Matching is case/space-insensitive.
+#
+# This is intentionally a curated allow-list, NOT fuzzy matching: an unrecognized
+# label returns None (off-scope) so nothing is silently mis-bucketed.
+_CONDITION_NORMALIZE = {
+    # canonical six (identity) — every key is stored lowercased/stripped
+    "pmdd": "PMDD",
+    "pms": "PMDD",
+    "pms/pmdd": "PMDD",
+    "pmdd/pms": "PMDD",
+    "premenstrual syndrome": "PMDD",
+    "premenstrual dysphoric disorder": "PMDD",
+    "premenstrual dysphoric disorder (pmdd)": "PMDD",
+    "premenstrual anxiety": "PMDD",
+    "premenstrual": "PMDD",
+    "premenstrual symptoms": "PMDD",
+    "premenstrual mood symptoms": "PMDD",
+    "luteal phase symptoms": "PMDD",
+
+    "endometriosis": "endometriosis",
+    "endometriotic": "endometriosis",
+    "deep infiltrating endometriosis": "endometriosis",
+    "pelvic endometriosis": "endometriosis",
+
+    "pcos": "PCOS",
+    "polycystic ovary syndrome": "PCOS",
+    "polycystic ovarian syndrome": "PCOS",
+    "polycystic ovary syndrome (pcos)": "PCOS",
+
+    "menopause": "menopause",
+    "menopausal": "menopause",
+    "menopausal symptoms": "menopause",
+    "postmenopause": "menopause",
+    "postmenopausal": "menopause",
+    "perimenopause": "menopause",
+    "perimenopausal": "menopause",
+    "vasomotor symptoms": "menopause",
+    "vasomotor symptoms in menopausal women": "menopause",
+    "vasomotor symptoms of menopause": "menopause",
+    "hot flashes": "menopause",
+    "hot flushes": "menopause",
+    "hot flash": "menopause",
+    "hot flush": "menopause",
+    "night sweats": "menopause",
+    "genitourinary syndrome of menopause": "menopause",
+    "genitourinary symptoms": "menopause",
+    "genitourinary syndrome": "menopause",
+    "vulvovaginal atrophy": "menopause",
+    "vaginal atrophy": "menopause",
+
+    "vulvodynia": "vulvodynia",
+    "vestibulodynia": "vulvodynia",
+    "provoked vestibulodynia": "vulvodynia",
+    "provoked vulvodynia": "vulvodynia",
+    "localized provoked vulvodynia": "vulvodynia",
+    "vulvar pain": "vulvodynia",
+    "vulvar vestibulitis": "vulvodynia",
+    "vulvar vestibulitis syndrome": "vulvodynia",
+
+    "adenomyosis": "adenomyosis",
+    "adenomyotic": "adenomyosis",
+}
+
+
+def canonical_condition(name):
+    """Fold a free-text condition label into one of the six canonical keys.
+
+    Returns the canonical key (e.g. "menopause") for any recognized synonym, or
+    None when the label is outside Whel's six conditions (off-scope). Matching is
+    case-insensitive and whitespace-trimmed; unrecognized labels return None so the
+    caller can decide (mark off_scope, fall back to a doc tag, etc.) rather than
+    creating a spurious new condition.
+    """
+    if not name:
+        return None
+    key = " ".join(str(name).strip().lower().split())
+    return _CONDITION_NORMALIZE.get(key)
+
+
 def load_dotenv(path: pathlib.Path = DOTENV) -> None:
     if not path.exists():
         return

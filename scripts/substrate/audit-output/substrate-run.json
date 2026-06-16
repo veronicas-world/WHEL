@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-11T14:28:59+00:00",
+  "generated_at": "2026-06-16T17:23:35+00:00",
   "counts": {
-    "documents": 4,
-    "source_spans": 60,
-    "claims": 35,
+    "documents": 344,
+    "source_spans": 945,
+    "claims": 452,
     "contradictions": 3,
-    "entities": 11,
-    "claims_provenance_verified": 35,
-    "claims_entailment_labeled": 35
+    "entities": 196,
+    "claims_provenance_verified": 450,
+    "claims_entailment_labeled": 449
   },
   "usage": {
-    "calls": 88,
-    "input_tokens": 43935,
-    "output_tokens": 8161,
-    "est_cost_usd": 0.2542
+    "calls": 76,
+    "input_tokens": 25104,
+    "output_tokens": 6893,
+    "est_cost_usd": 0.1787
   },
   "seed_migration": "supabase/migrations/047_substrate_seed_pmdd.sql"
 }

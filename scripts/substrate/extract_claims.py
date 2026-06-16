@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 
 import db
 from llm import complete_json, prompt_hash, map_parallel
-from config import MODEL, CONDITIONS, DEFAULT_CONDITION
+from config import MODEL, CONDITIONS, DEFAULT_CONDITION, canonical_condition
 
 # Condition-parameterized via .replace (NOT .format — the JSON example below uses
 # literal braces). {condition_label} and {condition_canonical} are filled per the
@@ -196,6 +196,14 @@ def run():
                     quote = it["exact_quote"]
                     interv = it["intervention_canonical"].strip()
                     cond = (it.get("condition") or default_cond).strip() or default_cond
+                    # Fold free-text condition labels ("vasomotor symptoms",
+                    # "vestibulodynia", "PMS") into one of the six canonical keys so
+                    # the evidence doesn't fragment across near-duplicate rows. An
+                    # unrecognized label is left as-is (it may be a legit subtype or
+                    # genuinely off-scope; the scorer/normalizer decides downstream).
+                    _canon = canonical_condition(cond)
+                    if _canon:
+                        cond = CONDITIONS[_canon]["canonical"]
                     outcome = (it.get("outcome") or "").strip()
                     aspect = (it.get("aspect") or "other").strip()
                     direction = (it.get("direction") or "unclear").strip()

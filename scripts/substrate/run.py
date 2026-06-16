@@ -24,6 +24,7 @@ import fetch_trials
 import fetch_pathway
 import fetch_sider
 import fetch_community
+import fetch_community_legacy
 import chunk
 import extract_claims
 import verify_provenance
@@ -63,6 +64,9 @@ def main():
         fetch_trials.run(conditions=conds, max_trials=args.max_docs)
     if "community" in sources:
         fetch_community.run(conditions=conds, max_posts=args.max_docs)
+    if "reddit-legacy" in sources:
+        print("\n[fetch] Community — archival Reddit post titles from the legacy DB (no model) ...")
+        fetch_community_legacy.run()
     if "pathway" in sources:
         print("\n[fetch] Pathway — Open Targets (deterministic claims, no model) ...")
         fetch_pathway.run(conditions=conds, sources=("opentargets",))
