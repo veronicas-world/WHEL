@@ -8,7 +8,7 @@ import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getShowcasePair } from "@/lib/candidates";
+import { getShowcasePair } from "@/lib/substrate-candidates";
 import ScrollEffects from "@/app/components/ScrollEffects";
 
 export const dynamic = "force-dynamic";

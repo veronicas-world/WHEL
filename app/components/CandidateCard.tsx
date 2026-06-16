@@ -168,7 +168,120 @@ function Readout({ score, max = 10 }: { score: number; max?: number }) {
   );
 }
 
+// ── Substrate UI pieces ──────────────────────────────────────────────────────
+
+const ARM_META: Record<"direct" | "pathway" | "community", { label: string; color: string }> = {
+  direct: { label: "Direct", color: "var(--arm-direct)" },
+  pathway: { label: "Pathway", color: "var(--arm-pathway)" },
+  community: { label: "Community", color: "var(--arm-community)" },
+};
+
+const VALIDATION_META: Record<NonNullable<Candidate["validationStatus"]>, { label: string; note: string; fill: string }> = {
+  clinical: { label: "Clinically anchored", note: "Direct clinical evidence anchors this signal.", fill: "var(--arm-direct)" },
+  unvalidated_signal: { label: "Unvalidated signal", note: "Hypothesis / patient-reported — not clinically validated.", fill: "var(--arm-pathway)" },
+  preliminary: { label: "Preliminary", note: "A single, early signal. Lowest confidence.", fill: "var(--lgrade-l0)" },
+};
+
+/** Plain-language reading of each female-applicability band (F1–F6). */
+const FEMALE_BAND_TEXT: Record<string, string> = {
+  F1: "Evidence generated in women",
+  F2: "Sex-equivalence shown",
+  F3: "Represented, not sex-analyzed",
+  F4: "Applicability to women unconfirmed",
+  F5: "Male-derived evidence",
+  F6: "Known sex difference — flagged",
+};
+
+function ValidationStamp({ status }: { status: NonNullable<Candidate["validationStatus"]> }) {
+  const m = VALIDATION_META[status];
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 6,
+      fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10.5,
+      letterSpacing: "0.05em", textTransform: "uppercase", color: "var(--paper)",
+      background: m.fill, padding: "3px 9px", whiteSpace: "nowrap",
+    }}>
+      {m.label}
+    </span>
+  );
+}
+
+/**
+ * The female-applicability lens — Whel's signature element, front and center.
+ * A full-width strip stating, in plain language, how much the evidence was
+ * generated in women and the discount that follows from it.
+ */
+function FemaleLens({ fa }: { fa: NonNullable<Candidate["femaleApplicability"]> }) {
+  const full = fa.multiplier >= 1.0;
+  const accent = full ? "var(--arm-direct)" : "var(--brick)";
+  return (
+    <div style={{
+      display: "flex", alignItems: "stretch", gap: 12, margin: "12px 0",
+      border: "1px solid var(--rule)", borderLeft: `4px solid ${accent}`,
+      background: "rgba(127,61,46,0.04)", padding: "10px 14px",
+    }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{
+          fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10.5,
+          letterSpacing: "0.08em", textTransform: "uppercase", color: accent, fontWeight: 600,
+        }}>
+          Scored for women
+        </div>
+        <div style={{ fontSize: 14, color: "var(--ink)", marginTop: 3, lineHeight: 1.35 }}>
+          <b>{FEMALE_BAND_TEXT[fa.band] ?? "Applicability uncertain"}</b>
+          {fa.rationale ? <span style={{ opacity: 0.78 }}> — {fa.rationale}</span> : null}
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "center", flexShrink: 0 }}>
+        <div style={{
+          fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 20,
+          fontWeight: 700, color: accent, lineHeight: 1,
+        }}>
+          ×{fa.multiplier.toFixed(2)}
+        </div>
+        <div style={{ fontSize: 9.5, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink)", opacity: 0.55, marginTop: 3 }}>
+          {fa.band} multiplier
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Per-arm strength bars (Direct / Pathway / Community), the anchor marked. */
+function ArmStrengths({ arms }: { arms: NonNullable<Candidate["arms"]> }) {
+  const order = ["direct", "pathway", "community"] as const;
+  const sorted = [...arms].sort((a, b) => order.indexOf(a.arm) - order.indexOf(b.arm));
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 6, margin: "10px 0 2px" }}>
+      {sorted.map((a) => {
+        const meta = ARM_META[a.arm];
+        return (
+          <div key={a.arm} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{
+              width: 74, flexShrink: 0, fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
+              fontSize: 11, color: meta.color, fontWeight: a.isAnchor ? 700 : 500,
+            }}>
+              {meta.label}{a.isAnchor ? " ◂" : ""}
+            </span>
+            <span style={{ flex: 1, height: 6, background: "rgba(20,24,15,0.08)", position: "relative" }}>
+              <span style={{ position: "absolute", inset: 0, width: `${(a.armScore / 10) * 100}%`, background: meta.color }} />
+            </span>
+            <span style={{
+              width: 64, flexShrink: 0, textAlign: "right",
+              fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10.5, color: "var(--ink)", opacity: 0.7,
+            }}>
+              {a.armScore.toFixed(1)} · {a.tier[0].toUpperCase()}{a.tier.slice(1, 3)}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function CandidateCard({ c }: { c: Candidate }) {
+  // Substrate cards carry per-arm data + the female lens; legacy cards fall back.
+  const isSubstrate = !!c.arms && c.arms.length > 0;
   const armKey = c.signalType ? toArmKey(c.signalType) : null;
   const armLabel = armKey ? ARM_LABELS[armKey] : null;
   return (
@@ -182,13 +295,13 @@ export default function CandidateCard({ c }: { c: Candidate }) {
             {c.graphViaTargets && c.graphViaTargets.length > 0 && (
               <MarkerChip dot="var(--moss)" label={`Graph · ${formatViaTargets(c.graphViaTargets)}`} />
             )}
-            {c.sexPk && c.sexPk.length > 0 && (
-              <MarkerChip dot="var(--brick)" label="Sex-PK" />
-            )}
+            {c.sexPk && c.sexPk.length > 0 && <MarkerChip dot="var(--brick)" label="Sex-PK" />}
             {c.cyclePhase && c.cyclePhase.length > 0 && (
               <MarkerChip dot="var(--arm-cross)" label={`Phase · ${c.cyclePhase[0].cyclePhase}`} />
             )}
-            <RelBadge rel={c.direction} />
+            {isSubstrate && c.validationStatus
+              ? <ValidationStamp status={c.validationStatus} />
+              : <RelBadge rel={c.direction} />}
             <TierBadge tier={c.tier} />
           </div>
         </div>
@@ -198,13 +311,30 @@ export default function CandidateCard({ c }: { c: Candidate }) {
           <span className="c-cond">{c.condition}</span>
         </div>
         <span className="c-origin">Origin · {c.origin}</span>
+
+        {isSubstrate && c.femaleApplicability && <FemaleLens fa={c.femaleApplicability} />}
+
         <p className="c-rationale">{c.rationale}</p>
-        <div className="c-meta">
-          <Readout score={c.score} />
-          {armLabel && <span className="m"><b>Arm</b> · {armLabel}</span>}
-          <span className="m"><b>Pathway</b> · {c.pathway}</span>
-          <span className="m"><b>Sources</b> · {c.claims.length}</span>
-        </div>
+
+        {isSubstrate && c.arms ? (
+          <>
+            <ArmStrengths arms={c.arms} />
+            <div className="c-meta">
+              <Readout score={c.score} />
+              <span className="m"><b>Evidence</b> · {c.claims.length} verbatim claim{c.claims.length === 1 ? "" : "s"}</span>
+              {c.arms.some((a) => a.contradictionFlag) && (
+                <span className="m" style={{ color: "var(--brick)" }}><b>⚠ Contradiction</b></span>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="c-meta">
+            <Readout score={c.score} />
+            {armLabel && <span className="m"><b>Arm</b> · {armLabel}</span>}
+            <span className="m"><b>Pathway</b> · {c.pathway}</span>
+            <span className="m"><b>Sources</b> · {c.claims.length}</span>
+          </div>
+        )}
       </div>
 
       {c.signalId && (

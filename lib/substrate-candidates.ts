@@ -309,6 +309,23 @@ export async function getFlagshipCandidate(): Promise<Candidate | null> {
   return all.find((c) => c.conditionId === "pmdd") ?? all[0] ?? null;
 }
 
+/**
+ * Homepage hero pair: the strongest signal plus a deliberately contrasting one
+ * (different condition, and ideally a different validation status) so the homepage
+ * shows the score's RANGE and the honesty stamps, not two perfect scores.
+ */
+export async function getShowcasePair(): Promise<Candidate[]> {
+  const all = await getCandidates(); // sorted strongest-first
+  const lead = all[0];
+  if (!lead) return [];
+  const diff = (c: Candidate) => (c.conditionId ?? c.condition) !== (lead.conditionId ?? lead.condition);
+  const contrast =
+    all.find((c) => diff(c) && c.validationStatus === "unvalidated_signal") ??
+    all.find((c) => diff(c) && c.tier !== lead.tier) ??
+    all.find(diff);
+  return contrast ? [lead, contrast] : [lead];
+}
+
 /** Real corpus counts for dynamic scope copy ("N signals across M conditions"). */
 export async function getCorpusScope(): Promise<{ signals: number; conditions: number }> {
   const all = await getCandidates();

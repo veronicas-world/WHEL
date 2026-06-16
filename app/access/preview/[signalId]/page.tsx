@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCandidateBySignalId } from "@/lib/candidates";
+import { getCandidateBySignalId } from "@/lib/substrate-candidates";
 import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
 
 export const dynamic = "force-dynamic";
