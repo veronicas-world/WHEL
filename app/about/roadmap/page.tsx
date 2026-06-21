@@ -41,7 +41,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
       color: "var(--moss)",
       items: [
         "Six conditions in scope: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, and menopause",
-        "Five evidence pipelines running across four research arms",
+        "Six evidence pipelines running across three evidence arms",
         signalsLine,
         "An independent biological-plausibility cross-reference from Every Cure's MATRIX model, shown beside our own grades rather than blended into them",
         "An external-validation grade on every drug and condition pair, with the highest grade reserved for signals backed by named clinical-guideline strength and certainty",

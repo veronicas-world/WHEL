@@ -165,7 +165,7 @@ export default function MethodologyChangelogPage() {
               PubMed abstracts, ClinicalTrials.gov API v2 briefSummary
               plus detailedDescription for trial records, Reddit&apos;s
               public JSON endpoint for post body plus top 5 comments
-              for forum signals), and calls Claude Opus 4.6 to extract
+              for forum signals), and calls Claude Opus 4.8 to extract
               a 2 to 4 sentence key finding focused on the
               drug-condition pair for that specific signal. The
               extraction prompt is tight on purpose: outputs must use
@@ -1195,7 +1195,7 @@ export default function MethodologyChangelogPage() {
             <p style={ENTRY_PARA_NEXT}>
               Whel will not train a custom graph neural network for
               drug-condition link prediction. The platform consumes machine
-              learning (Claude Opus 4.6 for extraction and scoring, MATRIX
+              learning (Claude Opus 4.8 for extraction and scoring, MATRIX
               scores from Every Cure as an external disclosure layer, where
               MATRIX builds on the KGML-xDTD graph-ML framework of Ma,
               Zhou, Liu &amp; Koslicki,{" "}

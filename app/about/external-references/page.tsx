@@ -1107,7 +1107,7 @@ export default function ExternalReferencesPage() {
                   knowledge graphs and models are tracked separately under the
                   Roadmap&apos;s validation layer. Whel will not train a custom
                   graph neural network; the platform consumes machine learning
-                  (Claude Opus 4.6 for extraction and scoring, MATRIX scores as
+                  (Claude Opus 4.8 for extraction and scoring, MATRIX scores as
                   the existing cross-reference) but does not develop its own ML
                   models.
                 </p>
