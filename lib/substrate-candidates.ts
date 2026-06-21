@@ -8,12 +8,16 @@
  * lib/candidates.ts (the legacy `repurposing_signals` reader) at cutover; it exposes
  * the same function surface so the swap is a one-line import change.
  *
- * Independent side-layers (MATRIX, sex-PK, cycle-phase) are re-keyed in a follow-up
- * (Stage 1.5); L-grade and the Open Targets graph chip are intentionally dropped —
- * the substrate's own `rigor` dimension and Pathway arm supersede them.
+ * Independent side-layers (MATRIX, sex-PK, cycle-phase) are re-keyed to the
+ * substrate drug set here (Stage 1.5): they resolve a substrate drug/condition
+ * label back to the legacy compound_id/condition_id (sex-PK, cycle-phase) or by
+ * name (MATRIX), and are reported beside the score, never folded into it. The
+ * L-grade and the Open Targets graph chip are intentionally dropped — the
+ * substrate's own `rigor` dimension and Pathway arm supersede them.
  */
 import { supabase } from "@/lib/supabase";
 import type { Candidate, Claim, SubstrateArm } from "@/app/components/CandidateCard";
+import { MATRIX_PAIR_SNAPSHOT, formatMatrixPercentile } from "@/lib/matrix-pair-scores-snapshot";
 
 type Row = Record<string, unknown>;
 type ArmKey = "direct" | "pathway" | "community";
@@ -31,6 +35,90 @@ const DIMS: { key: string; label: string }[] = [
 // Substrate condition labels are the canonical six; five match the `conditions`
 // table by name, but "menopause" is filed under the slug "perimenopause-menopause".
 const SLUG_OVERRIDE: Record<string, string> = { menopause: "perimenopause-menopause" };
+
+// ── Independent side-layers ──────────────────────────────────────────────────
+// Reported beside the score, never folded in. MATRIX is name-keyed; sex-PK and
+// cycle-phase are id-keyed (legacy compound_id / condition_id), so we resolve a
+// substrate drug/condition label back to its legacy id below.
+
+export type SexPkFact = { parameter: string; sex: string; direction?: string; magnitude?: string; source?: string; sourceUrl?: string; note?: string };
+export type PhaseFact = { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string; sourceUrl?: string };
+
+// MATRIX condition names differ from the substrate's canonical labels for one
+// condition; alias the substrate label (lowercased) to MATRIX's condition name.
+const MATRIX_COND_ALIAS: Record<string, string> = {
+  menopause: "perimenopause & menopause",
+};
+
+// Case-insensitive `${compound}::${condition}` → MATRIX score, built once.
+const MATRIX_INDEX: Map<string, (typeof MATRIX_PAIR_SNAPSHOT.per_pair)[number]> = (() => {
+  const m = new Map<string, (typeof MATRIX_PAIR_SNAPSHOT.per_pair)[number]>();
+  for (const p of MATRIX_PAIR_SNAPSHOT.per_pair) {
+    m.set(`${String(p.compound_name).toLowerCase()}::${String(p.condition_name).toLowerCase()}`, p);
+  }
+  return m;
+})();
+
+function matrixForPair(drug: string, condition: string) {
+  const condKey = MATRIX_COND_ALIAS[condition.toLowerCase()] ?? condition.toLowerCase();
+  const m = MATRIX_INDEX.get(`${drug.toLowerCase()}::${condKey}`);
+  if (!m) return { matrixPercentile: undefined, matrixDetail: undefined } as const;
+  return {
+    matrixPercentile: m.quantile_rank != null ? formatMatrixPercentile(m.quantile_rank) : undefined,
+    matrixDetail: {
+      transformedScore: m.transformed_score ?? undefined,
+      sourceId: m.matrix_source_id ?? undefined,
+      mondo: m.matrix_mondo ?? undefined,
+    },
+  } as const;
+}
+
+/** compound_id → documented sex-specific PK facts (migration 058). */
+async function getSexPkMap(): Promise<Map<string, SexPkFact[]>> {
+  const map = new Map<string, SexPkFact[]>();
+  const { data, error } = await supabase
+    .from("compound_pk")
+    .select("compound_id, parameter, sex, direction, magnitude, source_ref, source_url, note");
+  if (error || !data) return map;
+  for (const row of data as Row[]) {
+    const cid = row.compound_id ? String(row.compound_id) : "";
+    if (!cid) continue;
+    const fact: SexPkFact = {
+      parameter: String(row.parameter ?? ""),
+      sex: String(row.sex ?? ""),
+      direction: row.direction ? String(row.direction) : undefined,
+      magnitude: row.magnitude ? String(row.magnitude) : undefined,
+      source: row.source_ref ? String(row.source_ref) : undefined,
+      sourceUrl: row.source_url ? String(row.source_url) : undefined,
+      note: row.note ? String(row.note) : undefined,
+    };
+    (map.get(cid) ?? map.set(cid, []).get(cid)!).push(fact);
+  }
+  return map;
+}
+
+/** `${compound_id}::${condition_id}` → cycle-phase dependence (migration 060). */
+async function getPhaseMap(): Promise<Map<string, PhaseFact[]>> {
+  const map = new Map<string, PhaseFact[]>();
+  const { data, error } = await supabase
+    .from("compound_condition_phase")
+    .select("compound_id, condition_id, cycle_phase, pattern, dosing_note, source_ref, source_url");
+  if (error || !data) return map;
+  for (const row of data as Row[]) {
+    const cid = row.compound_id ? String(row.compound_id) : "";
+    const condId = row.condition_id ? String(row.condition_id) : "";
+    if (!cid || !condId) continue;
+    const fact: PhaseFact = {
+      cyclePhase: String(row.cycle_phase ?? ""),
+      pattern: row.pattern ? String(row.pattern) : undefined,
+      dosingNote: row.dosing_note ? String(row.dosing_note) : undefined,
+      source: row.source_ref ? String(row.source_ref) : undefined,
+      sourceUrl: row.source_url ? String(row.source_url) : undefined,
+    };
+    (map.get(`${cid}::${condId}`) ?? map.set(`${cid}::${condId}`, []).get(`${cid}::${condId}`)!).push(fact);
+  }
+  return map;
+}
 
 function tierLc(t: unknown): "strong" | "moderate" | "emerging" | "exploratory" {
   const k = String(t ?? "").toLowerCase();
@@ -144,12 +232,14 @@ function claimRank(doc: Row | null): number {
 }
 
 export async function getCandidates(): Promise<Candidate[]> {
-  const [sigRes, entRes, claimRes, condRes, compRes] = await Promise.all([
+  const [sigRes, entRes, claimRes, condRes, compRes, sexMap, phaseMap] = await Promise.all([
     supabase.from("substrate_signals").select(SIGNAL_COLS).eq("status", "active"),
     supabase.from("entities").select("id, type, label"),
     supabase.from("claims").select("id, exact_quote, text, direction, documents(source, external_id, url, title)"),
-    supabase.from("conditions").select("name, slug"),
-    supabase.from("compounds").select("name, fda_status, original_indication, drug_class"),
+    supabase.from("conditions").select("id, name, slug"),
+    supabase.from("compounds").select("id, name, fda_status, original_indication, drug_class"),
+    getSexPkMap(),
+    getPhaseMap(),
   ]);
 
   const signals = (sigRes.data ?? []) as unknown as Row[];
@@ -159,14 +249,20 @@ export async function getCandidates(): Promise<Candidate[]> {
   const label = new Map<string, string>();
   for (const e of (entRes.data ?? []) as Row[]) label.set(String(e.id), String(e.label));
 
-  // condition display-name(lower) -> slug; fall back to lowercased label
+  // condition display-name(lower) -> slug + legacy id (for the id-keyed layers)
   const slugByName = new Map<string, string>();
+  const condIdByName = new Map<string, string>();
   for (const c of (condRes.data ?? []) as Row[]) {
     if (c.name && c.slug) slugByName.set(String(c.name).toLowerCase(), String(c.slug));
+    if (c.name && c.id) condIdByName.set(String(c.name).toLowerCase(), String(c.id));
   }
-  // compound name(lower) -> origin meta
+  // compound name(lower) -> origin meta + legacy id (for the id-keyed layers)
   const compByName = new Map<string, Row>();
-  for (const c of (compRes.data ?? []) as Row[]) compByName.set(String(c.name).toLowerCase(), c);
+  const compIdByName = new Map<string, string>();
+  for (const c of (compRes.data ?? []) as Row[]) {
+    compByName.set(String(c.name).toLowerCase(), c);
+    if (c.id) compIdByName.set(String(c.name).toLowerCase(), String(c.id));
+  }
 
   // claim id -> rendered provenance record (verbatim quote)
   const claimById = new Map<string, ClaimRec>();
@@ -239,6 +335,13 @@ export async function getCandidates(): Promise<Candidate[]> {
     const dims: Record<string, string> = {};
     for (const d of anchor.dimensions) dims[d.key] = lvl(d.score);
 
+    // ── Independent side-layers, re-keyed to the substrate drug/condition ──
+    const compoundId = compIdByName.get(drug.toLowerCase());
+    const conditionId = condIdByName.get(condition.toLowerCase());
+    const sexPk = compoundId ? sexMap.get(compoundId) : undefined;
+    const cyclePhase = compoundId && conditionId ? phaseMap.get(`${compoundId}::${conditionId}`) : undefined;
+    const { matrixPercentile, matrixDetail } = matrixForPair(drug, condition);
+
     n += 1;
     out.push({
       id: `WHEL-C-${String(n).padStart(3, "0")}`,
@@ -265,6 +368,11 @@ export async function getCandidates(): Promise<Candidate[]> {
       femaleApplicability: anchor.female,
       arms,
       safetyArms: safetyArms.length ? safetyArms : undefined,
+      // ── independent side-layers (reported beside the score, not folded in) ──
+      matrixPercentile,
+      matrixDetail,
+      sexPk: sexPk && sexPk.length ? sexPk : undefined,
+      cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,
     });
   }
 

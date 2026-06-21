@@ -104,20 +104,6 @@ export interface SubstrateArm {
   numContradictions: number;
 }
 
-const L_FILL: Record<NonNullable<Candidate["lGrade"]>, string> = {
-  L0: "var(--lgrade-l0)",
-  L1: "var(--lgrade-l1)",
-  L2: "var(--lgrade-l2)",
-  L3: "var(--lgrade-l3)",
-};
-
-/** "via ESR1", "via AR + PGR", "via ESR1 + 2 more" — keeps the chip compact. */
-function formatViaTargets(targets: string[]): string {
-  if (targets.length === 1) return `via ${targets[0]}`;
-  if (targets.length === 2) return `via ${targets[0]} + ${targets[1]}`;
-  return `via ${targets[0]} + ${targets.length - 1} more`;
-}
-
 function MarkerChip({ dot, label }: { dot: string; label: string }) {
   return (
     <Link
@@ -335,11 +321,7 @@ export default function CandidateCard({ c }: { c: Candidate }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
           <span className="eyebrow">{c.id}</span>
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-            {c.lGrade && <MarkerChip dot={L_FILL[c.lGrade]} label={`Lit · ${c.lGrade}`} />}
             {c.matrixPercentile && <MarkerChip dot="var(--green-deep)" label={`Matrix · ${c.matrixPercentile}`} />}
-            {c.graphViaTargets && c.graphViaTargets.length > 0 && (
-              <MarkerChip dot="var(--moss)" label={`Graph · ${formatViaTargets(c.graphViaTargets)}`} />
-            )}
             {c.sexPk && c.sexPk.length > 0 && <MarkerChip dot="var(--brick)" label="Sex-PK" />}
             {c.cyclePhase && c.cyclePhase.length > 0 && (
               <MarkerChip dot="var(--arm-cross)" label={`Phase · ${c.cyclePhase[0].cyclePhase}`} />

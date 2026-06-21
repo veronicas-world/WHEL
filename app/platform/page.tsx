@@ -160,16 +160,16 @@ export default async function PlatformPage() {
             <div>
               <p className="ldesc">
                 The three layers above build a signal and score it. Each finished signal then carries an
-                independent validation layer, shown beside the score rather than folded into it: a
-                literature grade traced to guideline bodies such as ESHRE, ACOG, and Cochrane, Every
-                Cure&rsquo;s MATRIX treatment-probability model, and an Open Targets knowledge-graph check.
-                It is kept separate from Layer 02&rsquo;s internal validation and is not one of the three
-                build layers. The full set of readings is detailed below.
+                independent reading layer, shown beside the score rather than folded into it: Every
+                Cure&rsquo;s MATRIX treatment-probability cross-reference, and — where the substrate covers
+                the drug or pair — its documented sex-specific pharmacokinetics and cycle-phase dependence.
+                These are kept separate from Layer 02&rsquo;s internal validation and are not one of the
+                three build layers. The full set of readings is detailed below.
               </p>
               <div className="ltags">
-                <span className="pill on-ink">Literature grade</span>
                 <span className="pill on-ink">MATRIX cross-reference</span>
-                <span className="pill on-ink">Knowledge-graph check</span>
+                <span className="pill on-ink">Sex-specific PK</span>
+                <span className="pill on-ink">Cycle-phase reading</span>
               </div>
             </div>
           </div>
@@ -391,31 +391,23 @@ export default async function PlatformPage() {
               candidate in one of four tiers from exploratory to strong.
             </p>
             <p style={pBone}>
-              <strong>The literature grade, L0 to L3,</strong> records how far the published record
-              independently backs the pair, and it always traces to a specific source. L0 means no
-              external record yet, L1 means the pair appears in peer-reviewed literature, L2 means a
-              randomized trial or systematic review reports a result, and L3 means the pair is named
-              in an active clinical guideline from a body such as ESHRE, ACOG, or Cochrane. The grade
-              rises only as far as the attached sources can support, so it can be checked back to a
-              named paper, trial, or guideline section.
+              How far the published record independently backs a pair is no longer a separate grade: it
+              is carried inside the score itself, by the <strong>rigor</strong> dimension, which weights
+              registered trials and peer-reviewed work above weaker sources, and traces to the verbatim
+              quotes on the signal. Whether the biology connects the drug to the condition is likewise
+              carried by the <strong>Pathway</strong> evidence arm rather than shown as a separate graph
+              chip. What remains beside the score are the readings below, which inform how a result should
+              be interpreted rather than how strong it is.
             </p>
             <p style={pBone}>
               <strong>The MATRIX marker</strong>{" "}appears where Every Cure&rsquo;s MATRIX model has a
               score for the same pair. MATRIX is a machine-learned treatment-probability estimate
               drawn from a biomedical knowledge graph across roughly 1,800 drugs and 22,000 diseases,
               and it predicts how plausible a drug and disease link looks given the structure of
-              biomedical knowledge. We read the actual clinical evidence for a narrow set of
-              women&rsquo;s health conditions, so the two are doing different things, and we show the
-              MATRIX percentile beside our own grade rather than folding them together, so a reader
-              can weigh a model&rsquo;s prior against the evidence on the ground.
-            </p>
-            <p style={pBone}>
-              <strong>The graph marker</strong>{" "}records whether the knowledge graph independently
-              connects the drug to the condition. Computed over Open Targets, it reads &ldquo;graph
-              supports, via target X&rdquo; when the drug acts on a target the graph associates with
-              the condition, and stays silent when no such shared target is present. A silence is not a
-              contradiction, it means the graph has no relevant edge, which for these conditions is
-              often a real gap rather than a verdict, and we show it rather than hide it.
+              biomedical knowledge. We read the actual evidence for a narrow set of women&rsquo;s health
+              conditions, so the two are doing different things, and we show the MATRIX percentile beside
+              our own score rather than folding them together, so a reader can weigh a model&rsquo;s prior
+              against the evidence on the ground.
             </p>
             <p style={pBone}>
               <strong>The sex-PK marker</strong>{" "}appears where the substrate holds documented
