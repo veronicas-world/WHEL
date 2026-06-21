@@ -384,10 +384,11 @@ export default async function PlatformPage() {
             <p style={pBone}>
               Each candidate carries several independent readings, recorded separately rather than
               combined into a single number, so the basis for each reading stays visible.{" "}
-              <strong>The confidence tier</strong> is our own score: every
-              signal is graded on five dimensions, including replication, source quality, specificity,
-              biological plausibility, and consistency of direction, which sum to a score out of ten
-              and place the candidate in one of four tiers from exploratory to strong.
+              <strong>The confidence tier</strong> is our own score: each evidence arm is graded on
+              five dimensions — corroboration, rigor, specificity, plausibility, and consistency —
+              which sum to a strength out of ten, then discounted by a female-applicability
+              multiplier reflecting how far the evidence was generated in women, placing the
+              candidate in one of four tiers from exploratory to strong.
             </p>
             <p style={pBone}>
               <strong>The literature grade, L0 to L3,</strong> records how far the published record
