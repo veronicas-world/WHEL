@@ -3,70 +3,206 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 
-const LINK_STYLE = {
+const LINK = {
   color: "var(--moss)",
   textDecoration: "underline",
   textUnderlineOffset: "3px",
+} as const;
+
+function A({ h, children }: { h: string; children: ReactNode }) {
+  return (
+    <a href={h} target="_blank" rel="noopener noreferrer" style={LINK}>
+      {children}
+    </a>
+  );
+}
+
+const ARM_COLOR: Record<string, string> = {
+  direct: "var(--arm-direct)",
+  pathway: "var(--arm-pathway)",
+  community: "var(--arm-community)",
 };
 
-const CARDS: {
+type Dim = { slot: string; means: string; l0: string; l1: string; l2: string };
+
+type Card = {
   key: string;
   title: string;
   oneLine: string;
-  paragraphs: ReactNode[];
-  inclusionCriteria: string;
-}[] = [
+  sources: ReactNode;
+  dims: Dim[];
+  notes: ReactNode;
+};
+
+const CARDS: Card[] = [
   {
     key: "direct",
     title: "Direct Research",
-    oneLine: "Published studies and active clinical trials specifically investigating each condition.",
-    paragraphs: [
-      "Direct Research is the most literal arm: it pulls studies and trials that were explicitly designed to investigate the condition in question. If a researcher set out to study endometriosis, or registered a clinical trial for PMDD, it belongs here. This arm is intentionally sparse for most conditions in the database, and the sparseness is itself data. Endometriosis affects up to 10% of women of reproductive age, yet the direct research arm returns a relatively small number of results, most of them recent. That is not a gap in Whel. That is a reflection of how little targeted research exists.",
-      <>Whel pulls Direct Research signals from two sources. <a href="https://pubmed.ncbi.nlm.nih.gov" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>PubMed</a> (via the NCBI Entrez API) is the primary database for published biomedical literature, maintained by the National Library of Medicine. Searches are condition specific and filtered for relevance to drug or therapeutic intervention. <a href="https://clinicaltrials.gov" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>ClinicalTrials.gov</a> (via the ClinicalTrials.gov REST API v2) is the NIH registry of publicly and privately funded clinical studies. Whel captures active, completed, and recruiting trials, including trial phase, intervention type, and enrollment status. Each signal is analyzed by a language model for evidence strength classification: Strong, Moderate, Emerging, or Exploratory.</>,
-      "A concrete example: several small randomized controlled trials have examined melatonin supplementation for endometriosis related pain. These appear in the Direct Research arm because they were specifically designed to investigate endometriosis. The evidence is preliminary, with small sample sizes and limited follow-up, but the signal is there, and it is the kind of signal that should be informing the next generation of trial designs. The fact that melatonin is rarely mentioned in clinical conversations about endometriosis treatment is exactly what this arm is designed to make visible.",
-      "What to look for: A small number of strong evidence signals for a given condition suggests it is understudied at the trial level. A cluster of preliminary signals may indicate an emerging research area. The evidence strength label on each card reflects study design and sample size, not just whether results were positive.",
+    oneLine:
+      "Published studies and registered clinical trials that set out to investigate the condition itself.",
+    sources: (
+      <>
+        Direct Research is the most literal arm: studies and trials explicitly designed to
+        investigate the condition in question. It is intentionally sparse for most of these
+        conditions, and the sparseness is itself data — it reflects how little targeted
+        research exists. Sources are{" "}
+        <A h="https://pubmed.ncbi.nlm.nih.gov">PubMed</A> (via the NCBI Entrez API) and{" "}
+        <A h="https://clinicaltrials.gov">ClinicalTrials.gov</A> (REST API v2, interventional
+        studies). Every claim is pinned to a verbatim quote from the source and the offsets are
+        verified independently of the model.
+      </>
+    ),
+    dims: [
+      { slot: "Corroboration", means: "independent corroboration", l0: "a single primary study", l1: "a single systematic review / meta-analysis, or two independent studies", l2: "three+ independent and consistent studies, or one large, well-powered, low-bias RCT" },
+      { slot: "Rigor", means: "study design / risk of bias", l0: "case report / preclinical", l1: "observational or small trial", l2: "RCT, meta-analysis, or active guideline" },
+      { slot: "Specificity", means: "this drug, this condition", l0: "proxy only", l1: "drug named, condition adjacent", l2: "both named directly" },
+      { slot: "Plausibility", means: "mechanism", l0: "asserted", l1: "plausible", l2: "evidenced in relevant biology" },
+      { slot: "Consistency", means: "do results agree in direction", l0: "conflicting", l1: "mostly one way", l2: "unanimous (a single study is scored neutral, not penalized)" },
     ],
-    inclusionCriteria: "The highest-confidence category carries the highest bar. Minimum requirements: at least one peer reviewed human study with clearly identified population, drug, outcome, and effect direction. Signals are excluded if they are mechanistic only with no human data. Preferred: at least one prospective study, trial, or meta-analysis. Quality criteria prioritize replication and outcome relevance over citation count; a highly cited older paper with no replication is not equivalent to two recent independent studies with similar findings.",
+    notes: (
+      <>
+        <strong>A single source caps corroboration at 1.</strong> A lone systematic review or
+        meta-analysis is <em>one synthesis</em>, not independent replication, so the trials
+        pooled inside it are not counted as separate sources — corroboration 2 is reserved for
+        three+ genuinely independent studies or one large, low-bias pivotal trial. This follows
+        the modern evidence view that a single large, well-conducted RCT can outweigh a
+        meta-analysis of small, biased trials (<A h="https://www.cebm.ox.ac.uk/resources/levels-of-evidence/ocebm-levels-of-evidence">Oxford CEBM Levels of Evidence</A>), with risk of bias judged per the{" "}
+        <A h="https://training.cochrane.org/handbook">Cochrane Handbook</A>.{" "}
+        <strong>Imprecision is handled by hard rules, not model judgment:</strong> a very small
+        sample (N&nbsp;&lt;&nbsp;30, or &lt;&nbsp;300 events) caps corroboration and rigor at 1;
+        an effect with a p-value but no sample size and no confidence interval is flagged
+        <em> precision-unknown</em> and routed for full-text review rather than credited.
+      </>
+    ),
   },
   {
-    key: "cross",
-    title: "Cross-Condition Signals",
-    oneLine: "Drugs developed for other conditions where women incidentally reported benefit.",
-    paragraphs: [
-      "Cross-Condition Signals is the arm that drug repurposing is built on. It looks for drugs that were developed or trialed for an entirely different purpose, where female patients incidentally reported benefit, or where secondary endpoints in large trials suggest an unexpected effect on a condition we are tracking.",
-      <>Data sources include the <a href="https://www.fda.gov/drugs/surveillance/fda-adverse-event-monitoring-system-aems" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>FDA Adverse Event Monitoring System (AEMS)</a>, formerly FAERS, population level epidemiological studies, and secondary endpoints buried in trials designed to study something else. FDA AEMS is particularly useful because it captures not just adverse events but off label use patterns and unexpected outcomes. Whel also draws on the <a href="https://platform.opentargets.org" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>Open Targets Platform</a> (platform.opentargets.org), developed by EMBL-EBI, the Wellcome Sanger Institute, and GlaxoSmithKline, which aggregates genetic, genomic, and clinical evidence linking drug targets to diseases across multiple evidence types.</>,
-      "A concrete example: several large statin trials (statins are cholesterol lowering drugs) included significant female populations. Buried in the secondary endpoints, women on statins reported reduced dysmenorrhea, the painful periods that are a hallmark symptom of endometriosis. Is this a proven treatment? No. Is it a hypothesis worth formal investigation? Yes. That is exactly what this arm is designed to surface.",
-      "Drug classes of particular interest in this arm include statins, SSRIs, dopamine agonists, and GLP-1 receptor agonists. GLP-1s are especially active right now: the recent wave of weight-management trials has generated an enormous amount of data about hormonal and inflammatory effects in women, and researchers are only beginning to analyze what that secondary data contains.",
-      "What the raw data looks like: each cross-condition signal card shows reaction counts drawn from FDA AEMS reports, for example \u201CPain n=11.\u201D The n= number reflects how many reports in Whel's sampled dataset mentioned that reaction, and every count links directly to the live FDA database query so anyone can verify it. As a noise filter, an individual AEMS reaction needs at least two reports before it is surfaced at all; the broader cross-condition inclusion bar, corroboration across two independent evidence domains, still applies before a signal is classified above Exploratory.",
-      "What to look for: Cross-condition signals with multiple independent sources (FDA AEMS reports plus a secondary trial endpoint, for example) are stronger candidates for follow-up than signals from a single source.",
-    ],
-    inclusionCriteria: "These signals are hypothesis generating by nature. Minimum requirements: the signal must appear in at least two independent evidence domains (published literature plus FDA AEMS, adverse event data plus community reports, or similar cross-domain corroboration), with the same direction of effect and a plausible shared biological mechanism. Three or more formal source mentions pointing in the same direction also qualify. Vague similarity between conditions is not sufficient; a documented shared pathway is required.",
-  },
-  {
-    key: "pathways",
+    key: "pathway",
     title: "Pathway Insights",
-    oneLine: "Drugs with mechanistic or genetic evidence of biological relevance to a condition, including adverse effects that reveal underlying disease biology.",
-    paragraphs: [
-      "Pathway Insights looks for drugs with mechanistic or target level evidence of biological relevance to a condition, including drugs whose adverse effects reveal which pathways are driving the disease. The original framing of this arm was narrower: drugs that worsen conditions. The reframe is more accurate. Understanding what makes a condition worse is often a legitimate path to understanding what might make it better, because adverse effects are data about mechanism. But this arm also includes drugs with genetic and pathway level evidence of relevance that would not show up in direct clinical trials, because the research simply has not caught up yet.",
-      <>The primary source for Pathway Insights is the <a href="https://platform.opentargets.org" target="_blank" rel="noopener noreferrer" style={LINK_STYLE}>Open Targets Platform</a> (platform.opentargets.org), developed by EMBL-EBI, the Wellcome Sanger Institute, and GlaxoSmithKline. Open Targets aggregates evidence across six categories: genetic associations (GWAS and rare variant data), somatic mutations, known drug target interactions, affected pathways via Reactome, differential gene expression via Expression Atlas, and animal model data. Whel queries the Open Targets GraphQL API for each condition using standardized EFO and MONDO disease ontology identifiers. Additional signals come from FDA drug labeling (Drugs@FDA), published case reports documenting adverse gynecological effects, and EMA assessment reports which contain sex disaggregated adverse event data that rarely surfaces in journal publications.</>,
-      "Two examples. Tamoxifen is a breast cancer drug that works by blocking estrogen receptors. It is documented to cause or worsen adenomyosis in some patients. This is pharmacologically informative: if blocking estrogen receptors exacerbates adenomyosis, estrogen receptor pathways are central to adenomyosis biology, which tells us what drug classes are worth investigating as treatments. Separately, Filgrastim, a G-CSF receptor agonist approved for neutropenia, appears in the endometriosis arm because G-CSF modulates immune tolerance and has been explored in recurrent implantation failure. The immune dysregulation hypothesis in endometriosis may involve altered myeloid cell function, a connection invisible without target level pathway analysis.",
-      "What to look for: Pathway Insights signals that implicate a well characterized biological pathway (estrogen receptors, inflammatory cascades, dopamine signaling, immune tolerance) are more interpretable than purely empirical associations. The Pathway Insight field on each signal card names the specific mechanism. Signals with Open Targets evidence scores above 0.5 reflect stronger genetic or clinical association between the drug target and the condition.",
+    oneLine:
+      "Mechanistic, target-level, and safety evidence of biological relevance — including adverse effects that reveal disease biology.",
+    sources: (
+      <>
+        Pathway Insights looks for drugs with mechanistic or target-level evidence of relevance
+        to a condition, including drugs whose adverse effects reveal which pathways drive the
+        disease (understanding what worsens a condition is data about mechanism). Structured
+        sources are rendered into fixed, verbatim sentences without a model:{" "}
+        <A h="https://platform.opentargets.org">Open Targets</A> (genetic, drug-target, and
+        pathway associations, via the GraphQL API keyed on EFO/MONDO ontology IDs), the FDA
+        Adverse Event Reporting System —{" "}
+        <A h="https://fis.fda.gov/sense/app/95239e26-e0be-42d9-a960-9a5f7f1c25ee/overview">AEMS</A>{" "}
+        (formerly FAERS), and{" "}
+        <A h="http://sideeffects.embl.de/">SIDER</A> (label side-effect frequencies).
+      </>
+    ),
+    dims: [
+      { slot: "Corroboration", means: "how many independent mechanistic lines converge", l0: "one mechanistic line", l1: "two converging lines", l2: "several independent lines (target + preclinical + safety)" },
+      { slot: "Rigor", means: "strength / recency of the models", l0: "in-vitro only", l1: "mixed models", l2: "human-relevant models" },
+      { slot: "Specificity", means: "the drug's action on the named target", l0: "broad / off-target", l1: "partially specific", l2: "specific action on the named target" },
+      { slot: "Plausibility", means: "target–phenotype fit", l0: "weak link", l1: "plausible", l2: "hitting this target plausibly moves this condition" },
+      { slot: "Consistency", means: "do the mechanistic signals point the same way", l0: "conflicting", l1: "mixed", l2: "converge" },
     ],
-    inclusionCriteria: "Pathway signals are powerful but easy to overinterpret. Minimum requirements: a specific named mechanism (mast cell activation, prostaglandin signaling, or androgen receptor modulation, not generic \"inflammation\"), at least one known drug target link, and at least one disease pathway link. Pathway-only signals with no human or pharmacovigilance corroboration are classified Exploratory and displayed with explicit framing. Pathway signals paired with human observation are classified Emerging or Moderate. Pathway signals with human observation plus independent replication are classified Strong.",
+    notes: (
+      <>
+        <strong>Adverse-event data gets a dual read.</strong> An AEMS or SIDER signal is first a
+        safety caveat, and second — only when the pharmacology supports it — a hedged
+        mechanistic lead within this arm, never dressed up as efficacy. AEMS records are
+        counts-based and carry a mandatory caveat that spontaneous reports cannot establish
+        causation or incidence. Because structured sources have no study population, every
+        pathway signal defaults to the <em>female-applicability-unconfirmed</em> band (see
+        below) — mechanistic evidence is not clinical-in-women evidence, so the Pathway arm
+        tops out at Moderate on its own.
+      </>
+    ),
   },
   {
     key: "community",
     title: "Community Forum Reports",
-    oneLine: "Consistent treatment patterns reported across patient communities on Reddit.",
-    paragraphs: [
-      "Community Forum Reports is the arm that required the most internal debate, and it is the one that needs the clearest labeling: this is community signal, not clinical evidence. It is included because ignoring it would mean discarding a meaningful and systematically underrepresented source of information about what is actually happening to patients. Women often do not report positive side effects in clinical trials unless the trial is specifically designed to capture them. If you are enrolled in a statin trial and your periods improve, that is not a primary endpoint. It is not something the researchers are looking for, and it may not end up in the published data. But you might post about it on r/Endo. And if enough women do that over several years, it is a signal: imprecise, uncontrolled, but real.",
-      "Whel pulls Community Forum Reports from Reddit using the Reddit public JSON API. The pipeline queries six condition specific subreddits: r/Endo (endometriosis), r/PCOS, r/PMDD, r/Menopause, r/adenomyosis, and r/vulvodynia. For each condition, eight treatment focused search queries are run per subreddit to identify posts discussing specific medications or interventions. The pipeline stores individual post permalinks (validated to contain /comments/ to confirm post level rather than subreddit level URLs) and groups citations by subreddit in the display. Whel does not pull anecdotes uncritically; it looks for consistent patterns across a large number of posts over time, which is different from a single person's experience.",
-      "One early finding from this arm: Meloxicam, an NSAID, is mentioned consistently across multiple endometriosis communities as more effective for pelvic pain than standard ibuprofen. This is pharmacologically plausible: Meloxicam is a preferential COX-2 inhibitor with a different selectivity profile than ibuprofen, which is a non-selective COX inhibitor. The distinction matters because COX-2 is the isoform primarily responsible for the prostaglandin synthesis that drives endometriosis related pain. There are very few formal studies on Meloxicam specifically for endometriosis. That gap between community reported experience and formal research is exactly what this arm is designed to make visible.",
-      "What to look for: Community signals that align with a mechanistically plausible hypothesis are stronger candidates for follow-up than purely anecdotal patterns. A signal appearing across multiple subreddits for the same condition, or across multiple conditions, is more likely to reflect a real pharmacological effect than a single community observation.",
+    oneLine:
+      "Consistent, independently-reported treatment patterns from patient communities — signal, never clinical proof.",
+    sources: (
+      <>
+        This is the arm that needs the clearest labelling: <strong>community signal, not
+        clinical evidence.</strong> It exists because ignoring it would discard a meaningful,
+        systematically underrepresented record of what patients actually experience — women
+        rarely report a beneficial side effect in a trial that was not designed to capture it,
+        but they post about it. Sources are condition-specific subreddits (
+        <A h="https://www.reddit.com/r/Endo/">r/Endo</A>,{" "}
+        <A h="https://www.reddit.com/r/PCOS/">r/PCOS</A>,{" "}
+        <A h="https://www.reddit.com/r/PMDD/">r/PMDD</A>,{" "}
+        <A h="https://www.reddit.com/r/Menopause/">r/Menopause</A>,{" "}
+        <A h="https://www.reddit.com/r/adenomyosis/">r/adenomyosis</A>,{" "}
+        <A h="https://www.reddit.com/r/vulvodynia/">r/vulvodynia</A>), each post pinned to its
+        permalink. It is scored on patient-report-appropriate criteria — the{" "}
+        <A h="https://doi.org/10.1371/journal.pmed.1001895">GRADE-CERQual</A> idea — and{" "}
+        <strong>never</strong> on trial design, an approach grounded in the social-media
+        pharmacovigilance literature (<A h="https://web-radr.eu/">WEB-RADR</A>).
+      </>
+    ),
+    dims: [
+      { slot: "Corroboration", means: "independence of accounts (weighted)", l0: "single account / signs of coordination", l1: "a few independent accounts", l2: "many independent accounts across threads, communities, and time" },
+      { slot: "Rigor", means: "specificity of the report", l0: 'vague ("felt bad")', l1: "symptom clear, timing/dose fuzzy", l2: "clear symptom + dose + timing" },
+      { slot: "Specificity", means: "this drug, this outcome", l0: "drug or outcome vague", l1: "one clear", l2: "both clear and linked" },
+      { slot: "Plausibility", means: "fits the drug's pharmacology", l0: "unexplained by mechanism", l1: "loosely consistent", l2: "directly fits known pharmacology" },
+      { slot: "Consistency", means: "do reports agree (confirm vs. deny)", l0: "denials outweigh confirms", l1: "mixed", l2: "confirms dominate and dose/timing coheres" },
     ],
-    inclusionCriteria: "This category requires the clearest guardrails. Minimum requirements: 5 or more distinct posts with specific exposure-outcome language from unique users. Raw volume alone is insufficient; the framework still requires specificity (not \"it changed things\" but \"after starting the medication, my cycles shortened and acne improved\"), directionality (improvement, worsening, or no change), and unique-user diversity across threads. Obvious reposts, promotional content, and low-content comments are excluded. Replication is graded on a 0–2 scale (0 = 5–7 posts, 1 = 8–14 posts, 2 = 15 or more posts). Signals with 15 or more qualifying mentions and consistent directional language are eligible for Moderate classification, particularly when triangulated with a formal source. Whel also tracks which forums a signal appears in, the time period of discussion, and whether the signal persists over time or reflects a temporary spike.",
+    notes: (
+      <>
+        <strong>Independence is computed deterministically, not by the model.</strong> The unit
+        is the distinct account, not the post: a reply written after reading the original is
+        anchored by it and discounted, so a single long thread of agreement cannot reach the top
+        score. Distinct independent accounts across distinct threads set corroboration (single →
+        0; 2–4 → 1; 5+ across ≥2 threads → 2). Manipulation signals — near-duplicate phrasing,
+        sub-hour posting bursts — cap the score further, and high upvotes never inflate it.
+        Substantive denials are kept as community-level contradictions, never averaged away. A
+        high-scoring community signal is labelled a <em>&ldquo;strong patient-reported
+        signal&rdquo;</em> — it asserts a credible, specific, independently-reported pattern,
+        never proven efficacy.
+      </>
+    ),
   },
 ];
+
+function RubricTable({ dims, color }: { dims: Dim[]; color: string }) {
+  return (
+    <div style={{ overflowX: "auto", marginTop: 18 }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.86rem", minWidth: 640 }}>
+        <thead>
+          <tr style={{ borderBottom: `2px solid ${color}` }}>
+            {["Dimension", "What it measures here", "0", "1", "2"].map((h, i) => (
+              <th
+                key={h}
+                style={{
+                  textAlign: "left",
+                  padding: "8px 10px",
+                  fontFamily: "var(--font-plex-mono, monospace)",
+                  fontSize: "10px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--muted)",
+                  width: i >= 2 ? "20%" : i === 0 ? "13%" : "27%",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {dims.map((d) => (
+            <tr key={d.slot} style={{ borderBottom: "1px solid var(--line)", verticalAlign: "top" }}>
+              <td style={{ padding: "10px", fontWeight: 600, color, whiteSpace: "nowrap" }}>{d.slot}</td>
+              <td style={{ padding: "10px", color: "var(--body)" }}>{d.means}</td>
+              <td style={{ padding: "10px", color: "var(--body)" }}>{d.l0}</td>
+              <td style={{ padding: "10px", color: "var(--body)" }}>{d.l1}</td>
+              <td style={{ padding: "10px", color: "var(--body)" }}>{d.l2}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 export default function SignalTypesAccordion() {
   const [activeKey, setActiveKey] = useState<string | null>("direct");
@@ -79,12 +215,13 @@ export default function SignalTypesAccordion() {
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {CARDS.map((card, idx) => {
         const isActive = activeKey === card.key;
+        const color = ARM_COLOR[card.key];
         return (
           <div
             key={card.key}
             style={{
               border: "1px solid var(--line)",
-              borderLeft: isActive ? "3px solid var(--moss)" : "1px solid var(--line)",
+              borderLeft: isActive ? `3px solid ${color}` : "1px solid var(--line)",
               backgroundColor: "var(--paper)",
               transition: "border-left 0.15s ease",
             }}
@@ -101,11 +238,11 @@ export default function SignalTypesAccordion() {
                     fontSize: "10.5px",
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
-                    color: isActive ? "var(--moss)" : "var(--muted)",
+                    color: isActive ? color : "var(--muted)",
                     marginBottom: 8,
                   }}
                 >
-                  Arm {String(idx + 1).padStart(2, "0")} / {String(CARDS.length).padStart(2, "0")}
+                  Evidence arm {String(idx + 1).padStart(2, "0")} / {String(CARDS.length).padStart(2, "0")}
                 </p>
                 <h3
                   style={{
@@ -115,18 +252,16 @@ export default function SignalTypesAccordion() {
                     letterSpacing: "-0.015em",
                     lineHeight: 1.1,
                     margin: "0 0 8px",
-                    color: isActive ? "var(--moss)" : "var(--ink)",
+                    color: isActive ? color : "var(--ink)",
                   }}
                 >
                   {card.title}
                 </h3>
-                <p style={{ fontSize: "0.95rem", lineHeight: 1.6, color: "var(--body)" }}>
-                  {card.oneLine}
-                </p>
+                <p style={{ fontSize: "0.95rem", lineHeight: 1.6, color: "var(--body)" }}>{card.oneLine}</p>
               </div>
               <span
                 className="shrink-0 mt-1"
-                style={{ color: "var(--moss)", lineHeight: 1, fontSize: "1.4rem", fontWeight: 300 }}
+                style={{ color, lineHeight: 1, fontSize: "1.4rem", fontWeight: 300 }}
                 aria-hidden="true"
               >
                 {isActive ? "−" : "+"}
@@ -134,45 +269,48 @@ export default function SignalTypesAccordion() {
             </button>
 
             {isActive && (
-              <div
-                className="px-6 sm:px-8 pb-8"
-                style={{ borderTop: "1px solid var(--line)" }}
-              >
-                <div
-                  style={{
-                    paddingTop: 24,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 18,
-                    fontSize: "1rem",
-                    lineHeight: 1.72,
-                    color: "var(--body)",
-                  }}
-                >
-                  {card.paragraphs.map((p, i) => (
-                    <p key={i} style={{ margin: 0 }}>{p}</p>
-                  ))}
-                </div>
+              <div className="px-6 sm:px-8 pb-8" style={{ borderTop: "1px solid var(--line)" }}>
+                <p style={{ paddingTop: 24, margin: 0, fontSize: "1rem", lineHeight: 1.72, color: "var(--body)" }}>
+                  {card.sources}
+                </p>
 
-                {/* Inclusion criteria */}
-                <div
-                  style={{ marginTop: 24, padding: "20px 22px", backgroundColor: "var(--bone-2)", border: "1px solid var(--line)" }}
-                >
+                {/* Full scoring criteria for this arm */}
+                <div style={{ marginTop: 26 }}>
                   <p
                     style={{
                       fontFamily: "var(--font-plex-mono, monospace)",
                       fontSize: "10.5px",
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
-                      color: "var(--moss)",
+                      color,
+                      margin: "0 0 4px",
+                    }}
+                  >
+                    Scoring criteria · five dimensions, 0–2 each
+                  </p>
+                  <p style={{ fontSize: "0.9rem", color: "var(--muted)", margin: 0 }}>
+                    The same five slots are scored for every arm, but each slot is interpreted on
+                    this arm&rsquo;s terms. The five sum to an arm strength of 0–10, then a
+                    female-applicability multiplier is applied.
+                  </p>
+                  <RubricTable dims={card.dims} color={color} />
+                </div>
+
+                {/* Arm-specific notes */}
+                <div style={{ marginTop: 24, padding: "20px 22px", backgroundColor: "var(--bone-2)", border: "1px solid var(--line)" }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-plex-mono, monospace)",
+                      fontSize: "10.5px",
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color,
                       margin: "0 0 10px",
                     }}
                   >
-                    Inclusion criteria
+                    How this arm is held in check
                   </p>
-                  <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--body)", margin: 0 }}>
-                    {card.inclusionCriteria}
-                  </p>
+                  <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--body)", margin: 0 }}>{card.notes}</p>
                 </div>
               </div>
             )}
