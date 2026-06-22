@@ -94,7 +94,7 @@ export default function MethodologyChangelogPage() {
           </nav>
 
           <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Revision history · current version v3.13
+            Revision history · current version v4.0
           </div>
 
           <h1
@@ -132,8 +132,60 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v3.13 */}
+          {/* v4.0 — substrate cutover */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v4.0 &middot; June 21, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Major version. The LLM-synthesized{" "}
+              <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>
+                repurposing_signals
+              </code>{" "}
+              model was retired in favor of the arm-aware substrate engine.
+              Whel now reads each drug-condition pair through three evidence
+              arms (Direct, Pathway, Community), scores each arm on five tuned
+              dimensions (corroboration, rigor, specificity, plausibility,
+              consistency), discounts by a female-applicability multiplier, and
+              sorts into a tier. Cross-condition was demoted from a scored
+              fourth arm to a derived-hypotheses lens. The full model is
+              documented on the{" "}
+              <Link href="/signal-types" style={ENTRY_LINK}>
+                signal types &amp; scoring
+              </Link>{" "}
+              page. Snapshot at cutover: 183 active pairs across 6 conditions,
+              tiered 11 Strong / 66 Moderate / 65 Emerging / 41 Exploratory,
+              of which 108 carry a clinical validation status.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The L0&ndash;L3 literature grade was retired with this change. It
+              had served two roles at once, an in-pipeline corroboration input
+              and an external-validation benchmark, and the external reviewer
+              flagged that doubling as circular. The in-pipeline signal is
+              now the <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>corroboration</code>{" "}
+              dimension inside the five-dimension rubric, scored only against
+              evidence Whel has actually ingested. The{" "}
+              <Link href="/about/methodology" style={ENTRY_LINK}>
+                validation methodology
+              </Link>{" "}
+              page keeps a clean external-only ladder (E0&ndash;E3) computed
+              after the fact, so any agreement between the tier and the external
+              record now carries real information.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              The flagship editorial pages (the two featured signals), the
+              homepage, the candidates index, the technical-architecture page,
+              and the external-references page were all rebound to read tiers,
+              scores, validation status, dimensions, and claims directly from
+              the live substrate at request time. Hard-coded snapshots of the
+              old model, which had drifted from the engine&apos;s stricter,
+              more honest corroboration scoring, were removed, so the
+              public numbers can no longer diverge from what the engine holds.
+            </p>
+          </EntryWrapper>
+
+          {/* v3.13 */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v3.13 &middot; June 8, 2026
             </div>
@@ -534,7 +586,7 @@ export default function MethodologyChangelogPage() {
               the descriptive title in the{" "}
               <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>title</code>{" "}
               column carries the actual drug-target-disease finding
-              (e.g. &ldquo;Aprepitant — genetic_target_overlap for
+              (e.g. &ldquo;Aprepitant, genetic_target_overlap for
               menopause (target: TACR1, OT score: 0.482)&rdquo;).
               So users see a valid citation that links to a real
               Open Targets page; the failure is at the
@@ -627,8 +679,8 @@ export default function MethodologyChangelogPage() {
               that PMID as Ferrero S, Gillott DJ, Venturini PL &amp;
               Remorgida V 2011, &ldquo;Use of aromatase inhibitors to
               treat endometriosis-related pain symptoms: a systematic
-              review&rdquo; (Reproductive Biology and Endocrinology) —
-              the journal and year were correct, the description on the
+              review&rdquo; (Reproductive Biology and Endocrinology).
+              The journal and year were correct, the description on the
               featured page matched the Ferrero paper exactly, but the
               author attribution was simply wrong. The featured page
               and the manifest were both corrected to attribute Ferrero
@@ -691,7 +743,7 @@ export default function MethodologyChangelogPage() {
               reads from. Until the export runs and the snapshot is
               committed, the disclosure shows the &ldquo;tooling
               shipped, awaiting first run&rdquo; block instead of live
-              numbers — the honest state.
+              numbers, which is the honest state.
             </p>
             <p style={ENTRY_PARA_NEXT}>
               What is not yet audited: the export step requires

@@ -16,7 +16,7 @@ export interface Claim {
 
 export interface Candidate {
   id: string;
-  /** Underlying repurposing_signals id; the stable key for the per-signal detail page. */
+  /** Underlying substrate pair id (`${interventionId}__${conditionId}`); the stable key for the per-signal detail page. */
   signalId?: string;
   drug: string;
   condition: string;
@@ -35,8 +35,6 @@ export interface Candidate {
   signalType?: string;
   evidenceStrength?: string;
   claims: Claim[];
-  /** External-validation grade for the drug-condition pair (L0–L3), when present. */
-  lGrade?: "L0" | "L1" | "L2" | "L3";
   /** Every Cure MATRIX cross-reference percentile, e.g. "Top 12%", when MATRIX covers the pair. */
   matrixPercentile?: string;
   /** Fuller MATRIX detail: the raw treat-score and the drug/disease entities MATRIX scored. */
@@ -164,7 +162,7 @@ const ARM_META: Record<"direct" | "pathway" | "community", { label: string; colo
 
 const VALIDATION_META: Record<NonNullable<Candidate["validationStatus"]>, { label: string; note: string; fill: string }> = {
   clinical: { label: "Clinically anchored", note: "Direct clinical evidence anchors this signal.", fill: "var(--arm-direct)" },
-  unvalidated_signal: { label: "Unvalidated signal", note: "Hypothesis / patient-reported — not clinically validated.", fill: "var(--arm-pathway)" },
+  unvalidated_signal: { label: "Unvalidated signal", note: "Hypothesis / patient-reported, not clinically validated.", fill: "var(--arm-pathway)" },
   preliminary: { label: "Preliminary", note: "A single, early signal. Lowest confidence.", fill: "var(--lgrade-l0)" },
 };
 
@@ -175,7 +173,7 @@ const FEMALE_BAND_TEXT: Record<string, string> = {
   F3: "Represented, not sex-analyzed",
   F4: "Applicability to women unconfirmed",
   F5: "Male-derived evidence",
-  F6: "Known sex difference — flagged",
+  F6: "Known sex difference, flagged",
 };
 
 function ValidationStamp({ status }: { status: NonNullable<Candidate["validationStatus"]> }) {
@@ -221,7 +219,7 @@ function FemaleLens({ fa }: { fa: NonNullable<Candidate["femaleApplicability"]> 
         </div>
         <div style={{ fontSize: 14, color: "var(--ink)", marginTop: 3, lineHeight: 1.35 }}>
           <b>{band}</b>
-          {detail ? <span style={{ opacity: 0.78 }}> — {detail}</span> : null}
+          {detail ? <span style={{ opacity: 0.78 }}> · {detail}</span> : null}
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "center", flexShrink: 0 }}>

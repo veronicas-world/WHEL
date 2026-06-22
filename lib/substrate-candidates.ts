@@ -354,7 +354,7 @@ export async function getCandidates(): Promise<Candidate[]> {
       origin,
       pathway: anchor.tier === "exploratory"
         ? "Hypothesis-generation · pre-validation"
-        : "505(b)(2) — existing active ingredient, new indication",
+        : "505(b)(2) · existing active ingredient, new indication",
       direction: anyContradiction ? "contradicts" : anchor.tier === "exploratory" ? "silent" : "supports",
       rationale: anchor.synthesis || `${drug} surfaced as a substrate signal for ${condition}.`,
       mechanism: anchor.mechanism || "Mechanism not yet characterized in the substrate.",

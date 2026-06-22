@@ -278,7 +278,7 @@ export default async function SignalDetail({
                     borderBottom: "1px solid var(--rule)", paddingBottom: 9, marginBottom: 12,
                   }}>
                     <span style={{ fontWeight: 700, fontSize: 16, color: "var(--ink)" }}>
-                      {ARM3[arm.arm] ?? arm.arm} arm{arm.isAnchor ? " — anchors the headline" : ""}
+                      {ARM3[arm.arm] ?? arm.arm} arm{arm.isAnchor ? " · anchors the headline" : ""}
                     </span>
                     <span style={{ fontFamily: MONO, fontSize: 13, color: "var(--ink)", flexShrink: 0 }}>
                       {arm.armScore.toFixed(1)} / 10 · {TIER_LABELS[arm.tier]}

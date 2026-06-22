@@ -44,7 +44,7 @@ const CARDS: Card[] = [
       <>
         Direct Research is the most literal arm: studies and trials explicitly designed to
         investigate the condition in question. It is intentionally sparse for most of these
-        conditions, and the sparseness is itself data — it reflects how little targeted
+        conditions, and the sparseness is itself data, reflecting how little targeted
         research exists. Sources are{" "}
         <A h="https://pubmed.ncbi.nlm.nih.gov">PubMed</A> (via the NCBI Entrez API) and{" "}
         <A h="https://clinicaltrials.gov">ClinicalTrials.gov</A> (REST API v2, interventional
@@ -63,7 +63,7 @@ const CARDS: Card[] = [
       <>
         <strong>A single source caps corroboration at 1.</strong> A lone systematic review or
         meta-analysis is <em>one synthesis</em>, not independent replication, so the trials
-        pooled inside it are not counted as separate sources — corroboration 2 is reserved for
+        pooled inside it are not counted as separate sources. Corroboration 2 is reserved for
         three+ genuinely independent studies or one large, low-bias pivotal trial. This follows
         the modern evidence view that a single large, well-conducted RCT can outweigh a
         meta-analysis of small, biased trials (<A h="https://www.cebm.ox.ac.uk/resources/levels-of-evidence/ocebm-levels-of-evidence">Oxford CEBM Levels of Evidence</A>), with risk of bias judged per the{" "}
@@ -79,7 +79,7 @@ const CARDS: Card[] = [
     key: "pathway",
     title: "Pathway Insights",
     oneLine:
-      "Mechanistic, target-level, and safety evidence of biological relevance — including adverse effects that reveal disease biology.",
+      "Mechanistic, target-level, and safety evidence of biological relevance, including adverse effects that reveal disease biology.",
     sources: (
       <>
         Pathway Insights looks for drugs with mechanistic or target-level evidence of relevance
@@ -88,10 +88,10 @@ const CARDS: Card[] = [
         sources are rendered into fixed, verbatim sentences without a model:{" "}
         <A h="https://platform.opentargets.org">Open Targets</A> (genetic, drug-target, and
         pathway associations, via the GraphQL API keyed on EFO/MONDO ontology IDs), the FDA
-        Adverse Event Reporting System —{" "}
+        Adverse Event Reporting System,{" "}
         <A h="https://fis.fda.gov/sense/app/95239e26-e0be-42d9-a960-9a5f7f1c25ee/overview">AEMS</A>{" "}
         (formerly FAERS), and{" "}
-        <A h="http://sideeffects.embl.de/">SIDER</A> (label side-effect frequencies).
+        <A h="https://sideeffects.embl.de/">SIDER</A> (label side-effect frequencies).
       </>
     ),
     dims: [
@@ -104,12 +104,12 @@ const CARDS: Card[] = [
     notes: (
       <>
         <strong>Adverse-event data gets a dual read.</strong> An AEMS or SIDER signal is first a
-        safety caveat, and second — only when the pharmacology supports it — a hedged
+        safety caveat, and second, only when the pharmacology supports it, a hedged
         mechanistic lead within this arm, never dressed up as efficacy. AEMS records are
         counts-based and carry a mandatory caveat that spontaneous reports cannot establish
         causation or incidence. Because structured sources have no study population, every
         pathway signal defaults to the <em>female-applicability-unconfirmed</em> band (see
-        below) — mechanistic evidence is not clinical-in-women evidence, so the Pathway arm
+        below). Mechanistic evidence is not clinical-in-women evidence, so the Pathway arm
         tops out at Moderate on its own.
       </>
     ),
@@ -118,12 +118,12 @@ const CARDS: Card[] = [
     key: "community",
     title: "Community Forum Reports",
     oneLine:
-      "Consistent, independently-reported treatment patterns from patient communities — signal, never clinical proof.",
+      "Consistent, independently-reported treatment patterns from patient communities: signal, never clinical proof.",
     sources: (
       <>
         This is the arm that needs the clearest labelling: <strong>community signal, not
         clinical evidence.</strong> It exists because ignoring it would discard a meaningful,
-        systematically underrepresented record of what patients actually experience — women
+        systematically underrepresented record of what patients actually experience. Women
         rarely report a beneficial side effect in a trial that was not designed to capture it,
         but they post about it. Sources are condition-specific subreddits (
         <A h="https://www.reddit.com/r/Endo/">r/Endo</A>,{" "}
@@ -132,8 +132,8 @@ const CARDS: Card[] = [
         <A h="https://www.reddit.com/r/Menopause/">r/Menopause</A>,{" "}
         <A h="https://www.reddit.com/r/adenomyosis/">r/adenomyosis</A>,{" "}
         <A h="https://www.reddit.com/r/vulvodynia/">r/vulvodynia</A>), each post pinned to its
-        permalink. It is scored on patient-report-appropriate criteria — the{" "}
-        <A h="https://doi.org/10.1371/journal.pmed.1001895">GRADE-CERQual</A> idea — and{" "}
+        permalink. It is scored on patient-report-appropriate criteria, the{" "}
+        <A h="https://doi.org/10.1371/journal.pmed.1001895">GRADE-CERQual</A> idea, and{" "}
         <strong>never</strong> on trial design, an approach grounded in the social-media
         pharmacovigilance literature (<A h="https://web-radr.eu/">WEB-RADR</A>).
       </>
@@ -151,11 +151,11 @@ const CARDS: Card[] = [
         is the distinct account, not the post: a reply written after reading the original is
         anchored by it and discounted, so a single long thread of agreement cannot reach the top
         score. Distinct independent accounts across distinct threads set corroboration (single →
-        0; 2–4 → 1; 5+ across ≥2 threads → 2). Manipulation signals — near-duplicate phrasing,
-        sub-hour posting bursts — cap the score further, and high upvotes never inflate it.
+        0; 2–4 → 1; 5+ across ≥2 threads → 2). Manipulation signals (near-duplicate phrasing,
+        sub-hour posting bursts) cap the score further, and high upvotes never inflate it.
         Substantive denials are kept as community-level contradictions, never averaged away. A
         high-scoring community signal is labelled a <em>&ldquo;strong patient-reported
-        signal&rdquo;</em> — it asserts a credible, specific, independently-reported pattern,
+        signal&rdquo;</em>: it asserts a credible, specific, independently-reported pattern,
         never proven efficacy.
       </>
     ),

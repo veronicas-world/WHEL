@@ -1,8 +1,17 @@
 import Link from "next/link";
+import { getCandidateBySignalId } from "@/lib/substrate-candidates";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
-  title: "Archived featured signal: Anastrozole / Endometriosis | Whel",
+  title: "Featured signal: Aromatase inhibitors / Endometriosis | Whel",
 };
+
+// Live substrate pair: aromatase inhibitors × endometriosis (the class of which
+// anastrozole and letrozole are members). signalId = `${interventionId}__${conditionId}`.
+const SIGNAL_ID =
+  "4649c778-db16-4740-80c6-29a739610666__13c33c1b-98d6-4ef0-bb1a-add1344261a5";
 
 const MONO: React.CSSProperties = {
   fontFamily: "var(--font-plex-mono, ui-monospace, SFMono-Regular, Menlo, monospace)",
@@ -38,104 +47,67 @@ const LINK: React.CSSProperties = {
   textUnderlineOffset: "2px",
 };
 
-const SCORING_DIMENSIONS = [
-  {
-    label: "Replication",
-    score: 2,
-    note: "Multiple independent reviews and trial reports converge on the same target and direction of effect.",
-  },
-  {
-    label: "Source quality",
-    score: 2,
-    note: "Peer-reviewed reviews, regulatory pharmacovigilance data, and Open Targets pathway evidence.",
-  },
-  {
-    label: "Specificity",
-    score: 2,
-    note: "Anastrozole's target, CYP19A1 / aromatase, is the specific enzyme driving local estrogen biosynthesis in endometriotic lesions.",
-  },
-  {
-    label: "Plausibility",
-    score: 2,
-    note: "Local aromatase overexpression in lesions is well-characterized, and the autocrine ESR1\u2192GREB1 proliferative loop is mechanistically coherent.",
-  },
-  {
-    label: "Direction",
-    score: 2,
-    note: "Available evidence consistently points to symptom improvement, with no signal of worsening.",
-  },
-];
+const TIER_LABEL: Record<string, string> = {
+  strong: "Strong",
+  moderate: "Moderate",
+  emerging: "Emerging",
+  exploratory: "Exploratory",
+};
 
-// Sources actually attached to this signal in the Whel database.
-const INDEXED_SOURCES = [
-  {
-    label: "Open Targets \u2014 pathway evidence",
-    meta: "CHEMBL1399 \u00b7 target CYP19A1 (aromatase) \u00b7 association score 0.67",
-    href: "https://platform.opentargets.org/drug/CHEMBL1399",
-    note: "Records the drug-target link and the target's genetic and pathway-level association with endometriosis.",
-  },
-  {
-    label: "FDA Adverse Event Reporting System (FAERS / AEMS)",
-    meta: "10 indexed records \u00b7 15,012 condition-relevant reports out of 31,213 female-patient reports for anastrozole",
-    href: "https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-public-dashboard",
-    note: "Reported symptoms in women already taking anastrozole, indexed for tolerability context: fatigue (12), pain (10), depression (8), insomnia (7), abdominal pain (6), abdominal distension (2), abdominal pain upper (2), peripheral swelling (2), oedema peripheral (2).",
-  },
-];
+const ARM_TITLE: Record<string, string> = {
+  direct: "Direct",
+  pathway: "Pathway",
+  community: "Community",
+};
 
-const EXTERNAL_VALIDATION = [
-  {
-    label: "Ferrero S, Gillott DJ, Venturini PL, Remorgida V. 2011",
-    meta: "Systematic review \u00b7 Reproductive Biology and Endocrinology \u00b7 PMID 21693038",
-    href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3141646/",
-    note: "Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review. Ten publications, 251 women, four randomized trials. Reviewed aromatase inhibitors for endometriosis-associated pain and concluded the inhibitors reduce pain, including a goserelin + anastrozole arm with significant improvement over goserelin alone.",
-  },
+// The broader clinical record for aromatase inhibitors in endometriosis,
+// beyond the single systematic review the engine has ingested. PMIDs / guideline
+// verified 2026-06. Ingesting these would raise the corroboration dimension.
+const EXTERNAL_RECORD = [
   {
     label: "Peitsidis P et al. 2023",
-    meta: "Systematic review of systematic reviews \u00b7 Drug Design, Development and Therapy \u00b7 PMID 37168488",
-    href: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10166210/",
-    note: "A Systematic Review of Systematic Reviews on the Use of Aromatase Inhibitors for the Treatment of Endometriosis: The Evidence to Date. Reviewed the existing systematic-review evidence on aromatase inhibitors in endometriosis and found a consistent reduction in pain scores across the included reviews.",
+    meta: "Systematic review of systematic reviews \u00b7 Drug Des Devel Ther \u00b7 PMID 37168488",
+    href: "https://pubmed.ncbi.nlm.nih.gov/37168488/",
+    note: "A systematic review of systematic reviews on aromatase inhibitors for endometriosis, finding a consistent reduction in pain scores across the included reviews.",
   },
   {
     label: "ESHRE Endometriosis Guideline, 2022",
-    meta: "European Society of Human Reproduction and Embryology",
+    meta: "European Society of Human Reproduction and Embryology \u00b7 clinical guideline",
     href: "https://www.eshre.eu/Guidelines-and-Legal/Guidelines/Endometriosis-guideline",
-    note: "Recommends aromatase inhibitors, in combination with other hormonal treatment, for women with endometriosis-associated pain that does not respond to first-line options. Strong recommendation, low-certainty evidence.",
+    note: "Recommends aromatase inhibitors, in combination with other hormonal treatment, for endometriosis-associated pain unresponsive to first-line options. Strong recommendation, low-certainty evidence.",
   },
 ];
 
-export default function ArchivedAnastrozoleSignalPage() {
+function MetaCell({ label, value }: { label: string; value: string }) {
   return (
-    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
-
-      {/* Archive banner */}
+    <div>
       <div
         style={{
-          backgroundColor: "var(--bg-3)",
-          borderBottom: "1px solid var(--rule)",
+          ...MONO,
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "var(--muted)",
+          marginBottom: 4,
         }}
       >
-        <div
-          className="max-w-4xl mx-auto px-4 sm:px-6 py-3"
-          style={{
-            ...MONO,
-            fontSize: "11px",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "var(--muted)",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 14,
-            alignItems: "baseline",
-          }}
-        >
-          <span style={{ color: "var(--ink-2)" }}>Archived walkthrough</span>
-          <span>
-            The current featured signal is at{" "}
-            <Link href="/featured" style={{ color: "var(--ink)" }}>/featured</Link>.
-            This page is preserved as a historical record.
-          </span>
-        </div>
+        {label}
       </div>
+      <div className="font-heading" style={{ fontSize: "1rem", fontWeight: 500, color: "var(--ink)", lineHeight: 1.2 }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+export default async function AromataseInhibitorsSignalPage() {
+  const c = await getCandidateBySignalId(SIGNAL_ID);
+  const anchor = c?.arms?.find((a) => a.isAnchor) ?? c?.arms?.[0];
+  const tierLabel = c ? TIER_LABEL[c.tier] ?? c.tier : "—";
+  const primaryClaim = c?.claims?.[0];
+
+  return (
+    <main className="flex-1" style={{ backgroundColor: "var(--bg)" }}>
 
       {/* Page header */}
       <div style={{ backgroundColor: "var(--paper)", borderBottom: "1px solid var(--rule)" }}>
@@ -154,12 +126,10 @@ export default function ArchivedAnastrozoleSignalPage() {
             <span style={{ margin: "0 10px", opacity: 0.4 }}>&rsaquo;</span>
             <Link href="/featured" style={{ color: "var(--muted)" }}>Featured signal</Link>
             <span style={{ margin: "0 10px", opacity: 0.4 }}>&rsaquo;</span>
-            <span style={{ color: "var(--ink)" }}>Archived: Anastrozole / Endometriosis</span>
+            <span style={{ color: "var(--ink)" }}>Aromatase inhibitors / Endometriosis</span>
           </nav>
 
-          <div style={{ ...EYEBROW, marginBottom: 16 }}>
-            Archived featured signal
-          </div>
+          <div style={{ ...EYEBROW, marginBottom: 16 }}>Featured signal &middot; companion</div>
 
           <h1
             className="font-heading"
@@ -170,21 +140,22 @@ export default function ArchivedAnastrozoleSignalPage() {
               letterSpacing: "-0.02em",
               color: "var(--ink)",
               marginBottom: 20,
-              maxWidth: "26ch",
+              maxWidth: "28ch",
             }}
           >
-            A breast cancer drug surfaces as a top endometriosis lead.
+            Aromatase inhibitors for endometriosis-related pain.
           </h1>
-          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "58ch" }}>
-            Anastrozole, an aromatase inhibitor approved for hormone
-            receptor-positive breast cancer, is one of the highest-scoring
-            repurposing signals for endometriosis in the Whel database. Below
-            is a walkthrough of how it surfaced, the eleven sources currently
-            indexed against it, and the external clinical literature it lines
-            up with.
+          <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
+            The engine indexes aromatase inhibitors as a class, the group that
+            includes anastrozole and letrozole, both repurposing candidates for
+            endometriosis. This is the {tierLabel}-tier counterpart to the{" "}
+            <Link href="/featured" style={LINK}>vaginal-estrogen walkthrough</Link>, and
+            the pairing is deliberate: the two signals rest on almost identical
+            dimension scores, and a single dimension separates Strong from
+            Moderate. Every figure below is read live from the substrate.
           </p>
 
-          {/* Meta strip */}
+          {/* Meta strip — live */}
           <div
             style={{
               marginTop: 28,
@@ -195,38 +166,10 @@ export default function ArchivedAnastrozoleSignalPage() {
             }}
             className="grid-cols-2 sm:grid-cols-4 grid"
           >
-            {[
-              { label: "Compound", value: "Anastrozole" },
-              { label: "Condition", value: "Endometriosis" },
-              { label: "Evidence arm", value: "Pathway Insights" },
-              { label: "Tier", value: "Strong \u00b7 10 / 10" },
-            ].map(({ label, value }) => (
-              <div key={label}>
-                <div
-                  style={{
-                    ...MONO,
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "var(--muted)",
-                    marginBottom: 4,
-                  }}
-                >
-                  {label}
-                </div>
-                <div
-                  className="font-heading"
-                  style={{
-                    fontSize: "1rem",
-                    fontWeight: 500,
-                    color: "var(--ink)",
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {value}
-                </div>
-              </div>
-            ))}
+            <MetaCell label="Compound" value={c?.drug ?? "Aromatase inhibitors"} />
+            <MetaCell label="Condition" value={c?.condition ?? "Endometriosis"} />
+            <MetaCell label="Tier (live)" value={c ? `${tierLabel} \u00b7 ${c.score.toFixed(1)} / 10` : "\u2014"} />
+            <MetaCell label="Validation" value={c?.validationStatus === "clinical" ? "Clinically anchored" : "\u2014"} />
           </div>
         </div>
       </div>
@@ -235,258 +178,189 @@ export default function ArchivedAnastrozoleSignalPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
 
-          {/* 01 Origin of the signal */}
+          {/* 01 Origin */}
           <section>
-            <div style={EYEBROW}>01 \u00b7 Origin of the signal</div>
+            <div style={EYEBROW}>01 &middot; Origin of the signal</div>
             <h2 className="font-heading" style={H2}>How it surfaced</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                Anastrozole was indexed against endometriosis through the
-                Pathway Insights arm, which cross-references each drug&apos;s
-                molecular targets against the genetic and molecular targets
-                associated with each condition. Anastrozole&apos;s target is
-                CYP19A1, the gene encoding aromatase. In endometriotic lesions,
-                CYP19A1 is locally overexpressed, sustaining an autocrine
-                estrogen loop that drives lesion growth independently of the
-                ovaries. Open Targets gives CYP19A1 a strong association score
-                with endometriosis, and the closely linked estrogen receptor
-                ESR1 has the highest overall association of any target studied
-                for the condition.
+                The pair was indexed against endometriosis through the Direct
+                Research arm, which reads peer-reviewed literature and extracts a
+                verbatim claim for each finding. The anchoring source is a
+                systematic review of aromatase inhibitors for
+                endometriosis-related pain, pooling seven studies including three
+                randomized post-operative trials.
               </p>
-              <p style={BODY}>
-                The signal was then triangulated against the FDA Adverse Event
-                Reporting System, which contributed tolerability context and
-                reported effects in women already taking the drug. The full
-                source list is in section 04 below.
-              </p>
-            </div>
-          </section>
-
-          {/* 02 Evidence and scoring */}
-          <section>
-            <div style={EYEBROW}>02 \u00b7 Evidence and scoring</div>
-            <h2 className="font-heading" style={H2}>How the signal scores</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                The signal aggregates evidence from eleven indexed sources,
-                weighted by the five scoring dimensions Whel applies to every
-                entry. Anastrozole is rated Strong, the top tier, with the
-                maximum score on each dimension. Of the roughly 280 active
-                signals in the database, only a small fraction reach this
-                profile.
-              </p>
-              <p style={BODY}>
-                Mechanistically, aromatase inhibition blocks local
-                CYP19A1-mediated estrogen production within endometriotic
-                lesions, disrupting the ESR1&nbsp;&rarr;&nbsp;GREB1
-                proliferative loop that sustains lesion growth independently of
-                systemic ovarian estrogen. That is the biological hypothesis
-                the signal sits on, and the scoring records how well the
-                available evidence supports it.
-              </p>
-
-              <div
-                style={{
-                  backgroundColor: "var(--paper)",
-                  border: "1px solid var(--rule)",
-                  padding: "20px 22px",
-                  marginTop: 8,
-                }}
-              >
-                <div
+              {primaryClaim && (
+                <blockquote
                   style={{
-                    ...MONO,
-                    fontSize: "10px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "var(--muted)",
-                    marginBottom: 14,
+                    borderLeft: "2px solid var(--green-mid)",
+                    paddingLeft: 18,
+                    margin: 0,
+                    fontSize: "0.975rem",
+                    lineHeight: 1.7,
+                    color: "var(--ink)",
+                    fontStyle: "italic",
                   }}
                 >
-                  Score breakdown
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {SCORING_DIMENSIONS.map((dim) => (
-                    <div
-                      key={dim.label}
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "minmax(0, 140px) 56px 1fr",
-                        gap: 14,
-                        alignItems: "baseline",
-                      }}
-                    >
-                      <div
-                        className="font-heading"
-                        style={{
-                          fontSize: "0.9rem",
-                          fontWeight: 500,
-                          color: "var(--ink)",
-                        }}
-                      >
-                        {dim.label}
-                      </div>
-                      <div
-                        style={{
-                          ...MONO,
-                          fontSize: "0.875rem",
-                          color: "var(--green-deep)",
-                          fontWeight: 500,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {dim.score} / 2
-                      </div>
-                      <div style={{ fontSize: "0.875rem", color: "var(--ink-2)", lineHeight: 1.55 }}>
-                        {dim.note}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                  &ldquo;{primaryClaim.text}&rdquo;
+                  <span style={{ ...MONO, display: "block", fontStyle: "normal", fontSize: 11, color: "var(--muted)", marginTop: 8 }}>
+                    {primaryClaim.href ? (
+                      <a href={primaryClaim.href} target="_blank" rel="noopener noreferrer" style={LINK}>{primaryClaim.src}</a>
+                    ) : (
+                      primaryClaim.src
+                    )}
+                  </span>
+                </blockquote>
+              )}
+              <p style={BODY}>
+                {anchor?.mechanism
+                  ? anchor.mechanism
+                  : "Aromatase inhibitors suppress local and systemic estrogen production, reducing estrogen-dependent endometriotic lesion activity and associated pain."}
+              </p>
             </div>
           </section>
 
-          {/* 03 Real-world validation */}
+          {/* 02 Live score breakdown */}
           <section>
-            <div style={EYEBROW}>03 \u00b7 External validation</div>
-            <h2 className="font-heading" style={H2}>How it compares to the clinical literature</h2>
+            <div style={EYEBROW}>02 &middot; Evidence and scoring</div>
+            <h2 className="font-heading" style={H2}>How the engine scored it</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                The Pathway Insights arm surfaces signals from biology, without
-                conditioning on the clinical-trial literature. That means the
-                literature on aromatase inhibitors in endometriosis sits
-                outside the eleven sources attached to this record, and can be
-                used as an external check on whether the biology-led signal
-                converges with what clinicians and researchers have already
-                observed.
+                Each dimension below carries the engine&apos;s own 0&ndash;2 score
+                and the rationale it wrote. This is the live Direct-arm row,
+                read straight from the substrate at request time.
+              </p>
+
+              {anchor && (
+                <div style={{ backgroundColor: "var(--paper)", border: "1px solid var(--rule)", padding: "20px 22px", marginTop: 8 }}>
+                  <div
+                    style={{
+                      ...MONO,
+                      fontSize: "10px",
+                      letterSpacing: "0.2em",
+                      textTransform: "uppercase",
+                      color: "var(--muted)",
+                      marginBottom: 14,
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span>Score breakdown &middot; {ARM_TITLE[anchor.arm] ?? anchor.arm} arm</span>
+                    <span>strength {anchor.strength} / 10 &rarr; {tierLabel}</span>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {anchor.dimensions.map((dim) => (
+                      <div
+                        key={dim.key}
+                        style={{ display: "grid", gridTemplateColumns: "minmax(0, 130px) 48px 1fr", gap: 14, alignItems: "baseline" }}
+                      >
+                        <div className="font-heading" style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--ink)" }}>
+                          {dim.label}
+                        </div>
+                        <div style={{ ...MONO, fontSize: "0.875rem", color: "var(--green-deep)", fontWeight: 500, whiteSpace: "nowrap" }}>
+                          {dim.score} / 2
+                        </div>
+                        <div style={{ fontSize: "0.875rem", color: "var(--ink-2)", lineHeight: 1.55 }}>{dim.rationale}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {c?.femaleApplicability && (
+                    <div
+                      style={{
+                        marginTop: 16,
+                        paddingTop: 14,
+                        borderTop: "1px solid var(--rule)",
+                        fontSize: "0.85rem",
+                        color: "var(--ink-2)",
+                        lineHeight: 1.55,
+                      }}
+                    >
+                      <span style={{ ...MONO, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>
+                        Female applicability &middot; {c.femaleApplicability.band} &middot; &times;{c.femaleApplicability.multiplier.toFixed(2)}
+                      </span>
+                      <div style={{ marginTop: 4 }}>{c.femaleApplicability.rationale}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* 03 Reading the score — the consistency hinge */}
+          <section>
+            <div style={EYEBROW}>03 &middot; Reading the score</div>
+            <h2 className="font-heading" style={H2}>The single dimension that makes it Strong</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <p style={BODY}>
+                This pair and the vaginal-estrogen pair share an identical
+                corroboration score: both rest on a single ingested synthesis, so
+                corroboration holds at 1 for each. The pooled studies inside a
+                review do not count as independent sources. What separates them is
+                consistency. Here the systematic review synthesises seven studies
+                and three RCTs whose findings concordantly point the same way, so
+                consistency scores 2. The vaginal-estrogen review offered a single
+                figure with nothing to cross-check, so its consistency stayed at 1.
               </p>
               <p style={BODY}>
-                The published evidence is consistent with the indexed signal.
-                Aromatase inhibitors have been studied in small clinical trials
-                for endometriosis-associated pain and have been used off-label
-                for refractory cases. Three reference points are summarized
-                below.
+                That one point is the whole difference between an 8.0 Strong and a
+                7.0 Moderate. It is also exactly the kind of distinction the rubric
+                exists to make legible. The question it answers is how much the
+                ingested evidence actually agrees with itself, and it leaves
+                aside how famous the drug happens to be. See the companion case
+                on the{" "}
+                <Link href="/featured" style={LINK}>vaginal-estrogen page</Link>.
+              </p>
+            </div>
+          </section>
+
+          {/* 04 Beyond the ingested source */}
+          <section>
+            <div style={EYEBROW}>04 &middot; Beyond the ingested source</div>
+            <h2 className="font-heading" style={H2}>The wider record</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <p style={BODY}>
+                The clinical literature on aromatase inhibitors in endometriosis
+                extends past the one review on file. The references below sit
+                outside the ingested corpus today and are not folded into the
+                score. They converge with the indexed signal and, if ingested,
+                would raise its corroboration dimension.
               </p>
 
               <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 8 }}>
-                {EXTERNAL_VALIDATION.map((src) => (
-                  <div
-                    key={src.label}
-                    style={{
-                      borderTop: "1px solid var(--rule)",
-                      paddingTop: 14,
-                    }}
-                  >
-                    <div
-                      className="font-heading"
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: 500,
-                        color: "var(--ink)",
-                        marginBottom: 4,
-                      }}
-                    >
-                      <a href={src.href} target="_blank" rel="noopener noreferrer" style={LINK}>
-                        {src.label}
-                      </a>
+                {EXTERNAL_RECORD.map((src) => (
+                  <div key={src.label} style={{ borderTop: "1px solid var(--rule)", paddingTop: 14 }}>
+                    <div className="font-heading" style={{ fontSize: "1rem", fontWeight: 500, color: "var(--ink)", marginBottom: 4 }}>
+                      <a href={src.href} target="_blank" rel="noopener noreferrer" style={LINK}>{src.label}</a>
                     </div>
-                    <div
-                      style={{
-                        ...MONO,
-                        fontSize: "11px",
-                        letterSpacing: "0.04em",
-                        color: "var(--muted)",
-                        marginBottom: 6,
-                      }}
-                    >
+                    <div style={{ ...MONO, fontSize: "11px", letterSpacing: "0.04em", color: "var(--muted)", marginBottom: 6 }}>
                       {src.meta}
                     </div>
-                    <div style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
-                      {src.note}
-                    </div>
+                    <div style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.6 }}>{src.note}</div>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* 04 Indexed sources */}
+          {/* 05 What this demonstrates */}
           <section>
-            <div style={EYEBROW}>04 \u00b7 Indexed sources</div>
-            <h2 className="font-heading" style={H2}>The eleven sources behind the signal</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <p style={BODY}>
-                These are the sources currently attached to the anastrozole /
-                endometriosis record in the Whel database. The pathway evidence
-                is one Open Targets record covering the drug-target link and
-                its association with the condition. The pharmacovigilance
-                evidence is ten indexed adverse-event records drawn from FAERS,
-                each capturing a reported symptom and its count in women
-                already taking the drug.
-              </p>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 8 }}>
-                {INDEXED_SOURCES.map((src) => (
-                  <div
-                    key={src.label}
-                    style={{
-                      borderTop: "1px solid var(--rule)",
-                      paddingTop: 14,
-                    }}
-                  >
-                    <div
-                      className="font-heading"
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: 500,
-                        color: "var(--ink)",
-                        marginBottom: 4,
-                      }}
-                    >
-                      <a href={src.href} target="_blank" rel="noopener noreferrer" style={LINK}>
-                        {src.label}
-                      </a>
-                    </div>
-                    <div
-                      style={{
-                        ...MONO,
-                        fontSize: "11px",
-                        letterSpacing: "0.04em",
-                        color: "var(--muted)",
-                        marginBottom: 6,
-                      }}
-                    >
-                      {src.meta}
-                    </div>
-                    <div style={{ fontSize: "0.9rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
-                      {src.note}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* 05 What the tier means */}
-          <section>
-            <div style={EYEBROW}>05 \u00b7 Reading the tier</div>
+            <div style={EYEBROW}>05 &middot; Reading the tier</div>
             <h2 className="font-heading" style={H2}>What Strong means here</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <p style={BODY}>
-                A Strong tier in Whel records that the signal is well
-                replicated, sits on high-quality sources, targets a specific
-                molecular mechanism, is biologically coherent, and points
-                consistently in the same direction. It is a research lead, not
-                a clinical recommendation. The case for further study is well
-                supported by the indexed evidence and converges with the
-                external literature, which is the threshold the tier is
-                designed to capture.
+                A Strong tier records that the ingested evidence is high-design,
+                specific to the intervention and condition, and internally
+                consistent. It is a research lead that stops short of a clinical
+                recommendation. The signal is indexed at the class level:
+                anastrozole and letrozole are the specific agents behind it, and
+                the score reflects the aromatase-inhibitor evidence the engine
+                has read across the class, with no verdict on any one molecule.
               </p>
               <p style={BODY}>
-                Whel does not adjudicate clinical decisions. It surfaces what
-                the literature and underlying biology already imply, and it
-                records how confident that inference is.
+                Whel surfaces what the literature and underlying biology already
+                imply and records how confident that inference is. It does not
+                adjudicate clinical decisions.
               </p>
             </div>
           </section>
@@ -504,21 +378,12 @@ export default function ArchivedAnastrozoleSignalPage() {
             }}
           >
             <div style={{ maxWidth: "44ch" }}>
-              <div
-                style={{
-                  ...MONO,
-                  fontSize: "10px",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--muted)",
-                  marginBottom: 6,
-                }}
-              >
+              <div style={{ ...MONO, fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>
                 Continue
               </div>
               <p style={{ fontSize: "0.95rem", color: "var(--ink-2)", lineHeight: 1.6 }}>
-                See the full set of signals indexed for endometriosis, sorted
-                by tier and evidence arm, alongside their sources.
+                See the full set of signals indexed for endometriosis, sorted by
+                tier and evidence arm, alongside their sources.
               </p>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 16px" }}>
@@ -541,7 +406,7 @@ export default function ArchivedAnastrozoleSignalPage() {
                 Open Endometriosis &rarr;
               </Link>
               <Link
-                href="/about/technical-architecture"
+                href="/about/methodology"
                 style={{
                   ...MONO,
                   fontSize: "12px",
@@ -568,9 +433,10 @@ export default function ArchivedAnastrozoleSignalPage() {
               paddingTop: 18,
             }}
           >
-            Based on Whel database state as of May 2026. Scores and source
-            counts reflect the signal as indexed at the time of writing and
-            may change as new evidence is incorporated.
+            Scores, dimensions, and the ingested source on this page are read live
+            from the substrate at request time and update as the corpus grows. The
+            wider record in section 04 is curated by hand and is not yet part of
+            the scored corpus.
           </p>
 
         </div>

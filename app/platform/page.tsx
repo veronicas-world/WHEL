@@ -161,8 +161,8 @@ export default async function PlatformPage() {
               <p className="ldesc">
                 The three layers above build a signal and score it. Each finished signal then carries an
                 independent reading layer, shown beside the score rather than folded into it: Every
-                Cure&rsquo;s MATRIX treatment-probability cross-reference, and — where the substrate covers
-                the drug or pair — its documented sex-specific pharmacokinetics and cycle-phase dependence.
+                Cure&rsquo;s MATRIX treatment-probability cross-reference, and, where the substrate covers
+                the drug or pair, its documented sex-specific pharmacokinetics and cycle-phase dependence.
                 These are kept separate from Layer 02&rsquo;s internal validation and are not one of the
                 three build layers. The full set of readings is detailed below.
               </p>
@@ -385,7 +385,7 @@ export default async function PlatformPage() {
               Each candidate carries several independent readings, recorded separately rather than
               combined into a single number, so the basis for each reading stays visible.{" "}
               <strong>The confidence tier</strong> is our own score: each evidence arm is graded on
-              five dimensions — corroboration, rigor, specificity, plausibility, and consistency —
+              five dimensions (corroboration, rigor, specificity, plausibility, and consistency)
               which sum to a strength out of ten, then discounted by a female-applicability
               multiplier reflecting how far the evidence was generated in women, placing the
               candidate in one of four tiers from exploratory to strong.

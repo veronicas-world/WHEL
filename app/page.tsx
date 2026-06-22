@@ -121,19 +121,19 @@ export default async function Home() {
   // Provenance volume: distinct verbatim claims behind the active signals.
   const citationsLabel = home.claims > 0 ? home.claims.toLocaleString("en-US") : "–";
 
-  // Showcase contrast card: when its independent readings disagree (a MATRIX
-  // cross-reference present while the literature grade is still low), surface
-  // that disagreement explicitly as a teaching "key" under the two cards.
+  // Showcase contrast card: when its independent readings disagree — a strong
+  // MATRIX cross-reference present while Whel's own ingested-evidence tier is
+  // lower — surface that disagreement explicitly as a teaching "key" under the
+  // two cards.
+  const TIER_WORD: Record<string, string> = {
+    strong: "Strong", moderate: "Moderate", emerging: "Emerging", exploratory: "Exploratory",
+  };
   const contrastCard = showcase[1];
   const disagreement =
-    contrastCard && contrastCard.matrixPercentile && (!contrastCard.lGrade || contrastCard.lGrade === "L0" || contrastCard.lGrade === "L1")
+    contrastCard && contrastCard.matrixPercentile &&
+    (contrastCard.tier === "emerging" || contrastCard.tier === "exploratory")
       ? contrastCard
       : null;
-  const litGloss = !disagreement
-    ? ""
-    : disagreement.lGrade === "L1"
-      ? "L1, where it appears in peer-reviewed literature but no trial or guideline has reported a result yet"
-      : "L0, where no external record names the pair yet";
 
   return (
     <main>
@@ -298,10 +298,11 @@ export default async function Home() {
               <p style={{ marginTop: 22, maxWidth: "74ch", fontSize: 14.5, lineHeight: 1.62, color: "var(--body)" }}>
                 <strong style={{ color: "var(--ink)", fontWeight: 600 }}>Where the readings disagree.</strong>{" "}
                 The second pair is a deliberate example. For {disagreement.drug} in {disagreement.condition},
-                Every Cure&rsquo;s MATRIX model places the pair at {disagreement.matrixPercentile}, while its
-                literature grade sits at {litGloss}. Whel reports both side by side rather than averaging
-                them into one number; keeping the layers independent is what lets a disagreement like this
-                stay visible instead of being smoothed over.
+                Every Cure&rsquo;s MATRIX model places the pair at {disagreement.matrixPercentile}, while Whel&rsquo;s
+                own engine rates the ingested evidence {TIER_WORD[disagreement.tier] ?? disagreement.tier}, because the
+                literature on file is thinner than the model-based ranking implies. Whel reports both side by side
+                and leaves them unaveraged; keeping the layers independent is what lets a disagreement
+                like this stay visible on the page.
               </p>
             )}
           </div>

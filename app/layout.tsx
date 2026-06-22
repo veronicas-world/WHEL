@@ -28,7 +28,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Whel — Drug Repurposing for Female Biology",
+    default: "Whel · Drug Repurposing for Female Biology",
     template: "%s | Whel",
   },
   description:
