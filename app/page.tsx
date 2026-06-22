@@ -348,20 +348,18 @@ export default async function Home() {
             <div>
               <p className="ldesc">
                 Once a signal is built by the three layers above, it is checked against outside
-                references that are kept separate from its score rather than blended in: a literature
-                grade that traces to guideline bodies such as ESHRE, ACOG, and Cochrane; Every
-                Cure&rsquo;s MATRIX treatment-probability model; and an Open Targets knowledge-graph
-                check of whether the graph independently connects the drug to the condition. This is
-                the validation layer. It is shown beside each result, not folded into it, and is not
-                one of the three build layers.
+                references that are kept separate from its score: an external validation ladder
+                (E0&ndash;E3) that traces to guideline bodies such as ESHRE, ACOG, and Cochrane, and
+                Every Cure&rsquo;s MATRIX treatment-probability model. This is the validation layer.
+                It is shown beside each result, kept out of the score, and is not one of the three
+                build layers.
               </p>
               <div style={SOURCE_LINE}>
-                <span style={{ color: "var(--signal)" }}>References</span> · Every Cure MATRIX, Open Targets, ESHRE / ACOG / Cochrane guidance
+                <span style={{ color: "var(--signal)" }}>References</span> · Every Cure MATRIX, ESHRE / ACOG / Cochrane guidance
               </div>
               <div className="ltags">
-                <span className="pill on-ink">Literature grade</span>
+                <span className="pill on-ink">External validation ladder · E0–E3</span>
                 <span className="pill on-ink">MATRIX cross-reference</span>
-                <span className="pill on-ink">Knowledge-graph check</span>
                 <span className="pill on-ink">DRKG · PrimeKG · TxGNN planned</span>
               </div>
             </div>
