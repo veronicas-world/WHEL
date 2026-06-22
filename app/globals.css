@@ -204,8 +204,8 @@ h1, h2, h3, h4 {
 
 /* ── Layout ────────────────────────────────────────────────────────────── */
 
-.container       { max-width: var(--maxw); margin: 0 auto; padding: 0 40px; }
-.container-tight { max-width: 920px;       margin: 0 auto; padding: 0 40px; }
+.container       { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(40px, 6vw, 112px); }
+.container-tight { max-width: 920px;       margin: 0 auto; padding: 0 clamp(40px, 6vw, 112px); }
 @media (max-width: 720px){ .container, .container-tight { padding: 0 22px; } }
 
 .surface-ink      { background: var(--ink);      color: var(--on-ink); }
