@@ -491,7 +491,7 @@ export default async function PlatformPage() {
             <p style={pBone}>
               That is exactly why the platform leaves every claim checkable instead of presenting
               it as settled. We are integrating mature pieces, including knowledge graphs,
-              ontology grounding, retrieval, and evidence grading, and pointing them at the part
+              ontology grounding, retrieval, and evidence scoring, and pointing them at the part
               of biology medicine left understudied. The work that earns a clinician&apos;s trust
               is not a cleaner score; it is a visible source.
             </p>

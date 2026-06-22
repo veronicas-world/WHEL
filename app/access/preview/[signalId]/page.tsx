@@ -54,11 +54,11 @@ function studyLabel(t?: string): string | undefined {
 
 // What each rubric dimension measures (the model assigns each a 0-2 sub-score).
 const DIM_WHAT: Record<string, string> = {
-  replication: "How many independent sources report the same effect. A higher score means the finding is replicated rather than resting on a single report.",
-  source: "The strength of the source types behind the signal, weighting registered trials and peer-reviewed work above community reports.",
-  specificity: "How directly the evidence speaks to this exact drug and condition, rather than a related compound or a broader indication.",
+  corroboration: "How many independent sources report the same effect. A higher score means the finding is replicated across multiple reports.",
+  rigor: "The strength of the source types behind the signal, weighting registered trials and peer-reviewed work above community reports.",
+  specificity: "How directly the evidence speaks to this exact drug and condition versus a related compound or a broader indication.",
   plausibility: "Whether a credible biological mechanism connects the drug to the condition, as opposed to an unexplained association.",
-  direction: "Whether the sources agree on the direction of the effect, rather than pointing in conflicting directions.",
+  consistency: "Whether the sources agree on the direction of the effect or point in conflicting directions.",
 };
 
 const chebiUrl = (id: string) => `https://www.ebi.ac.uk/chebi/searchId.do?chebiId=${encodeURIComponent(id)}`;
