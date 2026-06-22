@@ -182,7 +182,7 @@ export default async function PlatformPage() {
           <div style={wrap}>
             <div className="eyebrow" style={{ marginBottom: 14 }}>Layer 01 · The substrate</div>
             <h2 className="h2" style={{ marginBottom: 24, maxWidth: "20ch" }}>
-              A map built for the body the data left out.
+              A knowledge graph built for female biology.
             </h2>
             <p style={pBone}>
               A drug-repurposing engine is only as good as the map it reasons over. That map is
@@ -236,7 +236,7 @@ export default async function PlatformPage() {
             <div>
               <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>Layer 01 · in practice</div>
               <h2 className="h2" style={{ color: "var(--on-ink)", maxWidth: "16ch" }}>
-                Cyclical biology, modeled as it moves.
+                Hormonal state held as structured data.
               </h2>
             </div>
             <p className="lede" style={{ color: "var(--on-ink-2)", maxWidth: "36ch" }}>
@@ -256,7 +256,7 @@ export default async function PlatformPage() {
           <div style={wrap}>
             <div className="eyebrow" style={{ marginBottom: 14 }}>Layer 02 · Retrieval &amp; validation</div>
             <h2 className="h2" style={{ marginBottom: 24, maxWidth: "22ch" }}>
-              Every claim carries the sentence it came from.
+              Every claim is traceable to its source sentence.
             </h2>
             <p style={pBone}>
               A repurposing hypothesis is only useful if its evidence can be checked, so the
@@ -302,7 +302,7 @@ export default async function PlatformPage() {
           <div style={wrap}>
             <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>Layer 03 · Hypothesis from signal</div>
             <h2 className="h2" style={{ color: "var(--on-ink)", marginBottom: 24, maxWidth: "22ch" }}>
-              Off-label practice is an experiment worth recovering.
+              Off-label practice is an untapped clinical experiment.
             </h2>
             <p style={pInk}>
               The conditions Whel works on are managed off label as a matter of routine, which
@@ -479,7 +479,7 @@ export default async function PlatformPage() {
           <div style={wrap}>
             <div className="eyebrow" style={{ marginBottom: 14 }}>The honest version</div>
             <h2 className="h2" style={{ marginBottom: 24, maxWidth: "22ch" }}>
-              What the platform is, and what it is not.
+              What the platform does, and its limits.
             </h2>
             <p style={pBone}>
               Whel generates evidenced repurposing hypotheses. It does not diagnose, it does not
@@ -493,7 +493,7 @@ export default async function PlatformPage() {
               it as settled. We are integrating mature pieces, including knowledge graphs,
               ontology grounding, retrieval, and evidence scoring, and pointing them at the part
               of biology medicine left understudied. The work that earns a clinician&apos;s trust
-              is not a cleaner score; it is a visible source.
+              is making the underlying source visible.
             </p>
             <p style={pBone}>
               The three layers are also at different stages, and we are explicit about that. The

@@ -437,7 +437,7 @@ export default function ManifestoPage() {
               </div>
               <div className="mf-prose mf-rise">
                 <p>
-                  In many women&rsquo;s health conditions, the drugs that help already exist. They are approved for something else, prescribed off label, and working in millions of cases that the evidence base never formally recorded. This is not an edge case, but rather, is standard care.
+                  In many women&rsquo;s health conditions, the drugs that help already exist. They are approved for something else, prescribed off label, and working in millions of cases that the evidence base never formally recorded. This is standard care.
                 </p>
                 <p>
                   The examples are routine. Premenstrual dysphoric disorder and menopausal symptoms are commonly managed with antidepressants prescribed <A href={OFFLABEL}>off label</A>. Insulin resistance in <A href={PCOS}>polycystic ovary syndrome</A> is managed with metformin, a diabetes drug, and GnRH antagonists first developed for prostate cancer are now standard treatment for <A href={ENDO}>endometriosis</A>{" "}pain. Women&rsquo;s medicine has run on repurposing for decades, but no one has treated that reality as something worth taking seriously.
@@ -462,7 +462,7 @@ export default function ManifestoPage() {
               </div>
               <div className="mf-prose mf-rise">
                 <p>
-                  Drug discovery is built to chase cures, not management. Its engines are tuned to find the single drug that can eliminate a disease. That model fits cancer and rare genetic disorders, and it is where the AI drug-discovery companies point their engines, since a cure for a fatal disease is the blockbuster.
+                  Drug discovery is built to chase cures rather than manage conditions. Its engines are tuned to find the single drug that can eliminate a disease. That model fits cancer and rare genetic disorders, and it is where the AI drug-discovery companies point their engines, since a cure for a fatal disease is the blockbuster.
                 </p>
                 <p>
                   Women&rsquo;s health does not fit this template. Conditions such as endometriosis, PCOS, PMDD, adenomyosis, perimenopause, and vulvodynia are not neatly curable; they are lived with and managed over years. They are rarely fatal but routinely life-debilitating, and reshape careers, relationships, and decades of life without showing up on mortality tables.

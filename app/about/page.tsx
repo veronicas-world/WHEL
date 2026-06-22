@@ -591,7 +591,7 @@ export default function AboutPage() {
             <section className="ab-sec" id="graph">
               <div className="ab-sec-head">
                 <span className="ab-sn">05</span>
-                <h2>A graph of its own</h2>
+                <h2>A separate knowledge graph for female biology</h2>
               </div>
               <div className="ab-prose">
                 <p className="ab-lead">
@@ -615,7 +615,7 @@ export default function AboutPage() {
                   mechanisms that only become visible once you stop treating the male body as the default.
                 </p>
                 <p>
-                  This is meant as an additive layer to pharma, not a competitor to it. The rest of the
+                  This is meant as an additive layer that complements pharma rather than competing with it. The rest of the
                   field is mapping the biology it was built to see; we are correcting and completing the
                   half of it that was left out. A fuller account of the architecture, how each signal is
                   graded, and the external resources we build on is on the{" "}

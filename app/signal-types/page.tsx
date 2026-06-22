@@ -59,7 +59,7 @@ export default function SignalTypesPage() {
             className="display"
             style={{ color: "var(--on-ink)", fontSize: "clamp(2.1rem, 4.4vw, 3.4rem)", lineHeight: 1.07, maxWidth: "22ch" }}
           >
-            Three ways of reading the evidence.
+            Signal types and scoring.
           </h1>
           <p className="lede" style={{ color: "var(--on-ink-2)", marginTop: 24, maxWidth: "64ch" }}>
             Whel reads each drug-condition pair through three evidence arms, each pulling a
@@ -78,7 +78,7 @@ export default function SignalTypesPage() {
           <div style={{ maxWidth: 800, marginBottom: 44 }}>
             <div className="eyebrow" style={{ marginBottom: 14 }}>The three arms</div>
             <h2 className="h2" style={{ marginBottom: 18, maxWidth: "22ch" }}>
-              One pair, three readings, never blended.
+              Three arms, scored separately and reported side by side.
             </h2>
             <p className="lede" style={{ color: "var(--body)" }}>
               A published trial, a mechanistic link, and a community report each carry a different
@@ -150,7 +150,7 @@ export default function SignalTypesPage() {
         <div className="container" style={{ maxWidth: 940 }}>
           <div className="eyebrow" style={{ marginBottom: 14 }}>Confidence tiers</div>
           <h2 className="h2" style={{ marginBottom: 16, maxWidth: "24ch" }}>
-            Strength × multiplier lands each arm in a tier.
+            Arm strength × multiplier determines the tier.
           </h2>
           <p className="lede" style={{ color: "var(--body)", marginBottom: 20, maxWidth: "70ch" }}>
             The final arm score (strength 0–10 × applicability multiplier) sorts into four tiers.
@@ -174,7 +174,7 @@ export default function SignalTypesPage() {
             explicitly rather than averaged away, following the{" "}
             <A h="https://training.cochrane.org/handbook">Cochrane</A> and{" "}
             <A h="https://www.cebm.ox.ac.uk/resources/levels-of-evidence/ocebm-levels-of-evidence">CEBM</A>{" "}
-            view that disagreement is information, not noise.
+            view that disagreement is meaningful information.
           </p>
         </div>
       </section>
@@ -184,7 +184,7 @@ export default function SignalTypesPage() {
         <div className="container" style={{ maxWidth: 940 }}>
           <div className="eyebrow" style={{ marginBottom: 14 }}>What changed: cross-condition</div>
           <h2 className="h2" style={{ marginBottom: 16, maxWidth: "28ch" }}>
-            Cross-condition is now a derived lens, not a fourth arm.
+            Cross-condition is a derived lens.
           </h2>
           <p className="lede" style={{ color: "var(--body)", maxWidth: "72ch" }}>
             An earlier version of Whel scored cross-condition signals as a fourth evidence arm. It
