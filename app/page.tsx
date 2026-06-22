@@ -1,14 +1,12 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { toArmKey, type ArmKey } from "@/lib/arm-mapping";
-import type { TierKey } from "@/app/components/TierHeatmap";
 import KnowledgeGraph3D from "@/app/components/KnowledgeGraph3D";
 import HeroTitle from "@/app/components/HeroTitle";
 import SubstrateCompare from "@/app/components/SubstrateCompare";
 import Pipeline from "@/app/components/Pipeline";
 import HomeTierMatrix, { type MatrixRow } from "@/app/components/HomeTierMatrix";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getShowcasePair } from "@/lib/candidates";
+import { getShowcasePair, getSubstrateHomeData } from "@/lib/substrate-candidates";
 import ScrollEffects from "@/app/components/ScrollEffects";
 
 export const dynamic = "force-dynamic";
@@ -88,43 +86,24 @@ const EXPANSION = [
 ];
 
 export default async function Home() {
-  // ── Real Supabase data ──────────────────────────────────────────────────────
-  const [
-    { data: conditionsRaw },
-    { data: signalsRaw },
-    { count: sourcesCount },
-    showcase,
-  ] = await Promise.all([
+  // ── Real data — now from the substrate (the new arm-aware engine) ────────────
+  const [{ data: conditionsRaw }, home, showcase] = await Promise.all([
     supabase.from("conditions").select("id, name, slug, description").order("name"),
-    supabase
-      .from("repurposing_signals")
-      .select("condition_id, confidence_tier, total_evidence_score, created_at, signal_type")
-      .eq("status", "active")
-      .not("total_evidence_score", "is", null)
-      .gt("total_evidence_score", 0),
-    supabase
-      .from("sources")
-      .select("repurposing_signals!inner(status)", { count: "exact", head: true })
-      .eq("repurposing_signals.status", "active"),
+    getSubstrateHomeData(),
     getShowcasePair(),
   ]);
 
   const conditions = conditionsRaw ?? [];
-  const signals    = signalsRaw   ?? [];
 
-  const totalSignals    = signals.length;
+  // Pair count (one drug–condition signal per pair, headline-anchored).
+  const totalSignals    = home.totalPairs;
   const totalConditions = conditions.length;
 
-  // Per-condition tier counts for the matrix
+  // Per-condition headline-tier counts for the matrix, from the substrate.
+  const EMPTY = { strong: 0, moderate: 0, emerging: 0, exploratory: 0, total: 0 };
   const conditionsWithStats = conditions.map((c) => {
-    const cSigs = signals.filter((s) => s.condition_id === c.id);
-    const tierCounts: Record<TierKey, number> = { strong: 0, moderate: 0, emerging: 0, exploratory: 0 };
-    for (const s of cSigs) {
-      const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
-      if (t in tierCounts) tierCounts[t]++;
-      else tierCounts.exploratory++;
-    }
-    return { ...c, totalSignals: cSigs.length, tierCounts };
+    const st = home.byCondition.get(c.slug) ?? EMPTY;
+    return { ...c, totalSignals: st.total, tierCounts: st };
   });
 
   const matrixRows: MatrixRow[] = conditionsWithStats.map((c) => ({
@@ -139,31 +118,22 @@ export default async function Home() {
     total:       c.totalSignals,
   }));
 
-  // Arm counts for display
-  const armCounts: Partial<Record<ArmKey, number>> = {};
-  for (const s of signals) {
-    const key = toArmKey((s as { signal_type?: string | null }).signal_type);
-    if (key) armCounts[key] = (armCounts[key] ?? 0) + 1;
-  }
+  // Provenance volume: distinct verbatim claims behind the active signals.
+  const citationsLabel = home.claims > 0 ? home.claims.toLocaleString("en-US") : "–";
 
-  const citationsLabel =
-    typeof sourcesCount === "number" && sourcesCount > 0
-      ? sourcesCount.toLocaleString("en-US")
-      : "–";
-
-  // Showcase contrast card: when its independent readings disagree (a MATRIX
-  // cross-reference present while the literature grade is still low), surface
-  // that disagreement explicitly as a teaching "key" under the two cards.
+  // Showcase contrast card: when its independent readings disagree — a strong
+  // MATRIX cross-reference present while Whel's own ingested-evidence tier is
+  // lower — surface that disagreement explicitly as a teaching "key" under the
+  // two cards.
+  const TIER_WORD: Record<string, string> = {
+    strong: "Strong", moderate: "Moderate", emerging: "Emerging", exploratory: "Exploratory",
+  };
   const contrastCard = showcase[1];
   const disagreement =
-    contrastCard && contrastCard.matrixPercentile && (!contrastCard.lGrade || contrastCard.lGrade === "L0" || contrastCard.lGrade === "L1")
+    contrastCard && contrastCard.matrixPercentile &&
+    (contrastCard.tier === "emerging" || contrastCard.tier === "exploratory")
       ? contrastCard
       : null;
-  const litGloss = !disagreement
-    ? ""
-    : disagreement.lGrade === "L1"
-      ? "L1, where it appears in peer-reviewed literature but no trial or guideline has reported a result yet"
-      : "L0, where no external record names the pair yet";
 
   return (
     <main>
@@ -210,7 +180,7 @@ export default async function Home() {
             </div>
             <div className="s">
               <div className="v">{citationsLabel}</div>
-              <div className="l">source citations across active signals</div>
+              <div className="l">verbatim claims, each pinned to a source quote</div>
             </div>
             {FACTS.slice(0, 2).map((f) => (
               <div className="s" key={f.n}>
@@ -328,10 +298,11 @@ export default async function Home() {
               <p style={{ marginTop: 22, maxWidth: "74ch", fontSize: 14.5, lineHeight: 1.62, color: "var(--body)" }}>
                 <strong style={{ color: "var(--ink)", fontWeight: 600 }}>Where the readings disagree.</strong>{" "}
                 The second pair is a deliberate example. For {disagreement.drug} in {disagreement.condition},
-                Every Cure&rsquo;s MATRIX model places the pair at {disagreement.matrixPercentile}, while its
-                literature grade sits at {litGloss}. Whel reports both side by side rather than averaging
-                them into one number; keeping the layers independent is what lets a disagreement like this
-                stay visible instead of being smoothed over.
+                Every Cure&rsquo;s MATRIX model places the pair at {disagreement.matrixPercentile}, while Whel&rsquo;s
+                own engine rates the ingested evidence {TIER_WORD[disagreement.tier] ?? disagreement.tier}, because the
+                literature on file is thinner than the model-based ranking implies. Whel reports both side by side
+                and leaves them unaveraged; keeping the layers independent is what lets a disagreement
+                like this stay visible on the page.
               </p>
             )}
           </div>

@@ -449,7 +449,7 @@ export default function ManifestoPage() {
               <div className="mf-marg mf-rise">
                 <div className="mf-stat">
                   <div className="mf-fig">1998</div>
-                  <div className="mf-cap">Sildenafil, developed for angina, brought to market as Viagra — one of the largest drug franchises in history</div>
+                  <div className="mf-cap">Sildenafil, developed for angina, brought to market as Viagra, now one of the largest drug franchises in history</div>
                 </div>
               </div>
             </section>
@@ -556,7 +556,7 @@ export default function ManifestoPage() {
               <div className="mf-marg mf-rise">
                 <div className="mf-stat">
                   <div className="mf-fig">$5.6<sup>B</sup></div>
-                  <div className="mf-cap">Pulled into AI drug discovery in a single year — close to a third of all healthcare startup funding</div>
+                  <div className="mf-cap">Pulled into AI drug discovery in a single year, close to a third of all healthcare startup funding</div>
                 </div>
                 <div className="mf-stat mf-flag">
                   <div className="mf-fig">9 / 10</div>

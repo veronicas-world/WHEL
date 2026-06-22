@@ -27,7 +27,6 @@ const CARD: React.CSSProperties = {
 
 const ARM_COLORS: Record<string, string> = {
   "Direct Research": "var(--arm-direct)",
-  "Cross-Condition Signals": "var(--arm-cross)",
   "Pathway Insights": "var(--arm-pathway)",
   "Community Forum Reports": "var(--arm-community)",
 };
@@ -64,7 +63,7 @@ const LAYERS: { n: string; name: string; status: string; color: string; body: st
    ────────────────────────────────────────────────────────────────────────── */
 
 const PIPELINES_INTRO =
-  "Whel runs five active data pipelines that populate the database on demand. A sixth pipeline (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.";
+  "Whel runs six active data pipelines that populate the substrate on demand. A seventh (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.";
 
 const PIPELINES: {
   name: string;
@@ -91,12 +90,12 @@ const PIPELINES: {
     body: "Queries the ClinicalTrials.gov REST API v2 for active, completed, and recruiting trials targeting each condition. Trial phase, status, and intervention type are captured and stored alongside the primary signal.",
   },
   {
-    name: "FDA Adverse Event Monitoring System (AEMS) [Formerly FAERS]",
+    name: "FDA Adverse Event Reporting System (AEMS) [Formerly FAERS]",
     short: "FDA AEMS",
-    tag: "Cross-Condition Signals",
+    tag: "Pathway Insights",
     api: "OpenFDA",
     status: "Active",
-    body: "Queries the FDA adverse-event public API (OpenFDA, the system formerly known as FAERS) using a two-pass approach: first targeting gynecological and hormonal terms, then broadening to general reaction terms. Female patient reports are filtered and analyzed for signals suggesting off label benefit. URL encoding and pagination are handled to maximize coverage across all six conditions.",
+    body: "Queries the FDA adverse-event public API (OpenFDA, the system formerly known as FAERS) for condition-aware reaction counts. Each record is given a dual read: first a safety caveat, then, only where the pharmacology supports it, a hedged mechanistic lead within the Pathway arm, never presented as efficacy. Records carry a mandatory caveat that spontaneous reports cannot establish causation or incidence.",
   },
   {
     name: "Open Targets Platform",
@@ -107,17 +106,25 @@ const PIPELINES: {
     body: "Queries the Open Targets Platform GraphQL API (platform.opentargets.org) for each condition using standardized EFO and MONDO disease ontology identifiers. Retrieves drug candidates, mechanistic associations, and biological target scores aggregated from genetic association data, known drug target interactions, Reactome pathway analysis, and differential gene expression. Results are analyzed by Claude Opus for pathway level repurposing hypotheses. No authentication required.",
   },
   {
+    name: "SIDER",
+    short: "SIDER",
+    tag: "Pathway Insights",
+    api: "Bulk TSV",
+    status: "Active",
+    body: "Loads the SIDER side-effect resource (sideeffects.embl.de), which pairs marketed drugs with label-documented side effects and their reported frequencies. Like AEMS, each record is rendered into a fixed verbatim sentence and read as a safety caveat first, a hedged mechanistic lead second. Carries a vintage caveat (2015 label snapshot).",
+  },
+  {
     name: "Reddit",
     short: "Reddit",
     tag: "Community Forum Reports",
-    api: "Public JSON",
+    api: "OAuth JSON",
     status: "Active",
-    body: "Queries condition specific subreddits (r/Endo, r/PCOS, r/PMDD, r/Menopause, r/adenomyosis, r/vulvodynia) using eight treatment focused search queries per subreddit. Individual post permalinks are stored and validated; URLs must contain /comments/ to confirm they are post level rather than subreddit level. Posts are grouped by subreddit in citation display. The pipeline looks for consistent patterns across many posts, not individual anecdotes.",
+    body: "Queries condition specific subreddits (r/Endo, r/PCOS, r/PMDD, r/Menopause, r/adenomyosis, r/vulvodynia) for posts and comments. Individual permalinks, thread IDs, authors, and timestamps are stored so independence can be judged deterministically. The pipeline looks for consistent patterns across many independent accounts, not individual anecdotes, and never scores them on clinical-trial criteria.",
   },
   {
     name: "EudraVigilance EVDAS (in development, not yet contributing signals)",
     short: "EudraVigilance EVDAS",
-    tag: "Cross-Condition Signals",
+    tag: "Pathway Insights",
     api: "Oracle BI API",
     status: "In development",
     body: "Queries the European Medicines Agency adverse event database (dap.ema.europa.eu) via the Oracle BI Analytics API. Substance codes are resolved via the public adrreports.eu substance table. Female patient reaction data is filtered and grouped by condition. Requires a free registered EMA account for session authentication. This pipeline is implemented but has not yet been ingested into the current database snapshot.",
@@ -131,82 +138,85 @@ const SCORING_INTRO =
 // below so the WHBench citation can sit inside the paragraph as a hyperlink.
 
 const FRAMEWORK_INTRO =
-  "Every signal is independently scored from 0 to 2 on five dimensions, for a maximum total score of 10. Scores are assigned by Claude Opus 4.6 based on the full source content, not just metadata.";
+  "Every signal is scored from 0 to 2 on five dimensions, summing to a 0-10 arm strength. The five dimension scores and structured facts are proposed by Claude Opus 4.8 from the full source content; the deterministic parts (the female-applicability multiplier, the imprecision caps, and the confidence tier) are then computed in code, never by the model. The full per-arm criteria are documented on the signal types and scoring page.";
 
+// The five generalized dimensions. Each is scored 0-2, but its MEANING is tuned to
+// the evidence arm (the full per-arm 0/1/2 criteria live on /signal-types). The
+// descriptions below are the cross-arm gist.
 const RUBRIC: { dim: string; note: string; s0: string; s1: string; s2: string }[] = [
   {
-    dim: "Replication",
-    note: "Whether the finding has been independently observed across separate sources.",
-    s0: "Single source only.",
-    s1: "Two independent sources.",
-    s2: "Three or more independent sources pointing in the same direction.",
+    dim: "Corroboration",
+    note: "Independent corroboration, kept distinct from rigor and consistency so the same fact is never scored twice.",
+    s0: "A single source (a lone review or primary study).",
+    s1: "A single synthesis, or two independent sources.",
+    s2: "Three or more genuinely independent, consistent sources (or one large, low-bias pivotal trial).",
   },
   {
-    dim: "Source Quality",
-    note: "The evidentiary weight of the underlying data.",
-    s0: "Forum or anecdotal data only.",
-    s1: "Observational, registry, or pharmacovigilance data.",
-    s2: "Peer reviewed human study or clinical trial.",
+    dim: "Rigor",
+    note: "Study design / risk of bias for Direct; model strength for Pathway; report specificity for Community.",
+    s0: "Case report, preclinical, in-vitro, or vague report.",
+    s1: "Observational, small trial, or partial detail.",
+    s2: "RCT, meta-analysis, active guideline, or human-relevant model.",
   },
   {
     dim: "Specificity",
-    note: "Whether the outcome is clearly defined and clinically relevant to the condition.",
-    s0: "Vague outcome (\u201Cimproved,\u201D \u201Cfelt better\u201D).",
-    s1: "Symptom specific outcome (pelvic pain, cycle regularity, mood lability).",
-    s2: "Clearly defined condition specific clinical endpoint.",
+    note: "Whether the evidence speaks to this exact drug and this exact condition or outcome.",
+    s0: "Proxy only; drug or outcome vague.",
+    s1: "One side named, the other adjacent.",
+    s2: "Both named directly and linked.",
   },
   {
-    dim: "Biological Plausibility",
-    note: "The strength and specificity of the mechanistic rationale.",
-    s0: "Unclear or absent mechanism.",
-    s1: "Broad but plausible mechanism.",
-    s2: "Well characterized drug target pathway disease fit (e.g., COX-2 inhibition and prostaglandin dysregulation in endometriosis).",
+    dim: "Plausibility",
+    note: "Whether a credible biological mechanism connects the drug to the condition.",
+    s0: "Mechanism asserted or unexplained.",
+    s1: "Plausible mechanism.",
+    s2: "Evidenced in relevant biology / directly fits known pharmacology.",
   },
   {
-    dim: "Consistency of Direction",
-    note: "Whether the effect direction is consistent across sources.",
-    s0: "Mixed or conflicting findings.",
-    s1: "Mostly consistent direction.",
-    s2: "Clearly consistent direction across all sources.",
+    dim: "Consistency",
+    note: "Whether the sources agree in direction; contradictions cap this and are shown, not averaged.",
+    s0: "Conflicting findings.",
+    s1: "Mostly one direction.",
+    s2: "Unanimous (a single study is scored neutral, not penalized).",
   },
 ];
 
 const TIERS_INTRO =
-  "Total scores map to four confidence tiers displayed on every signal card:";
+  "Each arm's five dimensions sum to a strength of 0-10, which is then multiplied by a female-applicability factor. The resulting arm score maps to four confidence tiers (cutoffs frozen against the real score distribution):";
 
 const TIERS: { name: string; range: string; color: string; soft: string; desc: string }[] = [
   {
     name: "Strong",
-    range: "9 to 10",
+    range: "≥ 8.0",
     color: "var(--tier-strong)",
     soft: "var(--tier-strong-soft)",
-    desc: "Highly replicated, well characterized signals with consistent direction across multiple evidence types.",
+    desc: "Guideline-grade: independently replicated, low-bias evidence generated in women.",
   },
   {
     name: "Moderate",
-    range: "7 to 8",
+    range: "6.0 to 7.9",
     color: "var(--tier-moderate)",
     soft: "var(--tier-moderate-soft)",
-    desc: "Replicated findings with solid mechanistic rationale.",
+    desc: "Good evidence with solid rationale, not yet definitive.",
   },
   {
     name: "Emerging",
-    range: "4 to 6",
+    range: "3.5 to 5.9",
     color: "var(--tier-emerging)",
     soft: "var(--tier-emerging-soft)",
-    desc: "Early stage evidence with some corroboration or mechanistic support.",
+    desc: "A real early lead worth watching: some corroboration or mechanistic support.",
   },
   {
     name: "Exploratory",
-    range: "0 to 3",
+    range: "< 3.5",
     color: "var(--tier-exploratory)",
     soft: "var(--tier-exploratory-soft)",
-    desc: "Single source, mechanistic, or low specificity signals included for hypothesis generation only.",
+    desc: "Thin or single-source signals, surfaced with heavy caveat for hypothesis generation.",
   },
 ];
 
 const RELIABILITY_INTRO =
-  "For every signal across all four categories, Whel applies five cross-cutting reliability checks:";
+  "For every signal across all three evidence arms, Whel applies five cross-cutting reliability checks:";
 
 const RELIABILITY: { label: string; body: string }[] = [
   {
@@ -218,7 +228,7 @@ const RELIABILITY: { label: string; body: string }[] = [
     body: "Every signal must be classified as one of: improves, worsens, mixed, or unclear.",
   },
   {
-    label: "Replication",
+    label: "Corroboration",
     body: "One source is interesting. Two or more independent sources start to constitute a signal.",
   },
   {
@@ -237,7 +247,7 @@ const PRINCIPLE_BODY =
 const INFRASTRUCTURE: { label: string; body: string }[] = [
   {
     label: "Database",
-    body: "Supabase (PostgreSQL) with Row Level Security. Core tables include conditions, compounds, repurposing_signals, and sources. The repurposing_signals table stores five scoring dimensions (replication, source quality, specificity, plausibility, direction), a computed total evidence score, confidence tier, effect direction, and human readable level labels. Signals are deduplicated at both the pipeline level (by post ID for Reddit, by compound and condition pair for all sources) and via database constraints.",
+    body: "Supabase (PostgreSQL). The substrate's core tables are entities (ontology-grounded drugs and conditions), documents and source_spans (the immutable source text), claims (each atomic claim pinned to a verbatim quote with verified character offsets), contradictions, and substrate_signals. Each substrate_signals row is one evidence arm's reading of an (intervention, condition, aspect): the five dimension scores and rationales, the female-applicability band and multiplier, the generated arm strength and arm score, the confidence tier, and back-references to the claims behind it. Rows are unique per (intervention, condition, aspect, arm).",
   },
   {
     label: "Frontend",
@@ -258,15 +268,15 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
     items: [
       {
         label: "LLM classification risk",
-        body: "Evidence strength classifications are generated by Claude Opus 4.6 against a published five-dimension rubric. While the rubric and JSON-schema validation reduce variability, three concrete classes of LLM-introduced error remain: (1) mechanistic misinterpretation, where the model may overstate the specificity of a target-pathway match, particularly for under-characterized pathways; (2) prompt sensitivity, where small changes to the system prompt have produced measurable shifts in tier assignment in our internal testing; (3) hallucinated citations, where occasional fabricated references have been observed despite the rubric requiring the model to score against the source content provided, and are mitigated by validating each cited source URL or PMID before database insertion. A planned validation pass will quantify per-tier concordance against expert human raters; until then, all signals should be treated as starting points for further verification, not assessments.",
+        body: "The five dimension scores are generated by Claude Opus 4.8 against a published per-arm rubric (the female multiplier, imprecision caps, and tier are deterministic and computed in code). While the rubric and JSON-schema validation reduce variability, three concrete classes of LLM-introduced error remain: (1) mechanistic misinterpretation, where the model may overstate the specificity of a target-pathway match, particularly for under-characterized pathways; (2) prompt sensitivity, where small changes to the system prompt have produced measurable shifts in tier assignment in our internal testing; (3) hallucinated citations, where occasional fabricated references have been observed despite the rubric requiring the model to score against the source content provided, and are mitigated by validating each cited source URL or PMID before database insertion. A planned validation pass will quantify per-tier concordance against expert human raters; until then, all signals should be treated as starting points for further verification, not assessments.",
       },
       {
         label: "LLM versioning and prompt drift",
-        body: "Both the model and the system prompts evolve over the lifecycle of the project. Each pipeline run is logged with the model version (claude-opus-4-6 at current snapshot) and a hash of the active prompt; snapshots taken months apart should not be compared signal-for-signal without re-running classification with a pinned model and prompt. The repository preserves prompt history for reproducibility.",
+        body: "Both the model and the system prompts evolve over the lifecycle of the project. Each pipeline run is logged with the model version (claude-opus-4-8 at current snapshot) and a hash of the active prompt; snapshots taken months apart should not be compared signal-for-signal without re-running classification with a pinned model and prompt. The repository preserves prompt history for reproducibility.",
       },
       {
         label: "External review and remediation",
-        body: "An independent external reviewer audit completed May 29 2026 surfaced two material findings. The first was a replication-score drift in the LLM rater: the published rubric defines Replication = 0 for one source, 1 for two independent sources, and 2 for three or more, but the rater had been counting more loosely. The rater prompts in all four pipelines were tightened to enforce literal source counting; 14 signals were downgraded to the tier the literature actually supports; and 19 manually-verified PubMed citations were added so each remaining Moderate-tier signal carries the source count the strict rubric requires. The second was a set of 21 ClinicalTrials.gov citations filed under conditions the trials were not run on: 10 signals were deactivated, 5 were reassigned from clinical-trial-finding to cross-condition framing, 1 source was dropped where the signal retained independent support, 2 sources were replaced with proper condition-specific citations, and 1 row was documented as a ClinicalTrials.gov API field limitation. The full audit trail is recorded in database migrations 036 through 040 and in the methodology version log.",
+        body: "An independent external reviewer audit completed May 29 2026 surfaced two material findings. The first was a corroboration-score drift in the LLM rater: the rubric defines corroboration = 0 for one source, 1 for two independent sources, and 2 for three or more, but the rater had been counting more loosely. The rater prompts were tightened to enforce literal source counting; signals were downgraded to the tier the evidence actually supports; and manually-verified PubMed citations were added so each remaining Moderate-tier signal carries the source count the strict rubric requires. The second was a set of 21 ClinicalTrials.gov citations filed under conditions the trials were not run on: 10 signals were deactivated, 5 were reassigned from clinical-trial-finding to cross-condition framing, 1 source was dropped where the signal retained independent support, 2 sources were replaced with proper condition-specific citations, and 1 row was documented as a ClinicalTrials.gov API field limitation. The full audit trail is recorded in database migrations 036 through 040 and in the methodology version log.",
       },
     ],
   },
@@ -283,7 +293,7 @@ const LIMITATION_GROUPS: { heading: string; items: { label: string; body: string
       },
       {
         label: "Cross-condition signal interpretation",
-        body: "Cross-Condition Signals identify drugs developed for other indications where women incidentally reported benefit for one of the six target conditions. Such signals can reflect three different underlying realities: (a) a real pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity, where the same patient population happens to carry both the original indication and the target condition with no causal pharmacological link, or (c) reporting artifact, where patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation across literature, AEMS, and pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely.",
+        body: "Cross-condition inference (now a derived-hypotheses lens layered on top of the three evidence arms, not a scored arm itself) identifies drugs developed for other indications where a shared mechanism suggests benefit for one of the six target conditions. Such inferences can reflect three different underlying realities: (a) a real pharmacological effect on a shared mechanism (the desired interpretation), (b) confounding by comorbidity, where the same patient population happens to carry both the original indication and the target condition with no causal pharmacological link, or (c) reporting artifact, where patients with a target condition may be more likely to report any adverse event as condition-related. Triangulation across literature, AEMS, and pathway data is required before elevation above Emerging, but no triangulation eliminates this ambiguity entirely.",
       },
       {
         label: "Pathway insight inference is weak",
@@ -446,12 +456,12 @@ export default function TechnicalArchitecturePage() {
           </h1>
           <p style={{ fontSize: "1rem", lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "64ch" }}>
             This page documents the technical machinery behind every signal
-            in the Whel database. It covers the five active data pipelines
+            in the Whel substrate. It covers the six active data pipelines
             and the sources each one queries, the five-dimension rubric Whel
-            applies to every signal, the four confidence tiers scores map
-            into, the category-specific admission standards each evidence arm
-            enforces, and the documented limitations of the methodology as
-            currently shipped.
+            applies to every signal, the female-applicability multiplier and the
+            four confidence tiers scores map into, the arm-specific admission
+            standards each of the three evidence arms enforces, and the documented
+            limitations of the methodology as currently shipped.
           </p>
         </div>
       </div>
@@ -506,11 +516,11 @@ export default function TechnicalArchitecturePage() {
           </div>
 
           <p style={{ ...MONO, fontSize: "11.5px", lineHeight: 1.6, color: "var(--muted)", marginTop: 18 }}>
-            The candidate index and condition pages live today are produced by the scored-signals
-            engine described below: the five data pipelines, the five-dimension rubric, and the four
-            confidence tiers. The substrate graph now runs over the Open Targets conditions and
-            surfaces beside each signal; the retrieval-and-validation layer and the full sex-aware
-            extension are still being built out across every condition.
+            The candidate index and condition pages live today are produced by the substrate
+            engine described below: the six data pipelines, the per-arm five-dimension rubric, the
+            female-applicability multiplier, and the four confidence tiers. Every signal traces to
+            verbatim-verified claims; the full sex-aware extension is still being built out across
+            every condition.
           </p>
         </div>
       </section>
@@ -668,12 +678,12 @@ export default function TechnicalArchitecturePage() {
           />
 
           <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "74ch", marginBottom: 24 }}>
-            The composite score is produced by the five-dimension rubric applied to the extracted
-            evidence. The literature grade (L0 to L3) and the MATRIX cross-reference are independent
-            external benchmarks: they are computed separately and reported beside the score, not used as
-            inputs to it. Keeping them out of the scoring pipeline means an outside benchmark cannot raise
-            or lower the rubric score, and agreement between an independent benchmark and the score
-            remains informative rather than circular.
+            The arm score is produced by the five-dimension rubric applied to the extracted
+            evidence, then discounted by the female-applicability multiplier. The MATRIX cross-reference
+            is an independent external benchmark: it is computed separately and reported beside the score;
+            the rubric never reads it as an input. Keeping it out of the scoring pipeline means an outside
+            benchmark cannot raise or lower the rubric score, and any agreement between an independent
+            benchmark and the score carries real information.
           </p>
 
           {/* Model selection callout */}
@@ -689,33 +699,58 @@ export default function TechnicalArchitecturePage() {
               className="font-heading"
               style={{ fontSize: "17px", color: "var(--ink)", marginBottom: 7 }}
             >
-              Model Selection: Claude Opus 4.6
+              Model Selection: Claude Opus 4.8
             </p>
             <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)" }}>
-              All signal analysis and scoring is performed using Claude Opus 4.6
-              (claude-opus-4-6). At the time Whel&apos;s evidence engine was
-              built, Opus 4.6 was Anthropic&apos;s most capable model and the
-              top-ranked model on{" "}
+              The dimension scoring is performed using Claude Opus 4.8
+              (claude-opus-4-8), released in May 2026; the deterministic steps
+              (the female-applicability multiplier, imprecision caps, and tier
+              assignment) are computed in code, not by the model. Opus 4.8 was
+              selected for its performance on complex multicriteria reasoning,
+              where each arm&apos;s five dimensions must be assessed against the
+              source content in a single analytical pass. In our internal
+              testing, smaller and faster models produced flatter, less
+              discriminating scores on plausibility and consistency.
+            </p>
+            <p style={{ fontSize: "14px", lineHeight: 1.62, color: "var(--ink-2)", marginTop: 12 }}>
+              On clinical text specifically,{" "}
+              <a
+                href="https://www.anthropic.com/news/claude-opus-4-8"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--ink)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+              >
+                Anthropic reports
+              </a>{" "}
+              that Opus 4.8 scores 55.8% on{" "}
+              <a
+                href="https://arxiv.org/abs/2604.27470"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--ink)", textDecoration: "underline", textUnderlineOffset: "2px" }}
+              >
+                HealthBench Professional
+              </a>
+              , an external, physician-authored benchmark of real clinical
+              tasks, up from 51.9% for the previous Opus release. No frontier
+              model is close to the ceiling on these tasks. Opus 4.8 has not been
+              evaluated on any women&apos;s-health-specific benchmark; the most
+              recent such evaluation,{" "}
               <a
                 href="https://arxiv.org/abs/2604.00024"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  color: "var(--ink)",
-                  textDecoration: "underline",
-                  textUnderlineOffset: "2px",
-                }}
+                style={{ color: "var(--ink)", textDecoration: "underline", textUnderlineOffset: "2px" }}
               >
                 WHBench
-              </a>
-              , an independent expert-validated benchmark for women&apos;s
-              health reasoning. Opus 4.6 was selected for its performance on
-              complex multicriteria reasoning, where signals must be
-              simultaneously assessed across source quality, replication,
-              biological plausibility, and confounding risk in a single
-              analytical pass. Smaller and faster models were evaluated and
-              produced flatter, less discriminating scores, particularly on
-              biological plausibility and confounding risk assessment.
+              </a>{" "}
+              (March 2026), tested the earlier Opus 4.6 and found it the
+              strongest of the models studied at 72.1%, while still flagging
+              meaningful safety and completeness gaps. We read these results as
+              evidence the model handles clinical text well. They are not a
+              guarantee that any individual score is correct, which is why every
+              score is shown beside its verbatim source and the model&apos;s
+              written rationale.
             </p>
           </div>
 
@@ -946,7 +981,7 @@ export default function TechnicalArchitecturePage() {
           <FigureHeader
             label="Figure 4 · Category standards"
             title="Category-specific minimum standards"
-            intro="Each of the four research arms carries its own inclusion bar, because a published trial, an adverse-event pattern, a mechanistic link, and a community report each demand a different kind of corroboration before they count. The full per-arm criteria, with their sources and worked examples, are documented on the signal types page."
+            intro="Each of the three evidence arms carries its own scoring bar, because a published trial, a mechanistic link, and a community report each demand a different kind of corroboration before they count. The full per-arm criteria, with their sources and worked examples, are documented on the signal types and scoring page."
           />
 
           <Link
@@ -963,7 +998,7 @@ export default function TechnicalArchitecturePage() {
               whiteSpace: "nowrap",
             }}
           >
-            The four research arms in depth →
+            The three evidence arms in depth →
           </Link>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { getCorpusScope } from "@/lib/substrate-candidates";
 
 export const metadata = {
   title: "Roadmap | Whel",
@@ -41,7 +41,7 @@ function buildPhases(totalSignals: number): { tag: string; sub: string; color: s
       color: "var(--moss)",
       items: [
         "Six conditions in scope: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, and menopause",
-        "Five evidence pipelines running across four research arms",
+        "Six evidence pipelines running across three evidence arms",
         signalsLine,
         "An independent biological-plausibility cross-reference from Every Cure's MATRIX model, shown beside our own grades rather than blended into them",
         "An external-validation grade on every drug and condition pair, with the highest grade reserved for signals backed by named clinical-guideline strength and certainty",
@@ -257,7 +257,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Knowledge-graph grounding",
-    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would run on Apache AGE to stay native to Postgres, or on BioCypher and Neo4j as the heavier alternative.",
+    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would move to BioCypher or Neo4j for richer graph tooling, with Apache AGE as a lighter Postgres-native fallback.",
     status: "Live",
   },
   {
@@ -446,14 +446,7 @@ function RegisterTable({ rows }: { rows: { name: string; role: string; status: S
    ────────────────────────────────────────────────────────────────────────── */
 
 export default async function RoadmapPage() {
-  const { count: totalSignalsRaw } = await supabase
-    .from("repurposing_signals")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "active")
-    .not("total_evidence_score", "is", null)
-    .gt("total_evidence_score", 0);
-
-  const totalSignals = totalSignalsRaw ?? 0;
+  const { signals: totalSignals } = await getCorpusScope();
   const PHASES = buildPhases(totalSignals);
 
   return (

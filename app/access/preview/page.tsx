@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getCandidates, getCorpusScope } from "@/lib/candidates";
+import { getCandidates, getCorpusScope } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;

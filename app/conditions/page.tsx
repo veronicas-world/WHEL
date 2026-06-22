@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import ConditionsList from "./ConditionsList";
-import type { TierKey } from "@/app/components/TierHeatmap";
-import { getLGradeDistributionForCondition } from "@/lib/evidence-grading-snapshot";
+import { getSubstrateHomeData } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -12,47 +11,21 @@ export const metadata = {
 };
 
 export default async function ConditionsPage() {
-  const [
-    { data: conditionsRaw },
-    { data: signalsRaw },
-  ] = await Promise.all([
-    supabase
-      .from("conditions")
-      .select("id, name, slug, description")
-      .order("name"),
-    supabase
-      .from("repurposing_signals")
-      .select("condition_id, confidence_tier")
-      .eq("status", "active")
-      .not("total_evidence_score", "is", null)
-      .gt("total_evidence_score", 0),
+  const [{ data: conditionsRaw }, home] = await Promise.all([
+    supabase.from("conditions").select("id, name, slug, description").order("name"),
+    getSubstrateHomeData(),
   ]);
 
   const conditions = conditionsRaw ?? [];
-  const signals    = signalsRaw   ?? [];
+  const EMPTY = { strong: 0, moderate: 0, emerging: 0, exploratory: 0, total: 0 };
 
   const conditionsWithStats = conditions.map((c, i) => {
-    const cSigs = signals.filter((s) => s.condition_id === c.id);
-    const tierCounts: Record<TierKey, number> = {
-      strong: 0, moderate: 0, emerging: 0, exploratory: 0,
-    };
-    for (const s of cSigs) {
-      const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
-      if (t in tierCounts) tierCounts[t]++;
-      else tierCounts.exploratory++;
-    }
-    // Per-condition L-grade distribution from the audit snapshot. Keyed by
-    // canonical condition.name (the same name passed to the chip lookup on
-    // the detail page), so /conditions and /conditions/[slug] grade the
-    // same pairs against the same rubric.
-    const lGradeCounts = getLGradeDistributionForCondition(c.name);
-
+    const st = home.byCondition.get(c.slug) ?? EMPTY;
     return {
       ...c,
       conditionCode: `C-${String(i + 1).padStart(2, "0")}`,
-      totalSignals: cSigs.length,
-      tierCounts,
-      lGradeCounts,
+      totalSignals: st.total,
+      tierCounts: { strong: st.strong, moderate: st.moderate, emerging: st.emerging, exploratory: st.exploratory },
     };
   });
 

@@ -84,7 +84,7 @@ export default function HomeTierMatrix({ rows }: { rows: MatrixRow[] }) {
             {TIERS.map(({ key }) => {
               const { bg, fg } = shade(key, r[key], max);
               return (
-                <Link key={key} href={`/conditions/${r.slug}`} title={`${r.name} · ${key} — ${r[key]}`} style={{
+                <Link key={key} href={`/conditions/${r.slug}`} title={`${r.name} · ${key}: ${r[key]}`} style={{
                   background: bg,
                   padding: "14px 12px", cursor: "pointer", minHeight: 54,
                   display: "flex", alignItems: "center", textDecoration: "none",

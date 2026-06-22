@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { toArmKey, ARM_LABELS, type ArmKey } from "@/lib/arm-mapping";
+import { getCandidates } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -21,15 +21,7 @@ export async function generateMetadata({
 }
 
 type TierKey = "strong" | "moderate" | "emerging" | "exploratory";
-
-/* Aggregate-only shape. Drug/compound and source fields are deliberately not
-   fetched on this public page, so no specific candidate ever reaches the
-   client. The candidates themselves live behind the access wall. */
-type AggregateSignal = {
-  signal_type: string | null;
-  confidence_tier: string | null;
-  created_at: string | null;
-};
+type ArmKey = "direct" | "pathway" | "community";
 
 const TIERS: { key: TierKey; label: string; token: string }[] = [
   { key: "strong",      label: "Strong",      token: "var(--tier-strong)"      },
@@ -38,29 +30,16 @@ const TIERS: { key: TierKey; label: string; token: string }[] = [
   { key: "exploratory", label: "Exploratory", token: "var(--tier-exploratory)" },
 ];
 
+// Three evidence arms (cross-condition is no longer an arm — it is a derived lens).
 const ARMS: { key: ArmKey; label: string; token: string }[] = [
-  { key: "direct",    label: ARM_LABELS.direct,    token: "var(--arm-direct)"    },
-  { key: "cross",     label: ARM_LABELS.cross,     token: "var(--arm-cross)"     },
-  { key: "pathway",   label: ARM_LABELS.pathway,   token: "var(--arm-pathway)"   },
-  { key: "community", label: ARM_LABELS.community, token: "var(--arm-community)" },
+  { key: "direct",    label: "Direct",    token: "var(--arm-direct)"    },
+  { key: "pathway",   label: "Pathway",   token: "var(--arm-pathway)"   },
+  { key: "community", label: "Community", token: "var(--arm-community)" },
 ];
 
 const MONO: React.CSSProperties = {
   fontFamily: "var(--font-plex-mono, ui-monospace, monospace)",
 };
-
-const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
-
-function formatReviewDate(isoStrings: string[]): string {
-  if (!isoStrings.length) return "—";
-  const latest = isoStrings.reduce((a, b) => (a > b ? a : b));
-  const d = new Date(latest);
-  if (Number.isNaN(d.getTime())) return "—";
-  return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
-}
 
 export default async function ConditionDetailPage({
   params,
@@ -72,6 +51,7 @@ export default async function ConditionDetailPage({
   const [
     { data: allConditions },
     { data: condition, error: conditionError },
+    allCandidates,
   ] = await Promise.all([
     supabase.from("conditions").select("slug").order("name"),
     supabase
@@ -79,6 +59,7 @@ export default async function ConditionDetailPage({
       .select("*, key_facts")
       .eq("slug", slug)
       .single(),
+    getCandidates(),
   ]);
 
   if (conditionError || !condition) notFound();
@@ -88,36 +69,21 @@ export default async function ConditionDetailPage({
     ? `C-${String(conditionIndex + 1).padStart(2, "0")}`
     : "";
 
-  // Public page: fetch only the fields needed for the aggregate breakdown.
-  // Compound names, summaries, mechanisms, and sources are not requested, so
-  // no specific surfaced drug is ever sent to the browser.
-  const { data: rawSignals } = await supabase
-    .from("repurposing_signals")
-    .select("signal_type, confidence_tier, created_at")
-    .eq("condition_id", condition.id)
-    .order("created_at");
+  // Aggregate-only: count this condition's substrate pairs by headline tier and
+  // by which evidence arms contribute, without sending any specific candidate to
+  // the client (the candidates live behind the access wall).
+  const condCands = allCandidates.filter((c) => c.conditionId === slug);
+  const total = condCands.length;
 
-  const signals = (rawSignals ?? []) as AggregateSignal[];
-  const total = signals.length;
-
-  // Tier counts
   const tierCounts: Record<TierKey, number> = {
     strong: 0, moderate: 0, emerging: 0, exploratory: 0,
   };
-  for (const s of signals) {
-    const t = (s.confidence_tier?.toLowerCase() ?? "exploratory") as TierKey;
-    if (t in tierCounts) tierCounts[t]++;
-    else tierCounts.exploratory++;
-  }
+  for (const c of condCands) tierCounts[c.tier]++;
 
-  // Arm counts
-  const armCounts: Record<ArmKey, number> = {
-    direct: 0, cross: 0, pathway: 0, community: 0,
-  };
-  for (const s of signals) {
-    const arm = toArmKey(s.signal_type) ?? "direct";
-    armCounts[arm]++;
-  }
+  // Arm composition: how many arm-readings each evidence arm contributes across
+  // this condition's pairs (a pair can carry Direct + Pathway + Community).
+  const armCounts: Record<ArmKey, number> = { direct: 0, pathway: 0, community: 0 };
+  for (const c of condCands) for (const a of c.arms ?? []) armCounts[a.arm]++;
 
   // Figure caption inputs — derived from the data, never asserted
   const topTier = [...TIERS].sort(
@@ -128,12 +94,6 @@ export default async function ConditionDetailPage({
   );
   const topArm = armsRanked[0];
   const bottomArm = armsRanked[armsRanked.length - 1];
-
-  // Last review from max created_at
-  const createdAts = (rawSignals ?? [])
-    .map((s: Record<string, unknown>) => s.created_at as string)
-    .filter(Boolean);
-  const lastReview = formatReviewDate(createdAts);
 
   const keyFacts =
     (condition.key_facts as { label: string; value: string }[] | null) ?? [];
@@ -217,7 +177,6 @@ export default async function ConditionDetailPage({
                       { label: "Moderate-tier",     value: String(tierCounts.moderate) },
                       { label: "Emerging-tier",     value: String(tierCounts.emerging) },
                       { label: "Exploratory-tier",  value: String(tierCounts.exploratory) },
-                      { label: "Last reviewed",     value: lastReview },
                     ] as const
                   ).map(({ label, value }, i) => (
                     <tr key={i} style={{ borderBottom: "1px solid rgba(244,239,230,0.14)" }}>
@@ -406,8 +365,8 @@ export default async function ConditionDetailPage({
           <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--body)", marginBottom: 36, maxWidth: "62ch" }}>
             The breakdown above shows how those {total} signals grade out by
             confidence tier and where each one originates. The candidates
-            themselves, the specific approved drugs with published evidence,
-            cross-condition signals, or mechanistic overlap for{" "}
+            themselves, the specific approved drugs with their verbatim-verified
+            evidence across the direct, pathway, and community arms for{" "}
             {condition.name.toLowerCase()}, sit behind access while Whel is in
             research preview.
           </p>

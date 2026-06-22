@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getCorpusScope, getShowcaseCandidates } from "@/lib/candidates";
+import { getCorpusScope, getShowcaseCandidates } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -49,9 +49,10 @@ export default async function CandidatesPage() {
               The strongest candidate in each of the {scope.conditions} conditions.
             </h2>
             <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--body)", maxWidth: "70ch", marginBottom: 30 }}>
-              One per condition, chosen for the depth of evidence behind it: the composite score, the
-              independent cross-references (literature grade, MATRIX, knowledge graph), and, where they
-              apply, the female-biology layers. Open any card for its evidence trail. The full index of{" "}
+              One per condition, chosen for the depth of evidence behind it: the arm-anchored composite
+              score, the independent cross-references (the MATRIX model, plus the sex-specific PK and
+              cycle-phase readings where they apply), and the female-applicability layer. Open any card for
+              its evidence trail. The full index of{" "}
               {scope.signals} candidates is available on request.
             </p>
             <div className="col" style={{ gap: 16 }}>

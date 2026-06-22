@@ -5,12 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 function WhelMark({ size = 30 }: { size?: number }) {
-  const off = 17, r = 21, sw = 4.6;
+  const r = 21, sw = 4.6;
+  // Three circles in a symmetric trefoil: one pointing up, the other two
+  // 120° apart, all offset 17 from the center (50, 50).
   const centers: [number, number][] = [
-    [50, 50 - off],
-    [50 + off, 50],
-    [50, 50 + off],
-    [50 - off, 50],
+    [50, 33],
+    [64.7, 58.5],
+    [35.3, 58.5],
   ];
   return (
     <svg
