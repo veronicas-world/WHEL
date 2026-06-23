@@ -42,7 +42,6 @@ const NAV_LINKS: { label: string; href: string; hideSm?: boolean }[] = [
   { label: "Manifesto",  href: "/manifesto" },
   { label: "Platform",   href: "/platform" },
   { label: "Conditions", href: "/conditions" },
-  { label: "Candidates", href: "/candidates" },
 ];
 
 // The About dropdown is split into two labelled groups: the company story,
