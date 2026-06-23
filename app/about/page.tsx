@@ -27,7 +27,7 @@ const ELAG    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC6244606/"; // elagolix
 const SSRI    = "https://www.pharmaceuticalonline.com/doc/fda-approves-sarafem-fluoxetine-hcl-for-preme-0001"; // Sarafem 2000
 const LTZ     = "https://www.nejm.org/doi/full/10.1056/NEJMoa1313517"; // Legro NEJM 2014 letrozole
 const GLP     = "https://academic.oup.com/ejendo/article/194/3/S25/8488941"; // GLP-1 in PCOS review
-const PMDD    = "https://www.frontiersin.org/journals/global-womens-health/articles/10.3389/fgwh.2023.1181583/full"; // PMDD DSM-5 / prevalence
+const PMDD    = "https://www.ncbi.nlm.nih.gov/books/NBK532307/"; // PMDD StatPearls: prevalence 3-8% of menstruating women, DSM-5
 const ECON    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12766319/"; // repurposing economics review
 const FIVE    = "https://www.fda.gov/media/156350/download"; // FDA 505(b)(2) overview
 const MARKET  = "https://www.precedenceresearch.com/drug-repurposing-market"; // repurposing market size
@@ -361,7 +361,7 @@ export default function AboutPage() {
                       Leuprolide was developed as a{" "}
                       <A href={LEUP}>prostate-cancer therapy</A> and became a mainstay of endometriosis
                       care by shutting down estrogen. Tellingly, elagolix in 2018 was the{" "}
-                      <A href={ELAG}>first oral drug developed for endometriosis in over a decade</A>,
+                      <A href={ELAG}>first oral drug approved for endometriosis in over a decade</A>,
                       proof of how starved the field has been of dedicated development.
                     </p>
                   </div>
@@ -462,7 +462,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   PMDD is severe, common, and recent. It affects an estimated{" "}
-                  <A href={PMDD}>1.8 to 5.8 percent of menstruating women</A>{" "}and was only added as a
+                  <A href={PMDD}>3 to 8 percent of menstruating women</A>{" "}and was only added as a
                   formal diagnosis to the DSM-5 in 2013, after decades in the manual&rsquo;s appendix.
                   That lateness is the point: a condition recognized this recently has a thin, scattered
                   evidence base, which is exactly the terrain where a system that reads evidence carefully
