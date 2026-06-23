@@ -249,6 +249,13 @@ h1, h2, h3, h4 {
 }
 .whel-nav .nav-cta:hover { background: var(--on-ink); color: var(--ink); border-color: var(--on-ink); }
 @media (max-width: 920px){ .whel-nav nav { gap: 15px; } .whel-nav nav a.hide-sm { display: none; } }
+/* Below Tailwind's sm breakpoint the hamburger drawer takes over. The base
+   `.whel-nav nav { display: flex }` is unlayered and would otherwise win over
+   Tailwind's `hidden` utility, so force the primary nav off on small screens. */
+@media (max-width: 639.98px){
+  .whel-nav nav.primary-nav { display: none; }
+  .whel-nav-inner { gap: 16px; }
+}
 
 /* ── Wordmark ─────────────────────────────────────────────────────────── */
 

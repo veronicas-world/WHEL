@@ -107,7 +107,7 @@ export default function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden sm:flex" style={{ gap: 26, alignItems: "center", marginLeft: "auto" }}>
+        <nav className="hidden sm:flex primary-nav" style={{ gap: 26, alignItems: "center", marginLeft: "auto" }}>
           {NAV_LINKS.map(({ label, href }) => (
             <Link
               key={href}
@@ -235,7 +235,7 @@ export default function Nav() {
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
-          style={{ background: "none", border: "none" }}
+          style={{ background: "none", border: "none", marginLeft: "auto" }}
         >
           {[0, 1, 2].map((i) => (
             <span
