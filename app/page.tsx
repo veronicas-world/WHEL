@@ -16,12 +16,12 @@ export const revalidate = 0;
 // These are the canonical named examples and architecture data from the
 // Claude Design redesign. They do not come from Supabase.
 
-/* TODO(real-data): placeholder stats from design — headline facts */
+/* Headline facts, each linked to the source behind the number. */
+const STUDY_BIAS = "https://pmc.ncbi.nlm.nih.gov/articles/PMC6877896/"; // ~80% of preclinical studies male-only; 5:1 ratio
+const TRIAL_EXCL = "https://orwh.od.nih.gov/toolkit/recruitment/history"; // women not required in federally funded research until NIH Revitalization Act 1993
 const FACTS = [
-  { n: "88%",    l: "of preclinical biomedical research uses male-only animal models" },
-  { n: "1993",   l: "women excluded from most US Phase I & II trials through this year" },
-  { n: "<10%",   l: "of PK studies report cyclical hormonal state" },
-  { n: "1.5–1.7×", l: "the rate of adverse drug reactions women experience vs men" },
+  { n: "80%",  l: "of preclinical research uses male-only animal models", src: STUDY_BIAS },
+  { n: "1993", l: "women excluded from most US Phase I & II trials through this year", src: TRIAL_EXCL },
 ];
 
 /* TODO(real-data): named drug-repurposing arcs — from design, verified examples */
@@ -182,9 +182,11 @@ export default async function Home() {
               <div className="v">{citationsLabel}</div>
               <div className="l">verbatim claims, each pinned to a source quote</div>
             </div>
-            {FACTS.slice(0, 2).map((f) => (
+            {FACTS.map((f) => (
               <div className="s" key={f.n}>
-                <div className="v">{f.n}</div>
+                <div className="v">
+                  <a href={f.src} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "underline", textDecorationColor: "rgba(244,239,230,0.4)", textUnderlineOffset: 4 }}>{f.n}</a>
+                </div>
                 <div className="l">{f.l}</div>
               </div>
             ))}

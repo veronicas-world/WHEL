@@ -140,7 +140,7 @@ const CONDITIONS: { name: string; pathways: string[]; gap: string }[] = [
   {
     name: "PCOS",
     pathways: ["Metabolic", "Estrogen", "Inflammation"],
-    gap: "The most common endocrine disorder in women of reproductive age, and chronically under-represented in research.",
+    gap: "One of the most common endocrine disorders in women of reproductive age, and chronically under-represented in research.",
   },
   {
     name: "Adenomyosis",

@@ -207,8 +207,8 @@ export default async function PlatformPage() {
             <p style={pBone}>
               A general-purpose graph is not enough, because the data underneath it was built
               largely on the male body. In pharmacology research male animals still outnumber
-              female ones by roughly five to one, and only about{" "}
-              <A href={BIAS}>15 percent of studies include both sexes</A>, so the basic
+              female ones by roughly five to one, with{" "}
+              <A href={BIAS}>most studies still using males only</A>, so the basic
               pharmacology of many drugs was characterized in male tissue. A substrate that
               inherits that record uncritically inherits its blind spots. Ours is built to
               correct for them, which means it carries sex-specific pharmacokinetics and
