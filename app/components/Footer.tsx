@@ -35,7 +35,6 @@ const COMPANY_LINKS = [
   { label: "Team",           href: "/about/team" },
   { label: "Roadmap",        href: "/about/roadmap" },
   { label: "Contact",        href: "/about/contact" },
-  { label: "Request access", href: "/access" },
 ];
 
 export default function Footer() {

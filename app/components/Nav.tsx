@@ -222,11 +222,11 @@ export default function Nav() {
           </div>
 
           <Link
-            href="/access"
+            href="/candidates"
             className="nav-cta"
             style={{ textDecoration: "none" }}
           >
-            Request access
+            View candidates
           </Link>
         </nav>
 
@@ -324,7 +324,7 @@ export default function Nav() {
             ))}
 
             <Link
-              href="/access"
+              href="/candidates"
               onClick={() => setMobileOpen(false)}
               style={{
                 padding: "14px 0",
@@ -336,7 +336,7 @@ export default function Nav() {
                 textDecoration: "none",
               }}
             >
-              Request access
+              View candidates
             </Link>
           </nav>
         </div>

@@ -7,11 +7,10 @@ import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// Gated per-signal detail page. Inherits the invite-only posture of the
-// preview index: not advertised, not indexed.
+// Public per-candidate breakdown: the full evidence trail for a signal,
+// open and indexable so the scoring can be checked.
 export const metadata: Metadata = {
-  title: "Signal detail, preview",
-  robots: { index: false, follow: false },
+  title: "Candidate breakdown",
 };
 
 const TIER_LABELS: Record<string, string> = {

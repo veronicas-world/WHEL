@@ -206,7 +206,7 @@ export default function SignalTypesPage() {
               Technical architecture <span className="arr">&rarr;</span>
             </Link>
             <Link href="/about/external-references" className="btn btn-ghost">External references</Link>
-            <Link href="/access" className="btn btn-ghost">Request access</Link>
+            <Link href="/candidates" className="btn btn-ghost">View candidates</Link>
           </div>
         </div>
       </section>

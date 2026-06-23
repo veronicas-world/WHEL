@@ -382,29 +382,28 @@ export default async function ConditionDetailPage({
             }}
           >
             <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 10 }}>
-              Behind access
+              The candidates
             </div>
             <h3 className="font-heading" style={{ fontSize: "1.35rem", fontWeight: 500, color: "var(--ink)", letterSpacing: "-0.01em", marginBottom: 12 }}>
-              The candidates are available on request.
+              Explore the candidates.
             </h3>
             <p style={{ fontSize: "0.9375rem", lineHeight: 1.7, color: "var(--body)", maxWidth: "58ch", marginBottom: 22 }}>
               Each candidate carries its full evidence trail: scored across five
               dimensions, graded from strong to exploratory, with every source and
-              date attached so it can be checked. We share the index with
-              researchers and clinicians during the preview.
+              date attached so it can be checked. Every candidate is open to read in full.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <Link
-                href="/access"
+                href="/candidates"
                 style={{ ...MONO, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--paper)", background: "var(--ink)", padding: "11px 18px", textDecoration: "none" }}
               >
-                Request access &rarr;
+                View all candidates &rarr;
               </Link>
               <Link
-                href="/candidates"
+                href="/signal-types"
                 style={{ ...MONO, fontSize: "12px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)", border: "1px solid var(--rule-strong)", padding: "11px 18px", textDecoration: "none" }}
               >
-                See a sample candidate
+                How signals are scored
               </Link>
             </div>
           </div>

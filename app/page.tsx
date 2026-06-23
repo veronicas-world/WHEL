@@ -504,11 +504,11 @@ export default async function Home() {
           </h2>
           <p className="lede" style={{ color: "var(--on-ink-2)", margin: "0 auto 32px" }}>
             For clinician-researchers, pharma women&apos;s health teams, and advocacy organizations.
-            Request access to the v0.1 index, or read how each signal is scored.
+            Explore the full candidate index, or read how each signal is scored.
           </p>
           <div className="row" style={{ justifyContent: "center", gap: 12 }}>
-            <Link href="/access" className="btn btn-on-ink">
-              Request access <span className="arr">→</span>
+            <Link href="/candidates" className="btn btn-on-ink">
+              View candidates <span className="arr">→</span>
             </Link>
             <Link href="/about/technical-architecture" className="btn btn-ghost-ink">
               How we score evidence

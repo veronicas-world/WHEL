@@ -728,7 +728,7 @@ export default function AboutPage() {
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
               <Link href="/manifesto" className="btn btn-primary">Read the manifesto <span className="arr">&rarr;</span></Link>
               <Link href="/about/technical-architecture" className="btn btn-ghost">How we score evidence</Link>
-              <Link href="/access" className="btn btn-ghost">Request access</Link>
+              <Link href="/candidates" className="btn btn-ghost">View candidates</Link>
             </div>
           </div>
         </section>

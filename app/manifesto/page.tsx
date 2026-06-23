@@ -615,7 +615,7 @@ export default function ManifestoPage() {
                   </p>
                   <div style={{ marginTop: 40, display: "flex", gap: 12, flexWrap: "wrap" }}>
                     <Link href="/candidates" className="btn btn-primary">See the candidates <span className="arr">&rarr;</span></Link>
-                    <Link href="/access" className="btn btn-ghost">Request access</Link>
+                    <Link href="/signal-types" className="btn btn-ghost">How signals are scored</Link>
                   </div>
                 </div>
               </section>

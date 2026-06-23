@@ -1,18 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CandidateCard from "@/app/components/CandidateCard";
-import { getCorpusScope, getShowcaseCandidates } from "@/lib/substrate-candidates";
+import { getCandidates, getCorpusScope } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Candidates",
-  description: "A sample of Whel's drug-repurposing candidates, scored, tiered, and mapped to the 505(b)(2) pathway. The full index is available on request.",
+  description: "Whel's full drug-repurposing candidate index, scored across five dimensions, tiered by confidence, and traceable to every source.",
+};
+
+const TIER_ORDER = ["strong", "moderate", "emerging", "exploratory"] as const;
+const TIER_LABELS: Record<string, string> = {
+  strong: "Strong · ≥8.0",
+  moderate: "Moderate · 6.0–7.9",
+  emerging: "Emerging · 3.5–5.9",
+  exploratory: "Exploratory · <3.5",
 };
 
 export default async function CandidatesPage() {
-  const [scope, showcase] = await Promise.all([getCorpusScope(), getShowcaseCandidates()]);
+  const [scope, candidates] = await Promise.all([getCorpusScope(), getCandidates()]);
+  const grouped = TIER_ORDER.map((tier) => ({
+    tier,
+    items: candidates.filter((c) => c.tier === tier),
+  })).filter((g) => g.items.length > 0);
 
   return (
     <main>
@@ -34,54 +46,37 @@ export default async function CandidatesPage() {
           <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
             Every candidate surfaces a drug already approved for one indication with evidence it
             works for a women&apos;s health condition, scored across five dimensions, tiered, and
-            traceable to its sources. The index is open to researchers and clinicians on request
-            during the research preview.
+            traceable to its sources. The full index is open below, grouped by confidence tier.
+            Open any card for its complete evidence trail.
           </p>
         </div>
       </section>
 
-      {/* Showcase: the strongest candidate in each condition */}
-      {showcase.length > 0 && (
-        <section className="surface-bone section">
+      {/* Full index, grouped by confidence tier */}
+      {grouped.map(({ tier, items }) => (
+        <section key={tier} className="surface-bone section tight">
           <div className="container">
-            <div className="eyebrow" style={{ marginBottom: 12 }}>A sample of the index</div>
-            <h2 className="h2" style={{ maxWidth: "26ch", marginBottom: 16 }}>
-              The strongest candidate in each of the {scope.conditions} conditions.
-            </h2>
-            <p style={{ fontSize: 16, lineHeight: 1.7, color: "var(--body)", maxWidth: "70ch", marginBottom: 30 }}>
-              One per condition, chosen for the depth of evidence behind it: the arm-anchored composite
-              score, the independent cross-references (the MATRIX model, plus the sex-specific PK and
-              cycle-phase readings where they apply), and the female-applicability layer. Open any card for
-              its evidence trail. The full index of{" "}
-              {scope.signals} candidates is available on request.
-            </p>
+            <div style={{ marginBottom: 24 }}>
+              <div className="eyebrow" style={{ marginBottom: 8 }}>{TIER_LABELS[tier]}</div>
+              <h2 className="h3">{tier.charAt(0).toUpperCase() + tier.slice(1)} evidence · {items.length}</h2>
+            </div>
             <div className="col" style={{ gap: 16 }}>
-              {showcase.map((c) => (
+              {items.map((c) => (
                 <CandidateCard key={c.id} c={c} />
               ))}
             </div>
           </div>
         </section>
-      )}
+      ))}
 
-      {/* Gate band */}
-      <section className="surface-moss section tight">
-        <div className="container" style={{ textAlign: "center" }}>
-          <div className="eyebrow on-ink" style={{ marginBottom: 14 }}>The full index</div>
-          <h2 className="framedevice" style={{ color: "var(--on-ink)", margin: "0 auto 18px", maxWidth: "20ch" }}>
-            {scope.signals} candidates across {scope.conditions} conditions, with complete evidence trails.
-          </h2>
-          <p className="lede" style={{ color: "var(--on-ink-2)", margin: "0 auto 30px", maxWidth: "54ch" }}>
-            The full candidate index, the searchable substrate, and structured data export are open by
-            invitation during the research preview.
-          </p>
-          <div className="row" style={{ justifyContent: "center", gap: 12 }}>
-            <Link href="/access" className="btn btn-on-ink">
-              Request access <span className="arr">→</span>
+      {/* Continue */}
+      <section className="surface-bone" style={{ paddingBottom: 72, paddingTop: 8 }}>
+        <div className="container">
+          <div style={{ borderTop: "1px solid var(--line)", paddingTop: 28, display: "flex", flexWrap: "wrap", gap: 12 }}>
+            <Link href="/signal-types" className="btn btn-primary">
+              How signals are scored <span className="arr">&rarr;</span>
             </Link>
-            <Link href="/about/technical-architecture" className="btn btn-ghost-ink">
-              How signals are scored
-            </Link>
+            <Link href="/about/technical-architecture" className="btn btn-ghost">Technical architecture</Link>
           </div>
         </div>
       </section>
