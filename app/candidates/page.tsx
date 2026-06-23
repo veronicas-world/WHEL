@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import CandidateCard from "@/app/components/CandidateCard";
-import ConditionAccordion, { type ConditionPanel } from "./ConditionAccordion";
+import CandidateExplorer, { type ExplorerItem } from "./CandidateExplorer";
 import { getCandidates, getCorpusScope } from "@/lib/substrate-candidates";
 
 export const dynamic = "force-dynamic";
@@ -65,15 +65,30 @@ export default async function CandidatesPage() {
     for (const t of TIER_ORDER) totalByTier[t] += cond.counts[t];
   }
 
-  const panels: ConditionPanel[] = conditions.map((cond) => ({
-    slug: cond.slug,
-    label: cond.label,
-    count: cond.items.length,
-    tierSummary: TIER_ORDER.filter((t) => cond.counts[t])
-      .map((t) => `${cond.counts[t]} ${TIER_LABELS[t].toLowerCase()}`)
-      .join(" · "),
-    cards: cond.items.map((c) => <CandidateCard key={c.id} c={c} />),
-  }));
+  // Build the explorer's serializable facet metadata, pairing each candidate's
+  // pre-rendered card with the fields the client filters and ranks on. The list
+  // is already sorted strongest-first by getCandidates().
+  const explorerItems: ExplorerItem[] = candidates.map((c) => {
+    const arm = c.signalType as ExplorerItem["signalArm"];
+    const signalArm = arm === "direct" || arm === "pathway" || arm === "community" ? arm : null;
+    const matrixRank = c.matrixPercentile ? Number(c.matrixPercentile.match(/(\d+)/)?.[1] ?? "") : NaN;
+    return {
+      id: c.id,
+      condition: c.condition,
+      conditionSlug: slugFor(c),
+      tier: c.tier,
+      score: c.score,
+      signalArm,
+      validation: c.validationStatus ?? null,
+      matrixPercentile: c.matrixPercentile ?? null,
+      matrixRank: Number.isFinite(matrixRank) ? matrixRank : null,
+      hasMatrix: !!c.matrixPercentile,
+      hasSexPk: !!(c.sexPk && c.sexPk.length > 0),
+      hasPhase: !!(c.cyclePhase && c.cyclePhase.length > 0),
+      hasGraph: !!(c.graphViaTargets && c.graphViaTargets.length > 0),
+      card: <CandidateCard key={c.id} c={c} />,
+    };
+  });
 
   return (
     <main>
@@ -166,9 +181,14 @@ export default async function CandidatesPage() {
         <div className="container">
           <div style={{ marginBottom: 24 }}>
             <div className="eyebrow" style={{ marginBottom: 8 }}>The full index</div>
-            <h2 className="h3">Open a condition to read its candidates</h2>
+            <h2 className="h3">Filter and rank the full board</h2>
+            <p style={{ marginTop: 10, color: "var(--muted)", maxWidth: "62ch", fontSize: "0.95rem" }}>
+              Narrow by confidence tier, validation status, signal type, evidence layer, or
+              MATRIX percentile, then rank the survivors however you like. Grouping by condition
+              stays on by default; turn it off for a single ranked board.
+            </p>
           </div>
-          <ConditionAccordion items={panels} />
+          <CandidateExplorer items={explorerItems} />
         </div>
       </section>
 
