@@ -90,7 +90,7 @@ export default async function CandidatesPage() {
             v0 corpus · {scope.signals} candidates across {scope.conditions} conditions
           </div>
           <h1 className="display" style={{ color: "var(--on-ink)", fontSize: "clamp(40px,5vw,76px)", maxWidth: "18ch" }}>
-            Repurposing candidates, with the trail.
+            Repurposing candidates
           </h1>
           <p className="lede" style={{ marginTop: 26, color: "var(--on-ink-2)" }}>
             Every candidate surfaces a drug already approved for one indication with evidence it
