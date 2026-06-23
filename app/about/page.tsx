@@ -32,16 +32,9 @@ const ECON    = "https://pmc.ncbi.nlm.nih.gov/articles/PMC12766319/"; // repurpo
 const FIVE    = "https://www.fda.gov/media/156350/download"; // FDA 505(b)(2) overview
 const MARKET  = "https://www.precedenceresearch.com/drug-repurposing-market"; // repurposing market size
 const ORPHAN  = "https://www.frontiersin.org/journals/pharmacology/articles/10.3389/fphar.2025.1670845/full"; // financial orphans / off-patent barriers
-const VIAGRA  = "https://pmc.ncbi.nlm.nih.gov/articles/PMC7097805/"; // sildenafil history
-const HEALX   = "https://www.pharmaceutical-technology.com/features/healx-ai-drug-repurposing-rare-disease/"; // Healx patient-foundation model
-const RECURSION = "https://www.utahbusiness.com/entrepreneurship/2023/07/20/how-chris-gibson-founded-recursion-pharmaceuticals/"; // Recursion founding / repurposing
-const WHOENDO = "https://www.who.int/news-room/fact-sheets/detail/endometriosis"; // endometriosis diagnostic delay
 const CAUSALY = "https://www.causaly.com/life-science-ai/knowledge-graph"; // general-platform data sources
 const LDN_MECH = "https://pmc.ncbi.nlm.nih.gov/articles/PMC3962576/"; // low-dose naltrexone mechanism
 const LDN_TRIAL = "https://clinicaltrials.gov/study/NCT03970330"; // LDN endometriosis trial (terminated)
-const GABA = "https://pubmed.ncbi.nlm.nih.gov/15228033/"; // gabapentin off-label settlement
-const LYRICA = "https://www.drugs.com/history/lyrica.html"; // pregabalin / Lyrica
-const LYRICA_REV = "https://www.fiercepharma.com/pharma/lyrica-looking-grim-pfizer-s-blockbuster-faces-crumbling-market-share-after-generic"; // Lyrica peak revenue
 const GTEX = "https://www.science.org/doi/10.1126/science.aaz1776"; // GTEx v8 atlas; ~two-thirds male donors (557/838)
 const OLIVA = "https://www.science.org/doi/10.1126/science.aba3066"; // Oliva et al. 2020, sex effects on gene expression across tissues
 const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5"; // Zucker & Prendergast 2020, curated sex-PK dataset (86 drugs)
@@ -235,7 +228,7 @@ export default function AboutPage() {
             <a href="#exclusion"><span className="ab-n">01</span><span className="ab-t">The exclusion</span></a>
             <a href="#repurposing"><span className="ab-n">02</span><span className="ab-t">Why we start with repurposing</span></a>
             <a href="#flagship"><span className="ab-n">03</span><span className="ab-t">Why PMDD is the flagship</span></a>
-            <a href="#management"><span className="ab-n">04</span><span className="ab-t">Built for management</span></a>
+            <a href="#management"><span className="ab-n">04</span><span className="ab-t">The management model</span></a>
             <a href="#graph"><span className="ab-n">05</span><span className="ab-t">A graph of its own</span></a>
             <a href="#competitors"><span className="ab-n">06</span><span className="ab-t">What general platforms miss</span></a>
           </aside>
@@ -492,11 +485,11 @@ export default function AboutPage() {
               </div>
             </section>
 
-            {/* 04 - Built for management */}
+            {/* 04 - The management model */}
             <section className="ab-sec" id="management">
               <div className="ab-sec-head">
                 <span className="ab-sn">04</span>
-                <h2>Built for management</h2>
+                <h2>The management model</h2>
               </div>
               <div className="ab-prose">
                 <p className="ab-lead">
@@ -504,85 +497,27 @@ export default function AboutPage() {
                   sets us apart is the medical model that machinery is built to serve.
                 </p>
                 <p>
-                  Most drug discovery is built to chase cures. Its engines are tuned to find the single
-                  molecule that can eliminate a disease, because for cancer and rare genetic disorders a
-                  cure for a fatal condition is the blockbuster. That model is sound for what it targets,
-                  and it is where the AI drug-discovery companies point their engines. It simply does not
-                  fit most of women&rsquo;s health.
+                  Most drug discovery is built to chase cures, the single molecule that can eliminate a
+                  disease, because for cancer and rare genetic disorders that cure is the blockbuster, and
+                  it is where the AI drug-discovery companies point their engines. Endometriosis, PCOS,
+                  PMDD, adenomyosis, perimenopause, and vulvodynia rarely work that way. They are lived
+                  with and managed over years, rarely fatal but routinely life-debilitating, reshaping
+                  careers, relationships, and decades of daily function without ever showing up on a
+                  mortality table. Managing a chronic condition needs a different evidence base than
+                  curing an acute one. The fuller case for why discovery is built around cures, and what
+                  that has cost women, is laid out in the{" "}
+                  <Link href="/manifesto" style={{ color: "var(--moss)", textDecoration: "underline", textUnderlineOffset: 3 }}>manifesto</Link>.
                 </p>
                 <p>
-                  Endometriosis, PCOS, PMDD, adenomyosis, perimenopause, and vulvodynia are rarely cured.
-                  They are lived with and managed over years. They are rarely fatal but routinely
-                  life-debilitating, reshaping careers, relationships, and decades of daily function
-                  without ever showing up on a mortality table. Managing a chronic, non-fatal condition
-                  is a different kind of problem, and it needs a different evidence base.
-                </p>
-                <div className="ab-split">
-                  <div className="ab-cure">
-                    <div className="ab-sk">Cure model</div>
-                    <div className="ab-sq">&ldquo;Which molecule erases the disease?&rdquo;</div>
-                  </div>
-                  <div className="ab-whel">
-                    <div className="ab-sk">Whel&rsquo;s model</div>
-                    <div className="ab-sq">&ldquo;Which existing drug makes this condition livable, at what dose, in which phase of the cycle, for which person?&rdquo;</div>
-                  </div>
-                </div>
-                <p>
-                  There is a structural reason a blockbuster engine looks past these drugs, and it is
-                  financial before it is clinical. Pharma recoups its enormous development bills through
-                  patent-protected exclusivity, so the candidates worth a company&rsquo;s attention are
-                  the ones it can own. Most of the drugs that already manage women&rsquo;s conditions are
-                  cheap, off-patent generics. The repurposing literature has a name for them:{" "}
-                  <A href={ORPHAN}>financial orphans</A>, clinically valuable and commercially
-                  unattractive, left unstudied because no one can profit from confirming what they do.
-                  Public money funds early research but rarely the confirmatory trials, which is part of
-                  why the odds of a repurposed generic reaching a new approved use sit{" "}
-                  <A href={ORPHAN}>below 30 percent</A> even when the science holds up.
-                </p>
-                <p>
-                  Sildenafil shows the same rule from the other side. It was developed for angina,
-                  underperformed at the heart, and was{" "}
-                  <A href={VIAGRA}>brought to market in 1998 as Viagra</A>. It cures nothing, yet by
-                  making a non-fatal condition livable it became one of the largest drug franchises in
-                  history, and it got developed precisely because it was a new, ownable molecule. The
-                  drugs that could do the same for endometriosis or PMDD are mostly generics no one can
-                  own, so a blockbuster-tuned engine has no reason to surface them.
-                </p>
-                <p>
-                  History makes the point from the losing side too. Gabapentin was approved for epilepsy
-                  in 1993, and within a few years most of its prescriptions were off-label, for nerve
-                  pain, fibromyalgia, and mood, uses found in practice rather than in trials. Its maker
-                  chose to <A href={GABA}>promote those uses illegally</A> rather than formally develop
-                  them, and paid a 430 million dollar settlement in 2004. The clinical value had been
-                  real all along. What the model needed was an ownable version, and once Pfizer had one
-                  it acted: pregabalin, sold as <A href={LYRICA}>Lyrica</A> and approved for the same
-                  pain and fibromyalgia indications gabapentin was already treating, a drug that went on
-                  to earn <A href={LYRICA_REV}>around five billion dollars a year</A>{" "}at its peak. The
-                  drugs that manage women&rsquo;s conditions are mostly generics with no such successor
-                  waiting.
-                </p>
-                <p>
-                  That is the consequence of the model difference. A platform scoring drug-disease pairs
-                  by their potential to cure, and by their potential to be owned, will rank a drug that
-                  manages endometriosis for millions of women as a near-miss. We rank it as the result.
-                  The same logic is why we read patient-community reports as evidence: managed conditions
-                  are the ones where people record, month after month, what helps them get through the
-                  week, and these communities accumulate practical knowledge years ahead of the
-                  literature. We structure that record and test it against mechanistic and clinical
-                  evidence, never mistaking it for proof and never discarding it as noise.
-                </p>
-                <p>
-                  Reading community signal this way is how the leading repurposing companies were built.{" "}
-                  <A href={HEALX}>Healx</A> grounded its rare-disease discovery in formal patient-foundation
-                  partnerships, and <A href={RECURSION}>Recursion</A>{" "}grew out of a rare-disease
-                  repurposing effort shaped by the community it served. Both leaned on organized
-                  foundations with registries and boards. Women&rsquo;s communities are far larger and
-                  almost entirely informal, living on forums and in advocacy groups, and they hold
-                  something institutional databases never recorded: the place where women confirm a
-                  symptom is real years before a diagnosis arrives, in a field where{" "}
-                  <A href={WHOENDO}>endometriosis alone takes years to identify</A>. That signal has never
-                  been read at scale. Reading it, and crediting the people who recorded it, is where our
-                  work begins.
+                  The consequence is financial before it is clinical. Pharma recoups its development bills
+                  through patent-protected exclusivity, so the candidates worth a company&rsquo;s
+                  attention are the ones it can own, and most of the drugs that already manage
+                  women&rsquo;s conditions are cheap, off-patent generics. The repurposing literature has a
+                  name for them: <A href={ORPHAN}>financial orphans</A>, clinically valuable and
+                  commercially unattractive, left unstudied because no one profits from confirming what
+                  they do. A platform scoring drug-disease pairs by their potential to cure, and by their
+                  potential to be owned, ranks a drug that manages endometriosis for millions of women as a
+                  near-miss. We rank it as the result.
                 </p>
               </div>
             </section>
@@ -700,7 +635,7 @@ export default function AboutPage() {
                   <A href={OLIVA}>sex shapes gene expression across nearly every tissue</A>. The predictive
                   graphs and models that have already digested the literature we keep beside the work as a
                   cross-reference, never letting their averaged verdict become our ground truth. And where the
-                  evidence genuinely runs out, we show the gap rather than fill it: query{" "}
+                  evidence runs out, we show the gap rather than fill it: query{" "}
                   <A href={OT_VULVO}>Open Targets for vulvodynia</A> or PMDD, two of our six conditions, and
                   it returns nothing at all, a silence we surface rather than smooth over, because for these
                   conditions a marked gap is worth more than a confident number resting on almost nothing.
@@ -710,17 +645,6 @@ export default function AboutPage() {
 
           </div>
         </div>
-
-        {/* ── Additive-layer band ───────────────────────────────────────────── */}
-        <section className="ab-band">
-          <div className="container ab-band-inner">
-            <blockquote>
-              The record was written for the wrong body. We are reading it back, correcting it, and
-              completing it.
-            </blockquote>
-            <div className="ab-src">Whel &middot; an additive layer to pharma</div>
-          </div>
-        </section>
 
         {/* ── Continue ──────────────────────────────────────────────────────── */}
         <section className="surface-bone" style={{ paddingTop: 56, paddingBottom: 72 }}>
