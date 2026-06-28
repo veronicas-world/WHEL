@@ -52,7 +52,6 @@ const ABOUT_GROUPS: { label: string; items: { label: string; href: string }[] }[
     label: "Company",
     items: [
       { label: "About",   href: "/about" },
-      { label: "Team",    href: "/about/team" },
       { label: "Roadmap", href: "/about/roadmap" },
       { label: "Contact", href: "/about/contact" },
     ],
