@@ -430,7 +430,7 @@ export default async function PlatformPage() {
               regulatory marker reads two FDA sources: DailyMed, for whether this condition is an
               FDA-approved (on-label) use of the drug or off-label; and the Orange Book, for whether the
               molecule is available as a generic or is a single-source brand still under patent. Together
-              they sketch the route a <strong>505(b)(2)</strong> filing would build on &mdash; an
+              they sketch the route a <strong>505(b)(2)</strong> filing would build on: an
               already-approved active ingredient proposed for a new indication. They are descriptive
               context shown beside the score, not a viability assessment and not regulatory advice; the
               full panel, with sources, sits on each candidate&rsquo;s breakdown page.
@@ -478,9 +478,9 @@ export default async function PlatformPage() {
                 whether the target condition is an FDA-approved (on-label) use or off-label, whether the
                 molecule is a generic or a single-source brand still under patent, and how far it has been
                 studied in trials for the condition. These read from the FDA Orange Book, DailyMed, and
-                ClinicalTrials.gov. They are descriptive context only &mdash; the landscape a{" "}
+                ClinicalTrials.gov. They are descriptive context only (the landscape a{" "}
                 <A href="#evidence-markers">505(b)(2)</A> route would build on, since each candidate is an
-                already-approved active ingredient proposed for a new indication &mdash; and are explicitly
+                already-approved active ingredient proposed for a new indication) and are explicitly
                 <em> not</em> a 505(b)(2) viability assessment or regulatory advice.
               </p>
             </div>

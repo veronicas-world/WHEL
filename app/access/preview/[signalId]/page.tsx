@@ -404,7 +404,7 @@ export default async function SignalDetail({
             <p className="note" style={{ marginBottom: 22 }}>
               This is descriptive context, not regulatory advice. It maps the landscape a{" "}
               <Link href="/platform#evidence-markers" className="ulink">505(b)(2)</Link> route would build
-              on &mdash; an already-approved active ingredient proposed for a new indication &mdash; but it is
+              on (an already-approved active ingredient proposed for a new indication), but it is
               not a 505(b)(2) viability assessment, and says nothing about whether any particular development
               path is advisable. &ldquo;Approved&rdquo; means FDA-approved (US); approvals elsewhere are out of scope.
             </p>
@@ -427,7 +427,7 @@ export default async function SignalDetail({
                 {ind.approved_indication_excerpt ? (
                   <p className="note" style={{ marginTop: 12, fontStyle: "italic" }}>
                     From the label&rsquo;s Indications &amp; Usage section: &ldquo;{ind.approved_indication_excerpt}&rdquo;
-                    {ind.label_title ? ` — ${ind.label_title}` : ""}
+                    {ind.label_title ? `, ${ind.label_title}` : ""}
                     {ind.label_url ? <> · <Ext href={ind.label_url}>view label ↗</Ext></> : null}
                   </p>
                 ) : null}

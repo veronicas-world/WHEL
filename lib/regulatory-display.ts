@@ -40,7 +40,7 @@ export function supplyGloss(ob: OrangeBook): string {
     case "combination_only":
       return "Appears only inside combination products, not as a stand-alone single-ingredient product.";
     case "not_listed":
-      return "Absent from the Orange Book — biologics (listed in the Purple Book instead), dietary supplements, and drugs not FDA-approved in the US do not appear here.";
+      return "Absent from the Orange Book. Biologics (listed in the Purple Book instead), dietary supplements, and drugs not FDA-approved in the US do not appear here.";
   }
 }
 
@@ -70,7 +70,7 @@ export function relationshipGloss(ind: Indication): string {
     case "on_label":
       return "This condition appears in the drug's FDA-approved label (Indications & Usage), so using it here is an approved, on-label use.";
     case "off_label":
-      return "The drug has an FDA-approved label, but for a different indication — using it for this condition would be off-label.";
+      return "The drug has an FDA-approved label, but for a different indication, so using it for this condition would be off-label.";
     case "no_fda_label":
       return "No FDA-approved drug label was found for this molecule (it may be a supplement, a biologic, investigational, or approved only outside the US), so any use here is investigational.";
   }

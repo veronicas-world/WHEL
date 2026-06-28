@@ -446,7 +446,7 @@ function RegulatoryStatusDetail({ c }: { c: Candidate }) {
       )}
 
       <p style={{ fontSize: 11.5, color: "var(--ink)", opacity: 0.7, margin: "2px 0 0" }}>
-        This is where the candidate sits in the regulatory landscape — descriptive context, not a
+        This is where the candidate sits in the regulatory landscape: descriptive context, not a
         505(b)(2) viability assessment or regulatory advice.
       </p>
 
