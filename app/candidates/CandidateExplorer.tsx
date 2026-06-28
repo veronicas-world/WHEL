@@ -25,13 +25,23 @@ export type ExplorerItem = {
   hasSexPk: boolean;
   hasPhase: boolean;
   hasGraph: boolean;
+  /** Has at least one qualifying ClinicalTrials.gov trial for this condition. */
+  hasTrials: boolean;
+  /** FDA-approved (on-label) for this exact condition (DailyMed). */
+  onLabel: boolean;
+  /** Approved for another use, so off-label here (DailyMed). */
+  offLabel: boolean;
+  /** A generic of the molecule is available (FDA Orange Book). */
+  genericAvailable: boolean;
   card: ReactNode;
 };
 
 type TierKey = ExplorerItem["tier"];
 type ValKey = NonNullable<ExplorerItem["validation"]>;
 type ArmKey = NonNullable<ExplorerItem["signalArm"]>;
-type MarkerKey = "matrix" | "sexpk" | "phase" | "graph";
+type MarkerKey =
+  | "matrix" | "sexpk" | "phase" | "graph" | "trials"
+  | "onlabel" | "offlabel" | "generic";
 
 const TIER_ORDER: TierKey[] = ["strong", "moderate", "emerging", "exploratory"];
 const TIER_LABELS: Record<TierKey, string> = {
@@ -56,12 +66,18 @@ const ARM_LABELS: Record<ArmKey, string> = {
   community: "Community reports",
 };
 
-const MARKER_ORDER: MarkerKey[] = ["matrix", "sexpk", "phase", "graph"];
+const MARKER_ORDER: MarkerKey[] = ["matrix", "sexpk", "phase", "graph", "trials"];
+const REG_ORDER: MarkerKey[] = ["onlabel", "offlabel", "generic"];
+const ALL_MARKERS: MarkerKey[] = [...MARKER_ORDER, ...REG_ORDER];
 const MARKER_LABELS: Record<MarkerKey, string> = {
   matrix: "Matrix match",
   sexpk: "Sex-PK",
   phase: "Cycle phase",
   graph: "Graph link",
+  trials: "In trials",
+  onlabel: "On-label",
+  offlabel: "Off-label",
+  generic: "Generic",
 };
 
 const MATRIX_THRESHOLDS = [10, 25, 50] as const;
@@ -80,6 +96,10 @@ function markerActive(it: ExplorerItem, m: MarkerKey): boolean {
     case "sexpk": return it.hasSexPk;
     case "phase": return it.hasPhase;
     case "graph": return it.hasGraph;
+    case "trials": return it.hasTrials;
+    case "onlabel": return it.onLabel;
+    case "offlabel": return it.offLabel;
+    case "generic": return it.genericAvailable;
   }
 }
 
@@ -194,7 +214,7 @@ export default function CandidateExplorer({ items }: { items: ExplorerItem[] }) 
       tier: tally<TierKey>("tier", (it) => it.tier),
       val: tally<ValKey>("val", (it) => it.validation),
       arm: tally<ArmKey>("arm", (it) => it.signalArm),
-      marker: tally<MarkerKey>("marker", (it) => MARKER_ORDER.filter((m) => markerActive(it, m))),
+      marker: tally<MarkerKey>("marker", (it) => ALL_MARKERS.filter((m) => markerActive(it, m))),
       cond: tally<string>("cond", (it) => it.conditionSlug),
       matrix: (() => {
         const m = new Map<number, number>();
@@ -317,6 +337,18 @@ export default function CandidateExplorer({ items }: { items: ExplorerItem[] }) 
 
         <FacetRow label="Layers">
           {MARKER_ORDER.map((m) => (
+            <Chip
+              key={m}
+              label={MARKER_LABELS[m]}
+              count={counts.marker.get(m) ?? 0}
+              active={markers.has(m)}
+              onClick={() => toggle(setMarkers, m)}
+            />
+          ))}
+        </FacetRow>
+
+        <FacetRow label="Regulatory">
+          {REG_ORDER.map((m) => (
             <Chip
               key={m}
               label={MARKER_LABELS[m]}

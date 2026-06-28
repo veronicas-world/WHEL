@@ -423,6 +423,19 @@ export default async function PlatformPage() {
               and like the others it is shown beside the signal rather than folded into the grade.
             </p>
             <p style={pBone}>
+              <strong>The trials marker and the regulatory marker</strong>{" "}place a candidate in the
+              regulatory and development landscape. The trials marker reads ClinicalTrials.gov for how far
+              the drug has been studied <em>as a therapy</em> for this condition (excluding mechanistic,
+              drug-interaction, and post-marketing studies), and shows the highest phase reached. The
+              regulatory marker reads two FDA sources: DailyMed, for whether this condition is an
+              FDA-approved (on-label) use of the drug or off-label; and the Orange Book, for whether the
+              molecule is available as a generic or is a single-source brand still under patent. Together
+              they sketch the route a <strong>505(b)(2)</strong> filing would build on &mdash; an
+              already-approved active ingredient proposed for a new indication. They are descriptive
+              context shown beside the score, not a viability assessment and not regulatory advice; the
+              full panel, with sources, sits on each candidate&rsquo;s breakdown page.
+            </p>
+            <p style={pBone}>
               The open data sources and tools we build on, the independent MATRIX
               cross-reference, and the checks we run against model error are documented
               on{" "}
@@ -458,6 +471,17 @@ export default async function PlatformPage() {
                 <A href={CDS}>independently review</A>, the platform meets the exemption&apos;s
                 transparency bar by architecture rather than by accident, which is the same
                 property that makes the output worth trusting in the first place.
+              </p>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--body)", maxWidth: "54ch", marginTop: 16 }}>
+                In the same spirit, each candidate now carries a{" "}
+                <em>regulatory &amp; development-status</em> panel that maps where the drug already sits:
+                whether the target condition is an FDA-approved (on-label) use or off-label, whether the
+                molecule is a generic or a single-source brand still under patent, and how far it has been
+                studied in trials for the condition. These read from the FDA Orange Book, DailyMed, and
+                ClinicalTrials.gov. They are descriptive context only &mdash; the landscape a{" "}
+                <A href="#evidence-markers">505(b)(2)</A> route would build on, since each candidate is an
+                already-approved active ingredient proposed for a new indication &mdash; and are explicitly
+                <em> not</em> a 505(b)(2) viability assessment or regulatory advice.
               </p>
             </div>
             <div>

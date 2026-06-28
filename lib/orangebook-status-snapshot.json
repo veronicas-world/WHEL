@@ -1,0 +1,3745 @@
+{
+  "_meta": {
+    "built": "2026-06-27",
+    "source": "https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files",
+    "attribution": "FDA Orange Book: Approved Drug Products with Therapeutic Equivalence Evaluations (public domain).",
+    "builder": "scripts/build-orangebook-status-snapshot.mjs",
+    "note": "Descriptive US regulatory-landscape context only, not regulatory advice. Single-ingredient products only. supply: generic = a live ANDA lists this active ingredient (off-patent in basic form); brand_patented = single-source brand with an unexpired Orange Book patent (expiry in latest_patent_expiry); brand_only = single-source brand, no unexpired patent; discontinued; combination_only = only present inside combo products; not_listed = absent from the Orange Book (biologics, supplements, and non-US-approved drugs will not appear).",
+    "drug_count": 130,
+    "drug_count_fda_listed": 68
+  },
+  "per_drug": [
+    {
+      "compound_name": "ACETYLCYSTEINE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "LEGUBETI",
+          "applicant": "GALEPHAR",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 2.5GM BASE/PACKET",
+          "status": "DISCN",
+          "approval_date": "Feb 13, 2024"
+        },
+        {
+          "trade_name": "LEGUBETI",
+          "applicant": "GALEPHAR",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 500MG BASE/PACKET",
+          "status": "DISCN",
+          "approval_date": "Feb 13, 2024"
+        },
+        {
+          "trade_name": "CYSTEINE HYDROCHLORIDE",
+          "applicant": "HOSPIRA",
+          "appl_type": "NDA (brand)",
+          "strength": "7.25% **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 22, 1986"
+        },
+        {
+          "trade_name": "ACETADOTE",
+          "applicant": "CUMBERLAND PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "6GM/30ML (200MG/ML)",
+          "status": "RX",
+          "approval_date": "Jan 23, 2004"
+        },
+        {
+          "trade_name": "ACETYLCYSTEINE",
+          "applicant": "EUGIA PHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "6GM/30ML (200MG/ML)",
+          "status": "RX",
+          "approval_date": "Feb 29, 2016"
+        }
+      ]
+    },
+    {
+      "compound_name": "acupuncture",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "amitriptyline",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ENDEP",
+          "applicant": "ROCHE",
+          "appl_type": "ANDA (generic)",
+          "strength": "40MG/ML **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITRIPTYLINE HYDROCHLORIDE",
+          "applicant": "WATSON LABS",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ELAVIL",
+          "applicant": "ASTRAZENECA",
+          "appl_type": "NDA (brand)",
+          "strength": "10MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITID",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITID",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "25MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "amitriptyline cream",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ENDEP",
+          "applicant": "ROCHE",
+          "appl_type": "ANDA (generic)",
+          "strength": "40MG/ML **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITRIPTYLINE HYDROCHLORIDE",
+          "applicant": "WATSON LABS",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ELAVIL",
+          "applicant": "ASTRAZENECA",
+          "appl_type": "NDA (brand)",
+          "strength": "10MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITID",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMITID",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "25MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "amitriptyline with baclofen cream",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ENDEP",
+          "applicant": "ROCHE",
+          "appl_type": "ANDA (generic)",
+          "strength": "40MG/ML **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "LYVISPAH",
+          "applicant": "STRIDES PHARMA INTL",
+          "appl_type": "NDA (brand)",
+          "strength": "5MG/PACKET",
+          "status": "DISCN",
+          "approval_date": "Nov 22, 2021"
+        },
+        {
+          "trade_name": "LYVISPAH",
+          "applicant": "STRIDES PHARMA INTL",
+          "appl_type": "NDA (brand)",
+          "strength": "10MG/PACKET",
+          "status": "DISCN",
+          "approval_date": "Nov 22, 2021"
+        },
+        {
+          "trade_name": "LYVISPAH",
+          "applicant": "STRIDES PHARMA INTL",
+          "appl_type": "NDA (brand)",
+          "strength": "20MG/PACKET",
+          "status": "DISCN",
+          "approval_date": "Nov 22, 2021"
+        },
+        {
+          "trade_name": "AMITRIPTYLINE HYDROCHLORIDE",
+          "applicant": "WATSON LABS",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "anti-androgens",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ASPIRIN",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2032-09-29",
+      "marketing_status": "otc",
+      "products_sampled": [
+        {
+          "trade_name": "DURLAZA",
+          "applicant": "HESP",
+          "appl_type": "NDA (brand)",
+          "strength": "162.5MG",
+          "status": "DISCN",
+          "approval_date": "Sep 4, 2015"
+        },
+        {
+          "trade_name": "VAZALORE",
+          "applicant": "PLX PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "81MG",
+          "status": "OTC",
+          "approval_date": "Feb 26, 2021"
+        },
+        {
+          "trade_name": "VAZALORE",
+          "applicant": "PLX PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "325MG",
+          "status": "OTC",
+          "approval_date": "Jan 14, 2013"
+        },
+        {
+          "trade_name": "8-HOUR BAYER",
+          "applicant": "BAYER",
+          "appl_type": "NDA (brand)",
+          "strength": "650MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "MEASURIN",
+          "applicant": "BAYER",
+          "appl_type": "NDA (brand)",
+          "strength": "650MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "BAZEDOXIFENE",
+      "fda_listed": true,
+      "supply": "combination_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "combination_only",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "BENTAMAPIMOD",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "bioidentical estrogens",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "botulinum toxin A",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "botulinum toxin type A",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "BROMOCRIPTINE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "BROMOCRIPTINE MESYLATE",
+          "applicant": "LEK PHARM",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 5MG BASE",
+          "status": "DISCN",
+          "approval_date": "Dec 10, 1998"
+        },
+        {
+          "trade_name": "BROMOCRIPTINE MESYLATE",
+          "applicant": "MYLAN",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 5MG BASE",
+          "status": "RX",
+          "approval_date": "Apr 4, 2005"
+        },
+        {
+          "trade_name": "BROMOCRIPTINE MESYLATE",
+          "applicant": "ZYDUS PHARMS USA INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 5MG BASE",
+          "status": "RX",
+          "approval_date": "Jul 30, 2008"
+        },
+        {
+          "trade_name": "PARLODEL",
+          "applicant": "ESJAY PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 5MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "RX",
+          "approval_date": "Mar 1, 1982"
+        },
+        {
+          "trade_name": "BROMOCRIPTINE MESYLATE",
+          "applicant": "AUROBINDO PHARMA USA",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 2.5MG BASE",
+          "status": "DISCN",
+          "approval_date": "Sep 24, 2004"
+        }
+      ]
+    },
+    {
+      "compound_name": "bupropion",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "APLENZIN",
+          "applicant": "BAUSCH",
+          "appl_type": "NDA (brand)",
+          "strength": "174MG",
+          "status": "RX",
+          "approval_date": "Apr 23, 2008"
+        },
+        {
+          "trade_name": "APLENZIN",
+          "applicant": "BAUSCH",
+          "appl_type": "NDA (brand)",
+          "strength": "348MG",
+          "status": "RX",
+          "approval_date": "Apr 23, 2008"
+        },
+        {
+          "trade_name": "APLENZIN",
+          "applicant": "BAUSCH",
+          "appl_type": "NDA (brand)",
+          "strength": "522MG",
+          "status": "RX",
+          "approval_date": "Apr 23, 2008"
+        },
+        {
+          "trade_name": "BUPROPION HYDROCHLORIDE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "150MG",
+          "status": "RX",
+          "approval_date": "Oct 31, 2018"
+        },
+        {
+          "trade_name": "BUPROPION HYDROCHLORIDE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Oct 31, 2018"
+        }
+      ]
+    },
+    {
+      "compound_name": "CABERGOLINE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CABERGOLINE",
+          "applicant": "ACTAVIS LABS FL INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.5MG",
+          "status": "DISCN",
+          "approval_date": "Apr 21, 2008"
+        },
+        {
+          "trade_name": "CABERGOLINE",
+          "applicant": "AMNEAL",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.5MG",
+          "status": "RX",
+          "approval_date": "Jun 26, 2024"
+        },
+        {
+          "trade_name": "CABERGOLINE",
+          "applicant": "APOTEX CORP",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.5MG",
+          "status": "DISCN",
+          "approval_date": "Mar 8, 2013"
+        },
+        {
+          "trade_name": "CABERGOLINE",
+          "applicant": "IMPAX LABS INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.5MG",
+          "status": "DISCN",
+          "approval_date": "Jul 3, 2007"
+        },
+        {
+          "trade_name": "CABERGOLINE",
+          "applicant": "INGENUS PHARMS LLC",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.5MG",
+          "status": "RX",
+          "approval_date": "Aug 1, 2018"
+        }
+      ]
+    },
+    {
+      "compound_name": "citalopram",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CITALOPRAM HYDROBROMIDE",
+          "applicant": "ALMATICA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 30MG BASE",
+          "status": "RX",
+          "approval_date": "Jan 31, 2022"
+        },
+        {
+          "trade_name": "CITALOPRAM HYDROBROMIDE",
+          "applicant": "AUROBINDO PHARMA LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 30MG BASE",
+          "status": "RX",
+          "approval_date": "Mar 13, 2026"
+        },
+        {
+          "trade_name": "CITALOPRAM HYDROBROMIDE",
+          "applicant": "PHARMOBEDIENT",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 10MG BASE",
+          "status": "DISCN",
+          "approval_date": "Feb 28, 2007"
+        },
+        {
+          "trade_name": "CITALOPRAM HYDROBROMIDE",
+          "applicant": "PHARMOBEDIENT",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 20MG BASE",
+          "status": "DISCN",
+          "approval_date": "Feb 28, 2007"
+        },
+        {
+          "trade_name": "CITALOPRAM HYDROBROMIDE",
+          "applicant": "PHARMOBEDIENT",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 40MG BASE",
+          "status": "DISCN",
+          "approval_date": "Feb 28, 2007"
+        }
+      ]
+    },
+    {
+      "compound_name": "clomiphene citrate",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CLOMID",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Oct 3, 2025"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "APPCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Nov 8, 2024"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "ASCENT PHARMS INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "May 15, 2026"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "COSETTE",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Aug 30, 1999"
+        }
+      ]
+    },
+    {
+      "compound_name": "CLOVER, RED",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "COCP",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "cold knife vestibulectomy",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "conjugated equine estrogen",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "conjugated equine estrogens with or without medroxyprogesterone acetate",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "AMNEAL PHARMS NY",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Sep 7, 2017"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "AMNEAL PHARMS NY",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Sep 7, 2017"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "BIONPHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Aug 16, 2013"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "BIONPHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Aug 16, 2013"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "DR REDDYS",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Feb 28, 2017"
+        }
+      ]
+    },
+    {
+      "compound_name": "CORTICOTROPIN",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2043-10-27",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ACTH",
+          "applicant": "PARKEDALE",
+          "appl_type": "NDA (brand)",
+          "strength": "25 UNITS/VIAL",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ACTH",
+          "applicant": "PARKEDALE",
+          "appl_type": "NDA (brand)",
+          "strength": "40 UNITS/VIAL",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ACTHAR",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "25 UNITS/VIAL",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ACTHAR",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "40 UNITS/VIAL",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ACTHAR GEL",
+          "applicant": "MALLINCKRODT IRELAND",
+          "appl_type": "NDA (brand)",
+          "strength": "40 UNITS/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "creatine",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "curcumin",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "D-chiro inositol",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "D-chiro-inositol",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "daily use",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "DANAZOL",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "DANAZOL",
+          "applicant": "AM THERAP",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "DISCN",
+          "approval_date": "Dec 30, 1987"
+        },
+        {
+          "trade_name": "DANAZOL",
+          "applicant": "BARR",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "May 29, 1998"
+        },
+        {
+          "trade_name": "DANAZOL",
+          "applicant": "BARR",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "May 29, 1998"
+        },
+        {
+          "trade_name": "DANAZOL",
+          "applicant": "BARR",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Aug 9, 1996"
+        },
+        {
+          "trade_name": "DANAZOL",
+          "applicant": "LANNETT CO INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Apr 19, 2007"
+        }
+      ]
+    },
+    {
+      "compound_name": "desipramine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "PERTOFRANE",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "25MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "PERTOFRANE",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "DESIPRAMINE HYDROCHLORIDE",
+          "applicant": "ACTAVIS TOTOWA",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG",
+          "status": "RX",
+          "approval_date": "Feb 9, 1996"
+        },
+        {
+          "trade_name": "DESIPRAMINE HYDROCHLORIDE",
+          "applicant": "ACTAVIS TOTOWA",
+          "appl_type": "ANDA (generic)",
+          "strength": "25MG",
+          "status": "RX",
+          "approval_date": "Jun 5, 1987"
+        },
+        {
+          "trade_name": "DESIPRAMINE HYDROCHLORIDE",
+          "applicant": "ACTAVIS TOTOWA",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Jun 5, 1987"
+        }
+      ]
+    },
+    {
+      "compound_name": "desipramine with or without lidocaine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "XYLOCAINE",
+          "applicant": "ASTRAZENECA",
+          "appl_type": "NDA (brand)",
+          "strength": "10%",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "PERTOFRANE",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "25MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "PERTOFRANE",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "DENTIPATCH",
+          "applicant": "NOVEN",
+          "appl_type": "NDA (brand)",
+          "strength": "23MG/PATCH",
+          "status": "DISCN",
+          "approval_date": "May 21, 1996"
+        },
+        {
+          "trade_name": "AKTEN",
+          "applicant": "THEA PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "3.5%",
+          "status": "RX",
+          "approval_date": "Oct 7, 2008"
+        }
+      ]
+    },
+    {
+      "compound_name": "DESOGESTREL",
+      "fda_listed": true,
+      "supply": "combination_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "combination_only",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "desvenlafaxine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 75MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 100MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "VENLAFAXINE HYDROCHLORIDE",
+          "applicant": "ALEMBIC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Jun 6, 2024"
+        }
+      ]
+    },
+    {
+      "compound_name": "DESVENLAFAXINE SUCCINATE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 75MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 100MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "VENLAFAXINE HYDROCHLORIDE",
+          "applicant": "ALEMBIC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Jun 6, 2024"
+        }
+      ]
+    },
+    {
+      "compound_name": "DIENOGEST",
+      "fda_listed": true,
+      "supply": "combination_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "combination_only",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "DROSPIRENONE",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2031-06-28",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "DROSPIRENONE",
+          "applicant": "EXELTIS USA INC",
+          "appl_type": "NDA (brand)",
+          "strength": "3.5MG",
+          "status": "DISCN",
+          "approval_date": "Jun 29, 2022"
+        },
+        {
+          "trade_name": "SLYND",
+          "applicant": "EXELTIS USA INC",
+          "appl_type": "NDA (brand)",
+          "strength": "4MG",
+          "status": "RX",
+          "approval_date": "May 23, 2019"
+        }
+      ]
+    },
+    {
+      "compound_name": "duloxetine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CYMBALTA",
+          "applicant": "LILLY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 20MG BASE",
+          "status": "DISCN",
+          "approval_date": "Aug 3, 2004"
+        },
+        {
+          "trade_name": "CYMBALTA",
+          "applicant": "LILLY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 30MG BASE",
+          "status": "DISCN",
+          "approval_date": "Aug 3, 2004"
+        },
+        {
+          "trade_name": "CYMBALTA",
+          "applicant": "LILLY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 60MG BASE",
+          "status": "DISCN",
+          "approval_date": "Aug 3, 2004"
+        },
+        {
+          "trade_name": "DRIZALMA SPRINKLE",
+          "applicant": "SUN PHARM",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 20MG BASE",
+          "status": "RX",
+          "approval_date": "Jul 19, 2019"
+        },
+        {
+          "trade_name": "DRIZALMA SPRINKLE",
+          "applicant": "SUN PHARM",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 30MG BASE",
+          "status": "RX",
+          "approval_date": "Jul 19, 2019"
+        }
+      ]
+    },
+    {
+      "compound_name": "ELAGOLIX SODIUM",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2040-08-27",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ORILISSA",
+          "applicant": "ABBVIE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Jul 23, 2018"
+        },
+        {
+          "trade_name": "ORILISSA",
+          "applicant": "ABBVIE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 200MG BASE",
+          "status": "RX",
+          "approval_date": "Jul 23, 2018"
+        }
+      ]
+    },
+    {
+      "compound_name": "electromyography biofeedback",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ELTANOLONE",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ENCLOMIPHENE CITRATE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CLOMID",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Oct 3, 2025"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "APPCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Nov 8, 2024"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "ASCENT PHARMS INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "May 15, 2026"
+        },
+        {
+          "trade_name": "CLOMIPHENE CITRATE",
+          "applicant": "COSETTE",
+          "appl_type": "ANDA (generic)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "Aug 30, 1999"
+        }
+      ]
+    },
+    {
+      "compound_name": "enoxaparin sodium",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ENOXAPARIN SODIUM",
+          "applicant": "AMPHASTAR PHARMS INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG/3ML (100MG/ML)",
+          "status": "RX",
+          "approval_date": "Mar 14, 2019"
+        },
+        {
+          "trade_name": "ENOXAPARIN SODIUM",
+          "applicant": "EMERGE BIOSCIENCE",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG/3ML (100MG/ML)",
+          "status": "RX",
+          "approval_date": "Jun 14, 2022"
+        },
+        {
+          "trade_name": "ENOXAPARIN SODIUM",
+          "applicant": "SANDOZ INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG/3ML (100MG/ML)",
+          "status": "RX",
+          "approval_date": "Nov 28, 2011"
+        },
+        {
+          "trade_name": "LOVENOX",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "300MG/3ML (100MG/ML)",
+          "status": "RX",
+          "approval_date": "Jan 23, 2003"
+        },
+        {
+          "trade_name": "ENOXAPARIN SODIUM (PRESERVATIVE FREE)",
+          "applicant": "AMPHASTAR PHARM",
+          "appl_type": "ANDA (generic)",
+          "strength": "30MG/0.3ML (100MG/ML)",
+          "status": "RX",
+          "approval_date": "Sep 19, 2011"
+        }
+      ]
+    },
+    {
+      "compound_name": "EPELSIBAN",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ERGOCALCIFEROL",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "DELTALIN",
+          "applicant": "LILLY",
+          "appl_type": "ANDA (generic)",
+          "strength": "50,000 IU",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "DRISDOL",
+          "applicant": "ESJAY PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "50,000 IU",
+          "status": "RX",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ERGOCALCIFEROL",
+          "applicant": "CHARTWELL RX",
+          "appl_type": "ANDA (generic)",
+          "strength": "50,000 IU",
+          "status": "RX",
+          "approval_date": "May 20, 2009"
+        },
+        {
+          "trade_name": "ERGOCALCIFEROL",
+          "applicant": "ONESOURCE SPECIALTY",
+          "appl_type": "ANDA (generic)",
+          "strength": "50,000 IU",
+          "status": "RX",
+          "approval_date": "Aug 3, 2010"
+        },
+        {
+          "trade_name": "ERGOCALCIFEROL",
+          "applicant": "PURACAP PHARM LLC",
+          "appl_type": "ANDA (generic)",
+          "strength": "50,000 IU",
+          "status": "RX",
+          "approval_date": "Dec 7, 2018"
+        }
+      ]
+    },
+    {
+      "compound_name": "escitalopram",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ESCITALOPRAM",
+          "applicant": "ALMATICA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 15MG BASE",
+          "status": "RX",
+          "approval_date": "Aug 29, 2025"
+        },
+        {
+          "trade_name": "ESCITALOPRAM OXALATE",
+          "applicant": "RISING",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 5MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jul 31, 2007"
+        },
+        {
+          "trade_name": "ESCITALOPRAM OXALATE",
+          "applicant": "RISING",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 10MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jul 31, 2007"
+        },
+        {
+          "trade_name": "ESCITALOPRAM OXALATE",
+          "applicant": "RISING",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 20MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jul 31, 2007"
+        },
+        {
+          "trade_name": "ESCITALOPRAM OXALATE",
+          "applicant": "AMNEAL PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 5MG BASE/5ML",
+          "status": "RX",
+          "approval_date": "Mar 14, 2012"
+        }
+      ]
+    },
+    {
+      "compound_name": "essential fatty acids",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ESTRADIOL",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ESTRACE",
+          "applicant": "ABBVIE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 31, 1984"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "ENCUBE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Mar 5, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "MYLAN",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Dec 29, 2017"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PADAGIS ISRAEL",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 22, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PRASCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jul 15, 2021"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRADIOL VALERATE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ESTRACE",
+          "applicant": "ABBVIE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 31, 1984"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "ENCUBE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Mar 5, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "MYLAN",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Dec 29, 2017"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PADAGIS ISRAEL",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 22, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PRASCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jul 15, 2021"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRIOL",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "estrogen",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "PREMARIN",
+          "applicant": "WYETH PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "0.625MG/GM",
+          "status": "RX",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "SYNTHETIC CONJUGATED ESTROGENS A",
+          "applicant": "TEVA WOMENS",
+          "appl_type": "NDA (brand)",
+          "strength": "0.625MG/GM",
+          "status": "DISCN",
+          "approval_date": "Nov 28, 2008"
+        },
+        {
+          "trade_name": "PREMARIN",
+          "applicant": "WYETH PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "25MG/VIAL",
+          "status": "RX",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMNESTROGEN",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.3MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "AMNESTROGEN",
+          "applicant": "BRISTOL MYERS SQUIBB",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.625MG",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "estrogen monotherapy",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ESTRONE",
+      "fda_listed": true,
+      "supply": "discontinued",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "discontinued",
+      "products_sampled": [
+        {
+          "trade_name": "ESTROGENIC SUBSTANCE",
+          "applicant": "WYETH AYERST",
+          "appl_type": "ANDA (generic)",
+          "strength": "2MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ESTRONE",
+          "applicant": "DR REDDYS",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "ESTRONE",
+          "applicant": "WATSON LABS",
+          "appl_type": "ANDA (generic)",
+          "strength": "2MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "NATURAL ESTROGENIC SUBSTANCE-ESTRONE",
+          "applicant": "WATSON LABS",
+          "appl_type": "ANDA (generic)",
+          "strength": "2MG/ML",
+          "status": "DISCN",
+          "approval_date": "Nov 23, 1982"
+        },
+        {
+          "trade_name": "THEELIN",
+          "applicant": "PARKEDALE",
+          "appl_type": "NDA (brand)",
+          "strength": "1MG/ML",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "ETHINYL ESTRADIOL",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ESTRACE",
+          "applicant": "ABBVIE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 31, 1984"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "ENCUBE",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Mar 5, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "MYLAN",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Dec 29, 2017"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PADAGIS ISRAEL",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jan 22, 2018"
+        },
+        {
+          "trade_name": "ESTRADIOL",
+          "applicant": "PRASCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "0.01%",
+          "status": "RX",
+          "approval_date": "Jul 15, 2021"
+        }
+      ]
+    },
+    {
+      "compound_name": "fluoxetine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "FLUOXETINE HYDROCHLORIDE",
+          "applicant": "BARR",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 90MG BASE",
+          "status": "DISCN",
+          "approval_date": "Mar 24, 2010"
+        },
+        {
+          "trade_name": "FLUOXETINE HYDROCHLORIDE",
+          "applicant": "DR REDDYS LABS LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 90MG BASE",
+          "status": "RX",
+          "approval_date": "Mar 22, 2010"
+        },
+        {
+          "trade_name": "PROZAC WEEKLY",
+          "applicant": "LILLY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 90MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Feb 26, 2001"
+        },
+        {
+          "trade_name": "FLUOXETINE",
+          "applicant": "SUN PHARM INDUSTRIES",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 10MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jan 29, 2002"
+        },
+        {
+          "trade_name": "FLUOXETINE",
+          "applicant": "SUN PHARM INDUSTRIES",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 20MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jan 29, 2002"
+        }
+      ]
+    },
+    {
+      "compound_name": "FOLIC ACID",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "FOLIC ACID",
+          "applicant": "BEN VENUE",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG/ML",
+          "status": "DISCN",
+          "approval_date": "Dec 29, 1993"
+        },
+        {
+          "trade_name": "FOLIC ACID",
+          "applicant": "FRESENIUS KABI USA",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG/ML",
+          "status": "RX",
+          "approval_date": "Feb 18, 1986"
+        },
+        {
+          "trade_name": "FOLIC ACID",
+          "applicant": "XGEN PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG/ML",
+          "status": "RX",
+          "approval_date": "Nov 6, 2019"
+        },
+        {
+          "trade_name": "FOLVITE",
+          "applicant": "WYETH PHARMS INC",
+          "appl_type": "NDA (brand)",
+          "strength": "5MG/ML **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "QUIOFIC",
+          "applicant": "SOLUBIOMIX",
+          "appl_type": "NDA (brand)",
+          "strength": "0.2MG/ML",
+          "status": "RX",
+          "approval_date": "Jan 26, 2026"
+        }
+      ]
+    },
+    {
+      "compound_name": "G-CSF",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "gabapentin",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ALKEM",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Dec 17, 2010"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ALKEM",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Dec 17, 2010"
+        }
+      ]
+    },
+    {
+      "compound_name": "gabapentin cream",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ACTAVIS ELIZABETH",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "RX",
+          "approval_date": "Sep 12, 2003"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ALKEM",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Dec 17, 2010"
+        },
+        {
+          "trade_name": "GABAPENTIN",
+          "applicant": "ALKEM",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Dec 17, 2010"
+        }
+      ]
+    },
+    {
+      "compound_name": "GANIRELIX ACETATE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "FYREMADEL",
+          "applicant": "SUN PHARM",
+          "appl_type": "ANDA (generic)",
+          "strength": "250MCG/0.5ML",
+          "status": "RX",
+          "approval_date": "Nov 30, 2018"
+        },
+        {
+          "trade_name": "GANIRELIX ACETATE",
+          "applicant": "AMPHASTAR PHARMS INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "250MCG/0.5ML",
+          "status": "RX",
+          "approval_date": "Apr 7, 2022"
+        },
+        {
+          "trade_name": "GANIRELIX ACETATE",
+          "applicant": "GLAND",
+          "appl_type": "ANDA (generic)",
+          "strength": "250MCG/0.5ML",
+          "status": "RX",
+          "approval_date": "Feb 28, 2023"
+        },
+        {
+          "trade_name": "GANIRELIX ACETATE",
+          "applicant": "LUPIN",
+          "appl_type": "ANDA (generic)",
+          "strength": "250MCG/0.5ML",
+          "status": "RX",
+          "approval_date": "Nov 16, 2023"
+        },
+        {
+          "trade_name": "GANIRELIX ACETATE",
+          "applicant": "MEITHEAL",
+          "appl_type": "ANDA (generic)",
+          "strength": "250MCG/0.5ML",
+          "status": "RX",
+          "approval_date": "Jun 6, 2022"
+        }
+      ]
+    },
+    {
+      "compound_name": "GnRH agonist",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "GnRHa",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "GONADORELIN ACETATE",
+      "fda_listed": true,
+      "supply": "discontinued",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "discontinued",
+      "products_sampled": [
+        {
+          "trade_name": "FACTREL",
+          "applicant": "HIKMA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 0.1MG BASE/VIAL",
+          "status": "DISCN",
+          "approval_date": "Sep 30, 1982"
+        },
+        {
+          "trade_name": "FACTREL",
+          "applicant": "HIKMA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 0.2MG BASE/VIAL",
+          "status": "DISCN",
+          "approval_date": "Sep 30, 1982"
+        },
+        {
+          "trade_name": "FACTREL",
+          "applicant": "HIKMA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 0.5MG BASE/VIAL",
+          "status": "DISCN",
+          "approval_date": "Sep 30, 1982"
+        },
+        {
+          "trade_name": "LUTREPULSE KIT",
+          "applicant": "FERRING",
+          "appl_type": "NDA (brand)",
+          "strength": "0.8MG/VIAL",
+          "status": "DISCN",
+          "approval_date": "Oct 10, 1989"
+        },
+        {
+          "trade_name": "LUTREPULSE KIT",
+          "applicant": "FERRING",
+          "appl_type": "NDA (brand)",
+          "strength": "3.2MG/VIAL",
+          "status": "DISCN",
+          "approval_date": "Oct 10, 1989"
+        }
+      ]
+    },
+    {
+      "compound_name": "GONADOTROPIN, CHORIONIC",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "GOSERELIN",
+      "fda_listed": true,
+      "supply": "brand_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ZOLADEX",
+          "applicant": "TERSERA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 3.6MG BASE",
+          "status": "RX",
+          "approval_date": "Dec 29, 1989"
+        },
+        {
+          "trade_name": "ZOLADEX",
+          "applicant": "TERSERA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 10.8MG BASE",
+          "status": "RX",
+          "approval_date": "Jan 11, 1996"
+        }
+      ]
+    },
+    {
+      "compound_name": "HISTRELIN",
+      "fda_listed": true,
+      "supply": "brand_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "SUPPRELIN LA",
+          "applicant": "ENDO OPERATIONS",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG",
+          "status": "RX",
+          "approval_date": "May 3, 2007"
+        },
+        {
+          "trade_name": "VANTAS",
+          "applicant": "ENDO OPERATIONS",
+          "appl_type": "NDA (brand)",
+          "strength": "50MG",
+          "status": "DISCN",
+          "approval_date": "Oct 12, 2004"
+        },
+        {
+          "trade_name": "SUPPRELIN",
+          "applicant": "SHIRE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 0.2MG BASE/ML",
+          "status": "DISCN",
+          "approval_date": "Dec 24, 1991"
+        },
+        {
+          "trade_name": "SUPPRELIN",
+          "applicant": "SHIRE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 0.5MG BASE/ML",
+          "status": "DISCN",
+          "approval_date": "Dec 24, 1991"
+        },
+        {
+          "trade_name": "SUPPRELIN",
+          "applicant": "SHIRE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 1MG BASE/ML",
+          "status": "DISCN",
+          "approval_date": "Dec 24, 1991"
+        }
+      ]
+    },
+    {
+      "compound_name": "hypnotherapy",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "inositol",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "INTERFERON ALFA",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "interventions",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "intravaginal TENS",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ISOFLAVONE",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "itraconazole",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ITRACONAZOLE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "DISCN",
+          "approval_date": "May 26, 2016"
+        },
+        {
+          "trade_name": "ITRACONAZOLE",
+          "applicant": "ALEMBIC",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Dec 13, 2016"
+        },
+        {
+          "trade_name": "ITRACONAZOLE",
+          "applicant": "ALKEM LABS LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Jun 12, 2017"
+        },
+        {
+          "trade_name": "ITRACONAZOLE",
+          "applicant": "AMNEAL PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Sep 26, 2016"
+        },
+        {
+          "trade_name": "ITRACONAZOLE",
+          "applicant": "JUBILANT GENERICS",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "DISCN",
+          "approval_date": "Feb 23, 2017"
+        }
+      ]
+    },
+    {
+      "compound_name": "KISSPEPTIN-10",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "LACTULOSE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "LACTULOSE",
+          "applicant": "CUMBERLAND PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "10GM/PACKET",
+          "status": "RX",
+          "approval_date": "Dec 10, 1997"
+        },
+        {
+          "trade_name": "LACTULOSE",
+          "applicant": "CUMBERLAND PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "20GM/PACKET",
+          "status": "RX",
+          "approval_date": "Dec 10, 1997"
+        },
+        {
+          "trade_name": "LACTULOSE",
+          "applicant": "PAI HOLDINGS",
+          "appl_type": "ANDA (generic)",
+          "strength": "10GM/PACKET",
+          "status": "RX",
+          "approval_date": "Mar 14, 2025"
+        },
+        {
+          "trade_name": "LACTULOSE",
+          "applicant": "PAI HOLDINGS",
+          "appl_type": "ANDA (generic)",
+          "strength": "20GM/PACKET",
+          "status": "RX",
+          "approval_date": "Mar 14, 2025"
+        },
+        {
+          "trade_name": "CHRONULAC",
+          "applicant": "SANOFI AVENTIS US",
+          "appl_type": "NDA (brand)",
+          "strength": "10GM/15ML **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        }
+      ]
+    },
+    {
+      "compound_name": "LETROZOLE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "FEMARA",
+          "applicant": "NOVARTIS PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "2.5MG",
+          "status": "RX",
+          "approval_date": "Jul 25, 1997"
+        },
+        {
+          "trade_name": "LETROZOLE",
+          "applicant": "ACCORD HLTHCARE",
+          "appl_type": "ANDA (generic)",
+          "strength": "2.5MG",
+          "status": "RX",
+          "approval_date": "Jun 3, 2011"
+        },
+        {
+          "trade_name": "LETROZOLE",
+          "applicant": "ACTAVIS TOTOWA",
+          "appl_type": "ANDA (generic)",
+          "strength": "2.5MG",
+          "status": "DISCN",
+          "approval_date": "Jul 13, 2011"
+        },
+        {
+          "trade_name": "LETROZOLE",
+          "applicant": "APOTEX INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "2.5MG",
+          "status": "DISCN",
+          "approval_date": "Apr 19, 2012"
+        },
+        {
+          "trade_name": "LETROZOLE",
+          "applicant": "BEIJING YILING",
+          "appl_type": "ANDA (generic)",
+          "strength": "2.5MG",
+          "status": "RX",
+          "approval_date": "Nov 14, 2018"
+        }
+      ]
+    },
+    {
+      "compound_name": "LEUPROLIDE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "CAMCEVI ETM",
+          "applicant": "ACCORD",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 21MG BASE",
+          "status": "RX",
+          "approval_date": "Aug 25, 2025"
+        },
+        {
+          "trade_name": "CAMCEVI KIT",
+          "applicant": "ACCORD",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 42MG BASE",
+          "status": "RX",
+          "approval_date": "May 25, 2021"
+        },
+        {
+          "trade_name": "LEUPROLIDE ACETATE FOR DEPOT SUSPENSION",
+          "applicant": "INVAGEN PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "22.5MG/VIAL",
+          "status": "RX",
+          "approval_date": "Aug 28, 2018"
+        },
+        {
+          "trade_name": "VIADUR",
+          "applicant": "ORTHO MCNEIL JANSSEN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 65MG BASE",
+          "status": "DISCN",
+          "approval_date": "Mar 3, 2000"
+        },
+        {
+          "trade_name": "LUPRON DEPOT",
+          "applicant": "ABBVIE ENDOCRINE INC",
+          "appl_type": "NDA (brand)",
+          "strength": "3.75MG/VIAL **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 22, 1990"
+        }
+      ]
+    },
+    {
+      "compound_name": "LEVONORGESTREL",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "JADELLE",
+          "applicant": "POPULATION COUNCIL",
+          "appl_type": "NDA (brand)",
+          "strength": "75MG/IMPLANT **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Nov 1, 1996"
+        },
+        {
+          "trade_name": "LEVONORGESTREL",
+          "applicant": "WYETH PHARMS INC",
+          "appl_type": "NDA (brand)",
+          "strength": "75MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Aug 15, 1996"
+        },
+        {
+          "trade_name": "NORPLANT",
+          "applicant": "POPULATION COUNCIL",
+          "appl_type": "NDA (brand)",
+          "strength": "36MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Dec 10, 1990"
+        },
+        {
+          "trade_name": "NORPLANT SYSTEM IN PLASTIC CONTAINER",
+          "applicant": "WYETH PHARMS INC",
+          "appl_type": "NDA (brand)",
+          "strength": "36MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Dec 10, 1990"
+        },
+        {
+          "trade_name": "KYLEENA",
+          "applicant": "BAYER HLTHCARE",
+          "appl_type": "NDA (brand)",
+          "strength": "19.5MG",
+          "status": "RX",
+          "approval_date": "Sep 16, 2016"
+        }
+      ]
+    },
+    {
+      "compound_name": "levonorgestrel-releasing intrauterine system",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "JADELLE",
+          "applicant": "POPULATION COUNCIL",
+          "appl_type": "NDA (brand)",
+          "strength": "75MG/IMPLANT **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Nov 1, 1996"
+        },
+        {
+          "trade_name": "LEVONORGESTREL",
+          "applicant": "WYETH PHARMS INC",
+          "appl_type": "NDA (brand)",
+          "strength": "75MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Aug 15, 1996"
+        },
+        {
+          "trade_name": "NORPLANT",
+          "applicant": "POPULATION COUNCIL",
+          "appl_type": "NDA (brand)",
+          "strength": "36MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Dec 10, 1990"
+        },
+        {
+          "trade_name": "NORPLANT SYSTEM IN PLASTIC CONTAINER",
+          "applicant": "WYETH PHARMS INC",
+          "appl_type": "NDA (brand)",
+          "strength": "36MG/IMPLANT",
+          "status": "DISCN",
+          "approval_date": "Dec 10, 1990"
+        },
+        {
+          "trade_name": "KYLEENA",
+          "applicant": "BAYER HLTHCARE",
+          "appl_type": "NDA (brand)",
+          "strength": "19.5MG",
+          "status": "RX",
+          "approval_date": "Sep 16, 2016"
+        }
+      ]
+    },
+    {
+      "compound_name": "lidocaine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "XYLOCAINE",
+          "applicant": "ASTRAZENECA",
+          "appl_type": "NDA (brand)",
+          "strength": "10%",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "DENTIPATCH",
+          "applicant": "NOVEN",
+          "appl_type": "NDA (brand)",
+          "strength": "23MG/PATCH",
+          "status": "DISCN",
+          "approval_date": "May 21, 1996"
+        },
+        {
+          "trade_name": "AKTEN",
+          "applicant": "THEA PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "3.5%",
+          "status": "RX",
+          "approval_date": "Oct 7, 2008"
+        },
+        {
+          "trade_name": "ALPHACAINE HYDROCHLORIDE",
+          "applicant": "CARLISLE",
+          "appl_type": "ANDA (generic)",
+          "strength": "2%",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "LIDOCAINE HYDROCHLORIDE",
+          "applicant": "ABBOTT",
+          "appl_type": "ANDA (generic)",
+          "strength": "10%",
+          "status": "DISCN",
+          "approval_date": "Feb 2, 1983"
+        }
+      ]
+    },
+    {
+      "compound_name": "lidocaine ointment",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "XYLOCAINE",
+          "applicant": "ASTRAZENECA",
+          "appl_type": "NDA (brand)",
+          "strength": "10%",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "DENTIPATCH",
+          "applicant": "NOVEN",
+          "appl_type": "NDA (brand)",
+          "strength": "23MG/PATCH",
+          "status": "DISCN",
+          "approval_date": "May 21, 1996"
+        },
+        {
+          "trade_name": "AKTEN",
+          "applicant": "THEA PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "3.5%",
+          "status": "RX",
+          "approval_date": "Oct 7, 2008"
+        },
+        {
+          "trade_name": "ALPHACAINE HYDROCHLORIDE",
+          "applicant": "CARLISLE",
+          "appl_type": "ANDA (generic)",
+          "strength": "2%",
+          "status": "DISCN",
+          "approval_date": "Approved Prior to Jan 1, 1982"
+        },
+        {
+          "trade_name": "LIDOCAINE HYDROCHLORIDE",
+          "applicant": "ABBOTT",
+          "appl_type": "ANDA (generic)",
+          "strength": "10%",
+          "status": "DISCN",
+          "approval_date": "Feb 2, 1983"
+        }
+      ]
+    },
+    {
+      "compound_name": "low-dose vaginal estrogen",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "lysine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "LIVDELZI",
+          "applicant": "GILEAD SCIENCES INC",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 10MG BASE",
+          "status": "RX",
+          "approval_date": "Aug 14, 2024"
+        },
+        {
+          "trade_name": "LEGUBETI",
+          "applicant": "GALEPHAR",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 2.5GM BASE/PACKET",
+          "status": "DISCN",
+          "approval_date": "Feb 13, 2024"
+        },
+        {
+          "trade_name": "LEGUBETI",
+          "applicant": "GALEPHAR",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 500MG BASE/PACKET",
+          "status": "DISCN",
+          "approval_date": "Feb 13, 2024"
+        },
+        {
+          "trade_name": "IBUPROFEN LYSINE",
+          "applicant": "XGEN PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 20MG BASE/2ML (EQ 10MG BASE/ML)",
+          "status": "RX",
+          "approval_date": "Mar 30, 2016"
+        },
+        {
+          "trade_name": "NEOPROFEN",
+          "applicant": "RECORDATI RARE",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 20MG BASE/2ML (EQ 10MG BASE/ML)",
+          "status": "RX",
+          "approval_date": "Apr 13, 2006"
+        }
+      ]
+    },
+    {
+      "compound_name": "MARVELON",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "Mazdutide",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "meloxicam",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "MELOXICAM",
+          "applicant": "LUPIN",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "RX",
+          "approval_date": "Jun 1, 2020"
+        },
+        {
+          "trade_name": "MELOXICAM",
+          "applicant": "LUPIN",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG",
+          "status": "RX",
+          "approval_date": "Jun 1, 2020"
+        },
+        {
+          "trade_name": "MELOXICAM",
+          "applicant": "NOVITIUM PHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "RX",
+          "approval_date": "Mar 9, 2021"
+        },
+        {
+          "trade_name": "MELOXICAM",
+          "applicant": "NOVITIUM PHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "10MG",
+          "status": "RX",
+          "approval_date": "Mar 9, 2021"
+        },
+        {
+          "trade_name": "VIVLODEX",
+          "applicant": "ICEUTICA OPERATIONS",
+          "appl_type": "NDA (brand)",
+          "strength": "5MG **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 22, 2015"
+        }
+      ]
+    },
+    {
+      "compound_name": "MENOTROPINS",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "metformin",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "RIOMET ER",
+          "applicant": "SUN PHARM",
+          "appl_type": "NDA (brand)",
+          "strength": "500MG/5ML",
+          "status": "DISCN",
+          "approval_date": "Aug 29, 2019"
+        },
+        {
+          "trade_name": "METFORMIN HYDROCHLORIDE",
+          "applicant": "ANNORA PHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "500MG/5ML",
+          "status": "RX",
+          "approval_date": "Mar 13, 2025"
+        },
+        {
+          "trade_name": "METFORMIN HYDROCHLORIDE",
+          "applicant": "BIONPHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "500MG/5ML",
+          "status": "RX",
+          "approval_date": "Apr 14, 2025"
+        },
+        {
+          "trade_name": "METFORMIN HYDROCHLORIDE",
+          "applicant": "SAPTALIS PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "500MG/5ML",
+          "status": "RX",
+          "approval_date": "Mar 3, 2020"
+        },
+        {
+          "trade_name": "METFORMIN HYDROCHLORIDE",
+          "applicant": "VISTAPHARM LLC",
+          "appl_type": "ANDA (generic)",
+          "strength": "500MG/5ML",
+          "status": "RX",
+          "approval_date": "Aug 19, 2022"
+        }
+      ]
+    },
+    {
+      "compound_name": "MIFEPRISTONE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "KORLYM",
+          "applicant": "CORCEPT THERAP",
+          "appl_type": "NDA (brand)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Feb 17, 2012"
+        },
+        {
+          "trade_name": "MIFEPREX",
+          "applicant": "DANCO LABS LLC",
+          "appl_type": "NDA (brand)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Sep 28, 2000"
+        },
+        {
+          "trade_name": "MIFEPRISTONE",
+          "applicant": "EVITA SOLUTIONS",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Sep 30, 2025"
+        },
+        {
+          "trade_name": "MIFEPRISTONE",
+          "applicant": "GENBIOPRO",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Apr 11, 2019"
+        },
+        {
+          "trade_name": "MIFEPRISTONE",
+          "applicant": "TEVA PHARMS USA INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "300MG",
+          "status": "RX",
+          "approval_date": "Aug 3, 2020"
+        }
+      ]
+    },
+    {
+      "compound_name": "multimodal physiotherapy",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "multiple interventions",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "myo-inositol",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "natural compound",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "NITRIC ACID",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "NORETHINDRONE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "AYGESTIN",
+          "applicant": "DURAMED RES",
+          "appl_type": "NDA (brand)",
+          "strength": "5MG **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Apr 21, 1982"
+        },
+        {
+          "trade_name": "NORETHINDRONE ACETATE",
+          "applicant": "AMNEAL PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "RX",
+          "approval_date": "Jul 30, 2012"
+        },
+        {
+          "trade_name": "NORETHINDRONE ACETATE",
+          "applicant": "AUROBINDO PHARMA LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "DISCN",
+          "approval_date": "Jan 8, 2016"
+        },
+        {
+          "trade_name": "NORETHINDRONE ACETATE",
+          "applicant": "BARR",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "RX",
+          "approval_date": "May 25, 2001"
+        },
+        {
+          "trade_name": "NORETHINDRONE ACETATE",
+          "applicant": "GLENMARK PHARMS LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "5MG",
+          "status": "RX",
+          "approval_date": "Jul 21, 2010"
+        }
+      ]
+    },
+    {
+      "compound_name": "NUX VOMICA EXTRACT",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ospemifene",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2028-07-09",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "OSPEMIFENE",
+          "applicant": "HETERO LABS LTD V",
+          "appl_type": "ANDA (generic)",
+          "strength": "60MG",
+          "status": "DISCN",
+          "approval_date": "Feb 13, 2024"
+        },
+        {
+          "trade_name": "OSPHENA",
+          "applicant": "DUCHESNAY",
+          "appl_type": "NDA (brand)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Feb 26, 2013"
+        }
+      ]
+    },
+    {
+      "compound_name": "paroxetine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "BRISDELLE",
+          "applicant": "LEGACY PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 7.5MG BASE",
+          "status": "RX",
+          "approval_date": "Jun 28, 2013"
+        },
+        {
+          "trade_name": "PAROXETINE MESYLATE",
+          "applicant": "ACTAVIS LABS FL INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 7.5MG BASE",
+          "status": "RX",
+          "approval_date": "Jun 20, 2017"
+        },
+        {
+          "trade_name": "PAROXETINE MESYLATE",
+          "applicant": "PRINSTON INC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 7.5MG BASE",
+          "status": "RX",
+          "approval_date": "Aug 18, 2017"
+        },
+        {
+          "trade_name": "PAXIL",
+          "applicant": "APOTEX",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 10MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 9, 1998"
+        },
+        {
+          "trade_name": "PAXIL",
+          "applicant": "APOTEX",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 20MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 9, 1998"
+        }
+      ]
+    },
+    {
+      "compound_name": "PAVINETANT",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "PENTOXIFYLLINE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "PENTOXIFYLLINE",
+          "applicant": "ANI PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "RX",
+          "approval_date": "Jul 9, 1997"
+        },
+        {
+          "trade_name": "PENTOXIFYLLINE",
+          "applicant": "ANI PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "DISCN",
+          "approval_date": "Sep 4, 1998"
+        },
+        {
+          "trade_name": "PENTOXIFYLLINE",
+          "applicant": "ANI PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "DISCN",
+          "approval_date": "Sep 3, 1999"
+        },
+        {
+          "trade_name": "PENTOXIFYLLINE",
+          "applicant": "APOTEX",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "RX",
+          "approval_date": "Jun 9, 1999"
+        },
+        {
+          "trade_name": "PENTOXIFYLLINE",
+          "applicant": "BAUSCH",
+          "appl_type": "ANDA (generic)",
+          "strength": "400MG",
+          "status": "DISCN",
+          "approval_date": "Jul 20, 1998"
+        }
+      ]
+    },
+    {
+      "compound_name": "PRASTERONE",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2031-03-19",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "INTRAROSA",
+          "applicant": "MILLICENT",
+          "appl_type": "NDA (brand)",
+          "strength": "6.5MG",
+          "status": "RX",
+          "approval_date": "Nov 16, 2016"
+        }
+      ]
+    },
+    {
+      "compound_name": "progesterone",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "AMNEAL PHARMS NY",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Sep 7, 2017"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "AMNEAL PHARMS NY",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Sep 7, 2017"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "BIONPHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Aug 16, 2013"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "BIONPHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "200MG",
+          "status": "RX",
+          "approval_date": "Aug 16, 2013"
+        },
+        {
+          "trade_name": "PROGESTERONE",
+          "applicant": "DR REDDYS",
+          "appl_type": "ANDA (generic)",
+          "strength": "100MG",
+          "status": "RX",
+          "approval_date": "Feb 28, 2017"
+        }
+      ]
+    },
+    {
+      "compound_name": "PTEROSTILBENE",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "quercetin",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "RALOXIFENE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "EVISTA",
+          "applicant": "LILLY",
+          "appl_type": "NDA (brand)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Dec 9, 1997"
+        },
+        {
+          "trade_name": "RALOXIFENE HYDROCHLORIDE",
+          "applicant": "AMNEAL PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Apr 8, 2016"
+        },
+        {
+          "trade_name": "RALOXIFENE HYDROCHLORIDE",
+          "applicant": "AUROBINDO PHARMA",
+          "appl_type": "ANDA (generic)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Aug 28, 2015"
+        },
+        {
+          "trade_name": "RALOXIFENE HYDROCHLORIDE",
+          "applicant": "CADILA PHARMS LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Aug 18, 2020"
+        },
+        {
+          "trade_name": "RALOXIFENE HYDROCHLORIDE",
+          "applicant": "GLENMARK PHARMS LTD",
+          "appl_type": "ANDA (generic)",
+          "strength": "60MG",
+          "status": "RX",
+          "approval_date": "Mar 22, 2016"
+        }
+      ]
+    },
+    {
+      "compound_name": "RELUGOLIX",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2037-09-29",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ORGOVYX",
+          "applicant": "SUMITOMO PHARMA AM",
+          "appl_type": "NDA (brand)",
+          "strength": "120MG",
+          "status": "RX",
+          "approval_date": "Dec 18, 2020"
+        }
+      ]
+    },
+    {
+      "compound_name": "resveratrol",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ROSIGLITAZONE",
+      "fda_listed": true,
+      "supply": "discontinued",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "discontinued",
+      "products_sampled": [
+        {
+          "trade_name": "AVANDIA",
+          "applicant": "WOODWARD",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 2MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "May 25, 1999"
+        },
+        {
+          "trade_name": "AVANDIA",
+          "applicant": "WOODWARD",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 4MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "May 25, 1999"
+        },
+        {
+          "trade_name": "AVANDIA",
+          "applicant": "WOODWARD",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 8MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "May 25, 1999"
+        },
+        {
+          "trade_name": "ROSIGLITAZONE MALEATE",
+          "applicant": "ANI PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 2MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jan 25, 2013"
+        },
+        {
+          "trade_name": "ROSIGLITAZONE MALEATE",
+          "applicant": "ANI PHARMS",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 4MG BASE",
+          "status": "DISCN",
+          "approval_date": "Jan 25, 2013"
+        }
+      ]
+    },
+    {
+      "compound_name": "SERTRALINE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "SERTRALINE HYDROCHLORIDE",
+          "applicant": "ALMATICA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 4, 2021"
+        },
+        {
+          "trade_name": "SERTRALINE HYDROCHLORIDE",
+          "applicant": "ALMATICA",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 200MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 4, 2021"
+        },
+        {
+          "trade_name": "SERTRALINE HYDROCHLORIDE",
+          "applicant": "AMNEAL",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Jan 28, 2026"
+        },
+        {
+          "trade_name": "SERTRALINE HYDROCHLORIDE",
+          "applicant": "AMNEAL",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 200MG BASE",
+          "status": "RX",
+          "approval_date": "Jan 28, 2026"
+        },
+        {
+          "trade_name": "SERTRALINE HYDROCHLORIDE",
+          "applicant": "APPCO",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Jan 20, 2026"
+        }
+      ]
+    },
+    {
+      "compound_name": "SIMVASTATIN",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "FLOLIPID",
+          "applicant": "SALERNO PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "20MG/5ML",
+          "status": "RX",
+          "approval_date": "Apr 21, 2016"
+        },
+        {
+          "trade_name": "FLOLIPID",
+          "applicant": "SALERNO PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "40MG/5ML",
+          "status": "RX",
+          "approval_date": "Apr 21, 2016"
+        },
+        {
+          "trade_name": "SIMVASTATIN",
+          "applicant": "SYNTHON PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "10MG",
+          "status": "DISCN",
+          "approval_date": "Oct 9, 2007"
+        },
+        {
+          "trade_name": "SIMVASTATIN",
+          "applicant": "SYNTHON PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "20MG",
+          "status": "DISCN",
+          "approval_date": "Oct 9, 2007"
+        },
+        {
+          "trade_name": "SIMVASTATIN",
+          "applicant": "SYNTHON PHARMS",
+          "appl_type": "NDA (brand)",
+          "strength": "40MG",
+          "status": "DISCN",
+          "approval_date": "Oct 9, 2007"
+        }
+      ]
+    },
+    {
+      "compound_name": "SMC021",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "SNRIs",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "SSRI/SNRIs",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "SSRIs",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "SYNTHETIC CONJUGATED ESTROGENS, B",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "TANEZUMAB",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "testosterone",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "JATENZO",
+          "applicant": "TOLMAR",
+          "appl_type": "NDA (brand)",
+          "strength": "158MG",
+          "status": "RX",
+          "approval_date": "Mar 27, 2019"
+        },
+        {
+          "trade_name": "JATENZO",
+          "applicant": "TOLMAR",
+          "appl_type": "NDA (brand)",
+          "strength": "198MG",
+          "status": "RX",
+          "approval_date": "Mar 27, 2019"
+        },
+        {
+          "trade_name": "JATENZO",
+          "applicant": "TOLMAR",
+          "appl_type": "NDA (brand)",
+          "strength": "237MG",
+          "status": "RX",
+          "approval_date": "Mar 27, 2019"
+        },
+        {
+          "trade_name": "KYZATREX",
+          "applicant": "MARIUS",
+          "appl_type": "NDA (brand)",
+          "strength": "100MG",
+          "status": "DISCN",
+          "approval_date": "Jul 27, 2022"
+        },
+        {
+          "trade_name": "KYZATREX",
+          "applicant": "MARIUS",
+          "appl_type": "NDA (brand)",
+          "strength": "150MG",
+          "status": "RX",
+          "approval_date": "Jul 27, 2022"
+        }
+      ]
+    },
+    {
+      "compound_name": "TILDACERFONT",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "TRIPTORELIN",
+      "fda_listed": true,
+      "supply": "brand_patented",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": "2029-06-30",
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "TRIPTODUR KIT",
+          "applicant": "AZURITY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 22.5MG BASE/VIAL",
+          "status": "RX",
+          "approval_date": "Jun 29, 2017"
+        },
+        {
+          "trade_name": "TRELSTAR",
+          "applicant": "VERITY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 3.75MG BASE/VIAL",
+          "status": "RX",
+          "approval_date": "Jun 15, 2000"
+        },
+        {
+          "trade_name": "TRELSTAR",
+          "applicant": "VERITY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 11.25MG BASE/VIAL",
+          "status": "RX",
+          "approval_date": "Jun 29, 2001"
+        },
+        {
+          "trade_name": "TRELSTAR",
+          "applicant": "VERITY",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 22.5MG BASE/VIAL",
+          "status": "RX",
+          "approval_date": "Mar 10, 2010"
+        }
+      ]
+    },
+    {
+      "compound_name": "tryptophan-rich diet",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "UBIDECARENONE",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "ULIPRISTAL ACETATE",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "ELLA",
+          "applicant": "LAB HRA PHARMA",
+          "appl_type": "NDA (brand)",
+          "strength": "30MG",
+          "status": "RX",
+          "approval_date": "Aug 13, 2010"
+        },
+        {
+          "trade_name": "LOGILIA",
+          "applicant": "TEVA PHARMS USA",
+          "appl_type": "ANDA (generic)",
+          "strength": "30MG",
+          "status": "RX",
+          "approval_date": "Feb 13, 2017"
+        }
+      ]
+    },
+    {
+      "compound_name": "vaginal dilators",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "vaginal estrogen",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "vaginal oestrogen",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "various treatments",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "venlafaxine",
+      "fda_listed": true,
+      "supply": "generic",
+      "generic_available": true,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "rx",
+      "products_sampled": [
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 75MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 100MG BASE **Federal Register determination that product was not discontinued or withdrawn for safety or effectiveness reasons**",
+          "status": "DISCN",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "EFFEXOR XR",
+          "applicant": "UPJOHN",
+          "appl_type": "NDA (brand)",
+          "strength": "EQ 150MG BASE",
+          "status": "RX",
+          "approval_date": "Oct 20, 1997"
+        },
+        {
+          "trade_name": "VENLAFAXINE HYDROCHLORIDE",
+          "applicant": "ALEMBIC",
+          "appl_type": "ANDA (generic)",
+          "strength": "EQ 37.5MG BASE",
+          "status": "RX",
+          "approval_date": "Jun 6, 2024"
+        }
+      ]
+    },
+    {
+      "compound_name": "VILAPRISAN",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "vitamin B6",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "VITAMIN E",
+      "fda_listed": true,
+      "supply": "combination_only",
+      "generic_available": false,
+      "marketed": true,
+      "latest_patent_expiry": null,
+      "marketing_status": "combination_only",
+      "products_sampled": []
+    },
+    {
+      "compound_name": "Vitex agnus-castus",
+      "fda_listed": false,
+      "supply": "not_listed",
+      "generic_available": false,
+      "marketed": false,
+      "latest_patent_expiry": null,
+      "marketing_status": "not_in_orange_book",
+      "products_sampled": []
+    }
+  ]
+}

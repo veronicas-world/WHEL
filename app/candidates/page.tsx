@@ -86,6 +86,10 @@ export default async function CandidatesPage() {
       hasSexPk: !!(c.sexPk && c.sexPk.length > 0),
       hasPhase: !!(c.cyclePhase && c.cyclePhase.length > 0),
       hasGraph: !!(c.graphViaTargets && c.graphViaTargets.length > 0),
+      hasTrials: !!(c.trialStatus && c.trialStatus.trial_count > 0),
+      onLabel: c.indication?.label_relationship === "on_label",
+      offLabel: c.indication?.label_relationship === "off_label",
+      genericAvailable: !!c.orangeBook?.generic_available,
       card: <CandidateCard key={c.id} c={c} />,
     };
   });

@@ -1,5 +1,9 @@
 import Link from "next/link";
 import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
+import {
+  supplyLabel, supplyGloss, relationshipLabel, relationshipGloss,
+  regulatoryChipLabel, regulatoryChipDot,
+} from "@/lib/regulatory-display";
 
 export interface Claim {
   type: "extract" | "synth" | "contradict";
@@ -61,6 +65,58 @@ export interface Candidate {
    * a "Phase" marker and a detail block in the evidence trail.
    */
   cyclePhase?: { cyclePhase: string; pattern?: string; dosingNote?: string; source?: string; sourceUrl?: string }[];
+  /**
+   * Clinical-trial status layer (ClinicalTrials.gov v2 snapshot): where this
+   * drug currently sits as a STUDIED THERAPY for this condition. Present =>
+   * a "Trials" marker and a detail block. Only carries a record when the drug
+   * was an experimental/active-comparator intervention in an interventional
+   * trial of this condition (mechanistic / PK-DDI / Phase-4 post-marketing /
+   * comparator-background studies are excluded upstream in the snapshot).
+   */
+  trialStatus?: {
+    compound_name: string;
+    condition_name: string;
+    trial_count: number;
+    highest_phase: string | null;
+    highest_phase_label: string | null;
+    activity: "active" | "completed" | "halted" | "unknown";
+    top_trials: { nctId: string; title: string; phase: string | null; status: string; url: string }[];
+  };
+  /**
+   * FDA Orange Book supply layer (per molecule): is this drug available as a
+   * generic, a single-source brand (optionally still patented), only inside
+   * combination products, discontinued, or absent from the Orange Book
+   * (biologics, supplements, non-US-approved). Descriptive US
+   * regulatory-landscape context only, not regulatory advice.
+   */
+  orangeBook?: {
+    compound_name: string;
+    fda_listed: boolean;
+    supply: "generic" | "brand_patented" | "brand_only" | "discontinued" | "combination_only" | "not_listed";
+    generic_available: boolean;
+    marketed: boolean;
+    latest_patent_expiry: string | null;
+    marketing_status: string | null;
+    products_sampled: { trade_name: string; applicant: string; appl_type: string; strength: string; status: string; approval_date: string }[];
+  };
+  /**
+   * DailyMed approved-indication layer (per pair): is THIS condition an
+   * FDA-approved (on-label) indication for the drug, an off-label use of a drug
+   * approved for something else, or is there no FDA-approved drug label at all
+   * (supplement, biologic-only, investigational, non-US). Descriptive context
+   * only, not regulatory advice.
+   */
+  indication?: {
+    compound_name: string;
+    condition_name: string;
+    has_fda_label: boolean;
+    fda_approved_for_condition: boolean;
+    label_relationship: "on_label" | "off_label" | "no_fda_label";
+    approved_indication_excerpt: string | null;
+    label_setid: string | null;
+    label_title: string | null;
+    label_url: string | null;
+  };
 
   // ── Substrate fields (the new arm-aware engine; optional so legacy consumers
   //    are unaffected until the cutover wires them in) ───────────────────────
@@ -307,6 +363,112 @@ function ArmDimensions({ arm }: { arm: NonNullable<Candidate["arms"]>[number] })
   );
 }
 
+/**
+ * Clinical-trial status disclosure. Shows where the drug currently sits as a
+ * studied therapy for this condition, with direct links to the trials on
+ * ClinicalTrials.gov. Only the snapshot's qualifying (experimental/active-
+ * comparator, interventional, non-mechanistic) trials reach this block.
+ */
+function TrialStatusDetail({ ts }: { ts: NonNullable<Candidate["trialStatus"]> }) {
+  const activityLabel =
+    ts.activity === "active" ? "active trial(s)"
+    : ts.activity === "completed" ? "completed"
+    : ts.activity === "halted" ? "halted/terminated"
+    : "status unclear";
+  const phaseLabel = ts.highest_phase_label ?? "no phase listed";
+  return (
+    <div style={{ marginTop: 11, borderTop: "1px solid var(--rule)", paddingTop: 9 }}>
+      <div style={{
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10,
+        letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink)", opacity: 0.55, marginBottom: 6,
+      }}>
+        Clinical-trial status · for this condition
+      </div>
+      <p style={{ fontSize: 12.5, color: "var(--ink)", opacity: 0.82, margin: "0 0 7px" }}>
+        Studied as a therapy for {ts.condition_name.toLowerCase()} in {ts.trial_count} interventional
+        trial{ts.trial_count === 1 ? "" : "s"} · highest reached {phaseLabel} · {activityLabel}.
+      </p>
+      <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        {ts.top_trials.map((t) => (
+          <Link
+            key={t.nctId}
+            href={t.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 11,
+              color: "var(--moss)", textDecoration: "none",
+            }}
+          >
+            {t.nctId} · {t.phase ? `${t.phase.replace(/_/g, " ").replace(/PHASE/i, "Phase ")} · ` : ""}
+            {t.status.replace(/_/g, " ").toLowerCase()}
+          </Link>
+        ))}
+      </div>
+      <p style={{ fontSize: 9.5, color: "var(--ink)", opacity: 0.45, margin: "7px 0 0" }}>
+        Source: ClinicalTrials.gov (U.S. National Library of Medicine).
+      </p>
+    </div>
+  );
+}
+
+// Regulatory & development status: where this candidate sits in the US
+// regulatory landscape — approved-indication relationship (DailyMed) and
+// generic / patent supply (FDA Orange Book). Descriptive context, not advice.
+function RegulatoryStatusDetail({ c }: { c: Candidate }) {
+  const ind = c.indication;
+  const ob = c.orangeBook;
+  if (!ind && !ob) return null;
+  return (
+    <div style={{ marginTop: 11, borderTop: "1px solid var(--rule)", paddingTop: 9 }}>
+      <div style={{
+        fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 10,
+        letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--ink)", opacity: 0.55, marginBottom: 6,
+      }}>
+        Regulatory &amp; development status
+      </div>
+
+      {ind && (
+        <p style={{ fontSize: 12.5, color: "var(--ink)", opacity: 0.82, margin: "0 0 6px" }}>
+          <b>{relationshipLabel(ind.label_relationship)}.</b> {relationshipGloss(ind)}
+          {ind.approved_indication_excerpt && (
+            <span style={{ display: "block", marginTop: 4, opacity: 0.7, fontStyle: "italic" }}>
+              Label: &ldquo;{ind.approved_indication_excerpt}&rdquo;
+            </span>
+          )}
+        </p>
+      )}
+
+      {ob && (
+        <p style={{ fontSize: 12.5, color: "var(--ink)", opacity: 0.82, margin: "0 0 6px" }}>
+          <b>{supplyLabel(ob.supply)}.</b> {supplyGloss(ob)}
+        </p>
+      )}
+
+      <p style={{ fontSize: 11.5, color: "var(--ink)", opacity: 0.7, margin: "2px 0 0" }}>
+        This is where the candidate sits in the regulatory landscape — descriptive context, not a
+        505(b)(2) viability assessment or regulatory advice.
+      </p>
+
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 7 }}>
+        {ind?.label_url && (
+          <Link
+            href={ind.label_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontFamily: "var(--font-plex-mono, ui-monospace, monospace)", fontSize: 11, color: "var(--moss)", textDecoration: "none" }}
+          >
+            FDA label (DailyMed) →
+          </Link>
+        )}
+      </div>
+      <p style={{ fontSize: 9.5, color: "var(--ink)", opacity: 0.45, margin: "7px 0 0" }}>
+        Sources: FDA Orange Book; DailyMed (U.S. National Library of Medicine).
+      </p>
+    </div>
+  );
+}
+
 export default function CandidateCard({ c }: { c: Candidate }) {
   // Substrate cards carry per-arm data + the female lens; legacy cards fall back.
   const isSubstrate = !!c.arms && c.arms.length > 0;
@@ -323,6 +485,19 @@ export default function CandidateCard({ c }: { c: Candidate }) {
             {c.sexPk && c.sexPk.length > 0 && <MarkerChip dot="var(--brick)" label="Sex-PK" />}
             {c.cyclePhase && c.cyclePhase.length > 0 && (
               <MarkerChip dot="var(--arm-cross)" label={`Phase · ${c.cyclePhase[0].cyclePhase}`} />
+            )}
+            {c.trialStatus && c.trialStatus.trial_count > 0 && (
+              <MarkerChip
+                dot={
+                  c.trialStatus.activity === "active" ? "var(--green-deep)"
+                  : c.trialStatus.activity === "halted" ? "var(--brick)"
+                  : "var(--moss)"
+                }
+                label={`Trials · ${c.trialStatus.highest_phase_label ?? "studied"}`}
+              />
+            )}
+            {regulatoryChipLabel(c) && (
+              <MarkerChip dot={regulatoryChipDot(c)} label={regulatoryChipLabel(c)!} />
             )}
             {isSubstrate && c.validationStatus
               ? <ValidationStamp status={c.validationStatus} />
@@ -361,6 +536,9 @@ export default function CandidateCard({ c }: { c: Candidate }) {
             <span className="m"><b>Sources</b> · {c.claims.length}</span>
           </div>
         )}
+
+        {c.trialStatus && c.trialStatus.trial_count > 0 && <TrialStatusDetail ts={c.trialStatus} />}
+        {(c.indication || c.orangeBook) && <RegulatoryStatusDetail c={c} />}
       </div>
 
       {c.signalId && (

@@ -136,6 +136,20 @@ const SOURCES: {
     status: "Live",
   },
   {
+    name: "FDA Orange Book",
+    role: "Approved Drug Products with Therapeutic Equivalence Evaluations; the generic-availability and patent-supply layer in the regulatory & development-status panel",
+    href: "https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files",
+    status: "Live",
+    note: "Descriptive landscape context; single-ingredient products only; not blended into Whel scores",
+  },
+  {
+    name: "DailyMed",
+    role: "US National Library of Medicine repository of FDA drug labels; the on-label / off-label approved-indication layer in the regulatory & development-status panel",
+    href: "https://dailymed.nlm.nih.gov/dailymed/",
+    status: "Live",
+    note: "Read from the FDA-approved label (NDA/ANDA/BLA only); descriptive context, not regulatory advice",
+  },
+  {
     name: "Open Targets",
     role: "Genetic-target and pathway evidence behind Pathway Insights",
     href: "https://www.opentargets.org/",

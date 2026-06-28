@@ -47,7 +47,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" style={{ backgroundColor: "var(--ink)" }}>
         <Nav />
-        <div className="flex-1 flex flex-col">{children}</div>
+        <div className="flex-1 flex flex-col min-w-0">{children}</div>
         <Footer />
         <Analytics />
       </body>

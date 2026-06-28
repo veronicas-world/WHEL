@@ -3,6 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCandidateBySignalId } from "@/lib/substrate-candidates";
 import { toArmKey, ARM_LABELS } from "@/lib/arm-mapping";
+import {
+  supplyLabel, supplyGloss, relationshipLabel, relationshipGloss, formatDate,
+} from "@/lib/regulatory-display";
+import SideToc, { type TocItem } from "@/app/components/SideToc";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -38,6 +42,9 @@ const EVERYCURE = "https://huggingface.co/datasets/everycure/matrix-scores";
 const ACOG_PMDD = "https://www.acog.org/clinical/clinical-guidance/clinical-practice-guideline/articles/2023/12/management-of-premenstrual-disorders";
 const ZUCKER = "https://doi.org/10.1186/s13293-020-00308-5";
 const SOLDIN = "https://doi.org/10.2165/00003088-200948030-00001";
+const ORANGE_BOOK = "https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files";
+const DAILYMED = "https://dailymed.nlm.nih.gov/dailymed/";
+const CT_GOV = "https://clinicaltrials.gov/";
 
 /** Human label for a source's study type (used to tag the provenance trail). */
 function studyLabel(t?: string): string | undefined {
@@ -154,6 +161,18 @@ export default async function SignalDetail({
 
   const sexCovered = !!(c.sexPk && c.sexPk.length > 0);
   const phaseCovered = !!(c.cyclePhase && c.cyclePhase.length > 0);
+
+  // Regulatory & development-status layers (descriptive landscape context).
+  const ind = c.indication;
+  const ob = c.orangeBook;
+  const ts = c.trialStatus && c.trialStatus.trial_count > 0 ? c.trialStatus : null;
+  const regCovered = !!(ind || ob || ts);
+  const trialActivityLabel = ts
+    ? ts.activity === "active" ? "active trial(s)"
+      : ts.activity === "completed" ? "completed"
+      : ts.activity === "halted" ? "halted or terminated"
+      : "status unclear"
+    : "";
   const relColor =
     c.direction === "supports" ? "var(--signal)" : c.direction === "contradicts" ? "var(--brick)" : "var(--on-ink)";
 
@@ -175,10 +194,29 @@ export default async function SignalDetail({
     });
   }
 
+  // On-page table of contents — only the sections that actually render for this
+  // candidate (several are conditional on coverage). Mirrors the section order.
+  const hasMatrix = !!(c.matrixPercentile || matrixMapped);
+  const tocItems: TocItem[] = [
+    { id: "verdict", label: "Verdict & score" },
+    { id: "mechanism", label: "Hypothesized mechanism" },
+    { id: "scoring", label: "How the score was reached" },
+    ...(hasMatrix ? [{ id: "independent", label: "Independent reading" }] : []),
+    ...(regCovered ? [{ id: "regulatory", label: "Regulatory & status" }] : []),
+    ...(sexCovered ? [{ id: "sex-pk", label: "Sex-specific PK" }] : []),
+    ...(phaseCovered ? [{ id: "cycle-phase", label: "Cycle-phase dependence" }] : []),
+    ...(notCovered.length > 0 ? [{ id: "not-covered", label: "Layers not covered" }] : []),
+    { id: "sources", label: "Source evidence" },
+  ];
+
   return (
     <main className="sigdetail">
+
+      {/* ── Floating table of contents (wide screens only) ───────────────── */}
+      <SideToc items={tocItems} heroId="verdict" />
+
       {/* ── 1 · Verdict + scorecard ──────────────────────────────────────── */}
-      <section className="surface-ink" style={{ paddingTop: 34, paddingBottom: 80 }}>
+      <section id="verdict" className="surface-ink" style={{ paddingTop: 34, paddingBottom: 80 }}>
         <div className="container">
           <div className="crumbs on-ink">
             <Link href="/">Home</Link>
@@ -240,7 +278,7 @@ export default async function SignalDetail({
       </section>
 
       {/* ── 2 · Hypothesized mechanism ───────────────────────────────────── */}
-      <section className="surface-paper section tight">
+      <section id="mechanism" className="surface-paper section tight" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <p className="kicker">Hypothesized mechanism</p>
           <p className="prose-lg measure">{c.mechanism}</p>
@@ -253,7 +291,7 @@ export default async function SignalDetail({
       </section>
 
       {/* ── 3 · How the score was reached ────────────────────────────────── */}
-      <section className="surface-bone section tight">
+      <section id="scoring" className="surface-bone section tight" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <p className="kicker">How the score was reached, for this pair</p>
           <p className="prose-lg measure" style={{ marginBottom: 18 }}>
@@ -322,8 +360,8 @@ export default async function SignalDetail({
       </section>
 
       {/* ── 4 · Independent readings ─────────────────────────────────────── */}
-      {(c.matrixPercentile || matrixMapped) ? (
-        <section className="surface-paper section tight">
+      {hasMatrix ? (
+        <section id="independent" className="surface-paper section tight" style={{ scrollMarginTop: 24 }}>
           <div className="container">
             <p className="kicker">Independent reading, reported beside the score</p>
             <p className="prose-lg measure" style={{ marginBottom: 8 }}>
@@ -350,9 +388,126 @@ export default async function SignalDetail({
         </section>
       ) : null}
 
+      {/* ── 4b · Regulatory & development status ─────────────────────────── */}
+      {regCovered ? (
+        <section id="regulatory" className="surface-bone section tight" style={{ scrollMarginTop: 24 }}>
+          <div className="container">
+            <p className="kicker">Regulatory &amp; development status</p>
+            <p className="prose-lg measure" style={{ marginBottom: 8 }}>
+              Where this candidate sits in the US regulatory landscape: whether the drug is already
+              FDA-approved for {c.condition.toLowerCase()} (on-label) or approved for something else
+              (off-label), whether the molecule is available as a generic or a single-source brand still
+              under patent, and how far it has been studied as a therapy for this condition. Each fact is
+              drawn from a public US source and reported beside the score; none of it is folded into the
+              score.
+            </p>
+            <p className="note" style={{ marginBottom: 22 }}>
+              This is descriptive context, not regulatory advice. It maps the landscape a{" "}
+              <Link href="/platform#evidence-markers" className="ulink">505(b)(2)</Link> route would build
+              on &mdash; an already-approved active ingredient proposed for a new indication &mdash; but it is
+              not a 505(b)(2) viability assessment, and says nothing about whether any particular development
+              path is advisable. &ldquo;Approved&rdquo; means FDA-approved (US); approvals elsewhere are out of scope.
+            </p>
+
+            {/* Approved-indication relationship (DailyMed) */}
+            {ind ? (
+              <div className="reading">
+                <h3>
+                  Approval relationship{" "}
+                  <span className="grade">{relationshipLabel(ind.label_relationship)}</span>
+                </h3>
+                <p className="prose">
+                  Read from the drug&rsquo;s FDA label via <Ext href={DAILYMED}>DailyMed</Ext>, the US
+                  National Library of Medicine&rsquo;s label repository. A label is only counted when it
+                  carries an FDA-approved marketing category (an NDA, ANDA, or biologic BLA); dietary
+                  supplements, homeopathics, and OTC-monograph products are not FDA-approved drugs and are
+                  excluded.
+                </p>
+                <p className="prose"><strong>For this pair.</strong> {relationshipGloss(ind)}</p>
+                {ind.approved_indication_excerpt ? (
+                  <p className="note" style={{ marginTop: 12, fontStyle: "italic" }}>
+                    From the label&rsquo;s Indications &amp; Usage section: &ldquo;{ind.approved_indication_excerpt}&rdquo;
+                    {ind.label_title ? ` — ${ind.label_title}` : ""}
+                    {ind.label_url ? <> · <Ext href={ind.label_url}>view label ↗</Ext></> : null}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+
+            {/* Generic & patent supply (Orange Book) */}
+            {ob ? (
+              <div className="reading">
+                <h3>
+                  Generic &amp; patent supply <span className="grade">{supplyLabel(ob.supply)}</span>
+                </h3>
+                <p className="prose">
+                  Read from the <Ext href={ORANGE_BOOK}>FDA Orange Book</Ext> (Approved Drug Products with
+                  Therapeutic Equivalence Evaluations), using single-ingredient products only so that patents
+                  on novel branded combination formulations are never attributed to the base molecule.
+                </p>
+                <p className="prose"><strong>For this molecule.</strong> {supplyGloss(ob)}</p>
+                {ob.latest_patent_expiry && !ob.generic_available ? (
+                  <p className="note" style={{ marginTop: 10 }}>
+                    Latest listed Orange Book patent expiry: {formatDate(ob.latest_patent_expiry)}. Patent
+                    listings can change and do not by themselves determine when a generic may launch.
+                  </p>
+                ) : null}
+                {ob.products_sampled && ob.products_sampled.length ? (
+                  <div className="reclist" style={{ marginTop: 14 }}>
+                    {ob.products_sampled.slice(0, 5).map((p, i) => (
+                      <div className="rec" key={i}>
+                        <span className="rl">{p.trade_name}</span>
+                        {` · ${p.appl_type} · ${p.strength}`}
+                        {p.status ? ` · ${p.status.toLowerCase()}` : ""}
+                        {p.approval_date ? ` · approved ${p.approval_date}` : ""}
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {/* Clinical-trial stage (ClinicalTrials.gov) */}
+            {ts ? (
+              <div className="reading">
+                <h3>
+                  Clinical-trial stage, for this condition{" "}
+                  <span className="grade">{ts.highest_phase_label ?? "studied"}</span>
+                </h3>
+                <p className="prose">
+                  Read from <Ext href={CT_GOV}>ClinicalTrials.gov</Ext> (US National Library of Medicine).
+                  A trial only counts when the drug appears as an experimental or active-comparator
+                  intervention in an interventional study of this condition; mechanistic, drug-interaction,
+                  post-marketing (Phase 4), and comparator-background uses are excluded, so this reflects the
+                  drug being tested <em>as a therapy</em> for {c.condition.toLowerCase()}.
+                </p>
+                <p className="prose">
+                  <strong>For this pair.</strong> Studied in {ts.trial_count} qualifying interventional
+                  trial{ts.trial_count === 1 ? "" : "s"} · highest stage reached{" "}
+                  {ts.highest_phase_label ?? "no phase listed"} · {trialActivityLabel}.
+                </p>
+                <div className="reclist" style={{ marginTop: 14 }}>
+                  {ts.top_trials.map((t) => (
+                    <div className="rec" key={t.nctId}>
+                      <a className="ulink" href={t.url} target="_blank" rel="noopener noreferrer">{t.nctId} ↗</a>
+                      {t.phase ? ` · ${t.phase.replace(/_/g, " ").replace(/PHASE/i, "Phase ")}` : ""}
+                      {` · ${t.status.replace(/_/g, " ").toLowerCase()}`}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            <More href="/about/external-references#underlying-data">
+              The regulatory and trial sources this status is drawn from
+            </More>
+          </div>
+        </section>
+      ) : null}
+
       {/* ── 5a · Sex-specific PK (covered) ───────────────────────────────── */}
       {sexCovered ? (
-        <section className="surface-bone section tight">
+        <section id="sex-pk" className="surface-bone section tight" style={{ scrollMarginTop: 24 }}>
           <div className="container">
             <p className="kicker">Sex-specific pharmacokinetics</p>
             <p className="prose-lg measure" style={{ marginBottom: 18 }}>
@@ -380,7 +535,7 @@ export default async function SignalDetail({
 
       {/* ── 5b · Cycle-phase dependence (covered) ────────────────────────── */}
       {phaseCovered ? (
-        <section className="surface-paper section tight">
+        <section id="cycle-phase" className="surface-paper section tight" style={{ scrollMarginTop: 24 }}>
           <div className="container">
             <p className="kicker">Cycle-phase dependence</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 20 }}>
@@ -422,7 +577,7 @@ export default async function SignalDetail({
 
       {/* ── 5c · Layers not covered ──────────────────────────────────────── */}
       {notCovered.length > 0 ? (
-        <section className="surface-sage section tight">
+        <section id="not-covered" className="surface-sage section tight" style={{ scrollMarginTop: 24 }}>
           <div className="container">
             <p className="kicker">Layers not covered for this pair</p>
             <div className={"notcovered" + (notCovered.length === 1 ? " one" : "")}>
@@ -439,7 +594,7 @@ export default async function SignalDetail({
       ) : null}
 
       {/* ── 6 · Source evidence ──────────────────────────────────────────── */}
-      <section className="surface-paper section tight">
+      <section id="sources" className="surface-paper section tight" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <p className="kicker">Source evidence · what the pipeline ingested</p>
           <p className="prose-lg measure">

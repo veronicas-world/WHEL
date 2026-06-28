@@ -1,0 +1,2569 @@
+{
+  "_meta": {
+    "built": "2026-06-27",
+    "source": "ClinicalTrials.gov v2 API (clinicaltrials.gov/data-api/api)",
+    "attribution": "Trial data courtesy of the U.S. National Library of Medicine, ClinicalTrials.gov",
+    "builder": "scripts/build-clinicaltrials-status-snapshot.mjs",
+    "note": "Conservative: condition-regex matched, drug is an experimental-arm intervention. One record per drug-condition pair.",
+    "pair_count": 141,
+    "pair_count_with_trials": 69
+  },
+  "per_pair": [
+    {
+      "compound_name": "ASPIRIN",
+      "condition_name": "adenomyosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "BROMOCRIPTINE",
+      "condition_name": "adenomyosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE1",
+      "highest_phase_label": "Phase 1",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01821001",
+          "title": "Vaginal Bromocriptine for Treatment of Adenomyosis",
+          "phase": "PHASE1",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01821001"
+        }
+      ]
+    },
+    {
+      "compound_name": "DIENOGEST",
+      "condition_name": "adenomyosis",
+      "trial_count": 2,
+      "highest_phase": "PHASE1",
+      "highest_phase_label": "Phase 1",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT06719934",
+          "title": "Ttt of Adenomyosis",
+          "phase": "PHASE1",
+          "status": "NOT_YET_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06719934"
+        },
+        {
+          "nctId": "NCT03890042",
+          "title": "Dienogest for Treatment of Adenomyotic Uteri",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03890042"
+        }
+      ]
+    },
+    {
+      "compound_name": "DROSPIRENONE",
+      "condition_name": "adenomyosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "EPELSIBAN",
+      "condition_name": "adenomyosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT02794467",
+          "title": "Placebo-controlled Proof of Concept Study of Epelsiban in Women With Adenomyosis",
+          "phase": "PHASE2",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT02794467"
+        }
+      ]
+    },
+    {
+      "compound_name": "GnRH agonist",
+      "condition_name": "adenomyosis",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT04356664",
+          "title": "Benefit of GnRH Agonist Before Frozen Embryo Transfer in Patients With Endometriosis and/or Adenomyosis",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT04356664"
+        },
+        {
+          "nctId": "NCT03940807",
+          "title": "Impact of Ultra-long Versus Long Down-regulation Protocol on IVF/ICSI in Adenomyosis",
+          "phase": "PHASE3",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT03940807"
+        },
+        {
+          "nctId": "NCT07065539",
+          "title": "GnRH Agonist Pretreatment Duration and Letrozole Supplementation in Frozen Embryo Transfer for Adenomyosis Patients",
+          "phase": null,
+          "status": "NOT_YET_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT07065539"
+        },
+        {
+          "nctId": "NCT06913075",
+          "title": "FET in Adenomyosis",
+          "phase": null,
+          "status": "NOT_YET_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06913075"
+        }
+      ]
+    },
+    {
+      "compound_name": "GnRHa",
+      "condition_name": "adenomyosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "GOSERELIN",
+      "condition_name": "adenomyosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01218581",
+          "title": "Aromatase Inhibitors or GnRH-a for Uterine Adenomyosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01218581"
+        }
+      ]
+    },
+    {
+      "compound_name": "LETROZOLE",
+      "condition_name": "adenomyosis",
+      "trial_count": 2,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT01218581",
+          "title": "Aromatase Inhibitors or GnRH-a for Uterine Adenomyosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01218581"
+        },
+        {
+          "nctId": "NCT06913075",
+          "title": "FET in Adenomyosis",
+          "phase": null,
+          "status": "NOT_YET_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06913075"
+        }
+      ]
+    },
+    {
+      "compound_name": "levonorgestrel-releasing intrauterine system",
+      "condition_name": "adenomyosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "MIFEPRISTONE",
+      "condition_name": "adenomyosis",
+      "trial_count": 2,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT03520439",
+          "title": "Evaluation of Therapeutic Effect and Safety of Mifepristone in the Treatment of Adenomyosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03520439"
+        },
+        {
+          "nctId": "NCT05151016",
+          "title": "Long-term Use of Mifepristone in the Treatment of Adenomyosis",
+          "phase": "EARLY_PHASE1",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT05151016"
+        }
+      ]
+    },
+    {
+      "compound_name": "TRIPTORELIN",
+      "condition_name": "adenomyosis",
+      "trial_count": 2,
+      "highest_phase": "EARLY_PHASE1",
+      "highest_phase_label": "Early Phase 1",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT05151016",
+          "title": "Long-term Use of Mifepristone in the Treatment of Adenomyosis",
+          "phase": "EARLY_PHASE1",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT05151016"
+        },
+        {
+          "nctId": "NCT06581679",
+          "title": "Adenomyosis and Pregnancy: Levonorgestrel vs. GnRH for Blastocyst Transfer",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06581679"
+        }
+      ]
+    },
+    {
+      "compound_name": "ULIPRISTAL ACETATE",
+      "condition_name": "adenomyosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT02587000",
+          "title": "Adenomyosis and Ulipristal Acetate",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02587000"
+        }
+      ]
+    },
+    {
+      "compound_name": "BENTAMAPIMOD",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "CABERGOLINE",
+      "condition_name": "endometriosis",
+      "trial_count": 3,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT06560814",
+          "title": "Non-surgical Interventions for Infertility in Endometriosis",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06560814"
+        },
+        {
+          "nctId": "NCT02542410",
+          "title": "Dopamine Receptor Agonist Therapy for Pain Relief in Women Suffering From Endometriosis: A Pilot Study",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02542410"
+        },
+        {
+          "nctId": "NCT03928288",
+          "title": "Cabergoline for the Treatment of Chronic Pain Due to Endometriosis",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03928288"
+        }
+      ]
+    },
+    {
+      "compound_name": "curcumin",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "DANAZOL",
+      "condition_name": "endometriosis",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT05697471",
+          "title": "Comparisons of the Therapeutic Effects of Dienogest and Danazol on Endometriosis",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT05697471"
+        },
+        {
+          "nctId": "NCT03352076",
+          "title": "Study to Determine Intraperitoneal,Tissue, Serum Concentrations of VML-0501 Following Five Days of Daily Vaginal Single Dose of VML-0501 (100 mg Danazol), in Comparison to Oral Danazol Capsules Daily 600 mg), in Women With Signs and Symptoms of Endometriosis Undergoing Laparoscopy",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03352076"
+        },
+        {
+          "nctId": "NCT07183787",
+          "title": "Letrozole vs Danazol for Endometriosis-Related Pain: Randomized Trial",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07183787"
+        },
+        {
+          "nctId": "NCT00758953",
+          "title": "Pain Associated With Endometriosis",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00758953"
+        }
+      ]
+    },
+    {
+      "compound_name": "DESOGESTREL",
+      "condition_name": "endometriosis",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01559480",
+          "title": "Postoperative Desogestrel for Endometriosis Related Pain",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01559480"
+        }
+      ]
+    },
+    {
+      "compound_name": "DIENOGEST",
+      "condition_name": "endometriosis",
+      "trial_count": 12,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT06145438",
+          "title": "Comparing the Safety and Efficacy in the Use of Hormonal Therapy on Endometriosis Patients After Conservative Surgery",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06145438"
+        },
+        {
+          "nctId": "NCT04256200",
+          "title": "Efficacy of Dienogest Versus Oral Contraceptive Pills on Pain Associated With Endometriosis",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT04256200"
+        },
+        {
+          "nctId": "NCT07164183",
+          "title": "Clinical Study to Compare Efficacy and Safety of Indinol Forto® 200 mg Capsules and Visanne 2 mg Tablets in Treatment of Endometriosis",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT07164183"
+        },
+        {
+          "nctId": "NCT01697111",
+          "title": "Comparative Study of BAY86-5300 With an Extended Flexible Regimen for Endometriosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01697111"
+        }
+      ]
+    },
+    {
+      "compound_name": "ELAGOLIX SODIUM",
+      "condition_name": "endometriosis",
+      "trial_count": 7,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01760954",
+          "title": "Study to Evaluate the Long-Term Safety and Efficacy of Elagolix in Adults With Moderate to Severe Endometriosis-Associated Pain",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01760954"
+        },
+        {
+          "nctId": "NCT02143713",
+          "title": "Global Study to Evaluate the Long-Term Safety and Efficacy of Elagolix in Women With Moderate to Severe Endometriosis-associated Pain",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02143713"
+        },
+        {
+          "nctId": "NCT01620528",
+          "title": "A Clinical Study to Evaluate the Safety and Efficacy of Elagolix in Subjects With Moderate to Severe Endometriosis-Associated Pain",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01620528"
+        },
+        {
+          "nctId": "NCT01931670",
+          "title": "A Global Phase 3 Study to Evaluate the Safety and Efficacy of Elagolix in Subjects With Moderate to Severe Endometriosis-Associated Pain",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01931670"
+        }
+      ]
+    },
+    {
+      "compound_name": "HISTRELIN",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "INTERFERON ALFA",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "LACTULOSE",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "LETROZOLE",
+      "condition_name": "endometriosis",
+      "trial_count": 4,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00240942",
+          "title": "Letrozole in the Treatment of Severe and Recurrent Endometriosis",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00240942"
+        },
+        {
+          "nctId": "NCT07183787",
+          "title": "Letrozole vs Danazol for Endometriosis-Related Pain: Randomized Trial",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07183787"
+        },
+        {
+          "nctId": "NCT04002141",
+          "title": "Assessment and Prevention of Pain During Ovarian Stimulation in Patients With Endometriosis",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT04002141"
+        },
+        {
+          "nctId": "NCT01334762",
+          "title": "Efficacy of Letrozole and CC Alone in an IUI Program in Cases With Surgically Treated Minimal to Mild Endometriosis",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01334762"
+        }
+      ]
+    },
+    {
+      "compound_name": "meloxicam",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "PENTOXIFYLLINE",
+      "condition_name": "endometriosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00632697",
+          "title": "Pentoxifylline and Endometriosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00632697"
+        }
+      ]
+    },
+    {
+      "compound_name": "quercetin",
+      "condition_name": "endometriosis",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": [
+        {
+          "nctId": "NCT05983224",
+          "title": "Effect of Quercetin Supplementation on Endometriosis Outcomes",
+          "phase": null,
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT05983224"
+        }
+      ]
+    },
+    {
+      "compound_name": "RELUGOLIX",
+      "condition_name": "endometriosis",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT06439524",
+          "title": "The Effect of Medical Management Following Excisional Surgery for Endometriosis: A Randomized Controlled Trial",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06439524"
+        },
+        {
+          "nctId": "NCT07100782",
+          "title": "Estradiol-mediated Inflammation and Central Sensitization in the Pathophysiology of Endometriosis-associated Pelvic Pain",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT07100782"
+        },
+        {
+          "nctId": "NCT05862272",
+          "title": "A Phase 3B Study to Evaluate Bone Mineral Density With Long-Term Use of Relugolix Combination Tablet in Women With Uterine Fibroids or Endometriosis",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT05862272"
+        },
+        {
+          "nctId": "NCT03654274",
+          "title": "SPIRIT EXTENSION: Efficacy and Safety Extension Study of Relugolix in Women With Endometriosis-Associated Pain",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03654274"
+        }
+      ]
+    },
+    {
+      "compound_name": "resveratrol",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "ROSIGLITAZONE",
+      "condition_name": "endometriosis",
+      "trial_count": 2,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT00121953",
+          "title": "Effect of Rosiglitazone on Peritoneal Cytokines in Women With Endometriosis",
+          "phase": "PHASE3",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT00121953"
+        },
+        {
+          "nctId": "NCT00115661",
+          "title": "Use of Rosiglitazone in the Treatment of Endometriosis",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00115661"
+        }
+      ]
+    },
+    {
+      "compound_name": "TANEZUMAB",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "testosterone",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "VILAPRISAN",
+      "condition_name": "endometriosis",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT03573336",
+          "title": "Assess Safety and Efficacy of Vilaprisan in Subjects With Endometriosis",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT03573336"
+        }
+      ]
+    },
+    {
+      "compound_name": "VITAMIN E",
+      "condition_name": "endometriosis",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "ACETYLCYSTEINE",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "anti-androgens",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "clomiphene citrate",
+      "condition_name": "PCOS",
+      "trial_count": 28,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00413179",
+          "title": "The Effect of Metformin Added to Clomiphene Citrate on Pregnancy Rates in Hyperandrogenic, Chronic Oligoovulatory or Anovulatory Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00413179"
+        },
+        {
+          "nctId": "NCT01638988",
+          "title": "Clomifene Citrate Versus Metformin in First-line Treatment of Infertility in Patients With Polycystic Ovary Syndrome and a Resistance to Insulin",
+          "phase": "PHASE3",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT01638988"
+        },
+        {
+          "nctId": "NCT00719186",
+          "title": "Pregnancy in Polycystic Ovary Syndrome II",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00719186"
+        },
+        {
+          "nctId": "NCT04870502",
+          "title": "Effect of Ubiquinol Supplementation on Ovulation Induction in Clomiphene Citrate Resistance",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT04870502"
+        }
+      ]
+    },
+    {
+      "compound_name": "COCP",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "CORTICOTROPIN",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "D-chiro inositol",
+      "condition_name": "PCOS",
+      "trial_count": 5,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT03201601",
+          "title": "Evaluation of the Mixture Myoinositol:D-chiro-inositol 3.6:1 in Women With Polycystic Ovary Syndrome",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03201601"
+        },
+        {
+          "nctId": "NCT03864068",
+          "title": "Inositol Supplementation to Treat PCOS (INSUPP-PCOS)",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03864068"
+        },
+        {
+          "nctId": "NCT06158932",
+          "title": "A Single Group Study to Evaluate the Effects of a Myo-Inositol and D-Chiro Inositol Supplement on Symptoms Associated With Polycystic Ovary Syndrome and Hormone Imbalance",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06158932"
+        },
+        {
+          "nctId": "NCT06715527",
+          "title": "Treatment of Women With Hyperandrogenic PCOS With Two Different Ratios of Myo-inositol:D-chiro-inositol: A Comparison",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06715527"
+        }
+      ]
+    },
+    {
+      "compound_name": "D-chiro-inositol",
+      "condition_name": "PCOS",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT03201601",
+          "title": "Evaluation of the Mixture Myoinositol:D-chiro-inositol 3.6:1 in Women With Polycystic Ovary Syndrome",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03201601"
+        },
+        {
+          "nctId": "NCT03864068",
+          "title": "Inositol Supplementation to Treat PCOS (INSUPP-PCOS)",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03864068"
+        },
+        {
+          "nctId": "NCT06715527",
+          "title": "Treatment of Women With Hyperandrogenic PCOS With Two Different Ratios of Myo-inositol:D-chiro-inositol: A Comparison",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06715527"
+        },
+        {
+          "nctId": "NCT07453680",
+          "title": "Comparative Effect of Myo-inositol With That of D-chiro-inositol on Insulin Resistance in Infertile Women With Polycystic Ovary Syndrome (PCOS).",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07453680"
+        }
+      ]
+    },
+    {
+      "compound_name": "daily use",
+      "condition_name": "PCOS",
+      "trial_count": 2,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT07120815",
+          "title": "Optimizing Metformin Use in Polycystic Ovary Syndrome",
+          "phase": "PHASE3",
+          "status": "NOT_YET_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT07120815"
+        },
+        {
+          "nctId": "NCT02244567",
+          "title": "Effect of Metformin Therapy on Serum Under-carboxylated Osteocalcin Levels in Hyperandrogenic Lean Polycystic Ovarian Syndrome Women",
+          "phase": "PHASE1",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02244567"
+        }
+      ]
+    },
+    {
+      "compound_name": "ENCLOMIPHENE CITRATE",
+      "condition_name": "PCOS",
+      "trial_count": 20,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00413179",
+          "title": "The Effect of Metformin Added to Clomiphene Citrate on Pregnancy Rates in Hyperandrogenic, Chronic Oligoovulatory or Anovulatory Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00413179"
+        },
+        {
+          "nctId": "NCT01638988",
+          "title": "Clomifene Citrate Versus Metformin in First-line Treatment of Infertility in Patients With Polycystic Ovary Syndrome and a Resistance to Insulin",
+          "phase": "PHASE3",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT01638988"
+        },
+        {
+          "nctId": "NCT00719186",
+          "title": "Pregnancy in Polycystic Ovary Syndrome II",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00719186"
+        },
+        {
+          "nctId": "NCT02775734",
+          "title": "NAC in CC Resistant PCOS After LOD",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02775734"
+        }
+      ]
+    },
+    {
+      "compound_name": "ERGOCALCIFEROL",
+      "condition_name": "PCOS",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00743574",
+          "title": "Health Benefits of Vitamin D and Calcium in Women With PCOS (Polycystic Ovarian Syndrome)",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00743574"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRADIOL VALERATE",
+      "condition_name": "PCOS",
+      "trial_count": 10,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT02729545",
+          "title": "The Efficacy and Safety Study of Tung's Acupuncture for Polycystic Ovarian Syndrome",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02729545"
+        },
+        {
+          "nctId": "NCT03401047",
+          "title": "Study to Assess Potential Impairments in Estradiol Augmentation of Gonadotropin Secretion in Polycystic Ovary Syndrome",
+          "phase": "EARLY_PHASE1",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT03401047"
+        },
+        {
+          "nctId": "NCT02744131",
+          "title": "OCP vs Metformin for Improvement in Clinical Symptoms and Metabolic Markers in Indian PCOS Women",
+          "phase": null,
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02744131"
+        },
+        {
+          "nctId": "NCT07318337",
+          "title": "Effect of Drospirenone-Ethinyl Estradiol (20microgram vs 30 Microgram) on Free Androgen Index in PCOS",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07318337"
+        }
+      ]
+    },
+    {
+      "compound_name": "FOLIC ACID",
+      "condition_name": "PCOS",
+      "trial_count": 8,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT02385396",
+          "title": "Myo-inositol Therapy on the Dynamics of Embryo Development in Patients Suffering From PCOS Undergoing ICSI Treatment",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02385396"
+        },
+        {
+          "nctId": "NCT03268733",
+          "title": "The Effects of Folic Acid on Sudanese Women With Polycystic Ovary Syndrome",
+          "phase": "PHASE2",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT03268733"
+        },
+        {
+          "nctId": "NCT01555190",
+          "title": "Combination Therapy With Myo-inositol and Folic Acid Versus Myo-inositol Alone",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01555190"
+        },
+        {
+          "nctId": "NCT05951309",
+          "title": "Myoinositol Treatment and Asprosin Levels in PCOS",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05951309"
+        }
+      ]
+    },
+    {
+      "compound_name": "GANIRELIX ACETATE",
+      "condition_name": "PCOS",
+      "trial_count": 2,
+      "highest_phase": "EARLY_PHASE1",
+      "highest_phase_label": "Early Phase 1",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT05751252",
+          "title": "Sub-therapeutic GnRH- Antagonist Treatment to Rectify LH Pulsatility in Lean Women With PCOS.",
+          "phase": "EARLY_PHASE1",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05751252"
+        },
+        {
+          "nctId": "NCT00757185",
+          "title": "Compromised Microcirculation in Women With Polycystic Ovary Syndrome",
+          "phase": "EARLY_PHASE1",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00757185"
+        }
+      ]
+    },
+    {
+      "compound_name": "GONADORELIN ACETATE",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "GONADOTROPIN, CHORIONIC",
+      "condition_name": "PCOS",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT06486870",
+          "title": "Comparison Between Two Ovulation Induction Therapies and LOD on Clinical Outcomes in CC-Resistant PCOS Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06486870"
+        }
+      ]
+    },
+    {
+      "compound_name": "inositol",
+      "condition_name": "PCOS",
+      "trial_count": 39,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT03059173",
+          "title": "Interest of Myo-inositol Supplementation in Women With Polycystic Ovarian Syndrome",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT03059173"
+        },
+        {
+          "nctId": "NCT07323589",
+          "title": "Impact of Myo-Inositol Alone vs Myo-Inositol Plus Metformin on Conception, Adherence, and Tolerability in PCOS",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07323589"
+        },
+        {
+          "nctId": "NCT03201601",
+          "title": "Evaluation of the Mixture Myoinositol:D-chiro-inositol 3.6:1 in Women With Polycystic Ovary Syndrome",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03201601"
+        },
+        {
+          "nctId": "NCT07585396",
+          "title": "Inositol in Letrozol Resistant PCOS Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT07585396"
+        }
+      ]
+    },
+    {
+      "compound_name": "KISSPEPTIN-10",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "LETROZOLE",
+      "condition_name": "PCOS",
+      "trial_count": 33,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT01577017",
+          "title": "The Effects of Letrozole And Clomiphene Citrate For Induction of Ovulation In Polycystic Ovarian Syndrome(PCOS)",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01577017"
+        },
+        {
+          "nctId": "NCT06418347",
+          "title": "Effect of ALA Combined With Letrozole on Polycystic Ovary Syndrome Clinical Outcome in Infertile Females",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT06418347"
+        },
+        {
+          "nctId": "NCT02491320",
+          "title": "The Clinical Trial of Acupuncture Pre-treatment on PCOS",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02491320"
+        },
+        {
+          "nctId": "NCT06403488",
+          "title": "Letrozole Dose Increments in PCOS Patients Resistant to Letrozole",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06403488"
+        }
+      ]
+    },
+    {
+      "compound_name": "Mazdutide",
+      "condition_name": "PCOS",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT06519656",
+          "title": "Efficacy of Mazdutide for Treating PCOS",
+          "phase": "PHASE2",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06519656"
+        }
+      ]
+    },
+    {
+      "compound_name": "MENOTROPINS",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "metformin",
+      "condition_name": "PCOS",
+      "trial_count": 109,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT02802215",
+          "title": "Metformin for Prevention Gestational Diabetes in Pregnant Women With Polycystic Ovarian Syndrome",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02802215"
+        },
+        {
+          "nctId": "NCT06576375",
+          "title": "Efficacy of Dapagliflozin Versus Metformin in Polycystic Ovary Syndrome",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06576375"
+        },
+        {
+          "nctId": "NCT06125587",
+          "title": "Chiglitazar/Metformin in Non-obese Women With PCOS",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06125587"
+        },
+        {
+          "nctId": "NCT06896981",
+          "title": "Semaglutide in Women With Polycystic Ovary Syndrome and Obesity",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06896981"
+        }
+      ]
+    },
+    {
+      "compound_name": "myo-inositol",
+      "condition_name": "PCOS",
+      "trial_count": 24,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT03059173",
+          "title": "Interest of Myo-inositol Supplementation in Women With Polycystic Ovarian Syndrome",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT03059173"
+        },
+        {
+          "nctId": "NCT02385396",
+          "title": "Myo-inositol Therapy on the Dynamics of Embryo Development in Patients Suffering From PCOS Undergoing ICSI Treatment",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02385396"
+        },
+        {
+          "nctId": "NCT02633462",
+          "title": "Non-surgical Periodontal Therapy and Myo-inositol in Polycystic Ovary Syndrome Women Having Chronic Periodontitis",
+          "phase": "PHASE2",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02633462"
+        },
+        {
+          "nctId": "NCT03864068",
+          "title": "Inositol Supplementation to Treat PCOS (INSUPP-PCOS)",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03864068"
+        }
+      ]
+    },
+    {
+      "compound_name": "natural compound",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "PAVINETANT",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SIMVASTATIN",
+      "condition_name": "PCOS",
+      "trial_count": 2,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00396513",
+          "title": "Simvastatin and Metformin Therapy in PCOS Women. Prospective Randomised Trial.",
+          "phase": null,
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT00396513"
+        },
+        {
+          "nctId": "NCT00365638",
+          "title": "Simvastatin Therapy in Women With Polycystic Ovary Syndrome.",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00365638"
+        }
+      ]
+    },
+    {
+      "compound_name": "TILDACERFONT",
+      "condition_name": "PCOS",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT05370521",
+          "title": "A Study of Safety and Efficacy of Tildacerfont in Females With Polycystic Ovary Syndrome and Elevated Adrenal Androgens",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT05370521"
+        }
+      ]
+    },
+    {
+      "compound_name": "UBIDECARENONE",
+      "condition_name": "PCOS",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "BAZEDOXIFENE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 5,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT03981341",
+          "title": "Impact of Estrogen + Estradiol Receptor Alpha Modulator Therapy on Oxidative Stress in Post-menopausal Women With and Without Sleep Apnea",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT03981341"
+        },
+        {
+          "nctId": "NCT00234819",
+          "title": "Study Evaluating Bazedoxifene/Conjugated Estrogen Combinations in Symptoms Associated With Menopause",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00234819"
+        },
+        {
+          "nctId": "NCT00808132",
+          "title": "Study Evaluating The Effects Of Bazedoxifene/Conjugated Estrogens On Endometrial Safety And Postmenopausal Osteoporosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00808132"
+        },
+        {
+          "nctId": "NCT05073237",
+          "title": "Effects of Novel Estrogens on Glucose and Lipids in Postmenopausal Prediabetic Women Veterans",
+          "phase": "PHASE2",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT05073237"
+        }
+      ]
+    },
+    {
+      "compound_name": "bioidentical estrogens",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "citalopram",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 2,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00894543",
+          "title": "MsFLASH-01: Escitalopram for Menopausal Symptoms in Midlife Women",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00894543"
+        },
+        {
+          "nctId": "NCT05346445",
+          "title": "Comparison of Fluoxetine Versus Citalopram Therapy to Control Postmenopausal Vasomotor Syndrome",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05346445"
+        }
+      ]
+    },
+    {
+      "compound_name": "CLOVER, RED",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "conjugated equine estrogen",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 11,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00196378",
+          "title": "A Clinical Trial to Evaluate the Safety and Efficacy of Enjuvia 0.3 mg for the Treatment of Vulvovaginal Atrophy",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00196378"
+        },
+        {
+          "nctId": "NCT00026286",
+          "title": "Hormone Replacement Therapy for Hot Flashes and/or Vaginal Symptoms in Postmenopausal Women Receiving Tamoxifen for Breast Cancer",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00026286"
+        },
+        {
+          "nctId": "NCT00234819",
+          "title": "Study Evaluating Bazedoxifene/Conjugated Estrogen Combinations in Symptoms Associated With Menopause",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00234819"
+        },
+        {
+          "nctId": "NCT00808132",
+          "title": "Study Evaluating The Effects Of Bazedoxifene/Conjugated Estrogens On Endometrial Safety And Postmenopausal Osteoporosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00808132"
+        }
+      ]
+    },
+    {
+      "compound_name": "conjugated equine estrogens with or without medroxyprogesterone acetate",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "creatine",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT06660004",
+          "title": "Creatine HCl and Creatine Ethyl Ester Supplementation in Perimenopausal and Menopausal Women",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06660004"
+        }
+      ]
+    },
+    {
+      "compound_name": "desvenlafaxine",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00369434",
+          "title": "Study of the Safety and Efficacy of Desvenlafaxine Succinate for Vasomotor Symptoms in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00369434"
+        },
+        {
+          "nctId": "NCT00888862",
+          "title": "Desvenlafaxine Succinate (DVS) for Major Depressive Disorder (MDD) in Midlife Men and Women",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT00888862"
+        },
+        {
+          "nctId": "NCT00683800",
+          "title": "Study Evaluating The Safety And Efficacy Of Desvenlafaxine Succinate For Vasomotor Symptoms In Menopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00683800"
+        }
+      ]
+    },
+    {
+      "compound_name": "DESVENLAFAXINE SUCCINATE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00369434",
+          "title": "Study of the Safety and Efficacy of Desvenlafaxine Succinate for Vasomotor Symptoms in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00369434"
+        },
+        {
+          "nctId": "NCT00888862",
+          "title": "Desvenlafaxine Succinate (DVS) for Major Depressive Disorder (MDD) in Midlife Men and Women",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT00888862"
+        },
+        {
+          "nctId": "NCT00683800",
+          "title": "Study Evaluating The Safety And Efficacy Of Desvenlafaxine Succinate For Vasomotor Symptoms In Menopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00683800"
+        }
+      ]
+    },
+    {
+      "compound_name": "escitalopram",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00894543",
+          "title": "MsFLASH-01: Escitalopram for Menopausal Symptoms in Midlife Women",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00894543"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRADIOL",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 38,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT01308814",
+          "title": "Perimenopausal Estrogen Replacement Therapy Study",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01308814"
+        },
+        {
+          "nctId": "NCT00185237",
+          "title": "Treatment of Hot Flushes in Asian Women With Ultra-low Dose Estradiol Patch",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00185237"
+        },
+        {
+          "nctId": "NCT02253173",
+          "title": "Estradiol Vaginal Softgel Capsules in Treating Symptoms of Vulvar and Vaginal Atrophy in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02253173"
+        },
+        {
+          "nctId": "NCT00236301",
+          "title": "Dose Effects of Hormone Therapy (Two Doses of Estradiol Associated to Progesterone) on Inflammatory Markers",
+          "phase": "PHASE3",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00236301"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRADIOL VALERATE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 38,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT01308814",
+          "title": "Perimenopausal Estrogen Replacement Therapy Study",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01308814"
+        },
+        {
+          "nctId": "NCT00185237",
+          "title": "Treatment of Hot Flushes in Asian Women With Ultra-low Dose Estradiol Patch",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00185237"
+        },
+        {
+          "nctId": "NCT02253173",
+          "title": "Estradiol Vaginal Softgel Capsules in Treating Symptoms of Vulvar and Vaginal Atrophy in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02253173"
+        },
+        {
+          "nctId": "NCT00236301",
+          "title": "Dose Effects of Hormone Therapy (Two Doses of Estradiol Associated to Progesterone) on Inflammatory Markers",
+          "phase": "PHASE3",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00236301"
+        }
+      ]
+    },
+    {
+      "compound_name": "ESTRIOL",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT06391372",
+          "title": "Effect of Local Estriol Treatment Before Vaginal Repair Surgery",
+          "phase": "PHASE3",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT06391372"
+        },
+        {
+          "nctId": "NCT00302731",
+          "title": "Bioidentical 'Natural' Hormone Evaluation in Early Menopause",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00302731"
+        },
+        {
+          "nctId": "NCT03116022",
+          "title": "Use of Estriol at Distal Third of Vagina Improving Coital Pain in Post-menopause Women",
+          "phase": "PHASE1",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03116022"
+        },
+        {
+          "nctId": "NCT04045379",
+          "title": "LASER and Radiofrequency and Genitourinary Syndrome of Menopause",
+          "phase": null,
+          "status": "ACTIVE_NOT_RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT04045379"
+        }
+      ]
+    },
+    {
+      "compound_name": "estrogen",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 29,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT00196378",
+          "title": "A Clinical Trial to Evaluate the Safety and Efficacy of Enjuvia 0.3 mg for the Treatment of Vulvovaginal Atrophy",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00196378"
+        },
+        {
+          "nctId": "NCT01501422",
+          "title": "Effect of Estrogen Therapy on Objective Sleep Quality in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01501422"
+        },
+        {
+          "nctId": "NCT03981341",
+          "title": "Impact of Estrogen + Estradiol Receptor Alpha Modulator Therapy on Oxidative Stress in Post-menopausal Women With and Without Sleep Apnea",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT03981341"
+        },
+        {
+          "nctId": "NCT05586724",
+          "title": "Micronized Progesterone Versus Norethisterone Acetate in Combination With Estrogen as Menopausal Hormone Therapy",
+          "phase": "PHASE3",
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT05586724"
+        }
+      ]
+    },
+    {
+      "compound_name": "estrogen monotherapy",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "fluoxetine",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01635218",
+          "title": "Homeopathic Treatment for Depression in Peri- and Postmenopausal Women",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01635218"
+        },
+        {
+          "nctId": "NCT02188225",
+          "title": "Comparison of Acupuncture and Fluoxetine on Quality of Life in Menopausal Women",
+          "phase": null,
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02188225"
+        },
+        {
+          "nctId": "NCT05346445",
+          "title": "Comparison of Fluoxetine Versus Citalopram Therapy to Control Postmenopausal Vasomotor Syndrome",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05346445"
+        }
+      ]
+    },
+    {
+      "compound_name": "G-CSF",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "gabapentin",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00112138",
+          "title": "Gabapentin for the Treatment of Hot Flashes in Menopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00112138"
+        },
+        {
+          "nctId": "NCT01080300",
+          "title": "Breeze3:Study of Gabapentin Extended Release in the Treatment of Vasomotor Symptoms(Hot Flashes)in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01080300"
+        },
+        {
+          "nctId": "NCT02040532",
+          "title": "Gabapentin for Insomnia Symptoms and Nighttime Vasomotor Symptoms (VMS) in Peri- and Postmenopausal Women",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02040532"
+        }
+      ]
+    },
+    {
+      "compound_name": "ISOFLAVONE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 8,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT00076050",
+          "title": "Using Soy Estrogens to Prevent Bone Loss and Other Menopausal Symptoms",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00076050"
+        },
+        {
+          "nctId": "NCT00179556",
+          "title": "Effects of Soy Isoflavones on Menopausal Hot Flashes",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00179556"
+        },
+        {
+          "nctId": "NCT00235924",
+          "title": "Study Assessing the Effects on Endometrium and Breast of Isoflavone in Post Menopausal Women",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT00235924"
+        },
+        {
+          "nctId": "NCT00925639",
+          "title": "Effects of the Concentrated Extract of Soy on Coagulation Factors After Menopause",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT00925639"
+        }
+      ]
+    },
+    {
+      "compound_name": "LEUPROLIDE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT02927392",
+          "title": "Brown Adipose Tissue Activity in Pre- and Postmenopausal Women",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02927392"
+        }
+      ]
+    },
+    {
+      "compound_name": "low-dose vaginal estrogen",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "NITRIC ACID",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "NORETHINDRONE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00003771",
+          "title": "Hormone Replacement Therapy and the Risk of Breast Cancer Recurrence in Women With Previous Early Stage Breast Cancer",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00003771"
+        }
+      ]
+    },
+    {
+      "compound_name": "ospemifene",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "paroxetine",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01361308",
+          "title": "Efficacy/Safety Study of Brisdelle™ (Formerly Known as Mesafem) in the Treatment of Vasomotor Symptoms (VMS)",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01361308"
+        },
+        {
+          "nctId": "NCT01101841",
+          "title": "24-Week Efficacy & Safety Study of Brisdelle™ (Formerly Known as Mesafem) in the Treatment of Vasomotor Symptoms",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01101841"
+        },
+        {
+          "nctId": "NCT00786188",
+          "title": "Eight-Week Efficacy & Safety Study of Brisdelle™ (Formerly Known as Mesafem) in the Treatment of Vasomotor Symptoms Associated With Menopause",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00786188"
+        },
+        {
+          "nctId": "NCT06763484",
+          "title": "Paroxetine Versus Placebo for Vasomotor Symptom Management in Surgical Menopause",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT06763484"
+        }
+      ]
+    },
+    {
+      "compound_name": "PRASTERONE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT03854396",
+          "title": "Clinical Trial on the Preventive Effect of Intravaginal Prasterone on Recurrent Urinary Tract Infections in Postmenopausal Women",
+          "phase": "PHASE3",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT03854396"
+        }
+      ]
+    },
+    {
+      "compound_name": "PTEROSTILBENE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT04841499",
+          "title": "Effects of a Seven-day BASIS™ Supplementation on Menopausal Syndromes and Measurements of the Urinary Vitamin B3 and Estradiol Levels in Pre-, Peri- and Post-menopause",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT04841499"
+        }
+      ]
+    },
+    {
+      "compound_name": "RALOXIFENE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 4,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00383422",
+          "title": "Study Comparing Arzoxifene With Raloxifene in Women After Menopause With Osteoporosis",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00383422"
+        },
+        {
+          "nctId": "NCT01573637",
+          "title": "Raloxifene as an Adjuvant Treatment of the Negative Symptoms of Schizophrenia in Post-menopausal Women",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01573637"
+        },
+        {
+          "nctId": "NCT00149604",
+          "title": "AFTER: Altering Fat Through Estrogen and Raloxifene",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00149604"
+        },
+        {
+          "nctId": "NCT00031811",
+          "title": "Raloxifene With or Without Exercise Compared With Exercise Alone in Women Who Have Been Previously Treated for Breast Cancer",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00031811"
+        }
+      ]
+    },
+    {
+      "compound_name": "SERTRALINE",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00283192",
+          "title": "Flushes and Sertraline Trial",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00283192"
+        }
+      ]
+    },
+    {
+      "compound_name": "SMC021",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SNRIs",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SSRI/SNRIs",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SSRIs",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SYNTHETIC CONJUGATED ESTROGENS, B",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT00196378",
+          "title": "A Clinical Trial to Evaluate the Safety and Efficacy of Enjuvia 0.3 mg for the Treatment of Vulvovaginal Atrophy",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00196378"
+        }
+      ]
+    },
+    {
+      "compound_name": "vaginal estrogen",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT07038070",
+          "title": "Via, a Hyaluronic Acid (HLA) Based Vaginal Moisturizer Study",
+          "phase": null,
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT07038070"
+        },
+        {
+          "nctId": "NCT05464654",
+          "title": "Vaginal Biorevitalization With Polydeoxyribonucleotides for the Improvement of the Genitourinary Syndrome of Menopause",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05464654"
+        },
+        {
+          "nctId": "NCT05672901",
+          "title": "Silicone Gel vs. Estrogen Vaginal Cream for the Management of Genitourinary Syndrome of Menopause",
+          "phase": null,
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT05672901"
+        }
+      ]
+    },
+    {
+      "compound_name": "vaginal oestrogen",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 3,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "active",
+      "top_trials": [
+        {
+          "nctId": "NCT07038070",
+          "title": "Via, a Hyaluronic Acid (HLA) Based Vaginal Moisturizer Study",
+          "phase": null,
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT07038070"
+        },
+        {
+          "nctId": "NCT05464654",
+          "title": "Vaginal Biorevitalization With Polydeoxyribonucleotides for the Improvement of the Genitourinary Syndrome of Menopause",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT05464654"
+        },
+        {
+          "nctId": "NCT05672901",
+          "title": "Silicone Gel vs. Estrogen Vaginal Cream for the Management of Genitourinary Syndrome of Menopause",
+          "phase": null,
+          "status": "RECRUITING",
+          "url": "https://clinicaltrials.gov/study/NCT05672901"
+        }
+      ]
+    },
+    {
+      "compound_name": "venlafaxine",
+      "condition_name": "perimenopause & menopause",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT01418209",
+          "title": "MsFLASH-03: Comparative Efficacy of Low-Dose Estradiol and Venlafaxine XR for Treatment of Menopausal Symptoms",
+          "phase": null,
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01418209"
+        }
+      ]
+    },
+    {
+      "compound_name": "acupuncture",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "bupropion",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "DROSPIRENONE",
+      "condition_name": "PMDD",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT00089414",
+          "title": "Treatment of Menstrually Related Disorders With Continuous v. Interrupted Oral Contraceptives",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00089414"
+        }
+      ]
+    },
+    {
+      "compound_name": "ELTANOLONE",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "essential fatty acids",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "ESTRONE",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "ETHINYL ESTRADIOL",
+      "condition_name": "PMDD",
+      "trial_count": 1,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT00089414",
+          "title": "Treatment of Menstrually Related Disorders With Continuous v. Interrupted Oral Contraceptives",
+          "phase": "PHASE2",
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00089414"
+        }
+      ]
+    },
+    {
+      "compound_name": "LEVONORGESTREL",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "lysine",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "MARVELON",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "NUX VOMICA EXTRACT",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "progesterone",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SERTRALINE",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "SSRIs",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "tryptophan-rich diet",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "ULIPRISTAL ACETATE",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "vitamin B6",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "Vitex agnus-castus",
+      "condition_name": "PMDD",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "acupuncture",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "amitriptyline",
+      "condition_name": "vulvodynia",
+      "trial_count": 1,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "unknown",
+      "top_trials": [
+        {
+          "nctId": "NCT02871661",
+          "title": "Physical Therapy as Adjuvant Treatment of Vulvodynia: a Randomized Controled Trial",
+          "phase": "PHASE3",
+          "status": "UNKNOWN",
+          "url": "https://clinicaltrials.gov/study/NCT02871661"
+        }
+      ]
+    },
+    {
+      "compound_name": "amitriptyline cream",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "amitriptyline with baclofen cream",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "botulinum toxin A",
+      "condition_name": "vulvodynia",
+      "trial_count": 3,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT02773641",
+          "title": "Placebo-controlled RCT of Botulinum Toxin A as a Treatment for Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02773641"
+        },
+        {
+          "nctId": "NCT02858219",
+          "title": "A Pilot Study of the Effects of Botulinum Toxin in the Treatment of Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02858219"
+        },
+        {
+          "nctId": "NCT04057755",
+          "title": "Botulinum Toxin A as a Treatment for Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT04057755"
+        }
+      ]
+    },
+    {
+      "compound_name": "botulinum toxin type A",
+      "condition_name": "vulvodynia",
+      "trial_count": 3,
+      "highest_phase": "PHASE3",
+      "highest_phase_label": "Phase 3",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT02773641",
+          "title": "Placebo-controlled RCT of Botulinum Toxin A as a Treatment for Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02773641"
+        },
+        {
+          "nctId": "NCT02858219",
+          "title": "A Pilot Study of the Effects of Botulinum Toxin in the Treatment of Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT02858219"
+        },
+        {
+          "nctId": "NCT04057755",
+          "title": "Botulinum Toxin A as a Treatment for Provoked Vestibulodynia",
+          "phase": "PHASE3",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT04057755"
+        }
+      ]
+    },
+    {
+      "compound_name": "cold knife vestibulectomy",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "desipramine",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "desipramine with or without lidocaine",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "duloxetine",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "electromyography biofeedback",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "enoxaparin sodium",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "escitalopram",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "gabapentin",
+      "condition_name": "vulvodynia",
+      "trial_count": 1,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "halted",
+      "top_trials": [
+        {
+          "nctId": "NCT00390013",
+          "title": "To Evaluate if the Medication Gabapentin Lessens Vulvar Pain",
+          "phase": null,
+          "status": "TERMINATED",
+          "url": "https://clinicaltrials.gov/study/NCT00390013"
+        }
+      ]
+    },
+    {
+      "compound_name": "gabapentin cream",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "hypnotherapy",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "interventions",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "intravaginal TENS",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "itraconazole",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "lidocaine",
+      "condition_name": "vulvodynia",
+      "trial_count": 6,
+      "highest_phase": "PHASE2",
+      "highest_phase_label": "Phase 2",
+      "activity": "completed",
+      "top_trials": [
+        {
+          "nctId": "NCT03844412",
+          "title": "Vestibulodynia: Understanding Pathophysiology and Determining Appropriate Treatments",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT03844412"
+        },
+        {
+          "nctId": "NCT01048177",
+          "title": "A Trial of Intravesical Therapy for Interstitial Cystitis in Patients With Generalized Vulvodynia",
+          "phase": "PHASE2",
+          "status": "WITHDRAWN",
+          "url": "https://clinicaltrials.gov/study/NCT01048177"
+        },
+        {
+          "nctId": "NCT00590590",
+          "title": "Safety and Efficacy of Two Vaginal Products Versus Placebo in Patients With Vaginal Discomfort",
+          "phase": "PHASE2",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT00590590"
+        },
+        {
+          "nctId": "NCT01996384",
+          "title": "Provoked, Localized Vulvodynia Treatment With Acupuncture and Lidocaine Pilot Study",
+          "phase": "PHASE1",
+          "status": "COMPLETED",
+          "url": "https://clinicaltrials.gov/study/NCT01996384"
+        }
+      ]
+    },
+    {
+      "compound_name": "lidocaine ointment",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "multimodal physiotherapy",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "multiple interventions",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "vaginal dilators",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    },
+    {
+      "compound_name": "various treatments",
+      "condition_name": "vulvodynia",
+      "trial_count": 0,
+      "highest_phase": null,
+      "highest_phase_label": null,
+      "activity": "unknown",
+      "top_trials": []
+    }
+  ]
+}

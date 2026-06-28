@@ -686,6 +686,21 @@ export default function TechnicalArchitecturePage() {
             benchmark and the score carries real information.
           </p>
 
+          <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "74ch", marginBottom: 24 }}>
+            A <strong>regulatory &amp; development-status</strong> layer is reported beside the score on the
+            same terms: it is descriptive landscape context, never a scoring input. Built offline from three
+            public US sources into reviewed, committed snapshots, it records, per candidate, whether the
+            target condition is an FDA-approved (on-label) use or off-label (read from the FDA-approved drug
+            label via DailyMed, counting only NDA, ANDA, and BLA marketing categories so supplements and
+            homeopathics are excluded); whether the molecule is a generic or a single-source brand still under
+            patent (read from the FDA Orange Book using single-ingredient products only, so patents on novel
+            branded combination formulations are never attributed to the base molecule); and how far the drug
+            has been studied as a therapy for the condition (read from ClinicalTrials.gov, excluding
+            mechanistic, drug-interaction, and Phase-4 post-marketing studies). It sketches the landscape a
+            505(b)(2) filing would build on but is explicitly not a viability assessment or regulatory advice;
+            it is live for endometriosis, with the other conditions ingesting on the same pattern.
+          </p>
+
           {/* Model selection callout */}
           <div
             style={{

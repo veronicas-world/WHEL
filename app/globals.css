@@ -636,15 +636,51 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
   }
   .doc-toc.doc-toc--w4 { left: max(48px, calc(50vw - 572px)); }
 
-  /* Roadmap: full-bleed bands, .container capped to 1080 when railed.
-     block = 248 + 1080 = 1328 → margin = 50vw - 416. */
-  .rm-doc .container {
+  /* Full-bleed bands with a railed, offset inner column (roadmap, condition
+     pages, signal breakdown). The inner .container clears the fixed TOC rail on
+     the left while the coloured section bands stay full width.
+
+     Both margins are set explicitly with max() so the container box always
+     equals the viewport width and can NEVER overflow horizontally — an
+     overflow would push the page wider than the screen and expose the dark
+     page background to the right of the (otherwise full-bleed) bands. On wide
+     screens both calc() terms win and the column settles at exactly 1080px,
+     shifted right of centre to clear the rail; on narrower screens the column
+     shrinks to fit rather than overflowing. */
+  .rm-doc .container,
+  .cond-doc .container,
+  .sigdetail .container {
     margin-left: max(252px, calc(50vw - 416px));
-    margin-right: auto;
-    max-width: 1080px;
+    margin-right: max(40px, calc(50vw - 648px));
+    max-width: 1024px;
   }
-  .rm-doc .doc-toc { left: max(48px, calc(50vw - 664px)); }
+  .rm-doc .doc-toc,
+  .cond-doc .doc-toc,
+  .sigdetail .doc-toc { left: max(48px, calc(50vw - 664px)); }
 }
+
+/* Safety net for the railed, full-bleed-band pages: never allow horizontal
+   scrolling. The offset inner column is already sized to fit the viewport
+   (above), but this guarantees that even a stray wide child can never push the
+   page wider than the screen and expose the dark page background to the right
+   of the otherwise full-bleed bands. The TOC is position:fixed (its containing
+   block is the viewport, not this element), so clipping here never affects it. */
+.rm-doc,
+.cond-doc,
+.sigdetail { overflow-x: clip; min-width: 0; }
+
+/* ── Side TOC: light palette while the rail overlaps the dark hero, plus an
+   active-section emphasis. Toggled by the SideToc client component (used on the
+   condition pages and the per-candidate signal breakdown). ── */
+.doc-toc .is-active .doc-t { color: var(--ink); font-weight: 500; }
+
+.doc-toc.side-toc--ondark .doc-toc-eyebrow,
+.doc-toc.side-toc--ondark .doc-n { color: var(--on-ink-2); }
+.doc-toc.side-toc--ondark .doc-t { color: var(--on-ink-2); }
+.doc-toc.side-toc--ondark a { border-top-color: rgba(244, 239, 230, 0.20); }
+.doc-toc.side-toc--ondark a:last-child { border-bottom-color: rgba(244, 239, 230, 0.20); }
+.doc-toc.side-toc--ondark a:hover .doc-t,
+.doc-toc.side-toc--ondark .is-active .doc-t { color: var(--on-ink); }
 
 /* ──────────────────────────────────────────────────────────────────────────
    Signal detail page — redesigned layout (scoped under .sigdetail so the
@@ -656,7 +692,10 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 
 /* hero verdict layout */
 .sigdetail .verdict-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 64px; align-items: start; }
-@media (max-width: 1000px){ .sigdetail .verdict-grid { grid-template-columns: 1fr; gap: 40px; } }
+/* Stack earlier (1240 not 1000): the fixed TOC rail removes ~250px of usable
+   width on wide screens, so the two-column hero needs more viewport before it
+   has room for both the headline and the scorecard. */
+@media (max-width: 1240px){ .sigdetail .verdict-grid { grid-template-columns: 1fr; gap: 40px; } }
 
 .sigdetail .id-line { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); margin: 4px 0 22px; }
 .sigdetail h1.signal-title { font-family: var(--font-newsreader, Georgia, serif); font-weight: 400; font-size: clamp(40px, 5.2vw, 76px); line-height: 0.99; letter-spacing: -0.026em; margin: 0; color: var(--on-ink); }
@@ -723,8 +762,11 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 .sigdetail .rec .src { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 12px; color: var(--muted); display: block; margin-top: 4px; }
 
 /* demoted "not covered" strip */
-.sigdetail .notcovered { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-@media (max-width: 700px){ .sigdetail .notcovered { grid-template-columns: 1fr; } }
+/* Single column by default so the cards can never overflow the (rail-offset)
+   column; only go side-by-side on wide screens where there is clearly room for
+   two even after the rail takes its ~250px. */
+.sigdetail .notcovered { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+@media (min-width: 1480px){ .sigdetail .notcovered { grid-template-columns: 1fr 1fr; } }
 .sigdetail .notcovered.one { grid-template-columns: 1fr; }
 .sigdetail .notcovered .nc { background: var(--sage); padding: 26px 28px; }
 .sigdetail .notcovered .nc .nh { font-family: var(--font-plex-mono, ui-monospace, monospace); font-size: 11px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -741,8 +783,14 @@ body.scroll-effects-ready .scroll-section.s-in:not(.s-focus)::after {
 
 .sigdetail .backbar { padding: 56px 0 0; }
 
-/* signal detail uses a slightly tighter container than the 1440 default */
-.sigdetail .container { max-width: 1280px; }
+/* signal detail uses a slightly tighter container than the 1440 default — but
+   only BELOW the rail breakpoint. Once the fixed TOC rail is active (≥1160px),
+   the railed offset rule above owns the container width; letting this 1280px
+   override win there would widen the column back out past the rail and push
+   right-aligned content (scorecard, card labels) off the screen edge. */
+@media (max-width: 1159px) {
+  .sigdetail .container { max-width: 1280px; }
+}
 
 /* signal detail — standing epistemic frame (honest hypothesis voice) */
 .sigdetail .frame-note { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--ink-line-2); max-width: 74ch; font-size: 13.5px; line-height: 1.62; color: var(--on-ink-mut); }

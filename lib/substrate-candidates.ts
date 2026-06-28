@@ -18,6 +18,9 @@
 import { supabase } from "@/lib/supabase";
 import type { Candidate, Claim, SubstrateArm } from "@/app/components/CandidateCard";
 import { MATRIX_PAIR_SNAPSHOT, formatMatrixPercentile } from "@/lib/matrix-pair-scores-snapshot";
+import { getTrialStatusForPair } from "@/lib/clinicaltrials-status-snapshot";
+import { getOrangeBookForDrug } from "@/lib/orangebook-status-snapshot";
+import { getIndicationForPair } from "@/lib/dailymed-indication-snapshot";
 
 type Row = Record<string, unknown>;
 type ArmKey = "direct" | "pathway" | "community";
@@ -341,6 +344,9 @@ export async function getCandidates(): Promise<Candidate[]> {
     const sexPk = compoundId ? sexMap.get(compoundId) : undefined;
     const cyclePhase = compoundId && conditionId ? phaseMap.get(`${compoundId}::${conditionId}`) : undefined;
     const { matrixPercentile, matrixDetail } = matrixForPair(drug, condition);
+    const trialStatus = getTrialStatusForPair(drug, condition) ?? undefined;
+    const orangeBook = getOrangeBookForDrug(drug) ?? undefined;
+    const indication = getIndicationForPair(drug, condition) ?? undefined;
 
     n += 1;
     out.push({
@@ -373,6 +379,9 @@ export async function getCandidates(): Promise<Candidate[]> {
       matrixDetail,
       sexPk: sexPk && sexPk.length ? sexPk : undefined,
       cyclePhase: cyclePhase && cyclePhase.length ? cyclePhase : undefined,
+      trialStatus,
+      orangeBook,
+      indication,
     });
   }
 

@@ -271,8 +271,13 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
     status: "Live",
   },
   {
+    name: "Regulatory & development status",
+    role: "Where each candidate sits in the US regulatory landscape, read from three public FDA / NLM sources and shown beside the score: whether the target condition is an FDA-approved (on-label) use or off-label (DailyMed labels, counting only NDA/ANDA/BLA approvals); whether the molecule is a generic or a single-source brand still under patent (FDA Orange Book, single-ingredient products only); and how far it has been studied as a therapy for the condition (ClinicalTrials.gov, mechanistic and post-marketing studies excluded). Descriptive landscape context only, not a viability assessment; live for endometriosis, with the remaining conditions ingesting on the same pattern.",
+    status: "Live",
+  },
+  {
     name: "Actionability layer",
-    role: "A second axis beside the evidence score that weighs management endpoints, 505(b)(2) regulatory viability, and patient-community signal, so a livable-management candidate is ranked for what it is rather than against a cure-focused default.",
+    role: "A second axis beside the evidence score that weighs management endpoints, 505(b)(2) regulatory viability, and patient-community signal, so a livable-management candidate is ranked for what it is rather than against a cure-focused default. It builds on the descriptive regulatory & development-status layer above, which maps the landscape but stops short of judging whether a development path is viable.",
     status: "Planned",
   },
   {

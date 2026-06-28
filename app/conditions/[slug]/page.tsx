@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { getCandidates } from "@/lib/substrate-candidates";
+import SideToc, { type TocItem } from "@/app/components/SideToc";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -100,11 +101,23 @@ export default async function ConditionDetailPage({
 
   const hasContext = condition.biology_summary || condition.underfunding_notes;
 
+  // Side table-of-contents entries. The biology/research band is conditional, so
+  // it only appears in the rail when there is context to link to.
+  const tocItems: TocItem[] = [
+    { id: "overview", label: "Overview" },
+    { id: "signal-breakdown", label: "Signal breakdown" },
+    ...(hasContext ? [{ id: "context", label: "Biology & research" }] : []),
+    { id: "candidates", label: "Repurposing signals" },
+  ];
+
   return (
-    <main>
+    <main className="cond-doc">
+
+      {/* ── Floating table of contents (wide screens only) ───────────────── */}
+      <SideToc items={tocItems} heroId="overview" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="surface-ink" style={{ paddingTop: 40, paddingBottom: 56 }}>
+      <section id="overview" className="surface-ink" style={{ paddingTop: 40, paddingBottom: 56 }}>
         <div className="container">
           <div className="crumbs on-ink" style={{ marginBottom: 22 }}>
             <Link href="/">Home</Link>
@@ -197,7 +210,7 @@ export default async function ConditionDetailPage({
       </section>
 
       {/* ── Signal breakdown — figures ───────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="signal-breakdown" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <div className="eyebrow" style={{ marginBottom: 26 }}>Signal breakdown</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
@@ -315,7 +328,7 @@ export default async function ConditionDetailPage({
 
       {/* ── Biology / Research & Funding context ─────────────────────────── */}
       {hasContext && (
-        <section className="surface-paper section">
+        <section id="context" className="surface-paper section" style={{ scrollMarginTop: 24 }}>
           <div className="container">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 sm:gap-16">
               {condition.biology_summary && (
@@ -346,7 +359,7 @@ export default async function ConditionDetailPage({
       )}
 
       {/* ── Repurposing signals — gated ──────────────────────────────────── */}
-      <section className="surface-bone section">
+      <section id="candidates" className="surface-bone section" style={{ scrollMarginTop: 24 }}>
         <div className="container">
           <p className="eyebrow" style={{ marginBottom: 12 }}>REPURPOSING SIGNALS</p>
           <h2
