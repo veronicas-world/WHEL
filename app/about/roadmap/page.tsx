@@ -193,8 +193,10 @@ type Status = "Live" | "Under review" | "Planned";
 // plus the data sources under review or planned for that same build layer.
 const BUILD_SOURCES: { name: string; role: string; status: Status }[] = [
   { name: "PubMed", role: "Published literature", status: "Live" },
-  { name: "ClinicalTrials.gov", role: "Trial registry", status: "Live" },
+  { name: "ClinicalTrials.gov", role: "Trial registry; also the trial-stage read in the regulatory & development-status panel", status: "Live" },
   { name: "FDA openFDA", role: "Adverse-event data", status: "Live" },
+  { name: "DailyMed", role: "FDA drug labels; the on-label / off-label approved-indication read in the regulatory & development-status panel", status: "Live" },
+  { name: "FDA Orange Book", role: "Approved Drug Products with Therapeutic Equivalence Evaluations; the generic-availability and patent-supply read in the regulatory & development-status panel", status: "Live" },
   { name: "Open Targets", role: "Genetic-target and pathway data", status: "Live" },
   { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
   {
@@ -272,7 +274,7 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Regulatory & development status",
-    role: "Where each candidate sits in the US regulatory landscape, read from three public FDA / NLM sources and shown beside the score: whether the target condition is an FDA-approved (on-label) use or off-label (DailyMed labels, counting only NDA/ANDA/BLA approvals); whether the molecule is a generic or a single-source brand still under patent (FDA Orange Book, single-ingredient products only); and how far it has been studied as a therapy for the condition (ClinicalTrials.gov, mechanistic and post-marketing studies excluded). Descriptive landscape context only, not a viability assessment; live for endometriosis, with the remaining conditions ingesting on the same pattern.",
+    role: "Where each candidate sits in the US regulatory landscape, read from three public FDA / NLM sources and shown beside the score: whether the target condition is an FDA-approved (on-label) use or off-label (DailyMed labels, counting only NDA/ANDA/BLA approvals); whether the molecule is a generic or a single-source brand still under patent (FDA Orange Book, single-ingredient products only); and how far it has been studied as a therapy for the condition (ClinicalTrials.gov, mechanistic and post-marketing studies excluded). Descriptive landscape context only, not a viability assessment; live across all six conditions.",
     status: "Live",
   },
   {

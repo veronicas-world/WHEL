@@ -132,8 +132,49 @@ export default function MethodologyChangelogPage() {
           }}
         >
 
-          {/* v4.0 — substrate cutover */}
+          {/* v4.1 — regulatory & development-status layer */}
           <EntryWrapper isFirst>
+            <div style={ENTRY_EYEBROW}>
+              Methodology v4.1 &middot; June 28, 2026
+            </div>
+            <p style={ENTRY_PARA}>
+              Added a regulatory &amp; development-status layer: a descriptive
+              read of where each candidate sits in the US regulatory landscape,
+              reported beside the score and never folded into it. It introduces
+              three new external sources of truth, each read conservatively.
+              From DailyMed (FDA drug labels), whether the target condition is
+              an FDA-approved (on-label) use or off-label, counting only
+              NDA / ANDA / BLA marketing categories. From the FDA Orange Book,
+              whether the molecule is a generic or a single-source brand still
+              under patent, using single-ingredient products only so a branded
+              combination&rsquo;s patents are never attributed to the base
+              molecule. And from ClinicalTrials.gov, how far it has been studied
+              as a therapy for the condition, counting only interventional
+              trials of the drug as a therapy and excluding mechanistic,
+              drug-interaction, and Phase-4 post-marketing uses.
+            </p>
+            <p style={ENTRY_PARA_NEXT}>
+              This is descriptive landscape context, not regulatory advice, and
+              it is not an input to the five-dimension rubric, the
+              female-applicability multiplier, or the tier. It maps the route a{" "}
+              <Link href="/platform#evidence-markers" style={ENTRY_LINK}>
+                505(b)(2)
+              </Link>{" "}
+              filing would build on, an already-approved active ingredient
+              proposed for a new indication, but it is explicitly not a
+              505(b)(2) viability assessment. Each source is read offline into a
+              reviewed, committed snapshot, so the panel is reproducible and can
+              be checked against the upstream record; the sources are listed on
+              the{" "}
+              <Link href="/about/external-references#underlying-data" style={ENTRY_LINK}>
+                external references
+              </Link>{" "}
+              page. Now live across all six conditions.
+            </p>
+          </EntryWrapper>
+
+          {/* v4.0 — substrate cutover */}
+          <EntryWrapper>
             <div style={ENTRY_EYEBROW}>
               Methodology v4.0 &middot; June 21, 2026
             </div>

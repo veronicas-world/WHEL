@@ -422,6 +422,21 @@ export default async function MethodologyPage() {
               </p>
 
               <p style={BODY}>
+                On the same terms, and likewise never blended into the tier or the external level, Whel
+                surfaces a <strong>regulatory &amp; development-status</strong> layer beside each pair: a
+                descriptive read of where the candidate sits in the US regulatory landscape, drawn from three
+                public sources, the FDA-approved drug label via DailyMed (on-label or off-label), the FDA
+                Orange Book (generic or single-source brand still under patent), and ClinicalTrials.gov (how
+                far the drug has been studied as a therapy for the condition). It maps the route a 505(b)(2)
+                filing would build on, but it is descriptive landscape context only, not an input to the
+                five-dimension rubric or the tier and not regulatory advice. The sources are listed at{" "}
+                <Link href="/about/external-references#underlying-data" style={LINK}>
+                  external references → 01 · Underlying data
+                </Link>
+                .
+              </p>
+
+              <p style={BODY}>
                 Effect direction in the external record is captured as a secondary field: supports the
                 indexed direction, contradicts it, mixed, or unclear. This is reported alongside the
                 level but is not used to determine the level itself.

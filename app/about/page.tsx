@@ -434,7 +434,14 @@ export default function AboutPage() {
                   far higher rates</A>. Regulators built a lane for exactly this: the FDA&rsquo;s{" "}
                   <A href={FIVE}>505(b)(2) pathway</A> lets a sponsor lean on existing safety data for an
                   approved ingredient and begin clinical work for a new indication much closer to the
-                  finish line.
+                  finish line. Each Whel candidate now carries a{" "}
+                  <Link
+                    href="/platform#evidence-markers"
+                    style={{ color: "var(--moss)", textDecoration: "underline", textDecorationColor: "rgba(46,61,43,0.4)", textUnderlineOffset: 3 }}
+                  >
+                    regulatory &amp; development-status panel
+                  </Link>{" "}
+                  that maps where it already sits in exactly that landscape.
                 </p>
                 <p>
                   The market reflects the same logic. Drug repurposing was worth roughly{" "}

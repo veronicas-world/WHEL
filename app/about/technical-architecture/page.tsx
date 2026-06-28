@@ -63,7 +63,7 @@ const LAYERS: { n: string; name: string; status: string; color: string; body: st
    ────────────────────────────────────────────────────────────────────────── */
 
 const PIPELINES_INTRO =
-  "Whel runs six active data pipelines that populate the substrate on demand. A seventh (EudraVigilance) is implemented but not yet contributing signals to the current snapshot.";
+  "Whel runs six active data pipelines that populate the substrate on demand. A seventh (EudraVigilance) is implemented but not yet contributing signals to the current snapshot. The regulatory & development-status sources (the FDA-approved label via DailyMed and the FDA Orange Book) sit outside this register: they are read offline into reviewed, committed snapshots and reported beside the score, not ingested as on-demand pipelines.";
 
 const PIPELINES: {
   name: string;
@@ -460,8 +460,9 @@ export default function TechnicalArchitecturePage() {
             and the sources each one queries, the five-dimension rubric Whel
             applies to every signal, the female-applicability multiplier and the
             four confidence tiers scores map into, the arm-specific admission
-            standards each of the three evidence arms enforces, and the documented
-            limitations of the methodology as currently shipped.
+            standards each of the three evidence arms enforces, the descriptive
+            regulatory &amp; development-status layer reported beside each score, and
+            the documented limitations of the methodology as currently shipped.
           </p>
         </div>
       </div>
@@ -521,6 +522,23 @@ export default function TechnicalArchitecturePage() {
             female-applicability multiplier, and the four confidence tiers. Every signal traces to
             verbatim-verified claims; the full sex-aware extension is still being built out across
             every condition.
+          </p>
+
+          <p style={{ fontSize: "14px", lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "74ch", marginTop: 18 }}>
+            Around that scored substrate sit several <strong>descriptive layers</strong>, reported beside each
+            signal but never folded into the score: the independent MATRIX cross-reference, the sex-specific
+            pharmacokinetics and cyclical-phase reads, and a <strong>regulatory &amp; development-status</strong>{" "}
+            layer. The regulatory layer grounds each candidate in the external US record, reading three
+            authoritative public sources, the FDA-approved drug label via DailyMed, the FDA Orange Book, and
+            ClinicalTrials.gov, into reviewed, committed snapshots so the panel is reproducible and can be
+            checked against the upstream source. Each is read conservatively (label categories limited to
+            NDA / ANDA / BLA; Orange Book to single-ingredient products; trials to interventional studies of the
+            drug as a therapy), so it maps the landscape a 505(b)(2) route would build on without ever becoming
+            a scoring input or regulatory advice. The full read is detailed in the{" "}
+            <a href="#how-evidence-is-scored" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: 2 }}>scoring framework</a>{" "}
+            below, and every source is listed on the{" "}
+            <Link href="/about/external-references#underlying-data" style={{ color: "var(--green-mid)", textDecoration: "underline", textUnderlineOffset: 2 }}>external references</Link>{" "}
+            page.
           </p>
         </div>
       </section>
@@ -698,7 +716,7 @@ export default function TechnicalArchitecturePage() {
             has been studied as a therapy for the condition (read from ClinicalTrials.gov, excluding
             mechanistic, drug-interaction, and Phase-4 post-marketing studies). It sketches the landscape a
             505(b)(2) filing would build on but is explicitly not a viability assessment or regulatory advice;
-            it is live for endometriosis, with the other conditions ingesting on the same pattern.
+            it is live across all six conditions.
           </p>
 
           {/* Model selection callout */}

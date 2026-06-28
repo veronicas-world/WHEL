@@ -82,7 +82,7 @@ const AT_A_GLANCE: { tag: string; sub: string; color: string; items: string[] }[
     sub: "Live sources",
     color: "var(--green-mid)",
     items: [
-      "Five primary sources, each running an active pipeline",
+      "Five active ingestion pipelines, plus two FDA regulatory references read into reviewed snapshots",
       "Every cited record reachable upstream to its source",
       "Public, free, and built on stable identifiers wherever possible",
     ],
@@ -125,7 +125,7 @@ const SOURCES: {
   },
   {
     name: "ClinicalTrials.gov",
-    role: "Trial registry; both Direct Research and Cross-Condition arms",
+    role: "Trial registry feeding both the Direct Research and Cross-Condition arms; also the clinical-trial-stage read (drug studied as a therapy for the condition) in the regulatory & development-status panel",
     href: "https://clinicaltrials.gov/",
     status: "Live",
   },
