@@ -151,7 +151,7 @@ export default async function Home() {
           <div style={{ display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: 48, alignItems: "start", marginTop: 28 }} className="hero-grid">
             <div style={{ paddingTop: 8 }}>
               <p className="lede" style={{ color: "var(--on-ink-2)" }}>
-                Whel is building a drug-repurposing platform for female biology: one that surfaces
+                Whel is building a drug-repurposing platform for female biology that surfaces
                 approved drugs already working for women&apos;s health conditions, validates them
                 against mechanistic and clinical evidence, and maps each to the 505(b)(2) regulatory pathway.
               </p>

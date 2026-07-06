@@ -21,6 +21,7 @@ import { MATRIX_PAIR_SNAPSHOT, formatMatrixPercentile } from "@/lib/matrix-pair-
 import { getTrialStatusForPair } from "@/lib/clinicaltrials-status-snapshot";
 import { getOrangeBookForDrug } from "@/lib/orangebook-status-snapshot";
 import { getIndicationForPair } from "@/lib/dailymed-indication-snapshot";
+import { classifyCuration, resolveDrugClass } from "@/lib/curation";
 
 type Row = Record<string, unknown>;
 type ArmKey = "direct" | "pathway" | "community";
@@ -234,7 +235,7 @@ function claimRank(doc: Row | null): number {
   return 3; // reddit / community
 }
 
-export async function getCandidates(): Promise<Candidate[]> {
+async function getAllCandidates(): Promise<Candidate[]> {
   const [sigRes, entRes, claimRes, condRes, compRes, sexMap, phaseMap] = await Promise.all([
     supabase.from("substrate_signals").select(SIGNAL_COLS).eq("status", "active"),
     supabase.from("entities").select("id, type, label"),
@@ -348,13 +349,23 @@ export async function getCandidates(): Promise<Candidate[]> {
     const orangeBook = getOrangeBookForDrug(drug) ?? undefined;
     const indication = getIndicationForPair(drug, condition) ?? undefined;
 
+    // Drug-class resolution (see lib/curation.ts): relabel a class to its
+    // representative molecule, or mark a multi-molecule rollup as "class".
+    // All lookups above used the original `drug`; only the display label changes.
+    const cls = resolveDrugClass(drug);
+    const displayDrug = cls && "molecule" in cls ? cls.molecule : drug;
+    const curationClass = cls
+      ? ("molecule" in cls ? "drug" : "class")
+      : classifyCuration(drug);
+
     n += 1;
     out.push({
       id: `WHEL-C-${String(n).padStart(3, "0")}`,
       signalId: `${iid}__${cid}`,
-      drug,
+      drug: displayDrug,
       condition,
       conditionId: slug,
+      curationClass,
       tier: anchor.tier,
       score: Math.round(anchor.armScore * 10) / 10,
       origin,
@@ -362,7 +373,7 @@ export async function getCandidates(): Promise<Candidate[]> {
         ? "Hypothesis-generation · pre-validation"
         : "505(b)(2) · existing active ingredient, new indication",
       direction: anyContradiction ? "contradicts" : anchor.tier === "exploratory" ? "silent" : "supports",
-      rationale: anchor.synthesis || `${drug} surfaced as a substrate signal for ${condition}.`,
+      rationale: anchor.synthesis || `${displayDrug} surfaced as a substrate signal for ${condition}.`,
       mechanism: anchor.mechanism || "Mechanism not yet characterized in the substrate.",
       dims,
       dimBreakdown: anchor.dimensions.map((d) => ({ key: d.key, label: d.label, score: d.score, level: lvl(d.score) })),
@@ -385,13 +396,48 @@ export async function getCandidates(): Promise<Candidate[]> {
     });
   }
 
+  // Collapse duplicates created by class→molecule relabeling (e.g. an
+  // "aromatase inhibitors" row relabeled to Letrozole merging with an existing
+  // Letrozole row): keep the higher-scored candidate per drug + condition.
+  const bestByKey = new Map<string, Candidate>();
+  const deduped: Candidate[] = [];
+  for (const c of out) {
+    if (c.curationClass !== "drug") { deduped.push(c); continue; }
+    const key = `${c.drug.toLowerCase()}::${c.conditionId}`;
+    const prev = bestByKey.get(key);
+    if (!prev) { bestByKey.set(key, c); deduped.push(c); }
+    else if (c.score > prev.score) {
+      deduped[deduped.indexOf(prev)] = c;
+      bestByKey.set(key, c);
+    }
+  }
+
   // headline ranking: anchor score desc, then clinical-validated first on ties
   const vWeight = { clinical: 2, unvalidated_signal: 1, preliminary: 0 } as const;
-  out.sort((a, b) =>
+  deduped.sort((a, b) =>
     b.score - a.score ||
     (vWeight[b.validationStatus ?? "preliminary"] - vWeight[a.validationStatus ?? "preliminary"]) ||
     a.drug.localeCompare(b.drug));
-  return out;
+  return deduped;
+}
+
+// The public candidate INDEX is the clean single-agent drug set. Combination
+// regimens and supplements/herbals are segregated (below) rather than graded as
+// first-class candidates; non-drug/procedure/junk entries are dropped. This is a
+// display-time filter over the substrate (see lib/curation.ts) — the substrate
+// itself is unchanged.
+export async function getCandidates(): Promise<Candidate[]> {
+  return (await getAllCandidates()).filter((c) => (c.curationClass ?? "drug") === "drug");
+}
+
+/** Combination regimens (multi-agent), segregated from the single-agent index. */
+export async function getCombinationCandidates(): Promise<Candidate[]> {
+  return (await getAllCandidates()).filter((c) => c.curationClass === "combination");
+}
+
+/** Supplements / herbals, shown as an adjunct list rather than graded candidates. */
+export async function getAdjunctCandidates(): Promise<Candidate[]> {
+  return (await getAllCandidates()).filter((c) => c.curationClass === "supplement");
 }
 
 export async function getFeaturedCandidates(n = 3): Promise<Candidate[]> {
@@ -399,7 +445,8 @@ export async function getFeaturedCandidates(n = 3): Promise<Candidate[]> {
 }
 
 export async function getCandidateBySignalId(signalId: string): Promise<Candidate | null> {
-  const all = await getCandidates();
+  // Search ALL classes so a direct link to a combination/adjunct pair still resolves.
+  const all = await getAllCandidates();
   return all.find((c) => c.signalId === signalId) ?? null;
 }
 

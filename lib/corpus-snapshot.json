@@ -1,10 +1,10 @@
 {
   "_meta": {
-    "built": "2026-07-01T17:12:23.502Z",
+    "built": "2026-07-06T23:40:08.126Z",
     "source": "Whel substrate (substrate_signals + entities + claims + compounds) with committed side-layers (MATRIX, DailyMed, Orange Book, ClinicalTrials.gov)",
     "builder": "scripts/build-corpus-snapshot.mjs",
     "note": "Full curated corpus as surfaced on the public site. Descriptive research context, human-in-the-loop; not clinical or regulatory advice. Point-in-time — re-run to refresh.",
-    "candidate_count": 183,
+    "candidate_count": 182,
     "conditions": [
       "adenomyosis",
       "endometriosis",
@@ -15,10 +15,18 @@
     ],
     "tier_distribution": {
       "strong": 11,
-      "moderate": 60,
+      "moderate": 59,
       "emerging": 68,
       "exploratory": 44
     },
+    "curation_distribution": {
+      "drug": 111,
+      "combination": 21,
+      "supplement": 16,
+      "exclude": 28,
+      "class": 6
+    },
+    "curation_note": "curationClass: 'drug' = clean single-agent candidate (the public index); 'combination' = multi-agent regimen; 'supplement' = supplement/herbal (adjunct); 'exclude' = non-drug/procedure/junk. All are kept here so a client sees the full picture; the site shows only 'drug'.",
     "by_condition": {
       "pcos": {
         "strong": 3,
@@ -43,10 +51,10 @@
       },
       "endometriosis": {
         "strong": 1,
-        "moderate": 11,
+        "moderate": 10,
         "emerging": 14,
         "exploratory": 7,
-        "total": 33
+        "total": 32
       },
       "vulvodynia": {
         "strong": 0,
@@ -71,6 +79,7 @@
       "drug": "D-chiro-inositol",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 9,
       "origin": "Existing drug · repurposing candidate",
@@ -275,6 +284,7 @@
       "drug": "DIENOGEST",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 9,
       "origin": "Approved",
@@ -573,6 +583,7 @@
       "drug": "menopausal hormone therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 9,
       "origin": "Existing drug · repurposing candidate",
@@ -768,6 +779,7 @@
       "drug": "myo-inositol",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 9,
       "origin": "Dietary Supplement",
@@ -1070,155 +1082,11 @@
     },
     {
       "id": "WHEL-C-005",
-      "signalId": "4649c778-db16-4740-80c6-29a739610666__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
-      "drug": "aromatase inhibitors",
-      "condition": "endometriosis",
-      "conditionId": "endometriosis",
-      "tier": "strong",
-      "score": 8,
-      "origin": "Existing drug · repurposing candidate",
-      "pathway": "505(b)(2) · existing active ingredient, new indication",
-      "direction": "supports",
-      "rationale": "A systematic review (including three RCTs) found that aromatase inhibitors combined with progestogens or oral contraceptives reduce endometriosis-related pain severity and improve quality of life.",
-      "mechanism": "Aromatase inhibitors suppress local and systemic estrogen production, reducing estrogen-dependent endometriotic lesion activity and associated pain.",
-      "dims": {
-        "corroboration": "Medium",
-        "rigor": "High",
-        "specificity": "High",
-        "plausibility": "Medium",
-        "consistency": "High"
-      },
-      "dimBreakdown": [
-        {
-          "key": "corroboration",
-          "label": "Corroboration",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "All claims derive from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). A single synthesis scores 1; the seven studies and three RCTs pooled inside it do not count as independent sources."
-        },
-        {
-          "key": "rigor",
-          "label": "Rigor",
-          "score": 2,
-          "level": "High",
-          "rationale": "The evidence is a systematic review encompassing multiple studies, including three RCTs of post-operative therapy. Systematic reviews and RCTs are the highest design tier, justifying a score of 2."
-        },
-        {
-          "key": "specificity",
-          "label": "Specificity",
-          "score": 2,
-          "level": "High",
-          "rationale": "Both the intervention (aromatase inhibitors) and the condition (endometriosis-related pain) are named directly and repeatedly in the claims and source title."
-        },
-        {
-          "key": "plausibility",
-          "label": "Plausibility",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "The claims assert efficacy in reducing pain but do not articulate the aromatase/estrogen-suppression mechanism. A plausible mechanism exists for endometriosis but is not spelled out in the quotes, so a score of 1 is appropriate."
-        },
-        {
-          "key": "consistency",
-          "label": "Consistency",
-          "score": 2,
-          "level": "High",
-          "rationale": "Multiple claims from the review consistently point in the same direction: AIs (combined with progestogens or OCPs) reduce pain severity and improve quality of life. The review synthesizes seven studies and three RCTs with concordant positive findings."
-        }
-      ],
-      "signalType": "direct",
-      "evidenceStrength": "strong",
-      "claims": [
-        {
-          "type": "extract",
-          "text": "AIs combined with either progestogens or oral contraceptive pill reduce the severity of pain symptoms",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        },
-        {
-          "type": "extract",
-          "text": "AIs combined with either progestogens or oral contraceptive pill reduce the severity of pain symptoms and improve quality of life",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        },
-        {
-          "type": "extract",
-          "text": "Seven studies examined the efficacy of AIs in improving endometriosis-related pain symptoms",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        },
-        {
-          "type": "extract",
-          "text": "three RCTs investigated the use of AIs as post-operative therapy in preventing the recurrence of pain symptoms after surgery for endometriosis",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        }
-      ],
-      "validationStatus": "clinical",
-      "femaleApplicability": {
-        "band": "F1",
-        "multiplier": 1,
-        "rationale": "Evidence generated in women (female population, ~100% female)."
-      },
-      "arms": [
-        {
-          "arm": "direct",
-          "aspect": "efficacy",
-          "armScore": 8,
-          "strength": 8,
-          "tier": "strong",
-          "isAnchor": true,
-          "dimensions": [
-            {
-              "key": "corroboration",
-              "label": "Corroboration",
-              "score": 1,
-              "rationale": "All claims derive from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). A single synthesis scores 1; the seven studies and three RCTs pooled inside it do not count as independent sources."
-            },
-            {
-              "key": "rigor",
-              "label": "Rigor",
-              "score": 2,
-              "rationale": "The evidence is a systematic review encompassing multiple studies, including three RCTs of post-operative therapy. Systematic reviews and RCTs are the highest design tier, justifying a score of 2."
-            },
-            {
-              "key": "specificity",
-              "label": "Specificity",
-              "score": 2,
-              "rationale": "Both the intervention (aromatase inhibitors) and the condition (endometriosis-related pain) are named directly and repeatedly in the claims and source title."
-            },
-            {
-              "key": "plausibility",
-              "label": "Plausibility",
-              "score": 1,
-              "rationale": "The claims assert efficacy in reducing pain but do not articulate the aromatase/estrogen-suppression mechanism. A plausible mechanism exists for endometriosis but is not spelled out in the quotes, so a score of 1 is appropriate."
-            },
-            {
-              "key": "consistency",
-              "label": "Consistency",
-              "score": 2,
-              "rationale": "Multiple claims from the review consistently point in the same direction: AIs (combined with progestogens or OCPs) reduce pain severity and improve quality of life. The review synthesizes seven studies and three RCTs with concordant positive findings."
-            }
-          ],
-          "female": {
-            "band": "F1",
-            "multiplier": 1,
-            "rationale": "Evidence generated in women (female population, ~100% female)."
-          },
-          "synthesis": "A systematic review (including three RCTs) found that aromatase inhibitors combined with progestogens or oral contraceptives reduce endometriosis-related pain severity and improve quality of life.",
-          "mechanism": "Aromatase inhibitors suppress local and systemic estrogen production, reducing estrogen-dependent endometriotic lesion activity and associated pain.",
-          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
-          "needsFulltext": true,
-          "contradictionFlag": false,
-          "numContradictions": 0
-        }
-      ]
-    },
-    {
-      "id": "WHEL-C-006",
       "signalId": "3956d951-aa1c-47d6-8dfd-024f5d6c617d__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "citalopram",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "FDA Approved",
@@ -1554,11 +1422,12 @@
       }
     },
     {
-      "id": "WHEL-C-007",
+      "id": "WHEL-C-006",
       "signalId": "6a6ec540-0d18-4f4b-9234-63e6f9d9dbc7__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "desvenlafaxine",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "Approved",
@@ -1787,11 +1656,12 @@
       }
     },
     {
-      "id": "WHEL-C-008",
+      "id": "WHEL-C-007",
       "signalId": "f02367ca-3bca-43af-80db-0a713a8ba6d7__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "escitalopram",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "FDA Approved",
@@ -2120,11 +1990,158 @@
       }
     },
     {
+      "id": "WHEL-C-008",
+      "signalId": "4649c778-db16-4740-80c6-29a739610666__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
+      "drug": "Letrozole",
+      "condition": "endometriosis",
+      "conditionId": "endometriosis",
+      "curationClass": "drug",
+      "tier": "strong",
+      "score": 8,
+      "origin": "Existing drug · repurposing candidate",
+      "pathway": "505(b)(2) · existing active ingredient, new indication",
+      "direction": "supports",
+      "rationale": "A systematic review (including three RCTs) found that aromatase inhibitors combined with progestogens or oral contraceptives reduce endometriosis-related pain severity and improve quality of life.",
+      "mechanism": "Aromatase inhibitors suppress local and systemic estrogen production, reducing estrogen-dependent endometriotic lesion activity and associated pain.",
+      "dims": {
+        "corroboration": "Medium",
+        "rigor": "High",
+        "specificity": "High",
+        "plausibility": "Medium",
+        "consistency": "High"
+      },
+      "dimBreakdown": [
+        {
+          "key": "corroboration",
+          "label": "Corroboration",
+          "score": 1,
+          "level": "Medium",
+          "rationale": "All claims derive from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). A single synthesis scores 1; the seven studies and three RCTs pooled inside it do not count as independent sources."
+        },
+        {
+          "key": "rigor",
+          "label": "Rigor",
+          "score": 2,
+          "level": "High",
+          "rationale": "The evidence is a systematic review encompassing multiple studies, including three RCTs of post-operative therapy. Systematic reviews and RCTs are the highest design tier, justifying a score of 2."
+        },
+        {
+          "key": "specificity",
+          "label": "Specificity",
+          "score": 2,
+          "level": "High",
+          "rationale": "Both the intervention (aromatase inhibitors) and the condition (endometriosis-related pain) are named directly and repeatedly in the claims and source title."
+        },
+        {
+          "key": "plausibility",
+          "label": "Plausibility",
+          "score": 1,
+          "level": "Medium",
+          "rationale": "The claims assert efficacy in reducing pain but do not articulate the aromatase/estrogen-suppression mechanism. A plausible mechanism exists for endometriosis but is not spelled out in the quotes, so a score of 1 is appropriate."
+        },
+        {
+          "key": "consistency",
+          "label": "Consistency",
+          "score": 2,
+          "level": "High",
+          "rationale": "Multiple claims from the review consistently point in the same direction: AIs (combined with progestogens or OCPs) reduce pain severity and improve quality of life. The review synthesizes seven studies and three RCTs with concordant positive findings."
+        }
+      ],
+      "signalType": "direct",
+      "evidenceStrength": "strong",
+      "claims": [
+        {
+          "type": "extract",
+          "text": "AIs combined with either progestogens or oral contraceptive pill reduce the severity of pain symptoms",
+          "src": "PubMed · PMID 21693038",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
+        },
+        {
+          "type": "extract",
+          "text": "AIs combined with either progestogens or oral contraceptive pill reduce the severity of pain symptoms and improve quality of life",
+          "src": "PubMed · PMID 21693038",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
+        },
+        {
+          "type": "extract",
+          "text": "Seven studies examined the efficacy of AIs in improving endometriosis-related pain symptoms",
+          "src": "PubMed · PMID 21693038",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
+        },
+        {
+          "type": "extract",
+          "text": "three RCTs investigated the use of AIs as post-operative therapy in preventing the recurrence of pain symptoms after surgery for endometriosis",
+          "src": "PubMed · PMID 21693038",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
+        }
+      ],
+      "validationStatus": "clinical",
+      "femaleApplicability": {
+        "band": "F1",
+        "multiplier": 1,
+        "rationale": "Evidence generated in women (female population, ~100% female)."
+      },
+      "arms": [
+        {
+          "arm": "direct",
+          "aspect": "efficacy",
+          "armScore": 8,
+          "strength": 8,
+          "tier": "strong",
+          "isAnchor": true,
+          "dimensions": [
+            {
+              "key": "corroboration",
+              "label": "Corroboration",
+              "score": 1,
+              "rationale": "All claims derive from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). A single synthesis scores 1; the seven studies and three RCTs pooled inside it do not count as independent sources."
+            },
+            {
+              "key": "rigor",
+              "label": "Rigor",
+              "score": 2,
+              "rationale": "The evidence is a systematic review encompassing multiple studies, including three RCTs of post-operative therapy. Systematic reviews and RCTs are the highest design tier, justifying a score of 2."
+            },
+            {
+              "key": "specificity",
+              "label": "Specificity",
+              "score": 2,
+              "rationale": "Both the intervention (aromatase inhibitors) and the condition (endometriosis-related pain) are named directly and repeatedly in the claims and source title."
+            },
+            {
+              "key": "plausibility",
+              "label": "Plausibility",
+              "score": 1,
+              "rationale": "The claims assert efficacy in reducing pain but do not articulate the aromatase/estrogen-suppression mechanism. A plausible mechanism exists for endometriosis but is not spelled out in the quotes, so a score of 1 is appropriate."
+            },
+            {
+              "key": "consistency",
+              "label": "Consistency",
+              "score": 2,
+              "rationale": "Multiple claims from the review consistently point in the same direction: AIs (combined with progestogens or OCPs) reduce pain severity and improve quality of life. The review synthesizes seven studies and three RCTs with concordant positive findings."
+            }
+          ],
+          "female": {
+            "band": "F1",
+            "multiplier": 1,
+            "rationale": "Evidence generated in women (female population, ~100% female)."
+          },
+          "synthesis": "A systematic review (including three RCTs) found that aromatase inhibitors combined with progestogens or oral contraceptives reduce endometriosis-related pain severity and improve quality of life.",
+          "mechanism": "Aromatase inhibitors suppress local and systemic estrogen production, reducing estrogen-dependent endometriotic lesion activity and associated pain.",
+          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
+          "needsFulltext": true,
+          "contradictionFlag": false,
+          "numContradictions": 0
+        }
+      ]
+    },
+    {
       "id": "WHEL-C-009",
       "signalId": "97cc587b-f617-4589-b1df-9139f8a7ca7d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "LETROZOLE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "Approved",
@@ -2427,6 +2444,7 @@
       "drug": "paroxetine",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "FDA Approved",
@@ -2741,6 +2759,7 @@
       "drug": "venlafaxine",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "strong",
       "score": 8,
       "origin": "FDA Approved",
@@ -2956,170 +2975,11 @@
     },
     {
       "id": "WHEL-C-012",
-      "signalId": "2d9df8fe-d9e4-4952-84a1-af7d345c4198__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
-      "drug": "anti-androgens",
-      "condition": "PCOS",
-      "conditionId": "pcos",
-      "tier": "moderate",
-      "score": 7,
-      "origin": "Existing drug · repurposing candidate",
-      "pathway": "505(b)(2) · existing active ingredient, new indication",
-      "direction": "supports",
-      "rationale": "A systematic review and meta-analysis of RCTs found anti-androgens may mitigate hyperandrogenism-related symptoms of PCOS but are not preferred over combined oral contraceptives except when COCPs are contraindicated, poorly tolerated, or inadequately effective.",
-      "mechanism": "Anti-androgens reduce androgen activity, thereby mitigating hyperandrogenism-driven symptoms such as hirsutism in PCOS.",
-      "dims": {
-        "corroboration": "Medium",
-        "rigor": "High",
-        "specificity": "High",
-        "plausibility": "Medium",
-        "consistency": "Medium"
-      },
-      "dimBreakdown": [
-        {
-          "key": "corroboration",
-          "label": "Corroboration",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "All three claims derive from a single systematic review and meta-analysis of randomised controlled trials. Per scoring rules, a single synthesis scores 1 and does not count the pooled trials as independent sources."
-        },
-        {
-          "key": "rigor",
-          "label": "Rigor",
-          "score": 2,
-          "level": "High",
-          "rationale": "The source is a systematic review and meta-analysis of randomised controlled trials, the highest rigor tier. This warrants a score of 2."
-        },
-        {
-          "key": "specificity",
-          "label": "Specificity",
-          "score": 2,
-          "level": "High",
-          "rationale": "The claims explicitly name both anti-androgens and PCOS/hyperandrogenism-related symptoms. Both the intervention and condition are directly identified."
-        },
-        {
-          "key": "plausibility",
-          "label": "Plausibility",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "The claims state anti-androgens mitigate hyperandrogenism-related symptoms, implying an anti-androgen mechanism against androgen-driven symptoms, which is plausible. However, no explicit mechanistic evidence is detailed in the quotes."
-        },
-        {
-          "key": "consistency",
-          "label": "Consistency",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "Claims show a nuanced direction: anti-androgens may help symptoms but are not preferred over COCPs except in specific scenarios. Within this single meta-analysis the findings are coherent, so a neutral score of 1 applies."
-        }
-      ],
-      "signalType": "direct",
-      "evidenceStrength": "moderate",
-      "claims": [
-        {
-          "type": "extract",
-          "text": "Anti-androgens and combined oral contraceptive pills (COCPs) may mitigate hyperandrogenism-related symptoms of polycystic ovary syndrome (PCOS)",
-          "src": "PubMed · PMID 37583655",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
-        },
-        {
-          "type": "extract",
-          "text": "Current evidence does not support the use of anti-androgens preferentially to COCPs to treat hyperandrogenism in PCOS.",
-          "src": "PubMed · PMID 37583655",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
-        },
-        {
-          "type": "extract",
-          "text": "Anti-androgens could be considered to treat hirsutism in PCOS, where COCPs are contraindicated, poorly tolerated, or present a sub-optimal response after a minimum 6-month period",
-          "src": "PubMed · PMID 37583655",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
-        }
-      ],
-      "validationStatus": "clinical",
-      "femaleApplicability": {
-        "band": "F1",
-        "multiplier": 1,
-        "rationale": "Evidence generated in women (female population, ~100% female)."
-      },
-      "arms": [
-        {
-          "arm": "direct",
-          "aspect": "efficacy",
-          "armScore": 7,
-          "strength": 7,
-          "tier": "moderate",
-          "isAnchor": true,
-          "dimensions": [
-            {
-              "key": "corroboration",
-              "label": "Corroboration",
-              "score": 1,
-              "rationale": "All three claims derive from a single systematic review and meta-analysis of randomised controlled trials. Per scoring rules, a single synthesis scores 1 and does not count the pooled trials as independent sources."
-            },
-            {
-              "key": "rigor",
-              "label": "Rigor",
-              "score": 2,
-              "rationale": "The source is a systematic review and meta-analysis of randomised controlled trials, the highest rigor tier. This warrants a score of 2."
-            },
-            {
-              "key": "specificity",
-              "label": "Specificity",
-              "score": 2,
-              "rationale": "The claims explicitly name both anti-androgens and PCOS/hyperandrogenism-related symptoms. Both the intervention and condition are directly identified."
-            },
-            {
-              "key": "plausibility",
-              "label": "Plausibility",
-              "score": 1,
-              "rationale": "The claims state anti-androgens mitigate hyperandrogenism-related symptoms, implying an anti-androgen mechanism against androgen-driven symptoms, which is plausible. However, no explicit mechanistic evidence is detailed in the quotes."
-            },
-            {
-              "key": "consistency",
-              "label": "Consistency",
-              "score": 1,
-              "rationale": "Claims show a nuanced direction: anti-androgens may help symptoms but are not preferred over COCPs except in specific scenarios. Within this single meta-analysis the findings are coherent, so a neutral score of 1 applies."
-            }
-          ],
-          "female": {
-            "band": "F1",
-            "multiplier": 1,
-            "rationale": "Evidence generated in women (female population, ~100% female)."
-          },
-          "synthesis": "A systematic review and meta-analysis of RCTs found anti-androgens may mitigate hyperandrogenism-related symptoms of PCOS but are not preferred over combined oral contraceptives except when COCPs are contraindicated, poorly tolerated, or inadequately effective.",
-          "mechanism": "Anti-androgens reduce androgen activity, thereby mitigating hyperandrogenism-driven symptoms such as hirsutism in PCOS.",
-          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
-          "needsFulltext": true,
-          "contradictionFlag": false,
-          "numContradictions": 0
-        }
-      ],
-      "orangeBook": {
-        "compound_name": "anti-androgens",
-        "fda_listed": false,
-        "supply": "not_listed",
-        "generic_available": false,
-        "marketed": false,
-        "latest_patent_expiry": null,
-        "marketing_status": "not_in_orange_book",
-        "products_sampled": []
-      },
-      "indication": {
-        "compound_name": "anti-androgens",
-        "condition_name": "PCOS",
-        "has_fda_label": false,
-        "fda_approved_for_condition": false,
-        "label_relationship": "no_fda_label",
-        "approved_indication_excerpt": null,
-        "label_setid": null,
-        "label_title": null,
-        "label_url": null
-      }
-    },
-    {
-      "id": "WHEL-C-013",
       "signalId": "32800eb4-818d-4b1c-a2af-70f499b5db43__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "anti-androgens + lifestyle",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3259,11 +3119,12 @@
       ]
     },
     {
-      "id": "WHEL-C-014",
+      "id": "WHEL-C-013",
       "signalId": "40b16173-d1fb-4199-bc46-d064107fe48d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "anti-androgens + metformin + lifestyle",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3392,11 +3253,12 @@
       ]
     },
     {
-      "id": "WHEL-C-015",
+      "id": "WHEL-C-014",
       "signalId": "f3581d69-d2a6-473e-b1f9-0043946c59c9__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "aromatase inhibitors combined with gonadotropin releasing hormone analogue",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3519,11 +3381,12 @@
       ]
     },
     {
-      "id": "WHEL-C-016",
+      "id": "WHEL-C-015",
       "signalId": "fcf54880-cd97-4795-b81a-7025aa1c62ef__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "COCP",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3678,11 +3541,12 @@
       }
     },
     {
-      "id": "WHEL-C-017",
+      "id": "WHEL-C-016",
       "signalId": "77ecea03-7ec4-437b-969a-2452a9574f70__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "combined oral contraceptive",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3823,11 +3687,12 @@
       ]
     },
     {
-      "id": "WHEL-C-018",
+      "id": "WHEL-C-017",
       "signalId": "3c56ac32-c154-4590-a85f-5a1ca8f3b790__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "combined oral contraceptive pills",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -3950,11 +3815,12 @@
       ]
     },
     {
-      "id": "WHEL-C-019",
+      "id": "WHEL-C-018",
       "signalId": "d9814255-d60c-481a-95b6-50e67b646316__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "conjugated equine estrogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -4195,11 +4061,12 @@
       }
     },
     {
-      "id": "WHEL-C-020",
+      "id": "WHEL-C-019",
       "signalId": "ef42fd4c-c6b7-4147-ba81-f23ca6189dd4__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "conjugated equine estrogen plus medroxyprogesterone acetate",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -4373,11 +4240,12 @@
       ]
     },
     {
-      "id": "WHEL-C-021",
+      "id": "WHEL-C-020",
       "signalId": "db078ae7-eba6-47b4-bb00-3c5cfb87fab6__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "curcumin",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "supplement",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -4585,11 +4453,12 @@
       }
     },
     {
-      "id": "WHEL-C-022",
+      "id": "WHEL-C-021",
       "signalId": "99f7a146-c741-4c9c-b1a1-f0eef7a1fc23__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "desipramine",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -4774,11 +4643,12 @@
       }
     },
     {
-      "id": "WHEL-C-023",
+      "id": "WHEL-C-022",
       "signalId": "6a580fc3-04d6-4dc3-b18a-4e3d340bcb3f__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "estrogen combined with progestogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -4901,11 +4771,12 @@
       ]
     },
     {
-      "id": "WHEL-C-024",
+      "id": "WHEL-C-023",
       "signalId": "0048d3c7-d10d-463c-a861-6434c84b2868__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "estrogen therapy (intravaginal)",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5028,11 +4899,12 @@
       ]
     },
     {
-      "id": "WHEL-C-025",
+      "id": "WHEL-C-024",
       "signalId": "e902cf10-3a21-4f74-b9fb-e33cfd674991__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "hormonal therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5160,11 +5032,12 @@
       ]
     },
     {
-      "id": "WHEL-C-026",
+      "id": "WHEL-C-025",
       "signalId": "98900338-61e9-49a6-9a91-0c479d3b0e47__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "letrozole combined with norethisterone acetate",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5293,11 +5166,12 @@
       ]
     },
     {
-      "id": "WHEL-C-027",
+      "id": "WHEL-C-026",
       "signalId": "207bc176-7427-4edd-8f0d-4e9f0efbf43e__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "levonorgestrel-releasing intrauterine system",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5482,11 +5356,12 @@
       }
     },
     {
-      "id": "WHEL-C-028",
+      "id": "WHEL-C-027",
       "signalId": "96027ec1-212d-4827-b22a-a22820c17fe7__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "lidocaine ointment",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5671,11 +5546,12 @@
       }
     },
     {
-      "id": "WHEL-C-029",
+      "id": "WHEL-C-028",
       "signalId": "345a61ac-85d1-406f-bfff-29f45eb4c73c__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "low-dose vaginal estrogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -5819,11 +5695,12 @@
       }
     },
     {
-      "id": "WHEL-C-030",
+      "id": "WHEL-C-029",
       "signalId": "e7625ebb-ef58-4544-83c2-8fadd23058a0__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "menopause hormone therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -6003,11 +5880,12 @@
       ]
     },
     {
-      "id": "WHEL-C-031",
+      "id": "WHEL-C-030",
       "signalId": "43e6f623-ab3a-47ea-9f8a-05a39ba84a4d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "metformin",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "FDA Approved",
@@ -6354,11 +6232,12 @@
       }
     },
     {
-      "id": "WHEL-C-032",
+      "id": "WHEL-C-031",
       "signalId": "19b15ca6-ae62-440c-a151-0c3a69190217__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "metformin and combined oral contraceptive pill",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -6481,11 +6360,12 @@
       ]
     },
     {
-      "id": "WHEL-C-033",
+      "id": "WHEL-C-032",
       "signalId": "94c0e763-3091-4e97-b206-9b83fe0dd49e__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "multimodal physical therapy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -6613,11 +6493,12 @@
       ]
     },
     {
-      "id": "WHEL-C-034",
+      "id": "WHEL-C-033",
       "signalId": "0ad4d0ea-1d51-480a-a1c2-6b69fbd649a7__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "ospemifene",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -6778,11 +6659,12 @@
       }
     },
     {
-      "id": "WHEL-C-035",
+      "id": "WHEL-C-034",
       "signalId": "dee6bfca-af95-44bc-b5ff-ec22124400be__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "resveratrol",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "supplement",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -6926,11 +6808,12 @@
       }
     },
     {
-      "id": "WHEL-C-036",
+      "id": "WHEL-C-035",
       "signalId": "740685ea-e0b1-4f7c-b973-003430d2d24e__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SNRIs",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "class",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -7079,11 +6962,173 @@
       }
     },
     {
+      "id": "WHEL-C-036",
+      "signalId": "2d9df8fe-d9e4-4952-84a1-af7d345c4198__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
+      "drug": "Spironolactone",
+      "condition": "PCOS",
+      "conditionId": "pcos",
+      "curationClass": "drug",
+      "tier": "moderate",
+      "score": 7,
+      "origin": "Existing drug · repurposing candidate",
+      "pathway": "505(b)(2) · existing active ingredient, new indication",
+      "direction": "supports",
+      "rationale": "A systematic review and meta-analysis of RCTs found anti-androgens may mitigate hyperandrogenism-related symptoms of PCOS but are not preferred over combined oral contraceptives except when COCPs are contraindicated, poorly tolerated, or inadequately effective.",
+      "mechanism": "Anti-androgens reduce androgen activity, thereby mitigating hyperandrogenism-driven symptoms such as hirsutism in PCOS.",
+      "dims": {
+        "corroboration": "Medium",
+        "rigor": "High",
+        "specificity": "High",
+        "plausibility": "Medium",
+        "consistency": "Medium"
+      },
+      "dimBreakdown": [
+        {
+          "key": "corroboration",
+          "label": "Corroboration",
+          "score": 1,
+          "level": "Medium",
+          "rationale": "All three claims derive from a single systematic review and meta-analysis of randomised controlled trials. Per scoring rules, a single synthesis scores 1 and does not count the pooled trials as independent sources."
+        },
+        {
+          "key": "rigor",
+          "label": "Rigor",
+          "score": 2,
+          "level": "High",
+          "rationale": "The source is a systematic review and meta-analysis of randomised controlled trials, the highest rigor tier. This warrants a score of 2."
+        },
+        {
+          "key": "specificity",
+          "label": "Specificity",
+          "score": 2,
+          "level": "High",
+          "rationale": "The claims explicitly name both anti-androgens and PCOS/hyperandrogenism-related symptoms. Both the intervention and condition are directly identified."
+        },
+        {
+          "key": "plausibility",
+          "label": "Plausibility",
+          "score": 1,
+          "level": "Medium",
+          "rationale": "The claims state anti-androgens mitigate hyperandrogenism-related symptoms, implying an anti-androgen mechanism against androgen-driven symptoms, which is plausible. However, no explicit mechanistic evidence is detailed in the quotes."
+        },
+        {
+          "key": "consistency",
+          "label": "Consistency",
+          "score": 1,
+          "level": "Medium",
+          "rationale": "Claims show a nuanced direction: anti-androgens may help symptoms but are not preferred over COCPs except in specific scenarios. Within this single meta-analysis the findings are coherent, so a neutral score of 1 applies."
+        }
+      ],
+      "signalType": "direct",
+      "evidenceStrength": "moderate",
+      "claims": [
+        {
+          "type": "extract",
+          "text": "Anti-androgens and combined oral contraceptive pills (COCPs) may mitigate hyperandrogenism-related symptoms of polycystic ovary syndrome (PCOS)",
+          "src": "PubMed · PMID 37583655",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
+        },
+        {
+          "type": "extract",
+          "text": "Current evidence does not support the use of anti-androgens preferentially to COCPs to treat hyperandrogenism in PCOS.",
+          "src": "PubMed · PMID 37583655",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
+        },
+        {
+          "type": "extract",
+          "text": "Anti-androgens could be considered to treat hirsutism in PCOS, where COCPs are contraindicated, poorly tolerated, or present a sub-optimal response after a minimum 6-month period",
+          "src": "PubMed · PMID 37583655",
+          "href": "https://pubmed.ncbi.nlm.nih.gov/37583655/"
+        }
+      ],
+      "validationStatus": "clinical",
+      "femaleApplicability": {
+        "band": "F1",
+        "multiplier": 1,
+        "rationale": "Evidence generated in women (female population, ~100% female)."
+      },
+      "arms": [
+        {
+          "arm": "direct",
+          "aspect": "efficacy",
+          "armScore": 7,
+          "strength": 7,
+          "tier": "moderate",
+          "isAnchor": true,
+          "dimensions": [
+            {
+              "key": "corroboration",
+              "label": "Corroboration",
+              "score": 1,
+              "rationale": "All three claims derive from a single systematic review and meta-analysis of randomised controlled trials. Per scoring rules, a single synthesis scores 1 and does not count the pooled trials as independent sources."
+            },
+            {
+              "key": "rigor",
+              "label": "Rigor",
+              "score": 2,
+              "rationale": "The source is a systematic review and meta-analysis of randomised controlled trials, the highest rigor tier. This warrants a score of 2."
+            },
+            {
+              "key": "specificity",
+              "label": "Specificity",
+              "score": 2,
+              "rationale": "The claims explicitly name both anti-androgens and PCOS/hyperandrogenism-related symptoms. Both the intervention and condition are directly identified."
+            },
+            {
+              "key": "plausibility",
+              "label": "Plausibility",
+              "score": 1,
+              "rationale": "The claims state anti-androgens mitigate hyperandrogenism-related symptoms, implying an anti-androgen mechanism against androgen-driven symptoms, which is plausible. However, no explicit mechanistic evidence is detailed in the quotes."
+            },
+            {
+              "key": "consistency",
+              "label": "Consistency",
+              "score": 1,
+              "rationale": "Claims show a nuanced direction: anti-androgens may help symptoms but are not preferred over COCPs except in specific scenarios. Within this single meta-analysis the findings are coherent, so a neutral score of 1 applies."
+            }
+          ],
+          "female": {
+            "band": "F1",
+            "multiplier": 1,
+            "rationale": "Evidence generated in women (female population, ~100% female)."
+          },
+          "synthesis": "A systematic review and meta-analysis of RCTs found anti-androgens may mitigate hyperandrogenism-related symptoms of PCOS but are not preferred over combined oral contraceptives except when COCPs are contraindicated, poorly tolerated, or inadequately effective.",
+          "mechanism": "Anti-androgens reduce androgen activity, thereby mitigating hyperandrogenism-driven symptoms such as hirsutism in PCOS.",
+          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
+          "needsFulltext": true,
+          "contradictionFlag": false,
+          "numContradictions": 0
+        }
+      ],
+      "orangeBook": {
+        "compound_name": "anti-androgens",
+        "fda_listed": false,
+        "supply": "not_listed",
+        "generic_available": false,
+        "marketed": false,
+        "latest_patent_expiry": null,
+        "marketing_status": "not_in_orange_book",
+        "products_sampled": []
+      },
+      "indication": {
+        "compound_name": "anti-androgens",
+        "condition_name": "PCOS",
+        "has_fda_label": false,
+        "fda_approved_for_condition": false,
+        "label_relationship": "no_fda_label",
+        "approved_indication_excerpt": null,
+        "label_setid": null,
+        "label_title": null,
+        "label_url": null
+      }
+    },
+    {
       "id": "WHEL-C-037",
       "signalId": "e6727c59-a55a-4e1e-ac88-8ea457c7afd8__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SSRIs",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "class",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -7237,6 +7282,7 @@
       "drug": "Vitex agnus-castus",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "supplement",
       "tier": "moderate",
       "score": 7,
       "origin": "Existing drug · repurposing candidate",
@@ -7454,6 +7500,7 @@
       "drug": "anti-androgens + combined oral contraceptive pill",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -7638,6 +7685,7 @@
       "drug": "botulinum toxin type A",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -7816,6 +7864,7 @@
       "drug": "combined oral contraceptive pill",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -7959,6 +8008,7 @@
       "drug": "combined oral contraceptives",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -8085,6 +8135,7 @@
       "drug": "conjugated equine estrogens with or without medroxyprogesterone acetate",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -8273,6 +8324,7 @@
       "drug": "daily use",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -8450,6 +8502,7 @@
       "drug": "desipramine with or without lidocaine",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -8638,6 +8691,7 @@
       "drug": "enoxaparin sodium",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -8826,6 +8880,7 @@
       "drug": "estrogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -9071,6 +9126,7 @@
       "drug": "estrogen and progesterone combination therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -9197,6 +9253,7 @@
       "drug": "estrogen monotherapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -9344,6 +9401,7 @@
       "drug": "estrogen-progestogen therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -9522,6 +9580,7 @@
       "drug": "fluoxetine",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "FDA Approved",
@@ -9759,6 +9818,7 @@
       "drug": "gabapentin",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "FDA Approved",
@@ -9996,6 +10056,7 @@
       "drug": "gabapentin",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "FDA Approved",
@@ -10226,6 +10287,7 @@
       "drug": "GnRH agonist",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "class",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -10411,6 +10473,7 @@
       "drug": "GnRHa",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "class",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -10558,6 +10621,7 @@
       "drug": "inositol",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -10762,6 +10826,7 @@
       "drug": "interventions",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -10920,6 +10985,7 @@
       "drug": "intravaginal diazepam + intravaginal TENS",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -11046,6 +11112,7 @@
       "drug": "intravaginal TENS",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -11189,307 +11256,11 @@
     },
     {
       "id": "WHEL-C-060",
-      "signalId": "97cc587b-f617-4589-b1df-9139f8a7ca7d__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
-      "drug": "LETROZOLE",
-      "condition": "endometriosis",
-      "conditionId": "endometriosis",
-      "tier": "moderate",
-      "score": 6,
-      "origin": "Approved",
-      "drugClass": "hormone receptor-positive breast cancer",
-      "pathway": "505(b)(2) · existing active ingredient, new indication",
-      "direction": "supports",
-      "rationale": "A single systematic review found that letrozole does not improve patient satisfaction or influence symptom recurrence after discontinuation in endometriosis-related pain.",
-      "mechanism": "Mechanism not yet characterized in the substrate.",
-      "dims": {
-        "corroboration": "Medium",
-        "rigor": "High",
-        "specificity": "High",
-        "plausibility": "Low",
-        "consistency": "Medium"
-      },
-      "dimBreakdown": [
-        {
-          "key": "corroboration",
-          "label": "Corroboration",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "The evidence comes from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). Per scoring rules, a single systematic review scores 1 and does not constitute independent replication. No additional independent sources are presented."
-        },
-        {
-          "key": "rigor",
-          "label": "Rigor",
-          "score": 2,
-          "level": "High",
-          "rationale": "The source is a systematic review of aromatase inhibitors for endometriosis-related pain, which qualifies as high-rigor design. However, the underlying study quality of pooled trials is not described in the claims."
-        },
-        {
-          "key": "specificity",
-          "label": "Specificity",
-          "score": 2,
-          "level": "High",
-          "rationale": "Both the intervention (letrozole, an aromatase inhibitor) and the condition (endometriosis-related pain) are directly named in the claims and source title. The claims specifically discuss letrozole's effects in endometriosis."
-        },
-        {
-          "key": "plausibility",
-          "label": "Plausibility",
-          "score": 0,
-          "level": "Low",
-          "rationale": "The claims report null efficacy findings (no improvement in satisfaction, no influence on recurrence) without describing any mechanism of action. No mechanistic basis is asserted or evidenced in the verified claims."
-        },
-        {
-          "key": "consistency",
-          "label": "Consistency",
-          "score": 1,
-          "level": "Medium",
-          "rationale": "Both claims derive from the same single systematic review and report consistent null findings (no benefit on satisfaction or recurrence). With only one source, directional consistency across independent studies cannot be assessed, so this scores 1."
-        }
-      ],
-      "signalType": "direct",
-      "evidenceStrength": "moderate",
-      "claims": [
-        {
-          "type": "extract",
-          "text": "letrozole causes a higher incidence of adverse effects",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        },
-        {
-          "type": "extract",
-          "text": "does not improve patients' satisfaction",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        },
-        {
-          "type": "extract",
-          "text": "does not improve patients' satisfaction or influence recurrence of symptoms after discontinuation of treatment",
-          "src": "PubMed · PMID 21693038",
-          "href": "https://pubmed.ncbi.nlm.nih.gov/21693038/"
-        }
-      ],
-      "validationStatus": "clinical",
-      "femaleApplicability": {
-        "band": "F1",
-        "multiplier": 1,
-        "rationale": "Evidence generated in women (female population)."
-      },
-      "arms": [
-        {
-          "arm": "direct",
-          "aspect": "efficacy",
-          "armScore": 6,
-          "strength": 6,
-          "tier": "moderate",
-          "isAnchor": true,
-          "dimensions": [
-            {
-              "key": "corroboration",
-              "label": "Corroboration",
-              "score": 1,
-              "rationale": "The evidence comes from a single systematic review ('Use of aromatase inhibitors to treat endometriosis-related pain symptoms: a systematic review'). Per scoring rules, a single systematic review scores 1 and does not constitute independent replication. No additional independent sources are presented."
-            },
-            {
-              "key": "rigor",
-              "label": "Rigor",
-              "score": 2,
-              "rationale": "The source is a systematic review of aromatase inhibitors for endometriosis-related pain, which qualifies as high-rigor design. However, the underlying study quality of pooled trials is not described in the claims."
-            },
-            {
-              "key": "specificity",
-              "label": "Specificity",
-              "score": 2,
-              "rationale": "Both the intervention (letrozole, an aromatase inhibitor) and the condition (endometriosis-related pain) are directly named in the claims and source title. The claims specifically discuss letrozole's effects in endometriosis."
-            },
-            {
-              "key": "plausibility",
-              "label": "Plausibility",
-              "score": 0,
-              "rationale": "The claims report null efficacy findings (no improvement in satisfaction, no influence on recurrence) without describing any mechanism of action. No mechanistic basis is asserted or evidenced in the verified claims."
-            },
-            {
-              "key": "consistency",
-              "label": "Consistency",
-              "score": 1,
-              "rationale": "Both claims derive from the same single systematic review and report consistent null findings (no benefit on satisfaction or recurrence). With only one source, directional consistency across independent studies cannot be assessed, so this scores 1."
-            }
-          ],
-          "female": {
-            "band": "F1",
-            "multiplier": 1,
-            "rationale": "Evidence generated in women (female population)."
-          },
-          "synthesis": "A single systematic review found that letrozole does not improve patient satisfaction or influence symptom recurrence after discontinuation in endometriosis-related pain.",
-          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
-          "needsFulltext": true,
-          "contradictionFlag": false,
-          "numContradictions": 0
-        }
-      ],
-      "safetyArms": [
-        {
-          "arm": "direct",
-          "aspect": "safety",
-          "armScore": 6,
-          "strength": 6,
-          "tier": "moderate",
-          "isAnchor": false,
-          "dimensions": [
-            {
-              "key": "corroboration",
-              "label": "Corroboration",
-              "score": 1,
-              "rationale": "Evidence derives from a single systematic review of aromatase inhibitors for endometriosis-related pain. A single synthesis counts as 1, not independent replication; only one source and one claim are provided."
-            },
-            {
-              "key": "rigor",
-              "label": "Rigor",
-              "score": 2,
-              "rationale": "The source is a systematic review, which qualifies as high-design rigor (score 2). However, no details on pooled study designs or quality are given in the claim."
-            },
-            {
-              "key": "specificity",
-              "label": "Specificity",
-              "score": 2,
-              "rationale": "Both the drug (letrozole) and the condition (endometriosis) are named directly in the claim and source title. The claim explicitly addresses adverse effects in endometriosis treatment."
-            },
-            {
-              "key": "plausibility",
-              "label": "Plausibility",
-              "score": 0,
-              "rationale": "The claim asserts a higher incidence of adverse effects but provides no mechanism for why letrozole causes them. No physiological pathway is described."
-            },
-            {
-              "key": "consistency",
-              "label": "Consistency",
-              "score": 1,
-              "rationale": "Only a single source/claim is provided, so directional agreement across studies cannot be assessed. Per the rule, a single source defaults to 1."
-            }
-          ],
-          "female": {
-            "band": "F1",
-            "multiplier": 1,
-            "rationale": "Evidence generated in women (female population)."
-          },
-          "synthesis": "A systematic review reports that letrozole is associated with a higher incidence of adverse effects when used for endometriosis-related pain.",
-          "precisionNote": "no sample size or CI in source — precision unknown, flagged for full text",
-          "needsFulltext": true,
-          "contradictionFlag": false,
-          "numContradictions": 0
-        }
-      ],
-      "matrixPercentile": "Top 1%",
-      "matrixDetail": {
-        "transformedScore": 4.1738,
-        "sourceId": "CHEBI:6413",
-        "mondo": "MONDO:0005133"
-      },
-      "trialStatus": {
-        "compound_name": "LETROZOLE",
-        "condition_name": "endometriosis",
-        "trial_count": 4,
-        "highest_phase": "PHASE2",
-        "highest_phase_label": "Phase 2",
-        "activity": "completed",
-        "top_trials": [
-          {
-            "nctId": "NCT00240942",
-            "title": "Letrozole in the Treatment of Severe and Recurrent Endometriosis",
-            "phase": "PHASE2",
-            "status": "COMPLETED",
-            "url": "https://clinicaltrials.gov/study/NCT00240942"
-          },
-          {
-            "nctId": "NCT07183787",
-            "title": "Letrozole vs Danazol for Endometriosis-Related Pain: Randomized Trial",
-            "phase": "PHASE2",
-            "status": "COMPLETED",
-            "url": "https://clinicaltrials.gov/study/NCT07183787"
-          },
-          {
-            "nctId": "NCT04002141",
-            "title": "Assessment and Prevention of Pain During Ovarian Stimulation in Patients With Endometriosis",
-            "phase": "PHASE2",
-            "status": "COMPLETED",
-            "url": "https://clinicaltrials.gov/study/NCT04002141"
-          },
-          {
-            "nctId": "NCT01334762",
-            "title": "Efficacy of Letrozole and CC Alone in an IUI Program in Cases With Surgically Treated Minimal to Mild Endometriosis",
-            "phase": null,
-            "status": "COMPLETED",
-            "url": "https://clinicaltrials.gov/study/NCT01334762"
-          }
-        ]
-      },
-      "orangeBook": {
-        "compound_name": "LETROZOLE",
-        "fda_listed": true,
-        "supply": "generic",
-        "generic_available": true,
-        "marketed": true,
-        "latest_patent_expiry": null,
-        "marketing_status": "rx",
-        "products_sampled": [
-          {
-            "trade_name": "FEMARA",
-            "applicant": "NOVARTIS PHARMS",
-            "appl_type": "NDA (brand)",
-            "strength": "2.5MG",
-            "status": "RX",
-            "approval_date": "Jul 25, 1997"
-          },
-          {
-            "trade_name": "LETROZOLE",
-            "applicant": "ACCORD HLTHCARE",
-            "appl_type": "ANDA (generic)",
-            "strength": "2.5MG",
-            "status": "RX",
-            "approval_date": "Jun 3, 2011"
-          },
-          {
-            "trade_name": "LETROZOLE",
-            "applicant": "ACTAVIS TOTOWA",
-            "appl_type": "ANDA (generic)",
-            "strength": "2.5MG",
-            "status": "DISCN",
-            "approval_date": "Jul 13, 2011"
-          },
-          {
-            "trade_name": "LETROZOLE",
-            "applicant": "APOTEX INC",
-            "appl_type": "ANDA (generic)",
-            "strength": "2.5MG",
-            "status": "DISCN",
-            "approval_date": "Apr 19, 2012"
-          },
-          {
-            "trade_name": "LETROZOLE",
-            "applicant": "BEIJING YILING",
-            "appl_type": "ANDA (generic)",
-            "strength": "2.5MG",
-            "status": "RX",
-            "approval_date": "Nov 14, 2018"
-          }
-        ]
-      },
-      "indication": {
-        "compound_name": "LETROZOLE",
-        "condition_name": "endometriosis",
-        "has_fda_label": true,
-        "fda_approved_for_condition": false,
-        "label_relationship": "off_label",
-        "approved_indication_excerpt": null,
-        "label_setid": null,
-        "label_title": null,
-        "label_url": null
-      }
-    },
-    {
-      "id": "WHEL-C-061",
       "signalId": "865928ab-5cd9-451e-af91-5635dccdee68__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "letrozole + norethisterone acetate",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -11669,11 +11440,12 @@
       ]
     },
     {
-      "id": "WHEL-C-062",
+      "id": "WHEL-C-061",
       "signalId": "d6e0d47f-261a-490d-b935-ca89fedf0f76__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "multimodal physiotherapy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -11816,11 +11588,12 @@
       }
     },
     {
-      "id": "WHEL-C-063",
+      "id": "WHEL-C-062",
       "signalId": "db0aec5d-242a-4c53-96ed-ca375ee6b025__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "PRASTERONE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -12046,11 +11819,12 @@
       }
     },
     {
-      "id": "WHEL-C-064",
+      "id": "WHEL-C-063",
       "signalId": "9ec0dee5-cd94-438e-b8b2-deef0bfa5e49__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "quercetin",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "supplement",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -12210,11 +11984,12 @@
       }
     },
     {
-      "id": "WHEL-C-065",
+      "id": "WHEL-C-064",
       "signalId": "3b89967a-200f-4a6c-8121-63e623f824ab__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "relugolix combination therapy",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "combination",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -12401,11 +12176,12 @@
       ]
     },
     {
-      "id": "WHEL-C-066",
+      "id": "WHEL-C-065",
       "signalId": "7f6ed8f9-842a-42ca-b224-7ca9e3fcf95a__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SERTRALINE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "FDA Approved",
@@ -12624,11 +12400,12 @@
       }
     },
     {
-      "id": "WHEL-C-067",
+      "id": "WHEL-C-066",
       "signalId": "afa69e84-1146-4836-8bed-d29442024227__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SSRI/SNRIs",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "class",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -12771,11 +12548,12 @@
       }
     },
     {
-      "id": "WHEL-C-068",
+      "id": "WHEL-C-067",
       "signalId": "784fd705-d794-4b1b-8ce1-8f91de6503f6__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "surgical treatment",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "exclude",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -12897,11 +12675,12 @@
       ]
     },
     {
-      "id": "WHEL-C-069",
+      "id": "WHEL-C-068",
       "signalId": "a3c9739b-34d2-471b-b55a-67410e2f6672__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "GONADOTROPIN, CHORIONIC",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -13062,11 +12841,12 @@
       }
     },
     {
-      "id": "WHEL-C-070",
+      "id": "WHEL-C-069",
       "signalId": "e4ea5770-4d2c-4e3d-8b95-defada7816b8__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "ULIPRISTAL ACETATE",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Approved",
@@ -13228,11 +13008,12 @@
       }
     },
     {
-      "id": "WHEL-C-071",
+      "id": "WHEL-C-070",
       "signalId": "fd1e03a2-ac14-4f25-a321-04f067467983__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "VILAPRISAN",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "moderate",
       "score": 6,
       "origin": "Existing drug · repurposing candidate",
@@ -13393,11 +13174,12 @@
       }
     },
     {
-      "id": "WHEL-C-072",
+      "id": "WHEL-C-071",
       "signalId": "df468fdc-297f-4a39-913c-8f0cf50ee3e5__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "BAZEDOXIFENE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5.3,
       "origin": "Existing drug · repurposing candidate",
@@ -13650,11 +13432,12 @@
       }
     },
     {
-      "id": "WHEL-C-073",
+      "id": "WHEL-C-072",
       "signalId": "4f298539-db26-48e8-b86e-bbc7c69884a9__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "ESTRADIOL VALERATE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5.3,
       "origin": "Existing drug · repurposing candidate",
@@ -13936,11 +13719,12 @@
       }
     },
     {
-      "id": "WHEL-C-074",
+      "id": "WHEL-C-073",
       "signalId": "6e201d9b-35ae-4ce9-b337-7124dfc0455e__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "MIFEPRISTONE",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5.3,
       "origin": "Existing drug · repurposing candidate",
@@ -14149,11 +13933,12 @@
       }
     },
     {
-      "id": "WHEL-C-075",
+      "id": "WHEL-C-074",
       "signalId": "0d5c4c37-eb3c-4a52-970a-a8788b4236d5__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "bioidentical estrogens",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -14297,11 +14082,12 @@
       }
     },
     {
-      "id": "WHEL-C-076",
+      "id": "WHEL-C-075",
       "signalId": "75c2aadc-cef0-4fd6-ad41-e8b339e019d0__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "botulinum toxin A",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -14476,11 +14262,12 @@
       }
     },
     {
-      "id": "WHEL-C-077",
+      "id": "WHEL-C-076",
       "signalId": "fc4a10f2-2529-463c-beb8-ccd4e6f50aef__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "cold knife vestibulectomy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -14624,11 +14411,12 @@
       }
     },
     {
-      "id": "WHEL-C-078",
+      "id": "WHEL-C-077",
       "signalId": "63952f1e-feff-4ffe-b250-3d621d2d84a8__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "combined oral contraceptives",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -14751,11 +14539,12 @@
       ]
     },
     {
-      "id": "WHEL-C-079",
+      "id": "WHEL-C-078",
       "signalId": "c46a843c-320f-4984-8b4c-c0d7292b3ba8__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "desipramine + lidocaine cream",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "combination",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -14877,11 +14666,12 @@
       ]
     },
     {
-      "id": "WHEL-C-080",
+      "id": "WHEL-C-079",
       "signalId": "dcd5ca46-ee57-4d35-b7e1-07b887d30b22__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "DIENOGEST",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Approved",
@@ -15233,11 +15023,12 @@
       }
     },
     {
-      "id": "WHEL-C-081",
+      "id": "WHEL-C-080",
       "signalId": "a6a456c2-0a7c-49d0-9f32-92d18683ba19__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "estrogen therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -15359,11 +15150,12 @@
       ]
     },
     {
-      "id": "WHEL-C-082",
+      "id": "WHEL-C-081",
       "signalId": "2b3bca80-a383-4326-94e2-1694787c8bff__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "laparoscopic excision plus oral contraceptives",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -15486,11 +15278,12 @@
       ]
     },
     {
-      "id": "WHEL-C-083",
+      "id": "WHEL-C-082",
       "signalId": "f624a6f2-f6b5-4143-9bc8-9a684cc0a2fd__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "multiple interventions",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -15633,11 +15426,12 @@
       }
     },
     {
-      "id": "WHEL-C-084",
+      "id": "WHEL-C-083",
       "signalId": "fadba698-8ddc-4feb-9951-9d03a051cd6f__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "myo-inositol + oral contraceptive pill",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "combination",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -15778,11 +15572,12 @@
       ]
     },
     {
-      "id": "WHEL-C-085",
+      "id": "WHEL-C-084",
       "signalId": "8ca4776e-e536-4d53-a526-78596f65cc35__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "natural compound + oral contraceptive pill",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -15904,11 +15699,12 @@
       ]
     },
     {
-      "id": "WHEL-C-086",
+      "id": "WHEL-C-085",
       "signalId": "563ae35d-0969-44b4-87fd-52a759653a36__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "nonhormonal therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16036,11 +15832,12 @@
       ]
     },
     {
-      "id": "WHEL-C-087",
+      "id": "WHEL-C-086",
       "signalId": "392dccb2-3967-4f6c-b23c-3c4095a14b99__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "oral contraceptives",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16175,11 +15972,12 @@
       ]
     },
     {
-      "id": "WHEL-C-088",
+      "id": "WHEL-C-087",
       "signalId": "c504c3e4-00a4-451b-936d-8014aac0fa8d__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "tryptophan-rich diet",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16323,11 +16121,12 @@
       }
     },
     {
-      "id": "WHEL-C-089",
+      "id": "WHEL-C-088",
       "signalId": "56c09d87-ef14-4c95-8c3f-05e69349c924__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "unspecified treatment groups",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16501,11 +16300,12 @@
       ]
     },
     {
-      "id": "WHEL-C-090",
+      "id": "WHEL-C-089",
       "signalId": "00ab920a-db04-48bf-9df9-eaca7bcc196b__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "vitamin B6",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "supplement",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16666,11 +16466,12 @@
       }
     },
     {
-      "id": "WHEL-C-091",
+      "id": "WHEL-C-090",
       "signalId": "cd9e7779-d832-475a-a464-3553576eff5e__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "bupropion",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -16860,11 +16661,12 @@
       }
     },
     {
-      "id": "WHEL-C-092",
+      "id": "WHEL-C-091",
       "signalId": "afe89892-83af-4c18-a34a-02c048f8e7e8__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "GANIRELIX ACETATE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -17073,11 +16875,12 @@
       }
     },
     {
-      "id": "WHEL-C-093",
+      "id": "WHEL-C-092",
       "signalId": "61acc881-fd58-46f3-935c-43c2e04629e4__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "hormone replacement therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -17199,11 +17002,12 @@
       ]
     },
     {
-      "id": "WHEL-C-094",
+      "id": "WHEL-C-093",
       "signalId": "70176fbe-64a8-401a-b4e4-36a3fd33ab43__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "PAVINETANT",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Approved",
@@ -17348,11 +17152,12 @@
       }
     },
     {
-      "id": "WHEL-C-095",
+      "id": "WHEL-C-094",
       "signalId": "47fa1641-847f-4ef1-8c91-e37305293b53__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "progesterone",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Existing drug · repurposing candidate",
@@ -17542,11 +17347,12 @@
       }
     },
     {
-      "id": "WHEL-C-096",
+      "id": "WHEL-C-095",
       "signalId": "7f6ed8f9-842a-42ca-b224-7ca9e3fcf95a__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "SERTRALINE",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "FDA Approved",
@@ -17822,11 +17628,12 @@
       }
     },
     {
-      "id": "WHEL-C-097",
+      "id": "WHEL-C-096",
       "signalId": "7cdba395-c486-4218-80d1-e51cbece31cd__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "SIMVASTATIN",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 5,
       "origin": "Approved",
@@ -18042,11 +17849,12 @@
       }
     },
     {
-      "id": "WHEL-C-098",
+      "id": "WHEL-C-097",
       "signalId": "d0459f01-02b2-41b4-ac46-47d365868a7d__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "DESOGESTREL",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -18266,11 +18074,12 @@
       }
     },
     {
-      "id": "WHEL-C-099",
+      "id": "WHEL-C-098",
       "signalId": "04feb95d-0eb2-47ce-8904-25fd0616941b__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "ELAGOLIX SODIUM",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -18469,11 +18278,12 @@
       }
     },
     {
-      "id": "WHEL-C-100",
+      "id": "WHEL-C-099",
       "signalId": "041510d6-ac3c-4f73-8511-df8e44d5eb60__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "ESTRADIOL",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -18766,11 +18576,12 @@
       }
     },
     {
-      "id": "WHEL-C-101",
+      "id": "WHEL-C-100",
       "signalId": "54c47e3b-d531-48be-963f-26682921e21d__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "GOSERELIN",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -19019,11 +18830,12 @@
       }
     },
     {
-      "id": "WHEL-C-102",
+      "id": "WHEL-C-101",
       "signalId": "376c48da-11ba-43a2-90c3-80220b6699a7__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "HISTRELIN",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -19208,11 +19020,12 @@
       }
     },
     {
-      "id": "WHEL-C-103",
+      "id": "WHEL-C-102",
       "signalId": "26845ee7-fb72-4b09-a638-d053e291f837__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "RALOXIFENE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "FDA Approved",
@@ -19435,11 +19248,12 @@
       }
     },
     {
-      "id": "WHEL-C-104",
+      "id": "WHEL-C-103",
       "signalId": "8d5e712f-cc58-432d-a8d0-0c4a63b3ee9e__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "RELUGOLIX",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -19630,11 +19444,12 @@
       }
     },
     {
-      "id": "WHEL-C-105",
+      "id": "WHEL-C-104",
       "signalId": "297161b0-0686-4c6c-9236-6d816525aa21__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SYNTHETIC CONJUGATED ESTROGENS, B",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4.5,
       "origin": "Existing drug · repurposing candidate",
@@ -19795,11 +19610,12 @@
       }
     },
     {
-      "id": "WHEL-C-106",
+      "id": "WHEL-C-105",
       "signalId": "096931a8-b258-4d9c-94cd-243ff75993ad__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "acupuncture",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -19942,11 +19758,12 @@
       }
     },
     {
-      "id": "WHEL-C-107",
+      "id": "WHEL-C-106",
       "signalId": "3a35025d-5a80-4b01-aede-b7ffd317ed28__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "clomiphene citrate",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "FDA Approved",
@@ -20340,11 +20157,12 @@
       }
     },
     {
-      "id": "WHEL-C-108",
+      "id": "WHEL-C-107",
       "signalId": "8671204c-055a-4baa-9e28-e121e72d3d8b__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "cognitive behavioral therapy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -20466,11 +20284,12 @@
       ]
     },
     {
-      "id": "WHEL-C-109",
+      "id": "WHEL-C-108",
       "signalId": "23563087-0014-4122-a438-e512c99d3f7b__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "D-chiro inositol",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -20651,11 +20470,12 @@
       }
     },
     {
-      "id": "WHEL-C-110",
+      "id": "WHEL-C-109",
       "signalId": "7b7197d4-154c-469b-9fbf-1b98878517f0__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "electromyography biofeedback",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -20798,11 +20618,12 @@
       }
     },
     {
-      "id": "WHEL-C-111",
+      "id": "WHEL-C-110",
       "signalId": "6701818c-d9fb-481e-a045-61939dc07893__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "essential fatty acids",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "supplement",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -20963,11 +20784,12 @@
       }
     },
     {
-      "id": "WHEL-C-112",
+      "id": "WHEL-C-111",
       "signalId": "db80198e-005a-4723-91a3-3aad5170b2e3__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "G-CSF",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21168,11 +20990,12 @@
       }
     },
     {
-      "id": "WHEL-C-113",
+      "id": "WHEL-C-112",
       "signalId": "27be2483-5066-48e8-aa58-2e3bb9f188b5__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "gabapentin cream",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21357,11 +21180,12 @@
       }
     },
     {
-      "id": "WHEL-C-114",
+      "id": "WHEL-C-113",
       "signalId": "a17c87b5-12a9-4119-b7e9-bba5919d805b__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "hormonal treatment",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21484,11 +21308,12 @@
       ]
     },
     {
-      "id": "WHEL-C-115",
+      "id": "WHEL-C-114",
       "signalId": "fb15aea5-2e62-4eb4-89ce-8b4dce86cd03__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "hypnotherapy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21631,11 +21456,12 @@
       }
     },
     {
-      "id": "WHEL-C-116",
+      "id": "WHEL-C-115",
       "signalId": "fef84e81-3835-4be4-9d45-da325e8a2f95__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "itraconazole",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21819,11 +21645,12 @@
       }
     },
     {
-      "id": "WHEL-C-117",
+      "id": "WHEL-C-116",
       "signalId": "1205858f-dec0-465a-a27b-59f5b746fbac__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "nonhormonal treatment",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "exclude",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -21945,11 +21772,12 @@
       ]
     },
     {
-      "id": "WHEL-C-118",
+      "id": "WHEL-C-117",
       "signalId": "1ee8c502-ea12-4812-8209-790c92b5f0a2__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "creatine",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "supplement",
       "tier": "emerging",
       "score": 4,
       "origin": "Approved",
@@ -22109,11 +21937,12 @@
       }
     },
     {
-      "id": "WHEL-C-119",
+      "id": "WHEL-C-118",
       "signalId": "e9003ea1-ee30-4de7-96ff-158a42eed2ce__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "ETHINYL ESTRADIOL",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "Existing drug · repurposing candidate",
@@ -22385,11 +22214,12 @@
       }
     },
     {
-      "id": "WHEL-C-120",
+      "id": "WHEL-C-119",
       "signalId": "b73efe40-fe57-43fd-b7fb-a0087b37a3a4__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "meloxicam",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "FDA Approved",
@@ -22580,11 +22410,12 @@
       }
     },
     {
-      "id": "WHEL-C-121",
+      "id": "WHEL-C-120",
       "signalId": "0755b6b1-96e2-4bf8-b0c7-3199fc7697eb__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "vaginal estrogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 4,
       "origin": "FDA Approved",
@@ -22763,11 +22594,12 @@
       }
     },
     {
-      "id": "WHEL-C-122",
+      "id": "WHEL-C-121",
       "signalId": "6ac3c4b2-178a-4b38-9c40-6adef793e2b8__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "CABERGOLINE",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -23061,11 +22893,12 @@
       }
     },
     {
-      "id": "WHEL-C-123",
+      "id": "WHEL-C-122",
       "signalId": "8db8c878-b6f6-4c3a-8916-67ca943ad4da__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "DANAZOL",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "FDA Approved",
@@ -23354,11 +23187,12 @@
       }
     },
     {
-      "id": "WHEL-C-124",
+      "id": "WHEL-C-123",
       "signalId": "bc13ec6f-16f8-4001-b8b1-a7b165519dc1__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "DESVENLAFAXINE SUCCINATE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -23644,11 +23478,12 @@
       }
     },
     {
-      "id": "WHEL-C-125",
+      "id": "WHEL-C-124",
       "signalId": "b95a02c5-6a61-4087-9694-8ed237f007d9__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "EPELSIBAN",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -23810,11 +23645,12 @@
       }
     },
     {
-      "id": "WHEL-C-126",
+      "id": "WHEL-C-125",
       "signalId": "b059b3fd-6222-499b-87bb-f6fd3d6cce63__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "ERGOCALCIFEROL",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "supplement",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Dietary Supplement",
@@ -24017,11 +23853,12 @@
       }
     },
     {
-      "id": "WHEL-C-127",
+      "id": "WHEL-C-126",
       "signalId": "4f298539-db26-48e8-b86e-bbc7c69884a9__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "ESTRADIOL VALERATE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -24244,11 +24081,12 @@
       }
     },
     {
-      "id": "WHEL-C-128",
+      "id": "WHEL-C-127",
       "signalId": "13998085-3d51-40d8-807f-ad408d63ac4e__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "ESTRIOL",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -24430,11 +24268,12 @@
       }
     },
     {
-      "id": "WHEL-C-129",
+      "id": "WHEL-C-128",
       "signalId": "a1fd3f26-6434-4c31-a1d3-20b171dd66f4__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "ESTRONE",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -24690,11 +24529,12 @@
       }
     },
     {
-      "id": "WHEL-C-130",
+      "id": "WHEL-C-129",
       "signalId": "e566f424-c6ab-4fbd-9cdd-98821fcd8788__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "GONADORELIN ACETATE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -24879,11 +24719,12 @@
       }
     },
     {
-      "id": "WHEL-C-131",
+      "id": "WHEL-C-130",
       "signalId": "97cc587b-f617-4589-b1df-9139f8a7ca7d__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "LETROZOLE",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -25163,11 +25004,12 @@
       }
     },
     {
-      "id": "WHEL-C-132",
+      "id": "WHEL-C-131",
       "signalId": "f0a7e4d8-9652-4a5e-b1a3-572fc87c4048__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "LEUPROLIDE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -25369,11 +25211,12 @@
       }
     },
     {
-      "id": "WHEL-C-133",
+      "id": "WHEL-C-132",
       "signalId": "2e979d12-b11d-4e77-99d7-6171b6fda089__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "LEVONORGESTREL",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -25628,11 +25471,12 @@
       }
     },
     {
-      "id": "WHEL-C-134",
+      "id": "WHEL-C-133",
       "signalId": "901054e4-34cb-4773-ac71-e9bfb2efbee0__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "MENOTROPINS",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -25776,11 +25620,12 @@
       }
     },
     {
-      "id": "WHEL-C-135",
+      "id": "WHEL-C-134",
       "signalId": "6f07bf3d-46a6-408b-b253-a6bd96a6d4d7__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "NORETHINDRONE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -25982,11 +25827,12 @@
       }
     },
     {
-      "id": "WHEL-C-136",
+      "id": "WHEL-C-135",
       "signalId": "c89c26d2-a9e5-42b2-b3bf-7b71ca24e957__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "ROSIGLITAZONE",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -26200,11 +26046,12 @@
       }
     },
     {
-      "id": "WHEL-C-137",
+      "id": "WHEL-C-136",
       "signalId": "7f4eee9f-14b2-4d55-984b-800d9658ce94__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "TANEZUMAB",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -26349,11 +26196,12 @@
       }
     },
     {
-      "id": "WHEL-C-138",
+      "id": "WHEL-C-137",
       "signalId": "150b12a0-d4fd-41b2-9616-54bba3d38fc4__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "TRIPTORELIN",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Existing drug · repurposing candidate",
@@ -26554,11 +26402,12 @@
       }
     },
     {
-      "id": "WHEL-C-139",
+      "id": "WHEL-C-138",
       "signalId": "e4ea5770-4d2c-4e3d-8b95-defada7816b8__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "ULIPRISTAL ACETATE",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "emerging",
       "score": 3.8,
       "origin": "Approved",
@@ -26737,11 +26586,12 @@
       }
     },
     {
-      "id": "WHEL-C-140",
+      "id": "WHEL-C-139",
       "signalId": "096931a8-b258-4d9c-94cd-243ff75993ad__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "acupuncture",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -26884,11 +26734,12 @@
       }
     },
     {
-      "id": "WHEL-C-141",
+      "id": "WHEL-C-140",
       "signalId": "a3fe58b5-92c9-410f-bb0c-a71c90fcb81c__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "amitriptyline",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Approved",
@@ -27165,11 +27016,12 @@
       }
     },
     {
-      "id": "WHEL-C-142",
+      "id": "WHEL-C-141",
       "signalId": "5b856ad5-0fd4-4b84-9b44-ade55ef65495__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "amitriptyline cream",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -27353,11 +27205,12 @@
       }
     },
     {
-      "id": "WHEL-C-143",
+      "id": "WHEL-C-142",
       "signalId": "bcfb7a1e-91c8-49ba-8065-1a54a01a783d__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "amitriptyline with baclofen cream",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -27541,11 +27394,12 @@
       }
     },
     {
-      "id": "WHEL-C-144",
+      "id": "WHEL-C-143",
       "signalId": "389a935b-118a-4184-8353-dc7370c3070e__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "drug therapy",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -27667,11 +27521,12 @@
       ]
     },
     {
-      "id": "WHEL-C-145",
+      "id": "WHEL-C-144",
       "signalId": "c8b4887c-e5a6-45c5-a254-16c4398933d9__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "laser therapy",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -27793,11 +27648,12 @@
       ]
     },
     {
-      "id": "WHEL-C-146",
+      "id": "WHEL-C-145",
       "signalId": "cd4d57c8-1d81-4b7f-ba01-79d966326612__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "lidocaine",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -28019,11 +27875,12 @@
       }
     },
     {
-      "id": "WHEL-C-147",
+      "id": "WHEL-C-146",
       "signalId": "0aad9e2a-7e1c-4a4a-bfbf-69a4862a6907__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "Mazdutide",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -28183,11 +28040,12 @@
       }
     },
     {
-      "id": "WHEL-C-148",
+      "id": "WHEL-C-147",
       "signalId": "4563b459-fda9-4b9b-b78b-8bcfc7bb67b2__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "natural compound",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -28330,11 +28188,12 @@
       }
     },
     {
-      "id": "WHEL-C-149",
+      "id": "WHEL-C-148",
       "signalId": "619d4a83-bc1f-4359-84e2-1ce529ca51e8__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "unspecified treatment",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -28456,11 +28315,12 @@
       ]
     },
     {
-      "id": "WHEL-C-150",
+      "id": "WHEL-C-149",
       "signalId": "62c8f83d-7f99-4710-a529-e281876e08f0__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "vaginal dilators",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -28603,11 +28463,12 @@
       }
     },
     {
-      "id": "WHEL-C-151",
+      "id": "WHEL-C-150",
       "signalId": "7330eec6-af95-4731-a824-f9eca7fc8ae6__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "ASPIRIN",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Approved",
@@ -28856,11 +28717,12 @@
       }
     },
     {
-      "id": "WHEL-C-152",
+      "id": "WHEL-C-151",
       "signalId": "9c1bbc74-1113-49bf-bde7-6a4839ba970a__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "CORTICOTROPIN",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -29045,11 +28907,12 @@
       }
     },
     {
-      "id": "WHEL-C-153",
+      "id": "WHEL-C-152",
       "signalId": "e5e1c9ed-6926-4b12-a042-0ad4890672b2__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "DROSPIRENONE",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Approved",
@@ -29307,11 +29170,12 @@
       }
     },
     {
-      "id": "WHEL-C-154",
+      "id": "WHEL-C-153",
       "signalId": "c12e0607-9890-4c42-8c78-e614e4875fdf__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "duloxetine",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Existing drug · repurposing candidate",
@@ -29494,11 +29358,12 @@
       }
     },
     {
-      "id": "WHEL-C-155",
+      "id": "WHEL-C-154",
       "signalId": "ef8517a1-3e6a-4e8b-940d-e9d4dcb8a9f9__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "PENTOXIFYLLINE",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 3,
       "origin": "Approved",
@@ -29707,11 +29572,12 @@
       }
     },
     {
-      "id": "WHEL-C-156",
+      "id": "WHEL-C-155",
       "signalId": "e6727c59-a55a-4e1e-ac88-8ea457c7afd8__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "SSRIs",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "class",
       "tier": "exploratory",
       "score": 2.3,
       "origin": "Existing drug · repurposing candidate",
@@ -29906,11 +29772,12 @@
       }
     },
     {
-      "id": "WHEL-C-157",
+      "id": "WHEL-C-156",
       "signalId": "417c1bfd-e910-49d5-9e17-fb7e399abf2d__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "BENTAMAPIMOD",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2.3,
       "origin": "Approved",
@@ -30055,11 +29922,12 @@
       }
     },
     {
-      "id": "WHEL-C-158",
+      "id": "WHEL-C-157",
       "signalId": "c1bdf08b-2fd2-4d31-9ec9-a88972fa1322__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "BROMOCRIPTINE",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2.3,
       "origin": "Approved",
@@ -30268,11 +30136,12 @@
       }
     },
     {
-      "id": "WHEL-C-159",
+      "id": "WHEL-C-158",
       "signalId": "f02367ca-3bca-43af-80db-0a713a8ba6d7__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "escitalopram",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2.3,
       "origin": "FDA Approved",
@@ -30463,11 +30332,12 @@
       }
     },
     {
-      "id": "WHEL-C-160",
+      "id": "WHEL-C-159",
       "signalId": "77d8a832-5d66-44cc-bc19-56d50ea95322__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "SMC021",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2.3,
       "origin": "Existing drug · repurposing candidate",
@@ -30611,11 +30481,12 @@
       }
     },
     {
-      "id": "WHEL-C-161",
+      "id": "WHEL-C-160",
       "signalId": "df5d26db-e34e-4e16-bb63-7539985cc236__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "lysine",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 2,
       "origin": "Existing drug · repurposing candidate",
@@ -30798,11 +30669,12 @@
       }
     },
     {
-      "id": "WHEL-C-162",
+      "id": "WHEL-C-161",
       "signalId": "cb5f6b9c-2043-4026-ace6-cdba829e4bc0__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "non-pharmacological and non-hormonal treatments",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 2,
       "origin": "Existing drug · repurposing candidate",
@@ -30924,11 +30796,12 @@
       ]
     },
     {
-      "id": "WHEL-C-163",
+      "id": "WHEL-C-162",
       "signalId": "69fdbf70-90a4-4b76-9c73-8f6cd447f805__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "testosterone",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2,
       "origin": "Approved",
@@ -31116,11 +30989,12 @@
       }
     },
     {
-      "id": "WHEL-C-164",
+      "id": "WHEL-C-163",
       "signalId": "92bac47c-bc1f-4b7f-b0e9-d5459c82989d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "unspecified",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 2,
       "origin": "Existing drug · repurposing candidate",
@@ -31294,11 +31168,12 @@
       ]
     },
     {
-      "id": "WHEL-C-165",
+      "id": "WHEL-C-164",
       "signalId": "6b17bb13-df34-4d1b-ad99-57fda1af222e__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "vaginal oestrogen",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 2,
       "origin": "Existing drug · repurposing candidate",
@@ -31524,11 +31399,12 @@
       }
     },
     {
-      "id": "WHEL-C-166",
+      "id": "WHEL-C-165",
       "signalId": "b2cbbb8a-395f-49c0-b7c9-3eda89015834__ad8df3f9-20b6-47b6-84f9-2097945d5d7b",
       "drug": "various treatments",
       "condition": "vulvodynia",
       "conditionId": "vulvodynia",
+      "curationClass": "exclude",
       "tier": "exploratory",
       "score": 2,
       "origin": "Existing drug · repurposing candidate",
@@ -31671,11 +31547,12 @@
       }
     },
     {
-      "id": "WHEL-C-167",
+      "id": "WHEL-C-166",
       "signalId": "e5e1c9ed-6926-4b12-a042-0ad4890672b2__61143789-de48-488b-968b-f3f71189f1bc",
       "drug": "DROSPIRENONE",
       "condition": "adenomyosis",
       "conditionId": "adenomyosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0.8,
       "origin": "Approved",
@@ -31907,11 +31784,12 @@
       }
     },
     {
-      "id": "WHEL-C-168",
+      "id": "WHEL-C-167",
       "signalId": "3147af2c-fe61-47d5-b495-a524f8116833__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "MARVELON",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0.8,
       "origin": "Existing drug · repurposing candidate",
@@ -32054,11 +31932,12 @@
       }
     },
     {
-      "id": "WHEL-C-169",
+      "id": "WHEL-C-168",
       "signalId": "d7a2a7e6-ec6f-47b9-be6e-9e9497963a9d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "ACETYLCYSTEINE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -32307,11 +32186,12 @@
       }
     },
     {
-      "id": "WHEL-C-170",
+      "id": "WHEL-C-169",
       "signalId": "cbda9ece-a1a7-45c2-8b23-897540675281__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "CLOVER, RED",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -32454,11 +32334,12 @@
       }
     },
     {
-      "id": "WHEL-C-171",
+      "id": "WHEL-C-170",
       "signalId": "605761e1-fdf8-44ee-a47a-8f63a841f1bc__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "ELTANOLONE",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Approved",
@@ -32602,11 +32483,12 @@
       }
     },
     {
-      "id": "WHEL-C-172",
+      "id": "WHEL-C-171",
       "signalId": "b8bd8ac0-d7d0-4721-ba06-f0426223fe8c__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "ENCLOMIPHENE CITRATE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -32828,11 +32710,12 @@
       }
     },
     {
-      "id": "WHEL-C-173",
+      "id": "WHEL-C-172",
       "signalId": "9f3b74e7-a669-4df9-9e4e-dd9e7c45f475__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "FOLIC ACID",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33054,11 +32937,12 @@
       }
     },
     {
-      "id": "WHEL-C-174",
+      "id": "WHEL-C-173",
       "signalId": "c9e66c9d-9d97-4244-98f1-0061b47da1e0__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "INTERFERON ALFA",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33201,11 +33085,12 @@
       }
     },
     {
-      "id": "WHEL-C-175",
+      "id": "WHEL-C-174",
       "signalId": "d735fc43-3ce2-4d25-864b-7766bf050f78__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "ISOFLAVONE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33386,11 +33271,12 @@
       }
     },
     {
-      "id": "WHEL-C-176",
+      "id": "WHEL-C-175",
       "signalId": "5f2390ac-13e2-4e33-8c98-515e7f1fe1a7__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "KISSPEPTIN-10",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33533,11 +33419,12 @@
       }
     },
     {
-      "id": "WHEL-C-177",
+      "id": "WHEL-C-176",
       "signalId": "272ac39b-67c6-4415-8380-49a142741863__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "LACTULOSE",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33721,11 +33608,12 @@
       }
     },
     {
-      "id": "WHEL-C-178",
+      "id": "WHEL-C-177",
       "signalId": "afa0f645-cd9d-46fa-b11a-38e0b0d5071a__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "NITRIC ACID",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -33868,11 +33756,12 @@
       }
     },
     {
-      "id": "WHEL-C-179",
+      "id": "WHEL-C-178",
       "signalId": "85c5dd1c-ce80-48db-97fd-dc5797579875__fc6df098-33bb-45d7-a203-fdb0dc5095b1",
       "drug": "NUX VOMICA EXTRACT",
       "condition": "PMDD",
       "conditionId": "pmdd",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -34015,11 +33904,12 @@
       }
     },
     {
-      "id": "WHEL-C-180",
+      "id": "WHEL-C-179",
       "signalId": "13540a78-d75c-4e96-9055-ab97b26c2771__e3758034-fa92-40a3-af17-80fbbdecb0d6",
       "drug": "PTEROSTILBENE",
       "condition": "menopause",
       "conditionId": "perimenopause-menopause",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -34179,11 +34069,12 @@
       }
     },
     {
-      "id": "WHEL-C-181",
+      "id": "WHEL-C-180",
       "signalId": "175b57e3-8e5d-4ad5-ac01-664358e0820d__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "TILDACERFONT",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "drug",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -34343,11 +34234,12 @@
       }
     },
     {
-      "id": "WHEL-C-182",
+      "id": "WHEL-C-181",
       "signalId": "e75c7096-244d-48fc-a574-1ff3c1e1d135__3d08eafb-9ddd-4669-a3bc-f80164f7f1c5",
       "drug": "UBIDECARENONE",
       "condition": "PCOS",
       "conditionId": "pcos",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",
@@ -34490,11 +34382,12 @@
       }
     },
     {
-      "id": "WHEL-C-183",
+      "id": "WHEL-C-182",
       "signalId": "aedfa810-bac6-4c5b-a525-52046b55f356__13c33c1b-98d6-4ef0-bb1a-add1344261a5",
       "drug": "VITAMIN E",
       "condition": "endometriosis",
       "conditionId": "endometriosis",
+      "curationClass": "supplement",
       "tier": "exploratory",
       "score": 0,
       "origin": "Existing drug · repurposing candidate",

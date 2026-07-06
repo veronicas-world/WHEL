@@ -29,6 +29,7 @@ function summarize(c) {
     signalId: c.signalId,
     drug: c.drug,
     condition: c.condition,
+    curationClass: c.curationClass ?? "drug",
     tier: c.tier,
     score: c.score,
     arm: c.signalType,
@@ -56,8 +57,14 @@ export function meta() {
 }
 
 export function list(opts = {}) {
-  const { condition, tier, regulatory, drug, arm, limit = 50, offset = 0 } = opts;
-  let rows = CANDIDATES;
+  const { condition, tier, regulatory, drug, arm, curationClass, limit = 50, offset = 0 } = opts;
+  // Default to the clean single-agent drug index (what the site shows). Pass
+  // curationClass: "all" to include combinations/supplements/excluded too.
+  let rows = curationClass && curationClass !== "all"
+    ? CANDIDATES.filter((c) => (c.curationClass ?? "drug") === curationClass)
+    : curationClass === "all"
+      ? CANDIDATES
+      : CANDIDATES.filter((c) => (c.curationClass ?? "drug") === "drug");
   if (condition) {
     const q = norm(condition);
     rows = rows.filter((c) => norm(c.condition) === q || norm(c.conditionId) === q || norm(c.conditionId).includes(q) || norm(c.condition).includes(q));

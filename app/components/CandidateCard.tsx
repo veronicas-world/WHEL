@@ -25,6 +25,9 @@ export interface Candidate {
   drug: string;
   condition: string;
   conditionId?: string;
+  /** Display-time curation class (see lib/curation.ts). "drug" = a clean single-agent
+   *  repurposing candidate; the rest are segregated out of the graded candidate index. */
+  curationClass?: "drug" | "exclude" | "combination" | "supplement" | "class";
   tier: "strong" | "moderate" | "emerging" | "exploratory";
   score: number;
   origin: string;

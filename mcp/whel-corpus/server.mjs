@@ -41,6 +41,7 @@ server.registerTool(
       tier: z.enum(["strong", "moderate", "emerging", "exploratory"]).optional(),
       arm: z.enum(["direct", "pathway", "community"]).optional().describe("evidence arm"),
       regulatory: z.enum(["on-label", "off-label", "no-label", "generic"]).optional().describe("regulatory-status filter"),
+      curationClass: z.enum(["drug", "combination", "supplement", "exclude", "all"]).optional().describe("defaults to 'drug' (clean single-agent index, what the site shows); 'all' includes combinations/supplements/excluded"),
       drug: z.string().optional().describe("drug-name substring"),
       limit: z.number().int().min(1).max(500).optional().default(50),
       offset: z.number().int().min(0).optional().default(0),

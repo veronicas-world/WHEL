@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { getCandidates } from "@/lib/substrate-candidates";
+import { getCandidates, getCombinationCandidates, getAdjunctCandidates } from "@/lib/substrate-candidates";
 import SideToc, { type TocItem } from "@/app/components/SideToc";
 
 export const dynamic = "force-dynamic";
@@ -53,6 +53,8 @@ export default async function ConditionDetailPage({
     { data: allConditions },
     { data: condition, error: conditionError },
     allCandidates,
+    allCombos,
+    allAdjuncts,
   ] = await Promise.all([
     supabase.from("conditions").select("slug").order("name"),
     supabase
@@ -61,6 +63,8 @@ export default async function ConditionDetailPage({
       .eq("slug", slug)
       .single(),
     getCandidates(),
+    getCombinationCandidates(),
+    getAdjunctCandidates(),
   ]);
 
   if (conditionError || !condition) notFound();
@@ -75,6 +79,11 @@ export default async function ConditionDetailPage({
   // the client (the candidates live behind the access wall).
   const condCands = allCandidates.filter((c) => c.conditionId === slug);
   const total = condCands.length;
+
+  // Segregated views: multi-agent combination regimens and supplements/herbals
+  // are tracked but not graded as single-agent repurposing candidates.
+  const condCombos = allCombos.filter((c) => c.conditionId === slug);
+  const condAdjuncts = allAdjuncts.filter((c) => c.conditionId === slug);
 
   const tierCounts: Record<TierKey, number> = {
     strong: 0, moderate: 0, emerging: 0, exploratory: 0,
@@ -108,6 +117,7 @@ export default async function ConditionDetailPage({
     { id: "signal-breakdown", label: "Signal breakdown" },
     ...(hasContext ? [{ id: "context", label: "Biology & research" }] : []),
     { id: "candidates", label: "Repurposing signals" },
+    ...((condCombos.length || condAdjuncts.length) ? [{ id: "also-tracked", label: "Also tracked" }] : []),
   ];
 
   return (
@@ -422,6 +432,55 @@ export default async function ConditionDetailPage({
           </div>
         </div>
       </section>
+
+      {/* ── Also tracked (not graded as single-agent candidates) ─────────── */}
+      {(condCombos.length > 0 || condAdjuncts.length > 0) && (
+        <section id="also-tracked" className="surface-paper section" style={{ scrollMarginTop: 24 }}>
+          <div className="container">
+            <p className="eyebrow" style={{ marginBottom: 12 }}>ALSO TRACKED</p>
+            <h2
+              className="font-heading"
+              style={{ fontSize: "clamp(1.4rem, 2.4vw, 1.9rem)", fontWeight: 500, lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--ink)", marginBottom: 12 }}
+            >
+              Tracked, but not graded as single-agent candidates.
+            </h2>
+            <p style={{ fontSize: "0.9375rem", lineHeight: 1.65, color: "var(--body)", marginBottom: 32, maxWidth: "62ch" }}>
+              These are recorded for {condition.name.toLowerCase()} but kept out of the graded
+              repurposing index: multi-agent combination regimens (legitimate clinical regimens,
+              not single-agent repurposing candidates) and supplements or herbals (reported as
+              complementary context). Neither is scored on the five-dimension rubric.
+            </p>
+            {condCombos.length > 0 && (
+              <div style={{ marginBottom: 28 }}>
+                <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 12 }}>
+                  Combination therapies · {condCombos.length}
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {condCombos.map((c) => (
+                    <span key={c.signalId} style={{ fontSize: "13px", color: "var(--body)", border: "1px solid var(--rule)", background: "var(--surface)", padding: "5px 10px" }}>
+                      {c.drug}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {condAdjuncts.length > 0 && (
+              <div>
+                <div style={{ ...MONO, fontSize: "10.5px", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 12 }}>
+                  Supplements &amp; herbals (adjunct) · {condAdjuncts.length}
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {condAdjuncts.map((c) => (
+                    <span key={c.signalId} style={{ fontSize: "13px", color: "var(--body)", border: "1px solid var(--rule)", background: "var(--surface)", padding: "5px 10px" }}>
+                      {c.drug}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
     </main>
   );
