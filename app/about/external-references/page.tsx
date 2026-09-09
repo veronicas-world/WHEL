@@ -29,6 +29,11 @@ import {
   isPopulated as structuredSourcesPopulated,
   formattedDate as structuredSourcesFormattedDate,
 } from "@/lib/structured-sources-audit-snapshot";
+import {
+  getCoverageDisclosure,
+  sourceCoverageFor,
+  type CoverageDisclosure,
+} from "@/lib/coverage-disclosure";
 
 export const metadata = {
   title: "External references | Whel",
@@ -83,7 +88,7 @@ const AT_A_GLANCE: { tag: string; sub: string; color: string; items: string[] }[
     sub: "Live sources",
     color: "var(--green-mid)",
     items: [
-      "Five active ingestion pipelines, plus two FDA regulatory references read into reviewed snapshots",
+      "Six source feeds, plus regulatory/status snapshots",
       "Every cited record reachable upstream to its source",
       "Public, free, and built on stable identifiers wherever possible",
     ],
@@ -115,73 +120,83 @@ const SOURCES: {
   name: string;
   role: string;
   href: string;
-  status: "Live" | "Under review" | "Planned";
+  status: string;
+  coverageKey?: string;
   note?: string;
 }[] = [
   {
     name: "PubMed",
     role: "Published literature; the spine of the Direct Research arm",
     href: "https://pubmed.ncbi.nlm.nih.gov/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "pubmed",
   },
   {
     name: "ClinicalTrials.gov",
     role: "Trial registry feeding both the Direct Research and Cross-Condition arms; also the clinical-trial-stage read (drug studied as a therapy for the condition) in the regulatory & development-status panel",
     href: "https://clinicaltrials.gov/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "clinicaltrials",
   },
   {
     name: "FDA openFDA / AEMS",
     role: "Adverse-event data underlying the Cross-Condition arm",
     href: "https://open.fda.gov/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "aems",
   },
   {
     name: "FDA Orange Book",
     role: "Approved Drug Products with Therapeutic Equivalence Evaluations; the generic-availability and patent-supply layer in the regulatory & development-status panel",
     href: "https://www.fda.gov/drugs/drug-approvals-and-databases/orange-book-data-files",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "orangebook",
     note: "Descriptive landscape context; single-ingredient products only; not blended into Whel scores",
   },
   {
     name: "DailyMed",
     role: "US National Library of Medicine repository of FDA drug labels; the on-label / off-label approved-indication layer in the regulatory & development-status panel",
     href: "https://dailymed.nlm.nih.gov/dailymed/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "dailymed",
     note: "Read from the FDA-approved label (NDA/ANDA/BLA only); descriptive context, not regulatory advice",
   },
   {
     name: "Open Targets",
     role: "Genetic-target and pathway evidence behind Pathway Insights",
     href: "https://www.opentargets.org/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "opentargets",
   },
   {
     name: "Reddit communities",
     role: "Curated condition-specific subreddits feeding Community Forum Reports",
     href: "https://www.reddit.com/",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "reddit",
   },
   {
     name: "Monarch Initiative · MONDO",
-    role: "Disease ontology used to align condition names with the external biomedical knowledge graph",
+    role: "Planned disease-ontology alignment for substrate entities; static mappings exist, but live substrate entity IDs are not populated",
     href: "https://mondo.monarchinitiative.org/",
-    status: "Live",
-    note: "Identifier resolution only",
+    status: "Planned",
+    note: "Live substrate ontology coverage withheld until signals are published",
   },
   {
     name: "Every Cure MATRIX",
     role: "Independent biological-plausibility layer; displayed where MATRIX has coverage",
     href: "https://huggingface.co/datasets/everycure/matrix-scores",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "matrix",
     note: "Disclosure layer; not blended into Whel grades",
   },
   {
     name: "Named society guidelines (ESHRE, ISSWSH, NAMS)",
-    role: "Published clinical guidelines from named society bodies, human-curated into strength \u00d7 certainty pairs that corroborate the Direct evidence arm and anchor the clinical validation status where a named recommendation covers a compound\u2013condition pair",
+    role: "Published clinical guidelines from named society bodies, human-curated into strength × certainty pairs where a named recommendation covers a compound–condition pair",
     href: "https://www.eshre.eu/Guidelines-and-Legal/Guidelines",
-    status: "Live",
-    note: "Three bodies curated to date (ESHRE 2022, ISSWSH 2021, NAMS 2020); expansion ongoing",
+    status: "Integrated",
+    coverageKey: "guidelines",
+    note: "Named society bodies are human-curated; expansion ongoing",
   },
   {
     name: "EudraVigilance",
@@ -197,9 +212,11 @@ const SOURCES: {
   },
   {
     name: "SIDER",
-    role: "Drug side-effect reference; under review for retention or formal retirement",
+    role: "Implemented drug side-effect reference using the SIDER 4.1 bulk snapshot from 2015; stale source",
     href: "http://sideeffects.embl.de/",
-    status: "Planned",
+    status: "Implemented, stale source",
+    coverageKey: "sider",
+    note: "Not a live API",
   },
   {
     name: "DRKG (Drug Repurposing Knowledge Graph)",
@@ -224,11 +241,34 @@ const SOURCES: {
   },
 ];
 
-const STATUS_COLOR: Record<string, string> = {
-  Live: "var(--green-mid)",
-  "Under review": "var(--tier-emerging)",
-  Planned: "var(--muted-2)",
-};
+function statusColor(status: string): string {
+  if (status === "Planned") return "var(--muted-2)";
+  if (status === "Under review" || status.includes("stale")) return "var(--tier-emerging)";
+  return "var(--green-mid)";
+}
+
+function sourceDisplayStatus(
+  source: (typeof SOURCES)[number],
+  coverage: CoverageDisclosure | null,
+): string {
+  if (!source.coverageKey) return source.status;
+  if (!coverage) {
+    return source.status === "Integrated"
+      ? "Integrated; coverage pending publication"
+      : source.status;
+  }
+  if (source.coverageKey === "dailymed") {
+    return `${coverage.regulatory.dailymedPairs} pairs / ${coverage.regulatory.dailymedOnLabel} on-label`;
+  }
+  if (source.coverageKey === "orangebook") {
+    return `${coverage.regulatory.orangeBookDrugs} drugs / ${coverage.regulatory.orangeBookListed} FDA-listed`;
+  }
+  const sourceCounts = sourceCoverageFor(coverage, source.coverageKey);
+  if (sourceCounts) {
+    return `${sourceCounts.documents} documents / ${sourceCounts.claims} claims`;
+  }
+  return source.status;
+}
 
 const EXCLUSIONS: { title: string; body: string }[] = [
   {
@@ -306,7 +346,12 @@ function SectionHeader({
    Page
    ────────────────────────────────────────────────────────────────────────── */
 
-export default function ExternalReferencesPage() {
+export default async function ExternalReferencesPage() {
+  const coverage = SIGNALS_PUBLISHED ? await getCoverageDisclosure() : null;
+  const databaseAuditVisible = SIGNALS_PUBLISHED && databaseSourcesAuditPopulated();
+  const summaryGroundingVisible = SIGNALS_PUBLISHED && summaryGroundingPopulated();
+  const structuredSourcesVisible = SIGNALS_PUBLISHED && structuredSourcesPopulated();
+
   return (
     <main className="flex-1 doc-shell" style={{ backgroundColor: "var(--bg)" }}>
 
@@ -521,14 +566,14 @@ export default function ExternalReferencesPage() {
                       style={{
                         ...MONO,
                         fontSize: "12px",
-                        color: STATUS_COLOR[s.status],
+                        color: statusColor(sourceDisplayStatus(s, coverage)),
                         padding: "14px 14px",
                         borderBottom: "1px solid var(--rule)",
                         verticalAlign: "baseline",
                         whiteSpace: "nowrap",
                       }}
                     >
-                      ● {s.status}
+                      ● {sourceDisplayStatus(s, coverage)}
                     </td>
                   </tr>
                 ))}
@@ -553,14 +598,11 @@ export default function ExternalReferencesPage() {
       {/* ── 01c · Structured grounding ───────────────────────────────────── */}
       {/* Two collapsible blocks for Path A (ontology-grounded entity
           resolution) and Path B (knowledge-graph grounding) recorded in
-          methodology v3.4. Both are architectural additions to the LLM
-          pipeline, not pure post-hoc validation: Path A canonicalizes and
-          enriches every extracted compound and condition against ChEMBL and
-          MONDO/EFO (now applied across the corpus), Path B adds a persistent
-          relational graph over Open Targets that surfaces a graph-supports /
-          graph-silent disclosure beside each signal (live in the gated view),
-          with the BioCypher property graph and prompt-time scoring still
-          planned. The block structure parallels the MATRIX disclosure block
+          methodology v3.4. Both are planned architectural additions to the
+          LLM pipeline, not live signal disclosures: Path A's coverage is
+          withheld until signals are published, and Path B's populated tables
+          are not read by the current substrate candidate path. The block
+          structure parallels the MATRIX disclosure block
           above so the page reads as a single 'here are the grounding layers'
           surface. Patterned on the section 05 brand-name dictionary's
           <details> collapsible. */}
@@ -571,8 +613,8 @@ export default function ExternalReferencesPage() {
         <div className={SECTION_INNER}>
           <SectionHeader
             label="02 · Structured grounding"
-            title="Two structured grounding layers on top of LLM extraction"
-            intro="Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes (universal social-determinants blind spots reported by WHBench in 2026; high reference-fabrication rates reported by Bhattacharyya et al. 2023 in Cureus, 47 percent of ChatGPT-generated medical references fully fabricated and 46 percent authentic but with bibliographic errors) motivate grounding the pipeline in structured external knowledge rather than relying on LLM output alone. Two such layers are recorded in the methodology version log at v3.4: ontology-grounded entity resolution (Path A) and knowledge-graph grounding (Path B). Both are now in place in their first form. Path A canonicalizes extracted entities to standard identifiers and enriches them with structured metadata, and is applied across the corpus with ambiguous cases held for human review. Path B builds a domain-restricted graph over Open Targets and surfaces a 'graph supports' or 'graph silent' layer beside each signal, in the same shape as the MATRIX coverage block above. Two extensions stay planned and are called out below: feeding the graph into LLM scoring at prompt time, and a deeper property-graph version alongside an independent open-knowledge-graph validation track. These are architectural additions, not post-hoc checks. Both blocks are collapsed by default; expand for the full account."
+            title="Structured grounding planned; source tables are not yet wired into signal display"
+            intro={`Whel's evidence extraction and scoring layer runs on a large language model. Documented LLM failure modes motivate grounding the pipeline in structured external knowledge, but the two proposed layers are not currently live disclosures. Path A has resolver and enrichment tooling, yet ontology coverage is ${coverage ? `${coverage.entities.interventionOntologyIds}/${coverage.entities.interventions} for intervention entities and ${coverage.entities.conditionOntologyIds}/${coverage.entities.conditions} for condition entities` : "withheld until signals are published"}; no human-review queue exists. Path B's Open Targets graph tables are populated, but substrate-candidates.ts drops the graph fields and CandidateCard does not render graph-support or graph-silent tags. Both layers remain planned until their read paths and coverage disclosures are connected.`}
           />
 
           {/* Path A: Entity validation */}
@@ -616,7 +658,9 @@ export default function ExternalReferencesPage() {
                     marginBottom: 4,
                   }}
                 >
-                  Live &middot; Canonical IDs resolved; audit numbers to follow
+                  {coverage
+                    ? `Planned · ${coverage.entities.interventionOntologyIds}/${coverage.entities.interventions} intervention IDs; ${coverage.entities.conditionOntologyIds}/${coverage.entities.conditions} condition IDs`
+                    : "Planned · coverage pending publication"}
                 </span>
                 <span
                   style={{
@@ -662,22 +706,20 @@ export default function ExternalReferencesPage() {
                   What the layer does
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  This layer serves three functions, not one. First, it
-                  canonicalizes: every compound and condition the LLM
-                  extracts is resolved against a canonical biomedical
-                  registry and rewritten with that registry&apos;s standard
-                  identifier before being written to Whel&apos;s database.
-                  Compounds resolve against ChEMBL or DrugBank; conditions
-                  resolve against MONDO (the same ontology Whel already uses
-                  for the MATRIX cross-reference above). Second, it enriches:
-                  the resolution call returns structured metadata (generic
-                  name, drug class, ATC code, known targets for a compound;
-                  ontology lineage for a condition) that travels with the
-                  signal into the database, changing the shape of the data
-                  Whel stores. Third, it gates: entities that fail to
-                  resolve are flagged for human review rather than silently
-                  stored, which catches the structured-output hallucination
-                  class of error documented in the LLM literature.
+                  The intended layer would canonicalize every extracted
+                  compound and condition against a biomedical registry,
+                  attach structured metadata, and hold unresolved or
+                  ambiguous entities for human review. That is not the
+                  current live state: substrate ontology coverage is{" "}
+                  {coverage
+                    ? `${coverage.entities.interventionOntologyIds}/${coverage.entities.interventions} for interventions and ${coverage.entities.conditionOntologyIds}/${coverage.entities.conditions} for conditions`
+                    : "withheld until signals are published"}.
+                  <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>ground_entities.py</code>{" "}
+                  and the Open Targets ChEMBL-promotion tooling exist, but
+                  the resolver is not wired into <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>run.py</code>{" "}
+                  and no review queue exists. The local workstore has 60
+                  Open Targets-sourced ChEMBL IDs awaiting a reviewed
+                  migration; they are not present in live Supabase.
                 </p>
               </div>
 
@@ -823,13 +865,10 @@ export default function ExternalReferencesPage() {
                   Recorded in the methodology revision history at v3.4 (see{" "}
                   the methodology changelog
                   ). Listed on the Roadmap under the technical-architecture
-                  track as &ldquo;Ontology-grounded entity resolution (Path
-                  A).&rdquo; The resolution, enrichment, and human-review gate
-                  are now applied across the corpus, so the canonical
-                  identifiers and structured metadata travel with every signal.
-                  The per-pipeline and per-condition audit numbers above are the
-                  remaining piece: they populate this block once the
-                  resolution-rate disclosure is surfaced.
+                  track as planned &ldquo;Ontology-grounded entity resolution
+                  (Path A).&rdquo; Resolver and enrichment tooling exists, but
+                  its output has not been migrated into live substrate entities,
+                  and a human-review queue has not been built.
                 </p>
               </div>
             </div>
@@ -876,7 +915,7 @@ export default function ExternalReferencesPage() {
                     marginBottom: 4,
                   }}
                 >
-                  Live &middot; Graph supports / silent shipped over Open Targets
+                  Planned &middot; tables populated; current read path drops graph fields
                 </span>
                 <span
                   style={{
@@ -922,20 +961,19 @@ export default function ExternalReferencesPage() {
                   What the layer does
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  This layer is both a grounding mechanism and a disclosure
-                  layer, and it arrives in stages. The stage live today is
-                  relational: a domain-restricted graph of drug, target, and
-                  condition relationships built over Open Targets, restricted to
-                  Whel&apos;s six conditions and the compounds attached to active
-                  signals. From it, each signal carries a &lsquo;graph
-                  supports&rsquo; or &lsquo;graph silent&rsquo; tag beside its
-                  grade, in the same shape as the MATRIX score row above.
-                  &lsquo;Graph supports, via target X&rsquo; means the drug acts
-                  on a target that Open Targets associates with the condition;
-                  &lsquo;graph silent&rsquo; means no such shared target is
-                  present, which can reflect either a real biological gap or a
-                  limit of the source data. Two of the six conditions show this
-                  plainly: vulvodynia and PMDD return{" "}
+                  The Open Targets graph tables are populated
+                  {coverage
+                    ? `, with ${coverage.graph.targets} targets, ${coverage.graph.drugTargets} drug-target rows, and ${coverage.graph.targetConditions} target-condition rows`
+                    : ""}. The current substrate read path does not consume
+                  those tables: <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>substrate-candidates.ts</code>{" "}
+                  explicitly drops the graph fields, and CandidateCard does
+                  not render a signal-level graph-support or graph-silent
+                  tag. The planned disclosure would define &lsquo;graph
+                  supports&rsquo; and &lsquo;graph silent&rsquo; using shared
+                  Open Targets targets and would make coverage visible rather
+                  than treating graph silence as contradiction. Two of the
+                  six conditions show a likely source-data gap: vulvodynia
+                  and PMDD return{" "}
                   <a
                     href="https://platform.opentargets.org/search?q=vulvodynia"
                     target="_blank"
@@ -944,9 +982,8 @@ export default function ExternalReferencesPage() {
                   >
                     no disease entry in Open Targets at all
                   </a>
-                  , so every signal under them is graph silent by construction,
-                  an absence the page shows rather than hides. The planned stage
-                  deepens this: a
+                  , but that absence is not currently rendered beside Whel
+                  signals. The planned stage deepens this: a
                   property-graph version built with the BioCypher framework
                   (Lobentanzer et al., Nature Biotechnology 2023), grounded in
                   canonical ontologies, and a feed of the relevant subgraph into
@@ -974,10 +1011,10 @@ export default function ExternalReferencesPage() {
                 </div>
                 <p style={{ fontSize: 13.5, lineHeight: 1.65, color: "var(--muted-2)", maxWidth: "72ch", margin: "0 0 12px" }}>
                   The signal-level &lsquo;graph supports / graph silent&rsquo; tag
-                  is live in the gated view today. The aggregate audit views
-                  below (graph size, per-condition coverage, tier
-                  cross-tabulation) are computed from the same data and are being
-                  surfaced as reporting.
+                  is planned, not live in the gated view. The graph tables
+                  are populated, but the current substrate read path does not
+                  read them and no aggregate graph-coverage disclosure is
+                  currently rendered.
                 </p>
                 <ul
                   style={{
@@ -998,7 +1035,7 @@ export default function ExternalReferencesPage() {
                     },
                     {
                       head: "Signal-level graph support.",
-                      tail: "Each individual signal carries a 'graph supports' or 'graph silent' tag. 'Graph supports' means at least one mechanistic path exists in the KG that connects the compound to the condition through known targets, pathways, or co-occurring annotations. 'Graph silent' is not the same as 'graph contradicts'; it means the open KGs do not contain a relevant edge, which can reflect either a real biological gap or a known limitation of the source data.",
+                      tail: "Planned disclosure: each signal would carry a 'graph supports' or 'graph silent' tag. 'Graph supports' would mean at least one mechanistic path exists in the KG; 'graph silent' would mean the open KG contains no relevant edge, not that it contradicts the signal.",
                     },
                     {
                       head: "Cross-tabulation against Whel tiers.",
@@ -1115,10 +1152,11 @@ export default function ExternalReferencesPage() {
                   Recorded in the methodology revision history at v3.4 (see{" "}
                   the methodology changelog
                   ). Listed on the Roadmap under the technical-architecture
-                  track as &ldquo;Knowledge-graph grounding,&rdquo; now live for
-                  the relational Open Targets version with the per-signal tag in
-                  the gated view. The BioCypher property graph and the
-                  prompt-time scoring feed remain planned, and the open
+                  track as planned &ldquo;Knowledge-graph grounding.&rdquo; The
+                  relational Open Targets tables exist, but the per-signal
+                  tag is not connected to the gated view. The BioCypher
+                  property graph and the prompt-time scoring feed remain
+                  planned, and the open
                   knowledge graphs and models are tracked separately under the
                   Roadmap&apos;s validation layer. Whel will not train a custom
                   graph neural network; the platform consumes machine learning
@@ -1239,18 +1277,19 @@ export default function ExternalReferencesPage() {
                   Phase 1: citation validation
                 </div>
                 <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--ink-2)", maxWidth: "72ch", margin: 0 }}>
-                  Every PMID in Whel&apos;s database, and every reference in
-                  any prose Whel publishes (featured signal walkthroughs,
-                  the methods PDF, written drafts), is resolved against{" "}
+                  The shipped verifier checks the{" "}
+                  {coverage ? `${coverage.citationAudit.manifestTotal}-entry` : "pre-verified"}{" "}
+                  manifest of hand-curated citations. Those entries are
+                  resolved against{" "}
                   <a
                     href="https://www.ncbi.nlm.nih.gov/books/NBK25501/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={LINK}
                   >
-                    NCBI E-utilities
+                  NCBI E-utilities
                   </a>
-                  ; DOIs are resolved against the{" "}
+                  for PMID metadata; DOIs are resolved against the{" "}
                   <a
                     href="https://www.crossref.org/documentation/retrieve-metadata/rest-api/"
                     target="_blank"
@@ -1260,12 +1299,27 @@ export default function ExternalReferencesPage() {
                     Crossref REST API
                   </a>
                   . Each lookup returns canonical title, authors, journal,
-                  and year, which are compared against the LLM-claimed
-                  metadata. References that fail to resolve or whose
-                  returned metadata mismatch the LLM&apos;s claims are
-                  flagged for human review and blocked from publication.
-                  This addresses the citation fabrication and
-                  citation-misattribution failure modes directly.
+                  and year, which are compared against the manifest metadata.
+                  {coverage ? (
+                    <>
+                      {" "}The larger database-sources audit covers{" "}
+                      {coverage.citationAudit.sourceTotal} rows:{" "}
+                      {coverage.citationAudit.sourceRegistryMatches} have
+                      registry metadata matches, while{" "}
+                      {coverage.citationAudit.sourceFormatOnly} AEMS and Reddit
+                      rows receive format-only checks.
+                    </>
+                  ) : (
+                    <> The larger database-sources audit exists, but its corpus
+                    counts are withheld until signals are published.</>
+                  )}{" "}
+                  A format-only pass confirms identifier or URL shape; it does
+                  not establish registry resolution. Neither audit establishes
+                  that every PMID in the database or every reference in
+                  published prose has been registry-resolved. References
+                  outside the{" "}
+                  {coverage ? `${coverage.citationAudit.manifestTotal}-entry` : "pre-verified"}{" "}
+                  manifest must be audited separately.
                 </p>
               </div>
 
@@ -1350,7 +1404,9 @@ export default function ExternalReferencesPage() {
                     marginBottom: 8,
                   }}
                 >
-                  Phase 1 audit · live as of {citationAuditFormattedDate()}
+                  {SIGNALS_PUBLISHED
+                    ? `Phase 1 audit · live as of ${citationAuditFormattedDate()}`
+                    : "Phase 1 audit · counts withheld until signals are published"}
                 </div>
                 <p
                   style={{
@@ -1379,7 +1435,8 @@ export default function ExternalReferencesPage() {
                   pre-publish use.
                 </p>
 
-                <div
+                {SIGNALS_PUBLISHED ? (
+                  <div
                   style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
@@ -1393,19 +1450,19 @@ export default function ExternalReferencesPage() {
                   {[
                     {
                       label: "Total citations",
-                      value: CITATION_AUDIT_SNAPSHOT.summary.total.toString(),
+                      value: coverage?.citationAudit.manifestTotal.toString() ?? "—",
                     },
                     {
                       label: "Resolved + match",
-                      value: CITATION_AUDIT_SNAPSHOT.summary.resolved_match.toString(),
+                      value: coverage?.citationAudit.manifestMatched.toString() ?? "—",
                     },
                     {
                       label: "Resolved + mismatch",
-                      value: CITATION_AUDIT_SNAPSHOT.summary.resolved_mismatch.toString(),
+                      value: String(CITATION_AUDIT_SNAPSHOT.summary.resolved_mismatch),
                     },
                     {
                       label: "Unresolved",
-                      value: CITATION_AUDIT_SNAPSHOT.summary.unresolved.toString(),
+                      value: String(CITATION_AUDIT_SNAPSHOT.summary.unresolved),
                     },
                   ].map(({ label, value }) => (
                     <div key={label}>
@@ -1434,7 +1491,13 @@ export default function ExternalReferencesPage() {
                       </div>
                     </div>
                   ))}
-                </div>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: 14, lineHeight: 1.65, color: "var(--ink-2)", maxWidth: "72ch", margin: "0 0 16px" }}>
+                    The manifest audit is shipped, but its corpus-dependent
+                    counts remain withheld until signals are published.
+                  </p>
+                )}
 
                 <p
                   style={{
@@ -1468,11 +1531,13 @@ export default function ExternalReferencesPage() {
                   }}
                 >
                   Database-sources audit ·{" "}
-                  {databaseSourcesAuditPopulated()
+                  {databaseAuditVisible
                     ? `live as of ${databaseSourcesAuditFormattedDate()}`
-                    : "tooling shipped, awaiting first run"}
+                    : SIGNALS_PUBLISHED
+                      ? "tooling shipped, awaiting first run"
+                      : "counts withheld until signals are published"}
                 </div>
-                {databaseSourcesAuditPopulated() ? (
+                {databaseAuditVisible ? (
                   <>
                     <p
                       style={{
@@ -1551,32 +1616,12 @@ export default function ExternalReferencesPage() {
                         margin: "0 0 16px 0",
                       }}
                     >
-                      Zero{" "}
-                      <em>resolved_mismatch</em>{" "}
-                      entries on the first run: 113 of 113 PubMed PMIDs
-                      clean against NCBI E-utilities, 19 of 19
-                      ClinicalTrials.gov NCT IDs clean against the
-                      ClinicalTrials.gov API v2, and 38 of 38 canonical
-                      Open Targets identifiers clean against the Open
-                      Targets GraphQL search. The 10 unresolved are all
-                      Open Targets rows storing a synthetic{" "}
-                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>OT-{`{DRUGNAME}`}</code>{" "}
-                      shorthand in the{" "}
-                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>external_id</code>{" "}
-                      column instead of a canonical CHEMBL identifier;
-                      the URL on those rows still points at a real{" "}
-                      <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>platform.opentargets.org</code>{" "}
-                      page, so what users see on the drug card is a
-                      valid citation. The failure is at the
-                      identifier-storage layer rather than the
-                      user-visible content layer. Backfill recorded on
-                      the{" "}
-                      <Link href="/about/roadmap" style={LINK}>roadmap</Link>{" "}
-                      under{" "}
-                      <em>Backfill canonical Open Targets identifiers
-                      on signals using OT-DRUGNAME shorthand</em>;
-                      methodology v3.10 has the full finding write-up.
-                      Run log at{" "}
+                      The database-source snapshot contains{" "}
+                      {coverage?.citationAudit.sourceRegistryMatches ?? "—"}{" "}
+                      registry metadata matches and{" "}
+                      {coverage?.citationAudit.sourceFormatOnly ?? "—"}{" "}
+                      format-only passes. Those format checks do not mean the
+                      records were resolved against a registry. Run log at{" "}
                       <code style={{ fontFamily: "inherit", color: "var(--ink-2)" }}>scripts/audit-output/database-sources-audit-report.json</code>.
                     </p>
                   </>
@@ -1637,11 +1682,13 @@ export default function ExternalReferencesPage() {
                   }}
                 >
                   Phase 2a (summary grounding) ·{" "}
-                  {summaryGroundingPopulated()
+                  {summaryGroundingVisible
                     ? `live as of ${summaryGroundingFormattedDate()}`
-                    : "tooling shipped, awaiting first run"}
+                    : SIGNALS_PUBLISHED
+                      ? "tooling shipped, awaiting first run"
+                      : "counts withheld until signals are published"}
                 </div>
-                {summaryGroundingPopulated() ? (
+                {summaryGroundingVisible ? (
                   <>
                     <p
                       style={{
@@ -1766,11 +1813,13 @@ export default function ExternalReferencesPage() {
                   }}
                 >
                   Phase 2b (structured-source verification) ·{" "}
-                  {structuredSourcesPopulated()
+                  {structuredSourcesVisible
                     ? `live as of ${structuredSourcesFormattedDate()}`
-                    : "tooling shipped, awaiting first run"}
+                    : SIGNALS_PUBLISHED
+                      ? "tooling shipped, awaiting first run"
+                      : "counts withheld until signals are published"}
                 </div>
-                {structuredSourcesPopulated() ? (
+                {structuredSourcesVisible ? (
                   <>
                     <p
                       style={{
@@ -2238,7 +2287,9 @@ export default function ExternalReferencesPage() {
                 maxWidth: "74ch",
               }}
             >
-              Coverage audited {MATRIX_AUDIT_SNAPSHOT._meta.audit_date ?? "—"}.{" "}
+              {SIGNALS_PUBLISHED
+                ? `Coverage audited ${MATRIX_AUDIT_SNAPSHOT._meta.audit_date ?? "—"}.`
+                : "Coverage audit withheld until signals are published."}{" "}
               <a
                 href="#coverage-disclosure"
                 style={{
@@ -2429,7 +2480,7 @@ export default function ExternalReferencesPage() {
             const trueFalse = (v: boolean | null) =>
               v === null ? <em style={{ color: "var(--muted)" }}>n/a</em> : v ? "True" : "False";
 
-            if (!matrixSnapshotPopulated()) {
+            if (!SIGNALS_PUBLISHED || !matrixSnapshotPopulated()) {
               return (
                 <div
                   style={{
@@ -2452,8 +2503,9 @@ export default function ExternalReferencesPage() {
                     Audit pending
                   </div>
                   <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--ink-2)", margin: 0 }}>
-                    The MATRIX coverage audit has not been run since this disclosure block was
-                    wired in. Published numbers will appear here once{" "}
+                    {SIGNALS_PUBLISHED
+                      ? "The MATRIX coverage audit has not been run since this disclosure block was wired in. Published numbers will appear here once "
+                      : "The MATRIX coverage audit is ready, but its corpus-dependent numbers remain withheld until signals are published. "}
                     <code style={{ ...MONO, fontSize: "0.92em" }}>
                       scripts/check-matrix-coverage.py
                     </code>{" "}
@@ -2914,12 +2966,12 @@ export default function ExternalReferencesPage() {
                   >
                     {[
                       {
-                        head: "All six conditions confirmed as exact MONDO matches.",
-                        tail: "Whel's disease definitions resolve to standard ontology entries the broader literature already indexes: PCOS, PMDD, Adenomyosis, Endometriosis, Vulvodynia, Perimenopause & Menopause. No in-house labels, no silent drift.",
+                        head: "The condition crosswalk is explicit and auditable.",
+                        tail: "Whel maintains named condition mappings for the six conditions in scope, but live substrate entity ontology IDs remain a separate planned grounding layer.",
                       },
                       {
-                        head: "Whel's compound vocabulary maps cleanly into standard CURIE space.",
-                        tail: "85.7% of eligible compounds resolve into the CHEBI / UNII / DrugBank identifier system MATRIX uses. For a niche women's-health subset that is a high crosswalk rate, and it indicates Whel's drug layer is not running on a parallel vocabulary from the rest of pharmacology.",
+                        head: "Whel's compound vocabulary maps into the MATRIX crosswalk where audited.",
+                        tail: `${coverage ? `${((coverage.matrix.eligibleMatchedCompounds / Math.max(coverage.matrix.eligibleCompounds, 1)) * 100).toFixed(1)}% of eligible compounds match in the current audit` : "The current audit fraction is withheld until signals are published"}; this is a crosswalk result, not live ontology resolution.`,
                       },
                       {
                         head: "Whel covers conditions where MATRIX is silent.",
@@ -2927,7 +2979,7 @@ export default function ExternalReferencesPage() {
                       },
                       {
                         head: "The brand and synonym dictionary is Whel's contribution back.",
-                        tail: "24 of the 84 matched compounds were recoverable only via Whel's brand-to-generic and INN-variant translations (section 05). The crosswalk is versioned and auditable, and its size and composition are reported on this page; the individual entries are shared on request, since they name compounds in the gated index.",
+                        tail: `${coverage ? `${coverage.matrix.rescuedCompounds} of ${coverage.matrix.eligibleMatchedCompounds} matched compounds were recoverable only via Whel's brand-to-generic and INN-variant translations` : "The current rescued-compound count is withheld until signals are published"} (section 05). The crosswalk is versioned and auditable, and its size and composition are reported on this page; the individual entries are shared on request, since they name compounds in the gated index.`,
                       },
                     ].map((item) => (
                       <li
@@ -3193,7 +3245,7 @@ export default function ExternalReferencesPage() {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {SOURCES.filter((s) => s.status !== "Live").map((c) => (
+            {SOURCES.filter((s) => s.status === "Planned" || s.status === "Under review").map((c) => (
               <div
                 key={c.name}
                 style={{
@@ -3212,8 +3264,8 @@ export default function ExternalReferencesPage() {
                     fontWeight: 500,
                     letterSpacing: "0.12em",
                     textTransform: "uppercase",
-                    color: STATUS_COLOR[c.status],
-                    border: `1px solid ${STATUS_COLOR[c.status]}`,
+                    color: statusColor(c.status),
+                    border: `1px solid ${statusColor(c.status)}`,
                     padding: "3px 7px",
                     marginBottom: 14,
                   }}

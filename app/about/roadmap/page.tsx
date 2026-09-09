@@ -1,6 +1,10 @@
 import Link from "next/link";
-import { getCorpusScope } from "@/lib/substrate-candidates";
 import { SIGNALS_PUBLISHED } from "@/lib/site-config";
+import {
+  getCoverageDisclosure,
+  sourceCoverageFor,
+  type CoverageDisclosure,
+} from "@/lib/coverage-disclosure";
 
 export const metadata = {
   title: "Roadmap | Whel",
@@ -29,11 +33,22 @@ const PATHWAY_COLORS: Record<string, string> = {
    Content
    ────────────────────────────────────────────────────────────────────────── */
 
-function buildPhases(totalSignals: number | null): { tag: string; sub: string; color: string; items: string[] }[] {
+function buildPhases(
+  coverage: CoverageDisclosure | null,
+): { tag: string; sub: string; color: string; items: string[] }[] {
   const signalsLine =
-    totalSignals != null && totalSignals > 0
-      ? `${totalSignals} signals, each scored against the published graded rubric`
+    coverage != null && coverage.pairCount > 0
+      ? `${coverage.pairCount} signals, each scored against the published graded rubric`
       : "Signals scored against the published graded rubric";
+  const matrixLine = coverage
+    ? `Every Cure's MATRIX cross-reference, with coverage on ${coverage.matrix.scoredPairs} of ${coverage.matrix.activePairs} audited active pairs, shown beside our own grades rather than blended into them`
+    : "Every Cure's MATRIX cross-reference, shown beside our own grades rather than blended into them where coverage exists";
+  const sexPkLine = coverage
+    ? `A sex-specific pharmacokinetics layer covering ${coverage.sexPkPairs} of ${coverage.pairCount} active pairs, seeded from FDA labels and the curated sex-PK literature`
+    : "A sex-specific pharmacokinetics layer, seeded from FDA labels and the curated sex-PK literature";
+  const phaseLine = coverage
+    ? `A cyclical-phase layer covering ${coverage.phasePairs} of ${coverage.pairCount} active pairs, seeded for the strongest-evidence PMDD cases`
+    : "A cyclical-phase layer, seeded for the strongest-evidence PMDD cases";
 
   return [
     {
@@ -42,14 +57,11 @@ function buildPhases(totalSignals: number | null): { tag: string; sub: string; c
       color: "var(--moss)",
       items: [
         "Six conditions in scope: endometriosis, PMDD, PCOS, adenomyosis, vulvodynia, and menopause",
-        "Six evidence pipelines running across three evidence arms",
+        "Six source feeds running across three evidence arms",
         signalsLine,
-        "An independent biological-plausibility cross-reference from Every Cure's MATRIX model, shown beside our own grades rather than blended into them",
-        "An external-validation grade on every drug and condition pair, with the highest grade reserved for signals backed by named clinical-guideline strength and certainty",
-        "Every drug and condition resolved to canonical biomedical registries (ChEMBL, MONDO, EFO), with ambiguous cases held for human review",
-        "A knowledge-graph cross-check, computed over Open Targets, that shows beside each signal whether the graph supports it or stays silent",
-        "A sex-specific pharmacokinetics layer, seeded from FDA labels and the curated sex-PK literature, shown beside the relevant signals",
-        "A cyclical-phase layer that records where a treatment's effect depends on the menstrual-cycle phase, seeded for the strongest-evidence PMDD cases and shown beside the relevant signals",
+        matrixLine,
+        sexPkLine,
+        phaseLine,
       ],
     },
     {
@@ -60,7 +72,8 @@ function buildPhases(totalSignals: number | null): { tag: string; sub: string; c
         "Run the two-rater validation study and publish the agreement score",
         "Add disproportionality statistics to the adverse-event arm so a real safety signal separates from reporting noise",
         "Flag where two or more arms support the same drug and condition pair",
-        "Feed the knowledge graph into scoring at prompt time, beyond the beside-signal disclosure already live",
+        "Complete ontology-grounded entity resolution and add a human-review queue; live coverage is currently zero",
+        "Build and wire the Open Targets graph-support / graph-silent disclosure; the graph tables are populated but the current substrate read path does not read them",
         "Ground every summary sentence against its source, extending the citation validation already running",
         "Publish an open, citable data export",
       ],
@@ -188,25 +201,49 @@ const CANDIDATES: { name: string; pathways: string[]; body: string }[] = [
   },
 ];
 
-type Status = "Live" | "Under review" | "Planned";
+type Status = string;
+type CoverageKey =
+  | "pubmed"
+  | "clinicaltrials"
+  | "aems"
+  | "dailymed"
+  | "orangebook"
+  | "opentargets"
+  | "reddit"
+  | "sider"
+  | "ontology"
+  | "graph"
+  | "matrix"
+  | "guidelines"
+  | "phase"
+  | "sexPk"
+  | "regulatory"
+  | "citations"
+  | "contradictions";
+type RegisterRow = {
+  name: string;
+  role: string;
+  status: Status;
+  coverageKey?: CoverageKey;
+};
 
 // The original sources Whel pulls from to build its conditions and signals,
 // plus the data sources under review or planned for that same build layer.
-const BUILD_SOURCES: { name: string; role: string; status: Status }[] = [
-  { name: "PubMed", role: "Published literature", status: "Live" },
-  { name: "ClinicalTrials.gov", role: "Trial registry; also the trial-stage read in the regulatory & development-status panel", status: "Live" },
-  { name: "FDA openFDA", role: "Adverse-event data", status: "Live" },
-  { name: "DailyMed", role: "FDA drug labels; the on-label / off-label approved-indication read in the regulatory & development-status panel", status: "Live" },
-  { name: "FDA Orange Book", role: "Approved Drug Products with Therapeutic Equivalence Evaluations; the generic-availability and patent-supply read in the regulatory & development-status panel", status: "Live" },
-  { name: "Open Targets", role: "Genetic-target and pathway data", status: "Live" },
-  { name: "Reddit communities", role: "Patient-reported signal", status: "Live" },
+const BUILD_SOURCES: RegisterRow[] = [
+  { name: "PubMed", role: "Published literature", status: "Integrated", coverageKey: "pubmed" },
+  { name: "ClinicalTrials.gov", role: "Trial registry; also the trial-stage read in the regulatory & development-status panel", status: "Integrated", coverageKey: "clinicaltrials" },
+  { name: "FDA openFDA", role: "Adverse-event data", status: "Integrated", coverageKey: "aems" },
+  { name: "DailyMed", role: "FDA drug labels; the on-label / off-label approved-indication read in the regulatory & development-status panel", status: "Integrated", coverageKey: "dailymed" },
+  { name: "FDA Orange Book", role: "Approved Drug Products with Therapeutic Equivalence Evaluations; the generic-availability and patent-supply read in the regulatory & development-status panel", status: "Integrated", coverageKey: "orangebook" },
+  { name: "Open Targets", role: "Genetic-target and pathway data", status: "Integrated", coverageKey: "opentargets" },
+  { name: "Reddit communities", role: "Patient-reported signal", status: "Integrated", coverageKey: "reddit" },
   {
     name: "Patient-advocacy organizations",
     role: "Structured patient-reported signal beyond Reddit, through planned partnerships with formal women's health advocacy groups, taken on once the validation work is in place.",
     status: "Planned",
   },
   { name: "EudraVigilance", role: "European adverse-event data", status: "Under review" },
-  { name: "SIDER", role: "Drug side-effect reference", status: "Under review" },
+  { name: "SIDER", role: "Implemented drug side-effect reference using the SIDER 4.1 bulk snapshot from 2015; stale source", status: "Implemented, stale source", coverageKey: "sider" },
   { name: "DrugBank", role: "Drug-target and indication data", status: "Planned" },
 ];
 
@@ -214,16 +251,18 @@ const BUILD_SOURCES: { name: string; role: string; status: Status }[] = [
 // build it. Some are live; the open knowledge graphs and models are planned,
 // and stay outside the core architecture on purpose (see the note below the
 // register on the page).
-const VALIDATION_LAYERS: { name: string; role: string; status: Status }[] = [
+const VALIDATION_LAYERS: RegisterRow[] = [
   {
     name: "Every Cure MATRIX",
     role: "An independent treatment-probability cross-reference from Every Cure's graph-ML model, shown beside our grades rather than blended into them.",
-    status: "Live",
+    status: "Integrated",
+    coverageKey: "matrix",
   },
   {
     name: "Clinical-guideline curation",
-    role: "Strength and certainty drawn from named society guidelines, normalized into the highest external-validation grade where a named recommendation covers a pair.",
-    status: "Live",
+    role: "Strength and certainty drawn from named society guidelines; three signals currently carry guideline triples, and no universal pair-level grade is computed.",
+    status: "Integrated",
+    coverageKey: "guidelines",
   },
   {
     name: "DRKG (Drug Repurposing Knowledge Graph)",
@@ -242,7 +281,7 @@ const VALIDATION_LAYERS: { name: string; role: string; status: Status }[] = [
   },
 ];
 
-const UPGRADES: { name: string; role: string; status: Status }[] = [
+const UPGRADES: RegisterRow[] = [
   {
     name: "Two-rater validation study",
     role: "A stratified sample of signals re-scored blind by two independent raters, with agreement reported as a measured score.",
@@ -255,28 +294,33 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Ontology-grounded entity resolution",
-    role: "Every extracted drug and condition resolved against canonical registries (ChEMBL, RxNorm, MONDO, EFO), with anything that fails to resolve held for human review. Applied across the corpus; the per-pipeline audit numbers are the remaining piece to surface.",
-    status: "Live",
+    role: "Planned canonical resolution against ChEMBL, RxNorm, MONDO, and EFO, with a human-review queue.",
+    status: "Planned",
+    coverageKey: "ontology",
   },
   {
     name: "Knowledge-graph grounding",
-    role: "A domain-restricted graph of drug, target, and condition relationships built over Open Targets, surfacing a 'graph supports' or 'graph silent' layer beside each signal in the gated view. Feeding the graph into scoring at prompt time, and a property-graph version, are follow-ons; the property-graph would move to BioCypher or Neo4j for richer graph tooling, with Apache AGE as a lighter Postgres-native fallback.",
-    status: "Live",
+    role: "Planned signal-level graph-support / graph-silent disclosure over Open Targets. The tables are populated, but substrate-candidates.ts drops the graph fields and CandidateCard does not render them.",
+    status: "Planned",
+    coverageKey: "graph",
   },
   {
     name: "Phase-aware relationships",
-    role: "Holding cyclical hormonal state as a first-class variable, so a drug and condition relationship can carry the menstrual-cycle phase in which it holds rather than being averaged into a single static edge. Seeded for the strongest-evidence PMDD cases (luteal-phase SSRI dosing; drospirenone cycle suppression) from ACOG guidance, FDA labels, and a placebo-controlled RCT, and shown beside the relevant signals. Validation basis is the DRSP and the ISPMD consensus. Broader population is ongoing.",
-    status: "Live",
+    role: "Holding cyclical hormonal state as a first-class variable. Runtime lookup and the Phase chip exist for the seeded PMDD relationships; broader population coverage remains ongoing.",
+    status: "Integrated",
+    coverageKey: "phase",
   },
   {
     name: "Sex-stratified pharmacokinetics",
-    role: "Per-compound pharmacokinetic structure held by sex, so documented differences in metabolism and clearance inform scoring rather than being assumed uniform across bodies. Seeded for an initial set of compounds from FDA labels and the curated sex-PK literature, each carrying its source, and shown beside the relevant signals. Broader population is ongoing.",
-    status: "Live",
+    role: "Per-compound pharmacokinetic structure held by sex, with source-carrying facts and a Sex-PK chip for covered relationships. Broader population coverage remains ongoing.",
+    status: "Integrated",
+    coverageKey: "sexPk",
   },
   {
     name: "Regulatory & development status",
-    role: "Where each candidate sits in the US regulatory landscape, read from three public FDA / NLM sources and shown beside the score: whether the target condition is an FDA-approved (on-label) use or off-label (DailyMed labels, counting only NDA/ANDA/BLA approvals); whether the molecule is a generic or a single-source brand still under patent (FDA Orange Book, single-ingredient products only); and how far it has been studied as a therapy for the condition (ClinicalTrials.gov, mechanistic and post-marketing studies excluded). Descriptive landscape context only, not a viability assessment; live across all six conditions.",
-    status: "Live",
+    role: "Descriptive US regulatory landscape context from DailyMed, Orange Book, and ClinicalTrials.gov snapshots; not a viability assessment.",
+    status: "Integrated",
+    coverageKey: "regulatory",
   },
   {
     name: "Actionability layer",
@@ -285,8 +329,9 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
   {
     name: "Citation validation",
-    role: "Verifying every generated citation against its registry, so a fabricated or mis-attributed reference is caught before publication.",
-    status: "Live",
+    role: "The manifest verifier checks PMID, DOI, and arXiv metadata against registries. The larger source audit checks registry metadata for some source types and only identifier / URL format for AEMS and Reddit.",
+    status: "Integrated",
+    coverageKey: "citations",
   },
   {
     name: "Summary grounding",
@@ -296,7 +341,8 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   {
     name: "Per-claim synthesis and contradiction marking",
     role: "Tagging individual claims where the model combined findings (a synthesis) or where the underlying sources disagree (a contradiction), and surfacing those markers beside each signal. The marking is built into the signal view; populating it across the corpus, so the markers appear wherever they apply, is the remaining work.",
-    status: "Planned",
+    status: "Foundation",
+    coverageKey: "contradictions",
   },
   {
     name: "Cross-arm concordance flag",
@@ -310,11 +356,73 @@ const UPGRADES: { name: string; role: string; status: Status }[] = [
   },
 ];
 
-const STATUS_COLOR: Record<Status, string> = {
-  Live: "var(--green-mid)",
-  "Under review": "var(--tier-emerging)",
-  Planned: "var(--muted)",
-};
+function statusColor(status: Status): string {
+  if (status === "Planned") return "var(--muted)";
+  if (status === "Under review") return "var(--tier-emerging)";
+  if (status.includes("stale")) return "var(--tier-emerging)";
+  if (status.startsWith("Foundation")) return "var(--tier-emerging)";
+  return "var(--green-mid)";
+}
+
+function displayStatus(row: RegisterRow, coverage: CoverageDisclosure | null): string {
+  if (!row.coverageKey) return row.status;
+  if (!coverage) {
+    return row.status === "Planned"
+      ? "Planned"
+      : row.status === "Foundation"
+        ? "Foundation"
+        : row.status === "Implemented, stale source"
+          ? row.status
+          : `${row.status}; coverage pending publication`;
+  }
+
+  switch (row.coverageKey) {
+    case "pubmed":
+    case "clinicaltrials":
+    case "aems":
+    case "opentargets":
+    case "reddit": {
+      const source = sourceCoverageFor(coverage, row.coverageKey);
+      return source
+        ? `${source.documents} documents / ${source.claims} claims`
+        : row.status;
+    }
+    case "dailymed":
+      return `${coverage.regulatory.dailymedPairs} pairs / ${coverage.regulatory.dailymedOnLabel} on-label`;
+    case "orangebook":
+      return `${coverage.regulatory.orangeBookDrugs} drugs / ${coverage.regulatory.orangeBookListed} FDA-listed`;
+    case "sider": {
+      const source = sourceCoverageFor(coverage, "sider");
+      return source
+        ? `${row.status} · ${source.documents} documents / ${source.claims} claims`
+        : row.status;
+    }
+    case "matrix":
+      return `Coverage: ${coverage.matrix.scoredPairs}/${coverage.matrix.activePairs} audited active pairs`;
+    case "guidelines":
+      return coverage.guidelineSignals == null
+        ? row.status
+        : `Coverage: ${coverage.guidelineSignals} signals`;
+    case "ontology":
+      return `Planned · ${coverage.entities.interventionOntologyIds}/${coverage.entities.interventions} intervention IDs; ${coverage.entities.conditionOntologyIds}/${coverage.entities.conditions} condition IDs`;
+    case "graph":
+      return `Planned · ${coverage.graph.targets} targets, ${coverage.graph.drugTargets} drug-target rows, ${coverage.graph.targetConditions} target-condition rows`;
+    case "phase":
+      return `Coverage: ${coverage.phasePairs}/${coverage.pairCount} active pairs`;
+    case "sexPk":
+      return `Coverage: ${coverage.sexPkPairs}/${coverage.pairCount} active pairs`;
+    case "regulatory":
+      return `Coverage: ${coverage.conditionCount} conditions; ${coverage.regulatory.dailymedPairs} pairs / ${coverage.regulatory.dailymedOnLabel} on-label, ${coverage.regulatory.orangeBookDrugs} drugs / ${coverage.regulatory.orangeBookListed} FDA-listed, ${coverage.regulatory.trialPairs} pairs / ${coverage.regulatory.trialPairsWithTrials} qualifying trials`;
+    case "citations":
+      return `${coverage.citationAudit.manifestMatched}/${coverage.citationAudit.manifestTotal} manifest citations matched; ${coverage.citationAudit.sourceTotal} source rows: ${coverage.citationAudit.sourceRegistryMatches} registry matches + ${coverage.citationAudit.sourceFormatOnly} format-only passes`;
+    case "contradictions":
+      return coverage.contradictionRows == null
+        ? row.status
+        : `Foundation: ${coverage.contradictionRows} contradiction rows; corpus-wide population pending`;
+    default:
+      return row.status;
+  }
+}
 
 const PRIORITIES: { title: string; body: string }[] = [
   {
@@ -379,12 +487,18 @@ function SectionHeader({ label, title, intro }: { label: string; title: string; 
 }
 
 const StatusDot = ({ status }: { status: Status }) => (
-  <span style={{ ...MONO, fontSize: 12, color: STATUS_COLOR[status], whiteSpace: "nowrap" }}>
+  <span style={{ ...MONO, fontSize: 12, color: statusColor(status), whiteSpace: "nowrap" }}>
     ● {status}
   </span>
 );
 
-function RegisterTable({ rows }: { rows: { name: string; role: string; status: Status }[] }) {
+function RegisterTable({
+  rows,
+  coverage,
+}: {
+  rows: RegisterRow[];
+  coverage: CoverageDisclosure | null;
+}) {
   return (
     <div style={{ overflowX: "auto" }}>
       <table style={{ width: "100%", minWidth: 560, borderCollapse: "collapse" }}>
@@ -439,7 +553,7 @@ function RegisterTable({ rows }: { rows: { name: string; role: string; status: S
                 {r.role}
               </td>
               <td style={{ padding: "14px 14px", borderBottom: "1px solid var(--rule)", verticalAlign: "baseline" }}>
-                <StatusDot status={r.status} />
+                <StatusDot status={displayStatus(r, coverage)} />
               </td>
             </tr>
           ))}
@@ -454,8 +568,8 @@ function RegisterTable({ rows }: { rows: { name: string; role: string; status: S
    ────────────────────────────────────────────────────────────────────────── */
 
 export default async function RoadmapPage() {
-  const totalSignals = SIGNALS_PUBLISHED ? (await getCorpusScope()).signals : null;
-  const PHASES = buildPhases(totalSignals);
+  const coverage = SIGNALS_PUBLISHED ? await getCoverageDisclosure() : null;
+  const PHASES = buildPhases(coverage);
 
   return (
     <main className="rm-doc">
@@ -726,12 +840,12 @@ export default async function RoadmapPage() {
           <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginBottom: 18 }}>
             The sources Whel is built on
           </p>
-          <RegisterTable rows={BUILD_SOURCES} />
+          <RegisterTable rows={BUILD_SOURCES} coverage={coverage} />
 
           <p className="font-heading" style={{ fontSize: 18, fontWeight: 500, color: "var(--ink)", marginTop: 44, marginBottom: 18 }}>
             Method upgrades in progress
           </p>
-          <RegisterTable rows={UPGRADES} />
+          <RegisterTable rows={UPGRADES} coverage={coverage} />
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 32 }}>
             {PRIORITIES.map((p) => (
@@ -753,7 +867,7 @@ export default async function RoadmapPage() {
             intro="Separate from the sources Whel is built on is the layer it is checked against: independent references shown beside each signal rather than blended into its grade. Some are live today. Others are open knowledge graphs and models that lead the biomedical drug-repurposing field, and are planned as outside cross-references. The fuller account of how each external layer is disclosed lives on the external references page."
           />
 
-          <RegisterTable rows={VALIDATION_LAYERS} />
+          <RegisterTable rows={VALIDATION_LAYERS} coverage={coverage} />
 
           <div
             style={{
