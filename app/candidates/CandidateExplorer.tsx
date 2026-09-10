@@ -251,7 +251,7 @@ export default function CandidateExplorer({ items }: { items: ExplorerItem[] }) 
         return m;
       })(),
     };
-  }, [items, tiers, vals, arms, markers, conds, matrixMax]);
+  }, [items, tiers, vals, arms, markers, conds, negOnly, matrixMax]);
 
   const filtered = useMemo(() => {
     return items.filter((it) => {
