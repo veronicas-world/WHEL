@@ -4,6 +4,8 @@ This file lives next to `lib/site-config.ts` so it sits where whoever flips
 the flag will see it. Every item below must be resolved before the site can
 go live. The flag is currently **not safe to flip**.
 
+**Denominator traceability:** Figures derived from `scoring-v13-snapshot.json` use a denominator of 226, which includes 8 signals since purged as extraction artifacts; current active count is 220. Do not recompute those historical figures.
+
 ---
 
 ## 1. TIER_CUTOFFS must be re-derived on the post-rescore lattice

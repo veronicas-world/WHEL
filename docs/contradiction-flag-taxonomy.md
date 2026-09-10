@@ -7,6 +7,8 @@
 table contains at least one row involving a claim that belongs to this
 signal.
 
+**Denominator traceability:** Figures derived from `scoring-v13-snapshot.json` use a denominator of 226, which includes 8 signals since purged as extraction artifacts; current active count is 220. Do not recompute those historical figures.
+
 The `contradictions` table is populated by `detect_contradictions.py`, which
 compares **efficacy claims only** (aspect = 'efficacy', entailment =
 'entailed') within each `(intervention, condition)` group, looking for pairs
